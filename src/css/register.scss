@@ -1,0 +1,113 @@
+.ant-modal{
+  width: 420px !important;
+}
+
+  .ant-modal-body {
+    .weixin {
+      .ant-tabs-bar {
+        font-weight: bold;
+      }
+      .ant-tabs-content {
+        height: 300px;
+      }
+      .title {
+        font-size: 20px;
+        font-family: Source Han Sans CN;
+        font-weight: bold;
+        color: rgba(51, 51, 51, 1);
+      }
+      .accountNumber {
+        text-align: center;
+        color: #268AED;
+        cursor: pointer;
+      }
+      .agreement {
+        color: #666;
+        a {
+          color: #666;
+          text-decoration: underline;
+        }
+      }
+    }
+    .accountNumber {
+      .ant-tabs-bar {
+        font-weight: bold;
+      }
+      .ant-tabs-content {
+        height: 300px;
+      }
+      .title {
+        font-size: 20px;
+        font-family: Source Han Sans CN;
+        font-weight: bold;
+        color: rgba(51, 51, 51, 1);
+      }
+
+      .accountNumber {
+        text-align: center;
+        color: #268AED;
+        cursor: pointer;
+      }
+      .agreement {
+        color: #666;
+        a {
+          color: #666;
+          text-decoration: underline;
+        }
+      }
+    }
+    .item{
+      .ant-input-group-addon{
+        padding: 0;
+        border: none;
+        .ant-btn-block{
+          height: 40px;
+          border-radius: 0;
+        }
+      }
+      .ant-tabs-tab {
+        font-size: 18px;
+        color: #333;
+        font-weight: bold;
+      }
+      .title{
+        font-size:20px;
+        font-family:Source Han Sans CN;
+        font-weight:bold;
+        color:rgba(51,51,51,1);
+      }
+      .ant-radio-wrapper{
+        white-space: wrap;
+        span{
+
+        }
+        a {
+          color: #666;
+          text-decoration: underline;
+        }
+      }
+      .code{
+        .ant-col{
+          display: flex;
+          width: 100%;
+          .ant-form-item-control{
+            width: 100%;
+            .ant-form-item-children{
+              display: flex;
+              width: 100%;
+              justify-content: space-between;
+              .code
+              {
+                img{
+                 height: 40px;
+                }
+              }
+            }
+          }
+        }
+      }
+      .login-form-button{
+        width: 100%;
+      }
+    }
+}

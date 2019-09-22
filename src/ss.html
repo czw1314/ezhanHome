@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jQuery带缩略图轮播效果</title>
+  <style>
+      body,div,ul,li{
+          margin:0;
+          padding:0;
+      }
+      ul{
+          list-style:none;
+      }
+      img{
+          border:0;
+      }
+      .banner{
+          margin:30px auto 0;
+          width:635px;
+      }
+      .large_box{
+          margin-bottom:10px;
+          width:600px;
+          height:350px;
+          overflow:hidden;
+      }
+      .large_box img{
+          display:block;
+      }
+      .small_box{
+          width:600px;
+          height:73px;
+          overflow:hidden;
+      }
+      .small_list{
+          position:relative;
+          float:left;
+          width:550px;
+          height:73px;
+          overflow:hidden;
+      }
+      .small_list ul{
+          height:50px;
+          overflow:hidden;
+      }
+      .small_list ul li{
+          position:relative;
+          float:left;
+          margin-right:10px;
+          width:100px;
+      }
+      .small_list ul li img{
+          display:block;
+      }
+      .small_list ul li .bun_bg{
+          display:none;
+          position:absolute;
+          top:0;
+          left:0;
+          width:100px;
+          height:50px;
+          background:#FFF;
+          filter:alpha(opacity=60);
+          -moz-opacity:0.6;
+          -khtml-opacity:0.6;
+          opacity:0.6;
+      }
+      .small_list ul li.on .bun_bg{
+          display:block;
+      }
+      .btns{
+          display:block;
+          width:20px;
+          height:50px;
+          background-color:#777;
+          background-repeat:no-repeat;
+          background-position:center center;
+          cursor:pointer;
+      }
+      .btns:hover{
+          background-color:#333;
+      }
+      .lefts_btn{
+          float:left;
+          margin-right:10px;
+          background-image:url(../images/left_btn.png);
+      }
+      .rights_btn{
+          float:right;
+          background-image:url(../images/right_btn.png);
+      }
+  </style>
+</head>
+<body>
+<div class="banner">
+    <div class="large_box">
+        <ul>
+            <li>
+                <img src="images/img1.jpg" width="600" height="350">
+            </li>
+            <li>
+                <img src="images/img2.jpg" width="600" height="350">
+            </li>
+            <li>
+                <img src="images/img3.jpg" width="600" height="350">
+            </li>
+            <li>
+                <img src="images/img4.jpg" width="600" height="350">
+            </li>
+            <li>
+                <img src="images/img5.jpg" width="600" height="350">
+            </li>
+            <li>
+                <img src="images/img6.jpg" width="600" height="350">
+            </li>
+        </ul>
+    </div>
+    <div class="small_box">
+        <span class="btns lefts_btn" onclick="left_btn()"></span>
+        <div class="small_list">
+            <ul>
+                <li class="on">
+                    <img src="images/img1.jpg" width="100" height="50">
+                    <div class="bun_bg"></div>
+                </li>
+                <li class="">
+                    <img src="images/img2.jpg" width="100" height="50">
+                    <div class="bun_bg"></div>
+                </li>
+                <li class="">
+                    <img src="images/img3.jpg" width="100" height="50">
+                    <div class="bun_bg"></div>
+                </li>
+                <li class="">
+                    <img src="images/img4.jpg" width="100" height="50">
+                    <div class="bun_bg"></div>
+                </li>
+                <li class="">
+                    <img src="images/img5.jpg" width="100" height="50">
+                    <div class="bun_bg"></div>
+                </li>
+                <li class="">
+                    <img src="images/img6.jpg" width="100" height="50">
+                    <div class="bun_bg"></div>
+                </li>
+            </ul>
+        </div>
+        <span class="btns rights_btn" onclick="right_btn()"></span>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/core.js"></script>
+<script type="text/javascript">
+    /* 左按钮 */
+    function left_btn(){
+        var i;
+        var l = $(".small_list").find("ul li").length;
+        $(".small_list").find("ul li").each(function(index){
+            if($(this).hasClass("on")){
+                i = index;
+            }
+        });
+        i--;
+        if(i < 0){
+            i = l - 1;
+        }
+        t = i;
+        Img(i)
+    };
+
+    /* 右按钮 */
+    function right_btn(){
+        var i;
+        var l = $(".small_list").find("ul li").length;
+        $(".small_list").find("ul li").each(function(index){
+            if($(this).hasClass("on")){
+                i = index;
+            }
+        });
+        i++;
+        if(i > l-1){
+            i = 0;
+        }
+        t = i;
+        Img(i);
+    };
+
+    /* 图片 */
+    function Img(i){
+        var l = $(".small_list").find("ul li").length;
+        var l_mean;
+        if(l < 5){
+            l_mean = 0;
+        }else{
+            l_mean = ((parseInt(l / 5) - 1) * 5) + (l % 5);
+        }
+        var w = 110;
+        $(".large_box").find("ul li").eq(i).fadeIn().siblings().hide();
+        $(".small_list").find("ul li").eq(i).addClass("on").siblings().removeClass("on");
+        var ml = i * w;
+        if(ml <= l_mean * w){
+            $(".small_list").find("ul").stop().animate({
+                marginLeft: -ml + "px"
+            })
+        }else{
+            $(".small_list").find("ul").stop().animate({
+                marginLeft: -(l_mean * w) + "px"
+            })
+        }
+    }
+</script>
+</body>
+</html>

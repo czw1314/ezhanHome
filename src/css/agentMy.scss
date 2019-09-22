@@ -1,0 +1,213 @@
+.agentMy {
+  margin: 90px auto;
+  text-align: center;
+  color: #fff;
+  .title {
+    width: 1200px;
+    margin: auto;
+    display: flex;
+    height: 70px;
+    font-size: 41px;
+    font-family: Source Han Sans CN;
+    font-weight: 500;
+    align-items: center;
+    color: rgba(38, 138, 237, 1);
+    p {
+      border-left: 1px solid #268AED;
+      padding-left: 10px;
+      margin-right: 50px;
+      line-height: 46px;
+      margin-bottom: 0;
+    }
+    .logo {
+      padding-right: 10px;
+    }
+  }
+  .userBox {
+    margin-top: 20px;
+    padding: 30px 0;
+    background: rgba(242, 245, 248, 1);
+    .container {
+      width: 1200px;
+      position: relative;
+      margin: auto;
+
+      .menu {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        z-index: 222;
+        padding-top: 30px;
+        width: 200px;
+        font-size: 14px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
+        color: rgba(102, 102, 102, 1);
+        .headerPic {
+          width: 80px;
+          height: 80px;
+          margin-bottom: 16px;
+        }
+      }
+      .ant-tabs {
+        position: relative;
+        .ant-tabs-left-bar {
+          padding-top: 20px;
+          text-align: center;
+          background-color: #fff;
+          margin-top: 196px;
+          font-weight: bold;
+          border: none;
+          width: 200px;
+          height: 220px;
+          .ant-tabs-tab {
+            text-align: center;
+
+          }
+          .ant-tabs-tab:hover {
+            border: none;
+            color: #fff;
+            background-color: #268AED;
+          }
+          .ant-tabs-tab-active {
+            color: #fff;
+            border: none;
+            background-color: #268AED;
+          }
+          .ant-tabs-bar{
+            border: none;
+          }
+        }
+        .ant-tabs-ink-bar {
+          background-color: transparent;
+        }
+        .ant-tabs-content {
+          background-color: #fff;
+          padding: 30px ;
+          text-align: left;
+          border: none;
+          color:rgba(51,51,51,1);
+          .first{
+            display: flex;
+            justify-content: space-between;
+            background-color: transparent;
+            .headerPic{
+              width: 120px !important;
+              height: 120px;
+              background-color: transparent;
+              display: inline-block;
+              border-radius: 50%;
+            }
+            .ant-upload-picture-card-wrapper {
+              width: auto;
+              margin-left: 20px;
+            }
+            .ant-upload.ant-upload-select-picture-card {
+              width: 120px;
+              height: 40px;
+              background-color: transparent;
+              border: none;
+            }
+          }
+          .data{
+            font-size:20px;
+            font-family:Source Han Sans CN;
+            font-weight:bold;
+            color:rgba(51,51,51,1);
+          }
+          .nickname{
+            padding: 0;
+            margin: 0;
+          }
+          .weixin{
+            .h2{
+              margin-top: 50px;
+              font-size:20px;
+              font-family:Source Han Sans CN;
+              font-weight:bold;
+              color:rgba(51,51,51,1);
+            }
+            .weixinBox{
+              display: flex;
+              align-items: center;
+              p{
+                line-height: 28px;
+                margin:0 30px ;
+              }
+              button{
+                margin-left: 0 !important;
+              }
+            }
+          }
+          .center{
+            .item{
+              display: flex;
+              margin-top: 20px;
+              justify-content: space-between;
+              .left{
+                width: 85%;
+                display: flex;
+                align-items: center;
+                p{
+                  padding: 0;
+                  margin: 0;
+                }
+                input{
+                  width: 200px;
+                  margin-left: 20px;
+                }
+                .ant-select{
+                  width: 180px;
+                  margin-left: 20px;
+                }
+                .ant-checkbox-group{
+                  margin-left: 20px;
+                  input{
+                    width:auto;
+                    mxargin-left: 20px;
+                  }
+                }
+              }
+            }
+          }
+        }
+        .item{
+          display: flex;
+          margin-top: 20px;
+          justify-content: space-between;
+          .left{
+            width: 85%;
+            display: flex;
+            align-items: center;
+            p{
+              padding: 0;
+              margin: 0;
+            }
+            input{
+              width: 200px;
+              margin-left: 20px;
+            }
+            .ant-select{
+              width: 180px;
+              margin-left: 20px;
+            }
+            .ant-checkbox-group{
+              margin-left: 20px;
+              input{
+                width:auto;
+                mxargin-left: 20px;
+              }
+            }
+          }
+        }
+        .ant-tag{
+          padding: 8px;
+          margin-right: 40px;
+        }
+
+      }
+    }
+
+  }
+}
