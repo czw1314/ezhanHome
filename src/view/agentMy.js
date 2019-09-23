@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/agentMy.scss';
-import {personMsg} from '../api'
+import {getPersonMsg} from '../api'
 import { Tabs,Input,Button,Form,Upload, Icon, message,Checkbox,
     Select,Tag,Tooltip,} from 'antd';
 //上传头像
@@ -250,7 +250,12 @@ class AgentMy extends React.Component {
         console.log('checked = ', checkedValues);
     }
     componentDidMount(){
-        personMsg()
+        let params={
+            userId:localStorage.getItem('userId')
+        }
+        getPersonMsg(params).then((res)=>{
+            console.log(res)
+        })
     }
     componentWillUnmount(){
         console.log(1)

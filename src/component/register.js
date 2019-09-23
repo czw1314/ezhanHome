@@ -51,6 +51,7 @@ class Information extends React.Component {
                 return false
             }
             if (!err) {
+                localStorage.setItem('userPhone',values.phone)
                 let params = {
                     "password": values.password,
                     "phone": values.phone,
@@ -60,7 +61,6 @@ class Information extends React.Component {
                 }
                 register(params).then((res) => {
                     if (res.data.code === 0) {
-                        console.log(res.data.msg === '该手机号已绑定用户')
                         if (res.data.verifyErrorMsg) {
                             this.props.form.setFields({
                                 verifyCode: {

@@ -64,3 +64,12 @@ export const getDistrictRegions = (params) =>
             },
         }
     );
+    //获取个人信息
+export const getPersonMsg = (params) =>
+axios.get(`${base}/agent/personMsg`,{
+    params:params,
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+    }
+);

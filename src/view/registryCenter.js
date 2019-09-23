@@ -646,7 +646,7 @@ class RegistryCenter extends React.Component {
                                     </Upload>
                                 </div>
                             </div>
-                            <p style={{marginTop: '40px'}}>账号：{this.props.userInformation.userName || localStorage.getItem('userName')}</p>
+                            <p style={{marginTop: '40px'}}>账号：{localStorage.getItem('userPhone')}</p>
                             <InformationForms userInformation={this.props.userInformation}/>
                         </div>
                     </div>
