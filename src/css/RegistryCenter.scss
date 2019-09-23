@@ -157,6 +157,12 @@
             justify-content: space-between;
             .left {
               display: flex;
+              .ant-cascader-picker {
+                width: auto;
+              }
+              .ant-cascader-picker-label {
+                left:20px;
+              }
               .upload-list-inline {
                 margin-left: 40px;
               }
@@ -177,6 +183,19 @@
                 input {
                   width: auto;
                   mxargin-left: 20px;
+                }
+              }
+              .bottom{
+                margin-left: 16px;
+                width: 230px;
+                .ant-upload{
+                  padding: 0;
+                }
+                .ant-upload-select-picture-card{
+                  width: 120px;
+                  height: 40px;
+                  background-color: transparent;
+                  border: none;
                 }
               }
             }

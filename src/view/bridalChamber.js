@@ -164,6 +164,7 @@ class BridalChamber extends React.Component {
                             options={this.state.characteristic}
                             value={this.state.characteristicChecked}
                             onChange={this.onChangeCharacteristic}
+
                         />
                     </div>
 

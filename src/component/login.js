@@ -130,6 +130,7 @@ class NormalLoginForm extends React.Component {
                         this.props.setUserInformation(res.data)
                         localStorage.setItem('userName',res.data.name)
                         localStorage.setItem('role',res.data.role)
+                        localStorage.setItem('userId',res.data.userId)
                     }
                 })
             }

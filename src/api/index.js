@@ -48,3 +48,19 @@ export const agentRegister = (params) =>
             },
         }
     );
+//上传图片
+export const uploadFile = (params) =>
+    axios.get(`${base}/user/agentRegister`,{
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+//获取区域街道
+export const getDistrictRegions = (params) =>
+    axios.get(`${base}/dataList/districtRegions`,{
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
