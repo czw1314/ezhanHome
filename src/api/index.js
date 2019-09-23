@@ -42,7 +42,7 @@ export const personMsg = (params) =>
     );
 //注册上传资料
 export const agentRegister = (params) =>
-    axios.get(`${base}/user/agentRegister`,{
+    axios.post(`${base}/user/agentRegister`,params,{
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },

@@ -6,18 +6,14 @@ import {
     Tabs, Input, Button, Form, Upload, Icon, message, Checkbox,
     Select, Radio, Cascader
 } from 'antd';
-import {getDistrictRegions} from '../api/index'
+import {getDistrictRegions,agentRegister} from '../api/index'
 import InformationForm from '../component/informationForm'
 
 class Information extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            text: '获取验证码',
             disabled: false,
-            code: 'http://47.108.87.104:8501/user/verfiyCode',
-            loading: false,
-            loading1: false,
             loading2: false,
             loading3: false,
             loading4: false,
@@ -27,15 +23,47 @@ class Information extends React.Component {
             idT: '',
             idF: '',
             name: '',
-            plainOptions: ['新房经纪', '二手房经济', '权证代办', '贷款代办', '专车接送'],
+            plainOptions: ['新房经纪', '二手房经纪', '权证代办', '贷款代办', '专车接送'],
             tags: ['Unremovable', 'Tag 2', 'Tag 3'],
             inputVisible: false,
             inputValue: '',
             agent: true,
             first: false,
             id: 3,
-            districtRegionsList: []
+            districtRegionsList: [],
+            bussinessId:[],
+            regionId:'',
+            regionId1:'',
+            regionId2:'',
+            agentType:'',
+            position:''
         }
+    }
+    componentDidMount() {
+        getDistrictRegions().then((res) => {
+            if (res.data.code === 1) {
+                let option = [];
+                for (let i = 0; i < res.data.list.length; i++) {
+                    let item = {
+                        value: res.data.list[i].id,
+                        label: res.data.list[i].name,
+                        children: []
+                    }
+                    for (let j = 0; j < res.data.list[i].regions.length; j++) {
+                        let items = {
+                            value: res.data.list[i].regions[j].id,
+                            label: res.data.list[i].regions[j].street,
+                        }
+                        item.children.push(items)
+                    }
+                    option.push(item)
+                }
+                console.log(option)
+                this.setState({
+                    districtRegionsList: option
+                })
+            }
+        })
     }
     //转化为base64
     getBase64(img, callback) {
@@ -48,24 +76,31 @@ class Information extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            if (!(/^1[3456789]\d{9}$/.test(values.phone))) {
-                this.props.form.setFields({
-                    phone: {
-                        value: values.phone,
-                        errors: [new Error('请输入正确的手机号')],
-                    },
-                });
-                return false
-            }
             if (!err) {
-                let params = {
-                    "bussinessId": values.bussinessId,
-                    "phone": values.phone,
-                    "phoneCode": values.phoneCode,
-                    "role": this.props.role,
-                    "verifyCode": values.verifyCode
+                let re=[]
+                if(this.state.regionId){
+                    re.push(this.state.regionId)
                 }
-                setUserInformation(params).then((res) => {
+                if(this.state.regionId1){
+                    re.push(this.state.regionId1)
+                }
+                if(this.state.regionId2){
+                    re.push(this.state.regionId2)
+                }
+                let params = {
+                    "name": values.name,
+                    "regionIds":re,
+                    "bussinessId": this.state.bussinessId,
+                    "workingYears": values.workingYears,
+                    "agentType":this.state.agentType||2,
+                    "company":this.refs.company.state.value,
+                    "cardNo":this.refs.cardNo.state.value,
+                    "position":this.state.position||"房地产经纪人",
+                    "contact":values.contact,
+                    "userId":localStorage.getItem('userId')
+                }
+                console.log(params)
+                agentRegister(params).then((res) => {
                     if (res.data.code === 0) {
                         console.log(res.data.msg === '该手机号已绑定用户')
                         if (res.data.verifyErrorMsg) {
@@ -151,15 +186,45 @@ class Information extends React.Component {
             );
         }
     };
+    //区域选择
     onChange(checkedValues) {
-        console.log('checked = ', checkedValues);
+    this.setState({
+        regionId:checkedValues[1]
+    })
     }
-
-
-    componentDidMount() {
-        console.log(this.props.form.validateFields)
+    onChange1(checkedValues) {
+        this.setState({
+            regionId:checkedValues[1]
+        })
+        }
+        onChange2(checkedValues) {
+            this.setState({
+                regionId:checkedValues[1]
+            })
+            }
+    //服务选择
+    bussinessIdChange(value){
+        console.log(value)
+        this.setState({
+            bussinessId:value
+        })
     }
-
+    //公司选择（独立经纪人）
+    onAgentType(value){
+        this.setState({
+            agentType:value
+        })
+    }
+    onPosition(value){
+        this.setState({
+            position:value
+        })
+    }
+    //公司填写
+    company(e){
+        e.preventDefault();
+        console.log(e)
+    }
     render() {
         const {getFieldDecorator} = this.props.form;
         const base = 'http://47.108.87.104:8501/user/uploadFile';
@@ -176,26 +241,26 @@ class Information extends React.Component {
                         </div>
                     )}
                 </Form.Item>
-                <Form.Item className={'code'}>
+                <Form.Item className={'code'}  style={{display: this.state.agent ? 'block' : 'none'}}>
                     {getFieldDecorator('verifyCode')(
-                        <div className={'item'} style={{display: this.state.agent ? 'block' : 'none'}}>
+                        <div className={'item'}>
                             <div className={'left'}>
                                 <p>服务区域：</p>
                                 <Cascader
                                     options={this.state.districtRegionsList}
-                                    onChange={this.onChange}
+                                    onChange={this.onChange.bind(this)}
                                     placeholder={'请选择区域'}
                                     size={'large'}
                                 />
                                 <Cascader
                                     options={this.state.districtRegionsList}
-                                    onChange={this.onChange}
+                                    onChange={this.onChange1.bind(this)}
                                     placeholder={'请选择区域'}
                                     size={'large'}
                                 />
                                 <Cascader
                                     options={this.state.districtRegionsList}
-                                    onChange={this.onChange}
+                                    onChange={this.onChange2.bind(this)}
                                     placeholder={'请选择区域'}
                                     size={'large'}
                                 />
@@ -204,19 +269,27 @@ class Information extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item>
-                    {getFieldDecorator('bussinessId')(
-                        <div className={'item'} style={{display: this.state.agent ? 'block' : 'none'}}>
+                    {getFieldDecorator('contact')(
+                        <div className={'item'}>
+                            <div className={'left'}>
+                                <p>联系电话：</p>
+                                <Input size={'large'}/>
+                            </div>
+                        </div>
+                    )}
+                </Form.Item>
+                <Form.Item  style={{display: this.state.agent ? 'block' : 'none'}}>
+                        <div className={'item'}>
                             <div className={'left'}>
                                 <p>选择服务：</p>
-                                <Checkbox.Group options={this.state.plainOptions} defaultValue={['Apple']}
-                                                onChange={this.onChange.bind(this)}/>
+                                <Checkbox.Group options={this.state.plainOptions}
+                                                onChange={this.bussinessIdChange.bind(this)}/>
                             </div>
                         </div>
-                    )}
                 </Form.Item>
-                <Form.Item>
-                    {getFieldDecorator('password')(
-                        <div className={'item'} style={{display: this.state.agent ? 'block' : 'none'}}>
+                <Form.Item  style={{display: this.state.agent ? 'block' : 'none'}}>
+                    {getFieldDecorator('workingYears')(
+                        <div className={'item'} >
                             <div className={'left'}>
                                 <p>从业年限：</p>
                                 <Input size={'large'}/>
@@ -224,26 +297,27 @@ class Information extends React.Component {
                         </div>
                     )}
                 </Form.Item>
-                <Form.Item>
+                <Form.Item >
                     {getFieldDecorator('check')(
                         <div className={'item'}>
                             <div className={'left'}>
                                 <p>服务公司：</p>
-                                <Select defaultValue="在职公司" style={{width: 200}} onChange={this.handleChange}
+                                <Select defaultValue="2"  onSelect={this.onAgentType.bind(this)} style={{display: this.state.agent ? 'block' : 'none',width:'200px'}}
                                         size={'large'}>
-                                    <Option value="在职公司">在职公司</Option>
-                                    <Option value="独立经纪人">独立经纪人</Option>
+                                    <Option value="2">在职公司</Option>
+                                    <Option value="1">独立经纪人</Option>
                                 </Select>
-                                <Input placeholder="独立经纪人不填" size={'large'}/>
+                                <Input disabled={this.state.agentType===2?true:false} size={'large'} ref={'company'} />
                             </div>
                         </div>
                     )}
                 </Form.Item>
-                <Form.Item>
-                    <div className={'item'} style={{display: this.state.agent ? 'block' : 'none'}}>
+                <Form.Item  style={{display: this.state.agent ? 'block' : 'none'}}>
+
+                    <div className={'item'}>
                         <div className={'left'} style={{alignItems: 'flex-start'}}>
                             <p dangerouslySetInnerHTML={{__html: '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp职称：'}}></p>
-                            <Select defaultValue="房地产经纪人" style={{width: 200}} onChange={this.handleChange}
+                            <Select defaultValue="房地产经纪人" style={{width: 200}} onSelect={this.onPosition.bind(this)}
                                     size={'large'}>
                                 <Option value="房地产经纪人">房地产经纪人</Option>
                                 <Option value="房地产经纪人协理">房地产经纪人协理</Option>
@@ -269,12 +343,14 @@ class Information extends React.Component {
                             </div>
                         </div>
                     </div>
+
                 </Form.Item>
-                <Form.Item>
-                    <div className={'item'} style={{display: this.state.agent ? 'block' : 'none'}}>
+                <Form.Item  style={{display: this.state.agent ? 'block' : 'none'}}>
+    
+                    <div className={'item'}>
                         <div className={'left'} style={{alignItems: 'flex-start'}}>
                             <p>身份证号：</p>
-                            <Input size={'large'}/>
+                            <Input size={'large'} ref={'cardNo'}/>
                             <div className={'bottom'}>
                                 <Upload
                                     listType="picture-card"
@@ -372,31 +448,6 @@ class RegistryCenter extends React.Component {
         }
     }
 
-    componentDidMount() {
-        getDistrictRegions().then((res) => {
-            if (res.data.code === 1) {
-                let option = [];
-                for (let i = 0; i < res.data.list.length; i++) {
-                    let item = {
-                        value: res.data.list[i].name,
-                        label: res.data.list[i].name,
-                        children: []
-                    }
-                    for (let j = 0; j < res.data.list[i].regions.length; j++) {
-                        let items = {
-                            value: res.data.list[i].regions[j].street,
-                            label: res.data.list[i].regions[j].street,
-                        }
-                        item.children.push(items)
-                    }
-                    option.push(item)
-                }
-                this.setState({
-                    districtRegionsList: option
-                })
-            }
-        })
-    }
 
     //转化为base64
     getBase64(img, callback) {
