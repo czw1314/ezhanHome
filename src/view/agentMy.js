@@ -187,6 +187,8 @@ class AgentMy extends React.Component {
             tags: ['Unremovable', 'Tag 2', 'Tag 3'],
             inputVisible: false,
             inputValue: '',
+            userInformation:{},
+
         }
     }
     //转化为base64
@@ -254,7 +256,11 @@ class AgentMy extends React.Component {
             userId:localStorage.getItem('userId')
         }
         getPersonMsg(params).then((res)=>{
-            console.log(res)
+            if(res.data.code===1){
+                this.setState({
+                    userInformation:res.data
+                })
+            }
         })
     }
     componentWillUnmount(){
@@ -277,9 +283,9 @@ class AgentMy extends React.Component {
                 <div className={'userBox'}>
                     <div className={'container'}>
                         <div className={'menu'}>
-                            <img className={'headerPic'} src={require('../img/agent.png')}/>
-                            <p>欢迎您，晨晨</p>
-                            <p>账号：12909138409</p>
+                            <img className={'headerPic'} src={'http://47.108.87.104:8601/user/'+this.state.userInformation.head}/>
+                            <p>欢迎您，{this.state.userInformation.name}</p>
+                            <p>账号：{localStorage.getItem('phone')}</p>
                         </div>
                         <Tabs defaultActiveKey="1" onChange={this.callback} tabPosition={'left'} tabBarStyle={{textAlign:'center',marginRight:20}}>
                             <TabPane tab="个人信息/微信绑定" key="1">

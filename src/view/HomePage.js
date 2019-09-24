@@ -74,7 +74,7 @@ class HomePage extends React.Component {
             }
             else if(this.props.userInformation.role===5||localStorage.getItem('role')==3){
                 return(
-                    <Link to={'/home/registryCenter'}>
+                    <Link to={'/home/agentMy'}>
                         <span style={{marginRight:'20px'}}>{this.props.userInformation.userName||localStorage.getItem('userName')}</span>
                     </Link>
                 )

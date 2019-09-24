@@ -49,9 +49,6 @@ class RetreivePassword extends React.Component {
          }
 
     }
-    componentDidMount(){
-         this.createCode(4)
-    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -131,6 +128,7 @@ class NormalLoginForm extends React.Component {
                         localStorage.setItem('userName',res.data.name)
                         localStorage.setItem('role',res.data.role)
                         localStorage.setItem('userId',res.data.userId)
+                        localStorage.setItem('phone',values.phone)
                     }
                 })
             }

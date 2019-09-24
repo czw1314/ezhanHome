@@ -33,13 +33,7 @@ export const login = (params) =>
         }
     );
 //个人中心
-export const personMsg = (params) =>
-    axios.get(`${base}/agent/personMsg`,{
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-        }
-    );
+
 //注册上传资料
 export const agentRegister = (params) =>
     axios.post(`${base}/user/agentRegister`,params,{
