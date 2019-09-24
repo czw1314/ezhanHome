@@ -99,7 +99,7 @@ class Information extends React.Component {
                     "contact":values.contact,
                     "userId":localStorage.getItem('userId')
                 }
-                console.log(params)
+
                 agentRegister(params).then((res) => {
                     if (res.data.code === 0) {
                         console.log(res.data.msg === '该手机号已绑定用户')
@@ -194,12 +194,12 @@ class Information extends React.Component {
     }
     onChange1(checkedValues) {
         this.setState({
-            regionId:checkedValues[1]
+            regionId1:checkedValues[1]
         })
         }
         onChange2(checkedValues) {
             this.setState({
-                regionId:checkedValues[1]
+                regionId2:checkedValues[1]
             })
             }
     //服务选择

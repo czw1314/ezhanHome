@@ -1,180 +1,10 @@
 import React from 'react';
 import '../css/agentMy.scss';
-import {getPersonMsg} from '../api'
+import {getPersonMsg,getDistrictRegions, putPersonMsg} from '../api'
 import { Tabs,Input,Button,Form,Upload, Icon, message,Checkbox,
-    Select,Tag,Tooltip,} from 'antd';
-//上传头像
-class Avatar extends React.Component {
-    state = {
-        loading: false,
-    };
-    //转化为base64
-    getBase64(img, callback) {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => callback(reader.result));
-        reader.readAsDataURL(img);
-    }
-    //限制大小
-    beforeUpload(file) {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
-        }
-        return isJpgOrPng && isLt2M;
-    }
-    handleChange = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({ loading: true });
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            this.getBase64(info.file.originFileObj, imageUrl =>
-                this.setState({
-                    imageUrl,
-                    loading: false,
-                }),
-            );
-        }
-    };
+    Select,Tag,Tooltip,Cascader,Modal} from 'antd';
+import ChangePassWords from '../component/changePassWord'
 
-    render() {
-        const uploadButton = (
-            <div>
-                <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                <div className="ant-upload-text">Upload</div>
-            </div>
-        );
-        const { imageUrl } = this.state;
-        return (
-            <Upload
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                beforeUpload={this.beforeUpload}
-                onChange={this.handleChange}
-            >
-                {uploadButton}
-            </Upload>
-        );
-    }
-}
-class ChangePassWord extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            confirmDirty: false,
-            autoCompleteResult: [],
-            password:'',
-            newPassword:'',
-            confirmPassword:''
-        };
-    }
-    password=(rule,value) => {
-        this.setState({password:value})
-    };
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
-    };
-    newPassword = (rule, value, callback) => {
-        const { form } = this.props;
-        if (value && value === form.getFieldValue('password')) {
-            callback('新密码不能与旧密码相同!');
-        } else {
-            callback();
-        }
-    };
-    confirmPassword = (rule, value, callback) => {
-        const { form } = this.props;
-        if (value && value !== form.getFieldValue('newPassword')) {
-            callback('两次密码不同!');
-        } else {
-            callback();
-        }
-    };
-    render(){
-        const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            },
-        };
-        return(
-            <Form {...formItemLayout} onSubmit={this.handleSubmit} style={{width:'400px',margin:'auto'}}>
-                <Form.Item label="输入旧密码" >
-                    {getFieldDecorator('password', {
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入旧密码',
-                            },
-                        ],
-                    })(<Input.Password />)}
-                </Form.Item>
-                <Form.Item label="输入新密码" >
-                    {getFieldDecorator('newPassword', {
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入新密码',
-                            },
-                            {
-                                validator: this.newPassword,
-                            },
-                        ],
-                    })(<Input.Password />)}
-                </Form.Item>
-                <Form.Item label="确认新密码">
-                    {getFieldDecorator('confirmPassword', {
-                        rules: [
-                            {
-                                required: true,
-                                message: '请确认新密码',
-                            },
-                            {
-                                validator: this.confirmPassword,
-                            },
-                        ],
-                    })(<Input.Password />)}
-                </Form.Item>
-                <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit" onSubmit={this.handleSubmit}>
-                        确认修改
-                    </Button>
-                </Form.Item>
-            </Form>
-        )
-    }
-}
-const ChangePassWords = Form.create({ name: 'register' })(ChangePassWord);
 class AgentMy extends React.Component {
     constructor(props){
         super(props)
@@ -188,6 +18,17 @@ class AgentMy extends React.Component {
             inputVisible: false,
             inputValue: '',
             userInformation:{},
+            name:'',
+            districtRegionsList: [],
+            bussinessId:[],
+            regionId:[],
+            regionId1:[],
+            regionId2:[],
+            company:'',
+            workYears:'',
+            agentType:'',
+            position:'',
+            plainOptions: [{label:'新房经纪',value:'新房经纪'},{label:'二手房经纪',value:'二手房经纪'},{label:'权证代办',value:'权证代办'},{label: '贷款代办',value: '贷款代办'},{label:'专车接送',value:'专车接送'}],
 
         }
     }
@@ -198,43 +39,45 @@ class AgentMy extends React.Component {
         reader.readAsDataURL(img);
     }
     //限制大小
+    //限制大小
     beforeUpload(file) {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
             message.error('You can only upload JPG/PNG file!');
         }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
-        }
-        return isJpgOrPng && isLt2M;
+        // const isLt2M = file.size / 1024 / 1024 < 2;
+        // if (!isLt2M) {
+        //     message.error('Image must smaller than 2MB!');
+        // }
+        return isJpgOrPng;
     }
-    handleChange = info => {
+
+    //头像上传
+    headChange = info => {
         if (info.file.status === 'uploading') {
-            this.setState({ loading: true });
+            this.setState({loading: true});
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl =>
                 this.setState({
-                    imageUrl,
+                    head: imageUrl,
                     loading: false,
                 }),
             );
         }
     };
     //微信二维码上传
-    handleChange1 = info => {
+    weixinChange= info => {
         if (info.file.status === 'uploading') {
             this.setState({ loading1: true });
             return;
         }
         if (info.file.status === 'done') {
             // Get this url from response in real world.
-            this.getBase64(info.file.originFileObj, imageUrl1 =>
+            this.getBase64(info.file.originFileObj, imageUrl =>
                 this.setState({
-                    imageUrl1,
+                    weixin:imageUrl,
                     loading1: false,
                 }),
             );
@@ -247,31 +90,187 @@ class AgentMy extends React.Component {
     callback(key) {
         console.log(key);
     }
-    //多选
-    onChange(checkedValues) {
-        console.log('checked = ', checkedValues);
+    //改名
+    onChangeName(e) {
+        this.setState({name:e.target.value});
     }
+        //改电话
+        onChangeContact(e) {
+            this.setState({contact:e.target.value});
+        }
+        //区域选择
+        onChange(checkedValues) {
+
+            this.setState({
+                regionId:checkedValues
+            })
+            }
+            onChange1(checkedValues) {
+                this.setState({
+                    regionId1:checkedValues
+                })
+                }
+                onChange2(checkedValues) {
+                    this.setState({
+                        regionId2:checkedValues
+                    })
+                    }
     componentDidMount(){
         let params={
             userId:localStorage.getItem('userId')
         }
         getPersonMsg(params).then((res)=>{
             if(res.data.code===1){
+                let regions=[]
+                for(let i=0;i<res.data.regions.length;i++){
+                    regions.push([res.data.regions[i].districtId,res.data.regions[i].streetId])
+                }
                 this.setState({
-                    userInformation:res.data
+                    userInformation:res.data,
+                    name:res.data.name,
+                    regionId:regions[0]?regions[0]:[],
+                    regionId1:regions[1]?regions[1]:[],
+                    regionId2:regions[2]?regions[2]:[],
+                    position:res.data.position,
+                    bussinessId:res.data.businesses,
+                    workYears:res.data.workYears,
+                    agentType:res.data.agentType,
+                    company:res.data.company
                 })
             }
+        })
+        getDistrictRegions().then((res) => {
+            if (res.data.code === 1) {
+                let option = [];
+                for (let i = 0; i < res.data.list.length; i++) {
+                    let item = {
+                        value: res.data.list[i].id,
+                        label: res.data.list[i].name,
+                        children: []
+                    }
+                    for (let j = 0; j < res.data.list[i].regions.length; j++) {
+                        let items = {
+                            value: res.data.list[i].regions[j].id,
+                            label: res.data.list[i].regions[j].street,
+                        }
+                        item.children.push(items)
+                    }
+                    option.push(item)
+                }
+
+                this.setState({
+                    districtRegionsList: option
+                })
+            }
+        })
+    }
+    //职称改变
+    changePosition(e){
+        this.setState({
+            position:e
+        })
+    }
+        //工作年限
+        changeWorkYears(e){
+            this.setState({workYears:e.target.value});
+        }
+             //公司
+             changeCompany(e){
+                this.setState({company:e.target.value});
+            }
+        //服务选择
+        bussinessIdChange(value){
+            this.setState({
+                bussinessId:value
+            })
+        }
+            //公司选择（独立经纪人）
+    onAgentType(value){
+        this.setState({
+            agentType:value
         })
     }
     componentWillUnmount(){
         console.log(1)
     }
+    onSubmit(){
+        let re=[]
+        if(this.state.regionId){
+            re.push(this.state.regionId[1])
+        }
+        if(this.state.regionId1){
+            re.push(this.state.regionId1[1])
+        }
+        if(this.state.regionId2){
+            re.push(this.state.regionId2[1])
+        }
+        let params={
+            "name": this.state.name,
+            "regionIds":re,
+            "bussinessId": this.state.bussinessId,
+            "workingYears": this.state.workingYears,
+            "agentType":this.state.agentType,
+            "company":this.state.company,
+            "position":this.state.position,
+            "contact":this.state.contact,
+            "userId":localStorage.getItem('userId')
+        }
+        putPersonMsg(params).then((res)=>{
+            if(res.data.code===1){
+                message.success('修改成功')
+                let params={
+                    userId:localStorage.getItem('userId')
+                }
+                getPersonMsg(params).then((res)=>{
+                    if(res.data.code===1){
+                        let regions=[]
+                        for(let i=0;i<res.data.regions.length;i++){
+                            regions.push([res.data.regions[i].districtId,res.data.regions[i].streetId])
+                        }
+                        this.setState({
+                            userInformation:res.data,
+                            name:res.data.name,
+                            regionId:regions[0]?regions[0]:[],
+                            regionId1:regions[1]?regions[1]:[],
+                            regionId2:regions[2]?regions[2]:[],
+                            position:res.data.position,
+                            bussinessId:res.data.businesses,
+                            workYears:res.data.workYears,
+                            agentType:res.data.agentType,
+                            company:res.data.company
+                        })
+                    }
+                })
+            }
+            else{
+                message.error('修改失败')
+            }
+        })
+
+    }
+    //确认修改？
+    showConfirm() {
+        const { confirm } = Modal;
+        const that=this
+        confirm({
+          title: '是否确认更新修改信息?',
+          content: '',
+          onOk:()=> {
+            this.onSubmit()
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      }
     render(){
+        console.log(this.state.bussinessId)
         const { TabPane } = Tabs;
         const { imageUrl,imageUrl1 } = this.state;
         const { Option } = Select;
         const { tags, inputVisible, inputValue } = this.state;
-
+        const base='http://47.108.87.104:8601/user/';
+        const updata = 'http://47.108.87.104:8501/user/uploadFile';
         return(
             <div className={'agentMy'}>
                 <div className={'title'}>
@@ -283,7 +282,7 @@ class AgentMy extends React.Component {
                 <div className={'userBox'}>
                     <div className={'container'}>
                         <div className={'menu'}>
-                            <img className={'headerPic'} src={'http://47.108.87.104:8601/user/'+this.state.userInformation.head}/>
+                            <img className={'headerPic'} src={base+this.state.userInformation.head}/>
                             <p>欢迎您，{this.state.userInformation.name}</p>
                             <p>账号：{localStorage.getItem('phone')}</p>
                         </div>
@@ -292,122 +291,124 @@ class AgentMy extends React.Component {
                                 <p className={'data'}>个人资料/编辑</p>
                                <div className={'first'}>
                                    <div style={{display:'flex',alignItems:'center'}}>
-                                       <img src={imageUrl} className={'headerPic'}/>
+                                       <img src={this.state.head||base+this.state.userInformation.head} className={'headerPic'}/>
                                        <Upload
-                                           name="avatar"
+                                            name={'file'}
                                            listType="picture-card"
                                            className="avatar-uploader"
+                                           data={{
+                                            type: '1',
+                                            userId:localStorage.getItem('userId')
+                                        }}
                                            showUploadList={false}
-                                           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                           action={updata}
                                            beforeUpload={this.beforeUpload}
-                                           onChange={this.handleChange}
+                                           onChange={this.headChange.bind(this)}
                                        >
                                            <Button type="primary"  size={'large'}> <Icon type={this.state.loading ? 'loading' : 'plus'} />上传头像</Button>
                                        </Upload>
                                    </div>
                                    <div style={{display:'flex',alignItems:'center'}}>
-                                       <img src={imageUrl1} className={'headerPic'}/>
+                                       <img src={this.state.weixin||base+this.state.userInformation.weChatQrCode} className={'headerPic'} style={{borderRadius:0}}/>
                                        <Upload
-                                           name="avatar"
+                                           name="file"
+                                           data={{
+                                            type: '3',
+                                            userId:localStorage.getItem('userId')
+                                        }}
                                            listType="picture-card"
                                            className="avatar-uploader"
                                            showUploadList={false}
-                                           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                           action={updata}
                                            beforeUpload={this.beforeUpload}
-                                           onChange={this.handleChange1}
+                                           onChange={this.weixinChange.bind(this)}
                                        >
-                                           <Button type="primary"  size={'large'}> <Icon type={this.state.loading1 ? 'loading' : 'plus'} />添加/更新微信二维码</Button>
+                                           <Button type="primary"  size={'large'}> <Icon type={this.state.loading1 ? 'loading' : 'plus'} />更新微信二维码</Button>
                                        </Upload>
                                    </div>
                                </div>
-                                <p>账号：12909138409</p>
+                                <p style={{marginTop:'30px'}}>账号：{localStorage.getItem('phone')}</p>
                                 <div className={'center'}>
                                     <div className={'item'}>
                                         <div className={'left'}>
                                         <p>编辑姓名：</p>
-                                        <Input placeholder="Basic usage" />
+                                        <Input value={this.state.name} onChange={this.onChangeName.bind(this)}/>
                                         </div>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'}>更新修改</Button>
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>服务区域：</p>
-                                            <Select defaultValue="lucy"  onChange={this.handleChange}>
-                                                <Option value="jack">Jack</Option>
-                                                <Option value="lucy">Lucy</Option>
-                                                <Option value="disabled" disabled>
-                                                    Disabled
-                                                </Option>
-                                                <Option value="Yiminghe">yiminghe</Option>
-                                            </Select>    <Select defaultValue="lucy"  onChange={this.handleChange}>
-                                            <Option value="jack">Jack</Option>
-                                            <Option value="lucy">Lucy</Option>
-                                            <Option value="disabled" disabled>
-                                                Disabled
-                                            </Option>
-                                            <Option value="Yiminghe">yiminghe</Option>
-                                        </Select>
-                                            <Select defaultValue="lucy"  onChange={this.handleChange}>
-                                                <Option value="jack">Jack</Option>
-                                                <Option value="lucy">Lucy</Option>
-                                                <Option value="disabled" disabled>
-                                                    Disabled
-                                                </Option>
-                                                <Option value="Yiminghe">yiminghe</Option>
-                                            </Select>
+                                            <Cascader
+                                            value={this.state.regionId}
+                                    options={this.state.districtRegionsList}
+                                    onChange={this.onChange.bind(this)}
+                                    placeholder={'请选择区域'}
+                                    size={'large'}
+                                />
+                                <Cascader
+                                         value={this.state.regionId1}
+                                    options={this.state.districtRegionsList}
+                                    onChange={this.onChange1.bind(this)}
+                                    placeholder={'请选择区域'}
+                                    size={'large'}
+                                />
+                                <Cascader
+                                         value={this.state.regionId2}
+                                    options={this.state.districtRegionsList}
+                                    onChange={this.onChange2.bind(this)}
+                                    placeholder={'请选择区域'}
+                                    size={'large'}
+                                />
                                         </div>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'}>更新修改</Button>
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p dangerouslySetInnerHTML={{__html: '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp职称：'}}></p>
-                                            <Select defaultValue="lucy" style={{ width: 200 }} onChange={this.handleChange}>
-                                                <Option value="jack">Jack</Option>
-                                                <Option value="lucy">Lucy</Option>
-                                                <Option value="disabled" disabled>
-                                                    Disabled
-                                                </Option>
-                                                <Option value="Yiminghe">yiminghe</Option>
+                                            <Select value={this.state.position} style={{ width: 200 }} onChange={this.changePosition.bind(this)}>
+                                                <Option value="房地产经纪人">房地产经纪人</Option>
+                                                <Option value="房地产经纪人协理">房地产经纪人协理</Option>
                                             </Select>
                                         </div>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'}>更新修改</Button>
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>联系电话：</p>
-                                            <Input placeholder="Basic usage" />
+                                            <Input value={this.state.contact} onChange={this.onChangeContact.bind(this)}/>
                                         </div>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'}>更新修改</Button>
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>选择服务：</p>
-                                            <Checkbox.Group options={this.state.plainOptions} defaultValue={['Apple']} onChange={this.onChange.bind(this)} />
+                                            <Checkbox.Group options={this.state.plainOptions} value={this.state.bussinessId}
+                                                onChange={this.bussinessIdChange.bind(this)}/>
                                         </div>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'}>更新修改</Button>
                                     </div>
 
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>从业年限：</p>
-                                            <p style={{marginLeft:'20px'}}>5年</p>
+                                            <Input value={this.state.workYears} onChange={this.changeWorkYears.bind(this)}/>
                                         </div>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'}>更新修改</Button>
+                
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>服务公司：</p>
-                                            <Select defaultValue="lucy" style={{ width: 200 }} onChange={this.handleChange}>
-                                                <Option value="jack">Jack</Option>
-                                                <Option value="lucy">Lucy</Option>
-                                                <Option value="disabled" disabled>
-                                                    Disabled
-                                                </Option>
-                                                <Option value="Yiminghe">yiminghe</Option>
-                                            </Select>
-                                            <Input placeholder="Basic usage" />
+                                            <Select value={this.state.agentType}  onSelect={this.onAgentType.bind(this)}
+                                        size={'large'}>
+                                    <Option value="2">在职公司</Option>
+                                    <Option value="1">独立经纪人</Option>
+                                </Select>
+                                <Input disabled={this.state.agentType===2?true:false} size={'large'} value={this.state.company} 
+                                onChange={this.changeCompany.bind(this)}/>
                                         </div>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'}>更新修改</Button>
+                    
+                                    </div>
+                                    <div className={'item'}>
+                                        <div className={'left'} style={{textAlign:'center'}}>
+                                        <Button type="primary" style={{width:'200px'}} size={'large'} onClick={this.showConfirm.bind(this)} >更新修改</Button>
+                                        </div>
+                    
                                     </div>
                                 </div>
                                 <div className={'weixin'}>
@@ -475,7 +476,7 @@ class AgentMy extends React.Component {
                             </TabPane>
                             <TabPane tab="修改密码" key="4">
                                 <p className={'data'}>修改密码</p>
-                                <ChangePassWords></ChangePassWords>
+                                <ChangePassWords role={5}></ChangePassWords>
                             </TabPane>
                         </Tabs>
                     </div>

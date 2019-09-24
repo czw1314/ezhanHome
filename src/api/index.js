@@ -67,3 +67,19 @@ axios.get(`${base}/agent/personMsg`,{
         },
     }
 );
+//更新资料
+export const putPersonMsg = (params) =>
+axios.put(`${base}/agent/personMsg`,params,{
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+    }
+);
+//修改密码
+export const changeModifyPwd = (params) =>
+axios.post(`${base}/user/modifyPwd`,params,{
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+    }
+);

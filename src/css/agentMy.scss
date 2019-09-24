@@ -52,6 +52,9 @@
       }
       .ant-tabs {
         position: relative;
+        .ant-tabs-tab-active {
+          font-weight: bold;
+        }
         .ant-tabs-left-bar {
           padding-top: 20px;
           text-align: center;
@@ -140,14 +143,22 @@
             }
           }
           .center{
+            .ant-form-item {
+               margin-bottom: 0
+            }
             .item{
               display: flex;
-              margin-top: 20px;
               justify-content: space-between;
+              .ant-cascader-picker {
+                width: auto;
+              }
               .left{
                 width: 85%;
                 display: flex;
                 align-items: center;
+                .ant-cascader-picker-label{
+                  left: 20px
+                }
                 p{
                   padding: 0;
                   margin: 0;
@@ -164,7 +175,7 @@
                   margin-left: 20px;
                   input{
                     width:auto;
-                    mxargin-left: 20px;
+                    margin-left: 20px;
                   }
                 }
               }
