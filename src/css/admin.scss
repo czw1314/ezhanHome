@@ -1,0 +1,55 @@
+.admin{
+    padding: 30px;
+    background-color: rgb(247, 247, 247);
+    .header {
+        height: 60px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .left {
+          display: flex;
+          align-items: center;
+          .logo {
+            max-width: 131px;
+            max-height: 41px;
+            margin-right: 30px;
+          }
+          p{
+              font-size: 26px;
+              padding: 0;
+              margin: 0
+          }
+        }
+        .right {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          a{
+            color: #fff;
+          }
+        }
+    
+      }
+      .menu{
+
+          margin: 20px auto;
+          text-align: left;
+          background-color: rgb(239, 239, 244);
+          .ant-tabs .ant-tabs-left-bar .ant-tabs-tab {
+            text-align: left;
+        }
+        .ant-tabs-content{
+            background-color: #fff;
+            text-align: center;
+            .ant-table table {
+
+                    text-align: center;
+                
+            .ant-table-thead > tr > th{
+                text-align: center
+            }
+        }
+        }
+      }
+}

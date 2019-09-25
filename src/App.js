@@ -15,6 +15,7 @@ import User from './view/user'
 import AgentMy from './view/agentMy'
 import Consultant from './view/consultant'
 import RegistryCenter from './view/registryCenter'
+import Admin from './view/admin/admin'
 
 const MainPaper = ({match}) => {
     return <div>
@@ -38,6 +39,7 @@ class App extends Component {
                 <Route exact path="/" component={MainPaper}/>
                 <Route path="/home" component={MainPaper}/>
                 <Route path="/homePage" component={HomePage}/>
+                <Route path="/admin" component={Admin}/>
             </Router>
         );
     }
