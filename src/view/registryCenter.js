@@ -27,7 +27,7 @@ class Information extends React.Component {
             tags: ['Unremovable', 'Tag 2', 'Tag 3'],
             inputVisible: false,
             inputValue: '',
-            agent: true,
+            agent: false,
             first: false,
             id: 3,
             districtRegionsList: [],
@@ -494,7 +494,7 @@ class RegistryCenter extends React.Component {
             // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl1 =>
                 this.setState({
-                    imageUrl1,
+                    weixin:imageUrl1,
                     loading1: false,
                 }),
             );
@@ -639,7 +639,7 @@ class RegistryCenter extends React.Component {
                                         showUploadList={false}
                                         action={base}
                                         beforeUpload={this.beforeUpload}
-                                        onChange={this.weixinChange}
+                                        onChange={this.weixinChange.bind(this)}
                                     >
                                         <Button type="primary" size={'large'}> <Icon
                                             type={this.state.loading1 ? 'loading' : 'plus'}/>添加微信二维码</Button>

@@ -2,190 +2,27 @@ import React from 'react';
 import '../css/consultant.scss';
 import { Tabs,Input,Button,Form,Upload, Icon, message,Checkbox,
     Select,Tag,Tooltip,} from 'antd';
+import {getPersonMsg, putPersonMsg} from '../api'
+import {Modal} from "antd/lib/index";
+import ChangePassWord from '../component/changePassWord'
 //上传头像
-class Avatar extends React.Component {
-    state = {
-        loading: false,
-    };
-    //转化为base64
-    getBase64(img, callback) {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => callback(reader.result));
-        reader.readAsDataURL(img);
-    }
-    //限制大小
-    beforeUpload(file) {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
-        }
-        return isJpgOrPng && isLt2M;
-    }
-    handleChange = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({ loading: true });
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            this.getBase64(info.file.originFileObj, imageUrl =>
-                this.setState({
-                    imageUrl,
-                    loading: false,
-                }),
-            );
-        }
-    };
 
-    render() {
-        const uploadButton = (
-            <div>
-                <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                <div className="ant-upload-text">Upload</div>
-            </div>
-        );
-        const { imageUrl } = this.state;
-        return (
-            <Upload
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                beforeUpload={this.beforeUpload}
-                onChange={this.handleChange}
-            >
-                {uploadButton}
-            </Upload>
-        );
-    }
-}
-class ChangePassWord extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            confirmDirty: false,
-            autoCompleteResult: [],
-            password:'',
-            newPassword:'',
-            confirmPassword:''
-        };
-    }
-    password=(rule,value) => {
-        this.setState({password:value})
-    };
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
-    };
-    newPassword = (rule, value, callback) => {
-        const { form } = this.props;
-        if (value && value === form.getFieldValue('password')) {
-            callback('新密码不能与旧密码相同!');
-        } else {
-            callback();
-        }
-    };
-    confirmPassword = (rule, value, callback) => {
-        const { form } = this.props;
-        if (value && value !== form.getFieldValue('newPassword')) {
-            callback('两次密码不同!');
-        } else {
-            callback();
-        }
-    };
-    render(){
-        const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            },
-        };
-        return(
-            <Form {...formItemLayout} onSubmit={this.handleSubmit} style={{width:'400px',margin:'auto'}}>
-                <Form.Item label="输入旧密码" >
-                    {getFieldDecorator('password', {
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入旧密码',
-                            },
-                        ],
-                    })(<Input.Password />)}
-                </Form.Item>
-                <Form.Item label="输入新密码" >
-                    {getFieldDecorator('newPassword', {
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入新密码',
-                            },
-                            {
-                                validator: this.newPassword,
-                            },
-                        ],
-                    })(<Input.Password />)}
-                </Form.Item>
-                <Form.Item label="确认新密码">
-                    {getFieldDecorator('confirmPassword', {
-                        rules: [
-                            {
-                                required: true,
-                                message: '请确认新密码',
-                            },
-                            {
-                                validator: this.confirmPassword,
-                            },
-                        ],
-                    })(<Input.Password />)}
-                </Form.Item>
-                <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit" onSubmit={this.handleSubmit}>
-                        确认修改
-                    </Button>
-                </Form.Item>
-            </Form>
-        )
-    }
-}
-const ChangePassWords = Form.create({ name: 'register' })(ChangePassWord);
+
 class Consultant extends React.Component {
     constructor(props){
         super(props)
         this.state={
             loading: false,
             loading1: false,
-            imgUrl:'',
-            imgUrl1:'',
+            name:'',
+            contact:'',
+            company:"",
             plainOptions :['Apple', 'Pear', 'Orange'],
             tags: ['Unremovable', 'Tag 2', 'Tag 3'],
             inputVisible: false,
             inputValue: '',
+            head:'',
+            weixin:'',
         }
     }
     //转化为base64
@@ -215,7 +52,7 @@ class Consultant extends React.Component {
             // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl =>
                 this.setState({
-                    imageUrl,
+                    head:imageUrl,
                     loading: false,
                 }),
             );
@@ -229,9 +66,9 @@ class Consultant extends React.Component {
         }
         if (info.file.status === 'done') {
             // Get this url from response in real world.
-            this.getBase64(info.file.originFileObj, imageUrl1 =>
+            this.getBase64(info.file.originFileObj, imageUrl=>
                 this.setState({
-                    imageUrl1,
+                    weixin:imageUrl,
                     loading1: false,
                 }),
             );
@@ -244,15 +81,87 @@ class Consultant extends React.Component {
     callback(key) {
         console.log(key);
     }
-    //多选
-    onChange(checkedValues) {
-        console.log('checked = ', checkedValues);
+    //电话
+    onChangeContact(e) {
+        this.setState({contact: e.target.value});
+    }
+    //姓名
+    onChangeName(e) {
+        this.setState({name: e.target.value});
+    }
+    //公司
+    onChangeCompany(e) {
+        this.setState({company: e.target.value});
+    }
+    componentDidMount(){
+        let params = {
+            userId: localStorage.getItem('userId')
+        }
+        getPersonMsg(params).then((res) => {
+            if (res.data.code === 1) {
+                this.setState({
+                    head:res.data.head,
+                    name: res.data.name,
+                    position: res.data.position,
+                    bussinessId: res.data.businesses,
+                    workYears: res.data.workYears,
+                    agentType: res.data.agentType,
+                    company: res.data.company,
+                    contact: res.data.contact
+                })
+            }
+        })
+    }
+    onSubmit() {
+        let params = {
+            "name": this.state.name,
+            "company": this.state.company,
+            "contact": this.state.contact,
+            "userId": localStorage.getItem('userId')
+        }
+        putPersonMsg(params).then((res) => {
+            if (res.data.code === 1) {
+                message.success('修改成功')
+                let params = {
+                    userId: localStorage.getItem('userId')
+                }
+                getPersonMsg(params).then((res) => {
+                        this.setState({
+                            name: res.data.name,
+                            head:res.data.head,
+                            weixin:res.data.weixin,
+                            company: res.data.company,
+                            contact: res.data.contact
+                        })
+                    })
+            }
+            else {
+                message.error('修改失败')
+            }
+        })
+    }
+    //确认修改？
+    showConfirm() {
+        const {confirm} = Modal;
+        const that = this
+        confirm({
+            title: '是否确认更新修改信息?',
+            content: '',
+            onOk: () => {
+                this.onSubmit()
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     }
     render(){
         const { TabPane } = Tabs;
         const { imageUrl,imageUrl1 } = this.state;
         const { Option } = Select;
         const { tags, inputVisible, inputValue } = this.state;
+        const base = 'http://47.108.87.104:8601/user/';
+        const updata = 'http://47.108.87.104:8501/user/uploadFile';
 
         return(
             <div className={'consultant'}>
@@ -265,40 +174,48 @@ class Consultant extends React.Component {
                 <div className={'userBox'}>
                     <div className={'container'}>
                         <div className={'menu'}>
-                            <img className={'headerPic'} src={require('../img/agent.png')}/>
+                            <img className={'headerPic'} src={base + this.state.head}/>
                             <p>欢迎您，晨晨</p>
-                            <p>账号：12909138409</p>
+                            <p>账号：{localStorage.getItem('phone')}</p>
                         </div>
                         <Tabs defaultActiveKey="1" onChange={this.callback} tabPosition={'left'} tabBarStyle={{textAlign:'center',marginRight:20}}>
                             <TabPane tab="个人信息/微信绑定" key="1">
                                 <p className={'data'}>个人资料/编辑</p>
                                 <div className={'first'}>
-                                    <div style={{display:'flex',alignItems:'center'}}>
-                                        <img src={imageUrl} className={'headerPic'}/>
+                                    <div style={{display:'flex',alignItems:'center'}} className={'headerPic'}>
+                                        <img src={this.state.head || base + this.state.head}/>
                                         <Upload
-                                            name="avatar"
+                                            name="file"
                                             listType="picture-card"
                                             className="avatar-uploader"
                                             showUploadList={false}
-                                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                            data={{
+                                                type: '1',
+                                                userId: localStorage.getItem('userId')
+                                            }}
+                                            action={updata}
                                             beforeUpload={this.beforeUpload}
-                                            onChange={this.handleChange}
+                                            onChange={this.handleChange.bind(this)}
                                         >
                                             <Button type="primary"  size={'large'}> <Icon type={this.state.loading ? 'loading' : 'plus'} />上传头像</Button>
                                         </Upload>
                                     </div>
                                     <div style={{display:'flex',alignItems:'center'}}>
-                                        <img src={imageUrl1} className={'headerPic'}/>
+                                        <img src={this.state.weixin || base + this.state.weixin} />
                                         <Upload
-                                            name="avatar"
+                                            name="file"
+                                            data={{
+                                                type: '3',
+                                                userId: localStorage.getItem('userId')
+                                            }}
                                             listType="picture-card"
                                             className="avatar-uploader"
                                             showUploadList={false}
-                                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                            action={updata}
                                             beforeUpload={this.beforeUpload}
-                                            onChange={this.handleChange1}
+                                            onChange={this.handleChange1.bind(this)}
                                         >
-                                            <Button type="primary"  size={'large'}> <Icon type={this.state.loading1 ? 'loading' : 'plus'} />添加/更新微信二维码</Button>
+                                            <Button type="primary"  size={'large'}> <Icon type={this.state.loading1 ? 'loading' : 'plus'} />更新微信二维码</Button>
                                         </Upload>
                                     </div>
                                 </div>
@@ -307,23 +224,27 @@ class Consultant extends React.Component {
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>编辑姓名：</p>
-                                            <Input placeholder="Basic usage" />
+                                            <Input value={this.state.name} onChange={this.onChangeName.bind(this)}/>
                                         </div>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'}>更新修改</Button>
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>联系电话：</p>
-                                            <Input placeholder="Basic usage" />
+                                            <Input value={this.state.contact} onChange={this.onChangeContact.bind(this)}/>
                                         </div>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'}>更新修改</Button>
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>服务公司：</p>
-                                            <Input placeholder="Basic usage" />
+                                            <Input value={this.state.company} onChange={this.onChangeCompany.bind(this)}/>
                                         </div>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'}>更新修改</Button>
+                                    </div>
+                                    <div className={'item'}>
+                                        <div className={'left'} style={{textAlign: 'center'}}>
+                                            <Button type="primary" style={{width: '200px'}} size={'large'}
+                                                    onClick={this.showConfirm.bind(this)}>更新修改</Button>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div className={'weixin'}>
@@ -387,11 +308,10 @@ class Consultant extends React.Component {
                             </TabPane>
                             <TabPane tab="置业顾问协议" key="3">
                                 <p className={'data'}>置业顾问协议</p>
-                                <ChangePassWords></ChangePassWords>
                             </TabPane>
                             <TabPane tab="修改密码" key="4">
                                 <p className={'data'}>修改密码</p>
-                                <ChangePassWords></ChangePassWords>
+                                <ChangePassWord></ChangePassWord>
                             </TabPane>
                         </Tabs>
                     </div>

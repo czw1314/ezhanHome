@@ -4,40 +4,84 @@ import {login} from "../api";
 import {connect} from "react-redux";
 import {setUserInformation} from "../redux/action";
 import { Modal, Button,Tabs,Form, Input, message  } from 'antd';
+import {getPhoneCode, register} from '../api/index'
 
 class RetreivePassword extends React.Component {
+    constructor(props){
+        super(props)
+        this.state={
+            code: 'http://47.108.87.104:8501/user/verfiyCode'
+        }
+    }
+    //获取手机验证码
+    getCode() {
+        let that = this
+        var wait = 60;
+
+        function time() {
+            if (wait == 0) {
+                that.setState({text: "免费获取验证码", disabled: false})
+                wait = 60;
+            } else {
+                that.setState({text: "重新发送(" + wait + ")", disabled: true})
+                wait--;
+                setTimeout(function () {
+                    time()
+                }, 1000)
+            }
+        }
+
+        time()
+        let params = {phone: this.props.form.getFieldValue('phone')}
+        getPhoneCode(params).then((res) => {
+        })
+    }
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                let params = {
+                    "password": values.password,
+                    "phone": values.phone,
+                    "phoneCode": values.phoneCode,
+                    "verifyCode": values.verifyCode
+                }
+                register(params).then((res) => {
+                    if (res.data.code === 0) {
+                        if (res.data.verifyErrorMsg) {
+                            this.props.form.setFields({
+                                verifyCode: {
+                                    value: values.verifyCode,
+                                    errors: [new Error('验证码错误')],
+                                },
+                            })
+                            this.createCode()
+                        }
+                        else if (res.data.phoneVerifyErrorMsg) {
+                            this.props.form.setFields({
+                                phoneCode: {
+                                    value: values.phoneCode,
+                                    errors: [new Error('手机验证码错误')],
+                                },
+                            })
+                        }
+
+                    }
+                    else {
+                        message.success('密码修改成功！请去登陆！')
+                        setTimeout(this.props.handleClose, 1000)
+                    }
+
+                })
             }
         });
     };
     //生成验证码的方法
-     createCode(length) {
-        var code = "";
-        var codeLength = parseInt(length); //验证码的长度
-        var checkCode = document.getElementById("checkCode");
-        ////所有候选组成验证码的字符，当然也可以用中文的
-        var codeChars = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-            'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
-        //循环组成验证码的字符串
-        for (var i = 0; i < codeLength; i++)
-        {
-            //获取随机验证码下标
-            var charNum = Math.floor(Math.random() * 62);
-            //组合成指定字符验证码
-            code += codeChars[charNum];
-        }
-        if (checkCode)
-        {
-            //为验证码区域添加样式名
-            checkCode.className = "code";
-            //将生成验证码赋值到显示区
-            checkCode.innerHTML = code;
-        }
+    createCode() {
+        const num = Math.ceil(Math.random() * 10)
+        this.setState({
+            code: 'http://47.108.87.104:8501/user/verfiyCode?num=' + num
+        })
     }
     //检查验证码是否正确
      validateCode(rule, value, callback){
@@ -53,48 +97,56 @@ class RetreivePassword extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form">
+            <Form onSubmit={this.handleSubmit.bind(this)} className="login-form">
                 <Form.Item>
                     {getFieldDecorator('phone', {
-                        rules: [{ required: true, message: '请输入手机号!' }],
+                        rules: [{required: true, message: '请输入手机号!'}],
                     })(
                         <Input
                             placeholder="请输入手机号"
+                            size={'large'}
                         />,
                     )}
                 </Form.Item>
                 <Form.Item className={'code'}>
-                    {getFieldDecorator('code', {
+                    {getFieldDecorator('verifyCode', {
                         rules: [
-                            { required: true, message: '请输入验证码!' },
+                            {required: true, message: '请输入验证码!'},
+
                         ],
                     })(
                         <Input
                             placeholder="请输入验证码"
+                            size={'large'}
                         />,
                     )}
-                    <div id="checkCode" className="code" onClick={this.createCode.bind(this,4)}></div>
+                    <div id={this.props.id} className="code" onClick={this.createCode.bind(this, 4)}><img
+                        src={this.state.code}/></div>
                 </Form.Item>
                 <Form.Item>
-                    {getFieldDecorator('username', {
-                        rules: [{ required: true, message: '请输入手机号!' }],
+                    {getFieldDecorator('phoneCode', {
+                        rules: [{required: true, message: '请输入短信验证码!'}],
                     })(
-                        <Input  addonAfter={<span style={{cursor:'pointer'}}>获取验证码</span>} />
+                        <Input size={'large'}
+                               addonAfter={<Button style={{cursor: 'pointer', fontWeight: 'bold'}} block={true}
+                                                   onClick={this.getCode.bind(this)}
+                                                   disabled={this.state.disabled}>{this.state.text}</Button>}
+                               placeholder="请输入短线验证码"/>
                     )}
                 </Form.Item>
                 <Form.Item>
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入密码!' }],
+                        rules: [{required: true, message: '请输入新密码!'}, {min: 6, message: '密码至少6位数'}],
                     })(
                         <Input
-
+                            size={'large'}
                             type="password"
                             placeholder="请输入密码"
                         />,
                     )}
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">
+                    <Button type="primary" htmlType="submit" className="login-form-button" size={'large'}>
                         修改密码
                     </Button>
                 </Form.Item>
@@ -242,7 +294,7 @@ class Login extends React.Component {
                     </div>
                     <div className={'retrieve'} style={{display:this.state.retrieve?'block':'none'}}>
                         <p className={'title'}>密码找回</p>
-                        <Retreive/>
+                        <Retreive handleClose={this.props.handleCancel}/>
                         <div style={{display:'flex',justifyContent:'space-between'}}>
                             <p className={'retrieve'}  onClick={()=>this.setState({retrieve:false,weixin:true})}><a>微信快捷登陆</a></p>
                             <p className={'retrieve'}  onClick={()=>this.setState({retrieve:false,accountNumber:true})}><a>账号密码登陆</a></p>

@@ -1,9 +1,8 @@
 import React from 'react'
-import '../../css/admin.scss'
-import { Tabs, Table, Divider, Tag,Input} from 'antd';
-import ChangePassWord from '../../component/changePassWord'
+import '../../css/bridalAdmin.scss'
+import { Tabs, Table, Divider, Tag,Input,Select,Upload, Button, Icon} from 'antd';
 
-class Admin extends React.Component {
+class bridalAdmin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,7 +19,8 @@ class Admin extends React.Component {
             characteristicChecked: [],
             characteristic: ['现房'],
             togglePrice: true,
-            toggleTime: true
+            toggleTime: true,
+            fileList:[]
         }
     }
 
@@ -113,9 +113,31 @@ class Admin extends React.Component {
     recommend() {
 
     }
+    handleChange = info => {
+        let fileList = [...info.fileList];
 
+        // 1. Limit the number of uploaded files
+        // Only to show two recent uploaded files, and old ones will be replaced by the new
+        fileList = fileList.slice(-2);
+
+        // 2. Read from response and show file link
+        fileList = fileList.map(file => {
+            if (file.response) {
+                // Component will show file.url as link
+                file.url = file.response.url;
+            }
+            return file;
+        });
+
+        this.setState({ fileList });
+    };
     render() {
         const {TabPane} = Tabs;
+        const { Option } = Select;
+        const updata='http://47.108.87.104:8501/houseAdmin/paperPublished';
+        function handleChange(value) {
+            console.log(`selected ${value}`);
+        }
         const columns = [
             {
                 title: '时间',
@@ -533,14 +555,20 @@ class Admin extends React.Component {
                 tags: ['cool', 'teacher'],
             },
         ];
+        const props = {
+            action: updata,
+            onChange: this.handleChange,
+            multiple: true,
+        };
+        const { TextArea } = Input;
         return (
-            <div className='admin'>
+            <div className='bridalAdmin'>
                 <div className={'header'}>
                     <div className='left'>
                         <div className='logo'>
                             <img src={require('../../img/LOGO2.png')}/>
                         </div>
-                        <p>管理员中心</p>
+                        <p>新房管理中心</p>
                     </div>
                     <div className='right' style={{display: localStorage.getItem('userName') ? 'none' : 'block'}}>
                         <img src={require('../../img/admin.png')}/>
@@ -559,42 +587,73 @@ class Admin extends React.Component {
                 </div>
                 <div className={'menu'}>
                     <Tabs defaultActiveKey="1" onChange={this.callback} tabPosition={'left'}>
-                        <TabPane tab="审核经纪人、置业顾问注册" key="1">
-                            <Tabs defaultActiveKey="11" onChange={this.callback}>
-                                <TabPane tab="待审核经纪人" key="11">
-                                    <Table columns={columns} dataSource={data} scroll={{x: 1800}}/>
-                                </TabPane>
-                                <TabPane tab="待审核置业顾问" key="12">
-                                    <Table columns={consultant} dataSource={data}/>
-                                </TabPane>
-                            </Tabs>
+                        <TabPane tab="一页纸发布" key="1">
+                            <div className={'content'}>
+                            <p className={'title'}>楼盘一页纸发布</p>
+                                <div className={'item'}>
+                                    <p>选择发布的楼盘：</p>
+                                    <Select defaultValue="lucy" style={{ width: 200 }} onChange={handleChange}>
+                                        <Option value="jack">Jack</Option>
+                                        <Option value="lucy">Lucy</Option>
+                                        <Option value="Yiminghe">yiminghe</Option>
+                                    </Select>
+                                    <Select defaultValue="lucy" style={{ width: 200 }}>
+                                        <Option value="lucy">Lucy</Option>
+                                    </Select>
+                                    <Select defaultValue="lucy" style={{ width: 200 }} >
+                                        <Option value="lucy">Lucy</Option>
+                                    </Select>
+                                    <Upload {...props} fileList={this.state.fileList}>
+                                        <Button>
+                                            <Icon type="upload" /> Upload
+                                        </Button>
+                                    </Upload>
+                                    <Button type="primary" className={'push'}>
+                                        确认发布
+                                    </Button>
+                                </div>
+                            </div>
                         </TabPane>
-                        <TabPane tab="审核入驻申请" key="2">
-                            <Tabs defaultActiveKey="21" onChange={this.callback}>
-                                <TabPane tab="经纪人入驻申请" key="21">
-                                    <Table columns={agentColumns} dataSource={data} scroll={{x: 1400}}/>
-                                </TabPane>
-                                <TabPane tab="置业顾问入驻申请" key="22">
-                                    <Table columns={consultantColumns} dataSource={data}/>
-                                </TabPane>
-                            </Tabs>
+                        <TabPane tab="楼盘发布" key="2">
+                            <div className={'content'}>
+                            <p className={'title'}>楼盘发布</p>
+                            </div>
                         </TabPane>
-                        <TabPane tab="管理经纪人、置业顾问、新房管理员权限" key="3">
-                            <Tabs defaultActiveKey="31" onChange={this.callback}>
-                                <TabPane tab="管理经纪人" key="31">
-                                    <Table columns={agentControl} dataSource={data} scroll={{x: 1400}}/>
-                                </TabPane>
-                                <TabPane tab="管理置业顾问" key="32">
-                                    <Table columns={consultantControl} dataSource={data}/>
-                                </TabPane>
-                                <TabPane tab="管理新房管理员" key="33">
-                                    <Table columns={bridalControl} dataSource={data}/>
-                                </TabPane>
-                            </Tabs>
+                        <TabPane tab="楼盘动态更新" key="3">
+                            <div className={'content'}>
+                                <p className={'title'}>楼盘动态发布</p>
+                                <div className={'item'}>
+                                    <p>选择更新的楼盘：</p>
+                                    <Select defaultValue="lucy" style={{ width: 200 }} onChange={handleChange}>
+                                        <Option value="jack">Jack</Option>
+                                        <Option value="lucy">Lucy</Option>
+                                        <Option value="Yiminghe">yiminghe</Option>
+                                    </Select>
+                                    <Select defaultValue="lucy" style={{ width: 200 }}>
+                                        <Option value="lucy">Lucy</Option>
+                                    </Select>
+                                    <Select defaultValue="lucy" style={{ width: 200 }} >
+                                        <Option value="lucy">Lucy</Option>
+                                    </Select>
+                                </div>
+                                <div className={'item'}>
+                                    <p>楼盘动态标题：</p>
+                                    <Input style={{width:300,marginLeft:30}}/>
+                                </div>
+                                <div className={'item'}>
+                                    <p>发布内容：</p>
+                                    <TextArea
+                                        placeholder="Controlled autosize"
+                                        style={{width:300,marginLeft:30}}
+                                        autosize={{ minRows: 3, maxRows: 5 }}
+                                    />
+                                </div>
+                                    <Button type="primary" className={'push'}>
+                                        确认发布
+                                    </Button>
+                            </div>
                         </TabPane>
-                        <TabPane tab="修改密码" key="4">
-                            <p>修改登陆密码</p>
-                            <ChangePassWord></ChangePassWord>
+                        <TabPane tab="楼盘信息编辑更新" key="4">
                         </TabPane>
                     </Tabs>
                 </div>
@@ -604,4 +663,4 @@ class Admin extends React.Component {
     }
 }
 
-export default Admin
+export default bridalAdmin
