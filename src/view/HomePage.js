@@ -64,7 +64,6 @@ class HomePage extends React.Component {
     };
     //根据用户类型跳转不同页面
     link(){
-        console.log(localStorage.getItem('role'))
             if(this.props.userInformation.role===5||localStorage.getItem('role')==5){
                 return(
                     <Link to={'/home/user'}>
@@ -283,9 +282,6 @@ class HomePage extends React.Component {
                                 <li><a href={''}>用户协议</a></li>
                                 <li><a href={''}>免责申明</a></li>
                             </ul>
-                            {/*<div>*/}
-                                {/*<a target={'_blank'} href={''}>成都XXXXX科技有限公司| 成ICP备18000836号-1 | ©版权所有©2019 ke.com版权所有</a>*/}
-                            {/*</div>*/}
                         </div>
                     </div>
                 </div>

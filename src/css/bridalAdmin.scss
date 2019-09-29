@@ -46,6 +46,17 @@
         margin-top: 20px;
         width: 100%;
         align-content: center;
+        input{
+          width: 300px;
+        }
+        .items{
+          width: 33%;
+          display: flex;
+          align-items: center;
+          input{
+            width: 300px;
+          }
+        }
         p{
           margin: 0;
           line-height: 32px;
@@ -76,6 +87,22 @@
         }
         .ant-tabs-nav-scroll{
           text-align: left;
+        }
+      }
+    }
+  }
+  .first{
+    display: flex;
+    flex-wrap: wrap;
+    .ant-form-item {
+      width: 33%;
+      .item {
+        display: flex;
+        .ant-cascader-picker{
+          width: auto;
+        }
+        input{
+          width: auto;
         }
       }
     }

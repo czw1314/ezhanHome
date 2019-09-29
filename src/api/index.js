@@ -1,32 +1,33 @@
 import axios from 'axios';
 import qs from 'qs';
-axios.defaults.withCredentials=true;
+
+axios.defaults.withCredentials = true;
 const map = 'https://restapi.amap.com/v3/place/around';
-const base='http://47.108.87.104:8501';
+const base = 'http://47.108.87.104:8501';
 //加载高德地图
 export const mapInformation = (params) =>
     axios.get(map, {params: params,}
     );
 //获取手机验证码
 export const getPhoneCode = (params) =>
-    axios.get(`${base}/user/phoneCode`,{
+    axios.get(`${base}/user/phoneCode`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
-        params: params,
+            params: params,
         }
     );
 //注册
 export const register = (params) =>
-    axios.post(`${base}/user/register`, params,{
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
+    axios.post(`${base}/user/register`, params, {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
         }
     );
 //账号密码登陆
 export const login = (params) =>
-    axios.post(`${base}/user/login`, params,{
+    axios.post(`${base}/user/login`, params, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -36,7 +37,7 @@ export const login = (params) =>
 
 //注册上传资料
 export const agentRegister = (params) =>
-    axios.post(`${base}/user/agentRegister`,params,{
+    axios.post(`${base}/user/agentRegister`, params, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -44,7 +45,7 @@ export const agentRegister = (params) =>
     );
 //上传图片
 export const uploadFile = (params) =>
-    axios.get(`${base}/user/agentRegister`,{
+    axios.get(`${base}/user/agentRegister`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -52,34 +53,60 @@ export const uploadFile = (params) =>
     );
 //获取区域街道
 export const getDistrictRegions = (params) =>
-    axios.get(`${base}/dataList/districtRegions`,{
+    axios.get(`${base}/dataList/districtRegions`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
         }
     );
-    //获取个人信息
+//获取个人信息
 export const getPersonMsg = (params) =>
-axios.get(`${base}/agent/personMsg`,{
-    params:params,
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-    }
-);
+    axios.get(`${base}/agent/personMsg`, {
+            params: params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
 //更新资料
 export const putPersonMsg = (params) =>
-axios.put(`${base}/agent/personMsg`,params,{
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-    }
-);
+    axios.put(`${base}/agent/personMsg`, params, {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
 //修改密码
 export const changeModifyPwd = (params) =>
-axios.post(`${base}/user/modifyPwd`,params,{
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-    }
-);
+    axios.post(`${base}/user/modifyPwd`, params, {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+//获取新房管理员列表
+export const getAdmin = (params) =>
+    axios.get(`${base}/super/admin`, {
+            params: params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+//修改新房管理员密码
+export const modifyHouseAdminPwd = (params) =>
+    axios.post(`${base}/super/modifyHouseAdminPwd`, params, {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+//获取置业顾问列表
+export const getAdviser = (params) =>
+    axios.get(`${base}/super/adviser`, {
+            params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );

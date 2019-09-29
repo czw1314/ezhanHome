@@ -36,6 +36,7 @@ const MainPaper = ({match}) => {
 class App extends Component {
     render() {
         return (
+            <div>
             <Router>
                 <Route exact path="/" component={MainPaper}/>
                 <Route path="/home" component={MainPaper}/>
@@ -43,6 +44,10 @@ class App extends Component {
                 <Route path="/admin" component={Admin}/>
                 <Route path="/bridaladmin" component={BridalAdmin}/>
             </Router>
+                <div>
+                    <a target={'_blank'} href={''}>蜀ICP备18023206号-2</a>
+                </div>
+            </div>
         );
     }
 }

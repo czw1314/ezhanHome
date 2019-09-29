@@ -97,6 +97,7 @@ class ChangePassWord extends React.Component{
                 },
             },
         };
+
         return(
             <Form {...formItemLayout} onSubmit={this.handleSubmit} style={{width:'400px',margin:'auto'}}>
                 <Form.Item label="输入旧密码" >

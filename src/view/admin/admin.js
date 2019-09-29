@@ -1,7 +1,279 @@
 import React from 'react'
 import '../../css/admin.scss'
-import { Tabs, Table, Divider, Tag,Input} from 'antd';
+import { Tabs, Table, Divider, Modal,Input,Button,Popconfirm} from 'antd';
 import ChangePassWord from '../../component/changePassWord'
+import {connect} from "react-redux";
+import {login,getAdmin,modifyHouseAdminPwd,getAdviser} from "../../api";
+import {setUserInformation} from "../../redux/action";
+import {Form, message} from "antd/lib/index";
+class Login extends React.Component {
+    //登陆
+    handleSubmit = e => {
+        console.log(this.props)
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                let params = {
+                    "password": values.password,
+                    "phone": values.phone,
+                    "role": 1,
+                    "loginType": 2
+                };
+                login(params).then((res) => {
+                    if (res.data.code === 0) {
+                        message.error(res.data.msg)
+                    }
+                    else {
+                        message.success('登陆成功！')
+                        this.props.setUserInformation(res.data)
+                        setTimeout(this.props.handleClose, 1000)
+                        localStorage.setItem('userName',res.data.name)
+                        localStorage.setItem('role',res.data.role)
+                        localStorage.setItem('userId',res.data.userId)
+                        localStorage.setItem('phone',values.phone)
+                    }
+                })
+            }
+        });
+    };
+
+    render() {
+        const { getFieldDecorator } = this.props.form;
+        return (
+            <Form onSubmit={this.handleSubmit} className="login-form" style={{marginTop:'30px'}}>
+                <Form.Item>
+                    {getFieldDecorator('phone', {
+                        rules: [{ required: true, message: '请输入手机号!' }],
+                    })(
+                        <Input
+                            size={'large'}
+                            placeholder="请输入手机号"
+                        />,
+                    )}
+                </Form.Item>
+                <Form.Item>
+                    {getFieldDecorator('password', {
+                        rules: [{ required: true, message: '请输入密码!' }],
+                    })(
+                        <Input
+                            type="password"
+                            size={'large'}
+                            placeholder="请输入密码"
+                        />,
+                    )}
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" className="login-form-button" size={'large'} style={{width:'100%'}}>
+                        登陆
+                    </Button>
+                </Form.Item>
+            </Form>
+        );
+    }
+}
+const Logins =connect(state=>({userInformation:state.userInformation}),{setUserInformation})(Form.create({ name: 'normal_login' })(Login))
+const EditableContext = React.createContext();
+
+const EditableRow = ({ form, index, ...props }) => (
+    <EditableContext.Provider value={form}>
+        <tr {...props} />
+    </EditableContext.Provider>
+);
+
+const EditableFormRow = Form.create()(EditableRow);
+
+class EditableCell extends React.Component {
+    state = {
+        editing: false,
+    };
+
+    toggleEdit = () => {
+        const editing = !this.state.editing;
+        this.setState({ editing }, () => {
+            if (editing) {
+                this.input.focus();
+            }
+        });
+    };
+
+    save = e => {
+        const { record, handleSave } = this.props;
+        this.form.validateFields((error, values) => {
+            if (error && error[e.currentTarget.id]) {
+                return;
+            }
+            this.toggleEdit();
+            handleSave({ ...record, ...values });
+        });
+    };
+
+    renderCell = form => {
+        this.form = form;
+        const { children, dataIndex, record, title } = this.props;
+        const { editing } = this.state;
+        return editing ? (
+            <Form.Item style={{ margin: 0 }}>
+                {form.getFieldDecorator(dataIndex, {
+                    rules: [
+                        {
+                            required: true,
+                            message: `请填写密码.`,
+                        },
+                    ],
+                    initialValue: record[dataIndex],
+                })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} style={{width:'200px'}}/>)}
+            </Form.Item>
+        ) : (
+            <div
+                className="editable-cell-value-wrap"
+                style={{ paddingRight: 24 }}
+                onClick={this.toggleEdit}
+            >
+                {children}
+            </div>
+        );
+    };
+
+    render() {
+        const {
+            editable,
+            dataIndex,
+            title,
+            record,
+            index,
+            handleSave,
+            children,
+            ...restProps
+        } = this.props;
+        return (
+            <td {...restProps}>
+                {editable ? (
+                    <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+                ) : (
+                    children
+                )}
+            </td>
+        );
+    }
+}
+//可编辑表格
+class EditableTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.columns = [
+            {
+                title: '序号',
+                dataIndex: 'no',
+                key: 'no',
+            },
+            {
+                title: '账号',
+                dataIndex: 'phone',
+                key: 'phone',
+            },
+            {
+                title: '修改密码',
+                dataIndex: 'passWord',
+                editable: true,
+            },
+            {
+                title: '确认修改',
+                dataIndex: 'operation',
+                render: (text, record,index) =>
+                    this.state.dataSource.length >= 1 ? (
+                        <Popconfirm title="确认修改密码?" onConfirm={() => this.handleDelete(record.key,index)} cancelText={'取消'} okText={'确认'}>
+                            <a>确认修改</a>
+                        </Popconfirm>
+                    ) : null,
+            },
+        ];
+
+        this.state = {
+            dataSource: [],
+            count: 2,
+        };
+    }
+
+    handleDelete = (key,index) => {
+        let params={
+            phone:this.state.dataSource[index].phone,
+            newPassword:this.state.dataSource[index].passWord,
+            role:0
+        }
+        modifyHouseAdminPwd(params).then((res)=>{
+
+        })
+        // const dataSource = [...this.state.dataSource];
+        // this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+    };
+
+
+    handleSave = row => {
+        const newData = [...this.state.dataSource];
+        const index = newData.findIndex(item => row.key === item.key);
+        const item = newData[index];
+        newData.splice(index, 1, {
+            ...item,
+            ...row,
+        });
+        this.setState({ dataSource: newData });
+    };
+    componentDidMount(){
+        getAdmin().then((res)=>{
+            if(res.data.code===1){
+                let data=res.data.admins,arr=[]
+                for (let i=0;i<data.length;i++){
+                    let item={
+                        no:i+1,
+                        phone:data[i].phone,
+                        passWord:'123456',
+                    }
+                    arr.push(item)
+                }
+                this.setState({
+                    dataSource:arr
+                })
+            }
+
+        })
+    }
+
+    render() {
+        const { dataSource } = this.state;
+        const components = {
+            body: {
+                row: EditableFormRow,
+                cell: EditableCell,
+            },
+        };
+        const columns = this.columns.map(col => {
+            if (!col.editable) {
+                return col;
+            }
+            return {
+                ...col,
+                onCell: record => ({
+                    record,
+                    editable: col.editable,
+                    dataIndex: col.dataIndex,
+                    title: col.title,
+                    handleSave: this.handleSave,
+                }),
+            };
+        });
+        return (
+            <div>
+                <Table
+                    components={components}
+                    rowClassName={() => 'editable-row'}
+                    bordered
+                    dataSource={dataSource}
+                    columns={columns}
+                />
+            </div>
+        );
+    }
+}
 
 class Admin extends React.Component {
     constructor(props) {
@@ -20,7 +292,9 @@ class Admin extends React.Component {
             characteristicChecked: [],
             characteristic: ['现房'],
             togglePrice: true,
-            toggleTime: true
+            toggleTime: true,
+            adminData:[],
+            consultantData:[]
         }
     }
 
@@ -46,7 +320,6 @@ class Admin extends React.Component {
     //找房与找经纪人互相切换
     handleClick = e => {
         if (e.key == 2) {
-
             this.setState({left: 80});
         }
         else {
@@ -101,18 +374,44 @@ class Admin extends React.Component {
             togglePrice: true,
             toggleTime: true
         })
-        console.log(this.state.togglePrice)
     }
 
+
+    //获取新房管理员列表
     callback(key) {
+        if(key==='12'){
+            let params={
+                type:2
+            }
+            getAdviser(params).then((res)=>{
+                if(res.data.code===1){
+                    console.log(res.data.agentResponses)
+                    this.setState({
+                        consultantData:res.data.agentResponses
+                    })
+                    console.log(this.state.consultantData)
+                }
+
+            })
+        }
         console.log(key);
     }
-
-    推荐经纪人
-
+    //推荐经纪人
     recommend() {
 
     }
+    //关闭登陆弹框
+    handleCancel(){
+        console.log('s')
+        this.setState({
+            login:false
+        })
+    }
+    //修改密码
+    changePassWord(e){
+        console.log(e.target.value)
+    }
+
 
     render() {
         const {TabPane} = Tabs;
@@ -259,53 +558,50 @@ class Admin extends React.Component {
         const consultantColumns = [
             {
                 title: '时间',
-                dataIndex: '时间',
-                key: '时间',
-                render: text => <a>{text}</a>,
+                dataIndex: 'createTime',
+                key: 'createTime',
             },
             {
                 title: '申请人姓名',
-                dataIndex: 'age',
-                key: 'age',
+                dataIndex: 'name',
+                key: 'name',
             },
             {
                 title: '头像',
-                dataIndex: 'address',
-                key: 'address',
+                dataIndex: 'head',
+                key: 'head',
+                // render:(text, record,index)=>(
+                //     <img src={''}/>
+                // ),
             },
             {
                 title: '申请人账号（电话）',
-                key: 'tags',
-                dataIndex: 'tags',
+                key: 'phone',
+                dataIndex: 'phone',
             },
             {
                 title: '联系电话',
-                key: 'tags',
-                dataIndex: 'tags',
+                key: 'contact',
+                dataIndex: 'contact',
             },
             {
                 title: '微信二维码',
-                key: 'tags',
-                dataIndex: 'tags',
+                key: 'weChatQrCode',
+                dataIndex: 'weChatQrCode',
             },
             {
                 title: '申请人公司',
-                key: 'tags',
-                dataIndex: 'tags',
-            },
-            {
-                title: '申请入驻的楼盘',
-                key: 'tags',
-                dataIndex: 'tags',
+                key: 'company',
+                dataIndex: 'company',
             },
             {
                 title: '是否通过',
                 key: 'action',
-                render: (text, record) => (
+                render: (text, record,index) => (
                     <span>
-                  <a>Invite {record.name}</a>
+                  <a>是</a>
                   <Divider type="vertical"/>
-                  <a>Delete</a>
+                  <a>否</a>
                 </span>
                 ),
             },
@@ -439,72 +735,72 @@ class Admin extends React.Component {
         const bridalControl = [
             {
                 title: '序号',
-                dataIndex: '时间',
-                key: '时间',
-                render: text => <a>{text}</a>,
+                dataIndex: 'no',
+                key: 'no',
             },
             {
                 title: '账号',
-                dataIndex: 'age',
-                key: 'age',
+                dataIndex: 'phone',
+                key: 'phone',
             },
             {
                 title: '修改密码',
-                dataIndex: 'address',
-                key: 'address',
-                render:()=>(<Input/>)
+                dataIndex: 'passWord',
+                key: 'passWord',
+                render:()=>(<Input onChange={this.changePassWord.bind(this)}/>)
             },
             {
                 title: '更新密码',
-                key: 'tags',
-                dataIndex: 'tags',
+                render:()=>(<Button>确认修改</Button>)
             },
         ];
         const consultant = [
             {
                 title: '时间',
-                dataIndex: '时间',
-                key: '时间',
-                render: text => <a>{text}</a>,
+                dataIndex: 'createTime',
+                key: 'createTime',
             },
             {
                 title: '申请人姓名',
-                dataIndex: 'age',
-                key: 'age',
+                dataIndex: 'name',
+                key: 'name',
             },
             {
                 title: '头像',
-                dataIndex: 'address',
-                key: 'address',
+                dataIndex: 'head',
+                key: 'head',
+                // render:(text, record,index)=>(
+                //     <img src={''}/>
+                // ),
             },
             {
                 title: '申请人账号（电话）',
-                key: 'tags',
-                dataIndex: 'tags',
+                key: 'phone',
+                dataIndex: 'phone',
             },
             {
                 title: '联系电话',
-                key: 'tags',
-                dataIndex: 'tags',
+                key: 'contact',
+                dataIndex: 'contact',
             },
             {
                 title: '微信二维码',
-                key: 'tags',
-                dataIndex: 'tags',
+                key: 'weChatQrCode',
+                dataIndex: 'weChatQrCode',
             },
             {
                 title: '申请人公司',
-                key: 'tags',
-                dataIndex: 'tags',
+                key: 'company',
+                dataIndex: 'company',
             },
             {
                 title: '是否通过',
                 key: 'action',
-                render: (text, record) => (
+                render: (text, record,index) => (
                     <span>
-                  <a>Invite {record.name}</a>
+                  <a>是</a>
                   <Divider type="vertical"/>
-                  <a>Delete</a>
+                  <a>否</a>
                 </span>
                 ),
             },
@@ -544,28 +840,33 @@ class Admin extends React.Component {
                     </div>
                     <div className='right' style={{display: localStorage.getItem('userName') ? 'none' : 'block'}}>
                         <img src={require('../../img/admin.png')}/>
-                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆&nbsp&nbsp/'}}
+                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆'}}
                               onClick={this.showModal.bind(this, 'login')}/>
-                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp&nbsp注册'}}
-                              onClick={this.showModal.bind(this, 'register')}/>
+                        <Modal
+                            visible={this.state.login}
+                            onCancel={this.handleCancel.bind(this)}
+                            footer={''}
+                        >
+                            <Logins handleClose={this.handleCancel.bind(this)}/>
+                        </Modal>
                         {/* <Login login={this.state.login} handleCancel={this.handleCancel.bind(this,'login')}/>
                                 <Register register={this.state.register} handleCancel={this.handleCancel.bind(this,'register')}/> */}
                     </div>
                     <div className='right' style={{display: localStorage.getItem('userName') ? 'block' : 'none'}}>
                         <img src={require('../../img/admin.png')} style={{marginRight: '10px'}}/>
-
-                        <span onClick={this.clear.bind(this)}>退出</span>
+                        {localStorage.getItem('userName')}
+                        <span onClick={this.clear.bind(this)} style={{marginLeft:'10px'}}>退出</span>
                     </div>
                 </div>
                 <div className={'menu'}>
                     <Tabs defaultActiveKey="1" onChange={this.callback} tabPosition={'left'}>
                         <TabPane tab="审核经纪人、置业顾问注册" key="1">
-                            <Tabs defaultActiveKey="11" onChange={this.callback}>
+                            <Tabs defaultActiveKey="11" onChange={this.callback.bind(this)}>
                                 <TabPane tab="待审核经纪人" key="11">
                                     <Table columns={columns} dataSource={data} scroll={{x: 1800}}/>
                                 </TabPane>
                                 <TabPane tab="待审核置业顾问" key="12">
-                                    <Table columns={consultant} dataSource={data}/>
+                                    <Table columns={consultant} dataSource={this.state.consultantData}/>
                                 </TabPane>
                             </Tabs>
                         </TabPane>
@@ -580,15 +881,16 @@ class Admin extends React.Component {
                             </Tabs>
                         </TabPane>
                         <TabPane tab="管理经纪人、置业顾问、新房管理员权限" key="3">
-                            <Tabs defaultActiveKey="31" onChange={this.callback}>
+                            <Tabs defaultActiveKey="31" onChange={this.callback.bind(this)}>
                                 <TabPane tab="管理经纪人" key="31">
                                     <Table columns={agentControl} dataSource={data} scroll={{x: 1400}}/>
                                 </TabPane>
                                 <TabPane tab="管理置业顾问" key="32">
                                     <Table columns={consultantControl} dataSource={data}/>
                                 </TabPane>
-                                <TabPane tab="管理新房管理员" key="33">
-                                    <Table columns={bridalControl} dataSource={data}/>
+                                <TabPane tab="管理新房管理员" key={33}>
+                                    <EditableTable dataSource={this.state.adminData}/>
+                                    {/*<Table columns={bridalControl} dataSource={this.state.adminData} pagination={false}/>*/}
                                 </TabPane>
                             </Tabs>
                         </TabPane>
@@ -604,4 +906,5 @@ class Admin extends React.Component {
     }
 }
 
-export default Admin
+export default connect(state=>(
+    {userInformation:state.userInformation}),{setUserInformation})(Admin);
