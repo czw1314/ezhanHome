@@ -2,9 +2,9 @@ export const setUserInformation=(userInformation)=>({
     type:'userInformation',
     data:userInformation
 })
-export const newTaskList=(taskList)=>({
-    type:'taskList',
-    data:taskList
+export const setBridalInformation=(bridalInformation)=>({
+    type:'bridalInformation',
+    data:bridalInformation
 })
 export const newUserId=(taskList)=>({
     type:'userId',

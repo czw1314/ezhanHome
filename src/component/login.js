@@ -159,7 +159,6 @@ const Retreive = Form.create({ name: 'retrieve' })(RetreivePassword);
 class NormalLoginForm extends React.Component {
     //登陆
     handleSubmit = e => {
-        console.log(this.props)
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {

@@ -19,9 +19,9 @@ function userInformation(state = {}, action) {
             return state
     }
 }
-function index(state = '', action) {
+function bridalInformation(state ={}, action) {
     switch (action.type) {
-        case 'gateway':
+        case 'bridalInformation':
             return action.data
         default:
             return state
@@ -46,4 +46,4 @@ function taskList(state = [], action) {
 }
 
 
-export {userInformation,taskList,userId,index}
+export {userInformation,bridalInformation,userId,}

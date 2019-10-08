@@ -25,6 +25,12 @@
 .ant-modal.imgUp{
   width: 1000px !important;
 }
+.ant-modal-body {
+ text-align: center;
+}
+/*.ant-modal.code{*/
+  /*width: 4 !important;*/
+/*}*/
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

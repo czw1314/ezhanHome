@@ -58,7 +58,6 @@ class Information extends React.Component {
                     }
                     option.push(item)
                 }
-                console.log(option)
                 this.setState({
                     districtRegionsList: option
                 })

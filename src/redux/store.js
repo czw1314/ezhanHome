@@ -1,11 +1,10 @@
 
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-import {userInformation,taskList,userId,index} from './reducer'
+import {userInformation,bridalInformation,userId} from './reducer'
 const rootReducer = combineReducers({
     'userInformation':userInformation,
-    'taskList':taskList,
+    'bridalInformation':bridalInformation,
     'userId':userId,
-    'index':index
 })
 const store=new createStore(rootReducer)
 export default store
