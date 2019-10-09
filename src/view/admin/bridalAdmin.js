@@ -19,6 +19,7 @@ import {
     getHouseTypes,
     delPhoto
 } from '../../api/index'
+
 //上传户型
 class HousingPicturesWall extends React.Component {
     constructor(props) {
@@ -28,7 +29,7 @@ class HousingPicturesWall extends React.Component {
             previewImage: '',
             fileList: [],
             estateId: '',
-            housingMsgId:''
+            housingMsgId: ''
         };
     }
 
@@ -43,6 +44,7 @@ class HousingPicturesWall extends React.Component {
             reader.onerror = error => reject(error);
         });
     }
+
     //
 
     handlePreview = async file => {
@@ -75,7 +77,6 @@ class HousingPicturesWall extends React.Component {
 
     render() {
         const {previewVisible, previewImage, fileList} = this.state;
-        console.log(fileList)
         const uploadButton = (
             <div>
                 <Icon type="plus"/>
@@ -88,7 +89,7 @@ class HousingPicturesWall extends React.Component {
                     action="http://47.108.87.104:8501/estate/housingPictures"
                     name={'files'}
                     data={{
-                        housingMsgId:0,
+                        housingMsgId: 0,
                     }}
                     listType="picture-card"
                     onPreview={this.handlePreview}
@@ -104,6 +105,7 @@ class HousingPicturesWall extends React.Component {
         );
     }
 }
+
 class Information extends React.Component {
     constructor(props) {
         super(props)
@@ -117,7 +119,19 @@ class Information extends React.Component {
             propertyTypeLength: [''],
             traits: [],
             houseTypes: [],
-            housingMsgs:['']
+            housingMsgs: [{
+                advantage: '',
+                area: '',
+                drawback: '',
+                height: '',
+                housingDetailName: '',
+                housingStructure: '',
+                housingTraitIds: [],
+                housingType: '',
+                housingTypeTitle: '',
+                orientations: '',
+                propertyType: ''
+            }]
         }
     }
 
@@ -274,20 +288,31 @@ class Information extends React.Component {
             deliverDecorateStandard: e.value
         })
     }
-    delHousing(index){
+
+    delHousing(index) {
         this.state.housingMsgs.splice(index, 1)
+        let arr=this.props.form.getFieldValue('housingMsgs')
+       arr.splice(index, 1)
+        console.log(arr)
+
+        console.log(this.state.housingMsgs)
         this.setState({
-            housingMsgs: this.state.housingMsgs
+                housingMsgs: this.state.housingMsgs
             }
         )
+        this.props.form.setFieldsValue({
+            housingMsgs:arr
+        })
     }
-    addHousing(index){
+
+    addHousing(index) {
         this.state.housingMsgs.push('')
         this.setState({
                 housingMsgs: this.state.housingMsgs
             }
         )
     }
+
     //区域选择
     onChange(checkedValues) {
         this.setState({
@@ -330,7 +355,19 @@ class Information extends React.Component {
 
     propertyTypeAdd() {
         let arr = this.state.propertyTypeLength;
-        arr.push('')
+        arr.push({
+            advantage: '',
+            area: '',
+            drawback: '',
+            height: '',
+            housingDetailName: '',
+            housingStructure: '',
+            housingTraitIds: [],
+            housingType: '',
+            housingTypeTitle: '',
+            orientations: '',
+            propertyType: ''
+        })
         this.setState({
             propertyTypeLength: arr
         })
@@ -585,57 +622,57 @@ class Information extends React.Component {
                 </Form.Item>
                 <Form.Item label={'2、添加楼盘相册：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
-                <Form.Item label={'楼盘封面宣传图'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'楼盘封面宣传图'} className={'item'} labelCol={{span: 3}}>
                     <PicturesWall photoType={'0'}></PicturesWall>
                 </Form.Item>
-                <Form.Item label={'区位图'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'区位图'} className={'item'} labelCol={{span: 3}}>
                     <PicturesWall photoType={'1'}></PicturesWall>
                 </Form.Item>
-                <Form.Item label={'楼盘总平面图'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'楼盘总平面图'} className={'item'} labelCol={{span: 3}}>
                     <PicturesWall photoType={'2'}></PicturesWall>
                 </Form.Item>
-                <Form.Item label={'楼盘效果图'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'楼盘效果图'} className={'item'} labelCol={{span: 3}}>
                     <PicturesWall photoType={'3'}></PicturesWall>
                 </Form.Item>
-                <Form.Item label={'楼盘实景图'} className={'item'} labelCol={{span:3}}>
-                    <PicturesWall photoType={'4'}></PicturesWall >
+                <Form.Item label={'楼盘实景图'} className={'item'} labelCol={{span: 3}}>
+                    <PicturesWall photoType={'4'}></PicturesWall>
                 </Form.Item>
-                <Form.Item label={'样板间'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'样板间'} className={'item'} labelCol={{span: 3}}>
                     <PicturesWall photoType={'5'}></PicturesWall>
                 </Form.Item>
-                <Form.Item label={'添加预售'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'添加预售'} className={'item'} labelCol={{span: 3}}>
                     <PicturesWall photoType={'6'}></PicturesWall>
                 </Form.Item>
                 <Form.Item label={'3、楼盘动态：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
-                <Form.Item label={'楼盘动态标题：'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'楼盘动态标题：'} className={'item'} labelCol={{span: 3}}>
                     {getFieldDecorator('dynamicTitle')(
                         <Input/>
                     )}
                 </Form.Item>
-                <Form.Item label={'发布内容：'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'发布内容：'} className={'item'} labelCol={{span: 3}}>
                     {getFieldDecorator('dynamicContent')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'4、项目外部配套（从近到远排序）（3公里范围）：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
-                <Form.Item label={'交通配套：'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'交通配套：'} className={'item'} labelCol={{span: 3}}>
                     {getFieldDecorator('matching1')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
-                <Form.Item label={'医疗配套：'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'医疗配套：'} className={'item'} labelCol={{span: 3}}>
                     {getFieldDecorator('matching2')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
-                <Form.Item label={'商业配套：'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'商业配套：'} className={'item'} labelCol={{span: 3}}>
                     {getFieldDecorator('matching3')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
-                <Form.Item label={'教育配套：'} className={'item'} labelCol={{span:3}}>
+                <Form.Item label={'教育配套：'} className={'item'} labelCol={{span: 3}}>
                     {getFieldDecorator('matching4')(
                         <Input.TextArea/>
                     )}
@@ -643,87 +680,111 @@ class Information extends React.Component {
                 <Form.Item label={'5、添加户型信息以及户型图（支持格式PNG，JPG）：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 {
-                    this.state.housingMsgs&&this.state.housingMsgs.map((item,index)=>{
-                        return(  <div style={{width:'100%',display:'flex',flexWrap:'wrap'}}>
-                            <Form.Item label={'户型名称：'}>
-                                {getFieldDecorator('matching5')(
-                                    <Input/>
-                                )}
-                            </Form.Item>
-                            <Form.Item label={'户型选择：'}>
-                                {getFieldDecorator('matching5')(
-                                    <Select>
-                                        <Option value="1">一居室</Option>
-                                        <Option value="2">两居室</Option>
-                                        <Option value="3">三居室</Option>
-                                        <Option value="4">四居室</Option>
-                                        <Option value="5">五居室</Option>
-                                        <Option value="6">六居室</Option>
-                                    </Select>
-                                )}
-                            </Form.Item>
-                            <Form.Item label={'户型详细名称：'}>
-                                {getFieldDecorator('matching5')(
-                                    <Input/>
-                                )}
-                            </Form.Item>
-                            <Form.Item label={'建面：'}>
-                                {getFieldDecorator('matching5')(
-                                    <Input addonAfter="m²"/>
-                                )}
-                            </Form.Item>
-                            <Form.Item label={'层高：'}>
-                                {getFieldDecorator('matching5')(
-                                    <Input addonAfter="m"/>
-                                )}
-                            </Form.Item>
-                            <Form.Item label={'户型结构：'}>
-                                {getFieldDecorator('matching5')(
-                                    <Select>
-                                        {this.state.housingStructures && this.state.housingStructures.map(item => {
-                                                return (<Option value={item.value}>{item.label}</Option>)
-                                            }
-                                        )}
-                                    </Select>
-                                )}
-                            </Form.Item>
-                            <Form.Item label="户型特色：">
-                                {getFieldDecorator('housingStructureIds')(
-                                    <Select mode="multiple">
-                                        {this.state.housingStructures && this.state.housingStructures.map(item => {
-                                                return (<Option value={item.value}>{item.label}</Option>)
-                                            }
-                                        )}
-                                    </Select>
-                                )}
-                            </Form.Item>
-                            <Form.Item>
-                                {getFieldDecorator('housingStructureIds')(
-                                    <Input/>
-                                )}
-                            </Form.Item>
-                            <Form.Item label={'户型优点：'}>
-                                {getFieldDecorator('matching5')(
-                                    <Input.TextArea/>
-                                )}
-                            </Form.Item>
-                            <Form.Item label={'户型缺点：'}>
-                                {getFieldDecorator('matching5')(
-                                    <Input.TextArea/>
-                                )}
-                            </Form.Item>
-                            <Form.Item label={'户型上传：'}>
-                                <HousingPicturesWall></HousingPicturesWall>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button onClick={this.delHousing.bind(this,index)}>删除户型</Button>
-                            </Form.Item>
-                        </div>)
+                    this.state.housingMsgs && this.state.housingMsgs.map((item, index) => {
+                            return (<div style={{width: '100%', display: 'flex', flexWrap: 'wrap'}}>
+                                <Form.Item label={'户型名称：'}>
+                                    {getFieldDecorator(`housingMsgs[${index}].housingTypeTitle`)(
+                                        <Input/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label={'户型选择：'}>
+                                    {getFieldDecorator(`housingMsgs[${index}].housingType`)(
+                                        <Select>
+                                            <Option value="1">一居室</Option>
+                                            <Option value="2">两居室</Option>
+                                            <Option value="3">三居室</Option>
+                                            <Option value="4">四居室</Option>
+                                            <Option value="5">五居室</Option>
+                                            <Option value="6">六居室</Option>
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label={'户型详细名称：'}>
+                                    {getFieldDecorator(`housingMsgs[${index}].housingDetailName`)(
+                                        <Input/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label={'建面：'}>
+                                    {getFieldDecorator(`housingMsgs[${index}].area`)(
+                                        <Input addonAfter="m²"/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label={'物业类型：'}>
+                                    {getFieldDecorator(`housingMsgs[${index}].propertyType`)(
+                                        <Select>
+                                            {this.state.propertyTypes && this.state.propertyTypes.map(item => {
+                                                    return (<Option value={item.value}>{item.label}</Option>)
+                                                }
+                                            )}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label={'物业朝向：'}>
+                                    {getFieldDecorator(`housingMsgs[${index}].orientations`)(
+                                        <Select>
+                                            {this.state.propertyTypes && this.state.propertyTypes.map(item => {
+                                                    return (<Option value={item.value}>{item.label}</Option>)
+                                                }
+                                            )}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label={'层高：'}>
+                                    {getFieldDecorator(`housingMsgs[${index}].height`)(
+                                        <Input addonAfter="m"/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label={'户型结构：'}>
+                                    {getFieldDecorator(`housingMsgs[${index}].housingStructure`)(
+                                        <Select>
+                                            {this.state.housingStructures && this.state.housingStructures.map(item => {
+                                                    return (<Option value={item.value}>{item.label}</Option>)
+                                                }
+                                            )}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label="户型特色：">
+                                    {getFieldDecorator(`housingMsgs[${index}].housingTraitIds`)(
+                                        <Select mode="multiple">
+                                            {this.state.housingStructures && this.state.housingStructures.map(item => {
+                                                    return (<Option value={item.value}>{item.label}</Option>)
+                                                }
+                                            )}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                                {/*<Form.Item>*/}
+                                {/*{getFieldDecorator('housingStructureIds')(*/}
+                                {/*<Input/>*/}
+                                {/*)}*/}
+                                {/*</Form.Item>*/}
+                                <Form.Item label={'户型优点：'}>
+                                    {getFieldDecorator(`housingMsgs[${index}].advantage`)(
+                                        <Input.TextArea/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label={'户型缺点：'}>
+                                    {getFieldDecorator(`housingMsgs[${index}].drawback`)(
+                                        <Input.TextArea/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label={'户型上传：'}>
+                                    <HousingPicturesWall></HousingPicturesWall>
+                                </Form.Item>
+                                <Form.Item labelCol={{span: 13}}>
+                                    <Button type="primary" onClick={this.delHousing.bind(this, index)}
+                                            style={{marginLeft: '200px', marginTop: '-50px'}}>删除户型</Button>
+                                </Form.Item>
+                            </div>)
                         }
                     )
                 }
                 <Form.Item>
                     <Button icon={'plus'} type="primary" onClick={this.addHousing.bind(this)}>继续添加户型</Button>
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" onClick={this.handleSubmit.bind(this)}>确认发布并打开该楼盘详情页</Button>
                 </Form.Item>
             </Form>
         );
