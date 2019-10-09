@@ -221,3 +221,29 @@ export const delHousingPictures= (params) =>
             },
         }
     );
+    //根据街道id获取楼盘名
+export const getStreetEstates= (params) =>
+axios.get(`${base}/houseAdmin/streetEstates`,{
+        params,
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+    }
+);
+//楼盘动态更新
+    export const updata= (params) =>
+    axios.post(`${base}/houseAdmin/dynamicUpdate`,params,{
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+        //根据楼盘信息更新
+export const getEstateMsg= (params) =>
+axios.get(`${base}/estate/estateMsg`,{
+        params,
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+    }
+);

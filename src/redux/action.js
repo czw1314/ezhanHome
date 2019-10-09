@@ -6,9 +6,9 @@ export const setBridalInformation=(bridalInformation)=>({
     type:'bridalInformation',
     data:bridalInformation
 })
-export const newUserId=(taskList)=>({
-    type:'userId',
-    data:taskList
+export const newEstateId=(estateId)=>({
+    type:'estateId',
+    data:estateId
 })
 export const newIndex=(index)=>({
     type:'userId',
