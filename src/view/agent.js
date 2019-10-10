@@ -1,7 +1,7 @@
 import React from 'react'
 import '../css/agent.scss'
 import {Select, Button, Badge, Menu, Input, Checkbox, Modal, Pagination} from 'antd';
-import {searchAgent} from '../api/index'
+import {searchAgent,getDistrictRegions} from '../api/index'
 
 class Agent extends React.Component {
     constructor(props) {
@@ -22,6 +22,13 @@ class Agent extends React.Component {
             togglePrice: true,
             toggleTime: true
         }
+    }
+    componentDidMount(){
+        getDistrictRegions().then((res)=>{
+            if(res.data.code==1){
+                console.log(res)
+            }
+        })
     }
 
     //找房与找经纪人互相切换

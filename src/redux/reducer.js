@@ -27,23 +27,28 @@ function bridalInformation(state ={}, action) {
             return state
     }
 }
-function userId(state = {}, action) {
+function estateId(state = '', action) {
     switch (action.type) {
-        case 'userId':
+        case 'estateId':
             return action.data
         default:
             return state
     }
 }
 
-function taskList(state = [], action) {
+function fileList(state = [{
+    uid: '-1',
+    name: 'image.png',
+    status: 'done',
+    url: 'http://47.108.87.104:8601/building/7/effect/15706945654721.jpg',
+  }], action) {
     switch (action.type) {
-        case 'taskList':
-            return state=action.data
+        case 'fileList':
+            return action.data
         default:
             return state
     }
 }
 
 
-export {userInformation,bridalInformation,userId,}
+export {userInformation,bridalInformation,estateId,fileList}

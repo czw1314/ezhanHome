@@ -10,7 +10,7 @@ export const newEstateId=(estateId)=>({
     type:'estateId',
     data:estateId
 })
-export const newIndex=(index)=>({
-    type:'userId',
-    data:index
+export const getFileList=(fileList)=>({
+    type:'fileList',
+    data:fileList
 })

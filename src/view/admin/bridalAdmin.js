@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../css/bridalAdmin.scss'
 import {connect} from "react-redux";
-import {setBridalInformation} from "../../redux/action";
+import {newEstateId,getFileList} from "../../redux/action";
 import {
     Tabs, Input, Button, Form, Upload, Icon, message, Checkbox,
     Select, Modal, Cascader, Divider
@@ -285,12 +285,12 @@ class Information extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let params=values
-                params.estateId=localStorage.getItem('estateId')
-       
+                values.regionId=values.regionId[1]
+                values.estateId=this.props.estateId
                 values.matchings.map((item,index)=>{
                     item.type=index+1
                 })
+                let params=values
 
                 estatePublished(params).then((res)=>{
                     if(res.data.code===1){
@@ -589,25 +589,25 @@ class Information extends React.Component {
                 <Form.Item label={'2、添加楼盘相册：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'楼盘封面宣传图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWall photoType={'0'}></PicturesWall>
+                    <PicturesWallId photoType={'0'}></PicturesWallId>
                 </Form.Item>
                 <Form.Item label={'区位图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWall photoType={'1'}></PicturesWall>
+                    <PicturesWallId photoType={'1'}></PicturesWallId>
                 </Form.Item>
                 <Form.Item label={'楼盘总平面图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWall photoType={'2'}></PicturesWall>
+                    <PicturesWallId photoType={'2'}></PicturesWallId>
                 </Form.Item>
                 <Form.Item label={'楼盘效果图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWall photoType={'3'}></PicturesWall>
+                    <PicturesWallId photoType={'3'}></PicturesWallId>
                 </Form.Item>
                 <Form.Item label={'楼盘实景图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWall photoType={'4'}></PicturesWall>
+                    <PicturesWallId photoType={'4'}></PicturesWallId>
                 </Form.Item>
                 <Form.Item label={'样板间'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWall photoType={'5'}></PicturesWall>
+                    <PicturesWallId photoType={'5'}></PicturesWallId>
                 </Form.Item>
                 <Form.Item label={'添加预售'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWall photoType={'6'}></PicturesWall>
+                    <PicturesWallId photoType={'6'}></PicturesWallId>
                 </Form.Item>
                 <Form.Item label={'3、楼盘动态：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
@@ -754,7 +754,7 @@ class Information extends React.Component {
 }
 
 const InformationForms = connect(state => (
-    {bridalInformation: state.bridalInformation}), {setBridalInformation})(Form.create({name: 'retrieve'})(Information));
+    {estateId: state.estateId}), {newEstateId})(Form.create({name: 'retrieve'})(Information));
 
 //上传图片
 class PicturesWall extends React.Component {
@@ -808,7 +808,7 @@ class PicturesWall extends React.Component {
                 estateId: file.response.estateId,
                 multiple: true
             })
-            localStorage.setItem('estateId',file.response.estateId)
+            this.props.newEstateId(file.response.estateId)
         }
     };
 
@@ -827,7 +827,7 @@ class PicturesWall extends React.Component {
                     action="http://47.108.87.104:8501/estate/estatePhoto"
                     name={'files'}
                     data={{
-                        estateId: this.state.estateId || 0,
+                        estateId: this.props.estateId || 0,
                         photoType: this.props.photoType
                     }}
                     listType="picture-card"
@@ -846,6 +846,8 @@ class PicturesWall extends React.Component {
         );
     }
 }
+const PicturesWallId=connect(state => (
+    {estateId: state.estateId}), {newEstateId})(PicturesWall);
 //更新户型
 class HousingPicturesWallUpdata extends React.Component {
     constructor(props) {
@@ -1418,26 +1420,26 @@ class InformationUpdata extends React.Component {
                 <Form.Item label={'2、添加楼盘相册：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'楼盘封面宣传图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWallUpdata photoType={'0'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[0].name:[]} estateId={this.props.estateId}></PicturesWallUpdata>
+                    <PicturesWallUpdataId photoType={'0'} estateId={this.props.values.id}></PicturesWallUpdataId>
                 </Form.Item>
                 <Form.Item label={'区位图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWallUpdata photoType={'1'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[1].name:[]} estateId={this.props.estateId}></PicturesWallUpdata>
+                    <PicturesWallUpdataId photoType={'1'} estateId={this.props.values.id}></PicturesWallUpdataId>
                 </Form.Item>
                 <Form.Item label={'楼盘总平面图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWallUpdata photoType={'2'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[2].name:[]} estateId={this.props.estateId}></PicturesWallUpdata>
+                    <PicturesWallUpdataId photoType={'2'} estateId={this.props.values.id}></PicturesWallUpdataId>
                 </Form.Item>
-                <Form.Item label={'楼盘效果图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWallUpdata photoType={'3'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[3].name:[]} estateId={this.props.estateId}></PicturesWallUpdata>
+                {/* <Form.Item label={'楼盘效果图'} className={'item'} labelCol={{span: 3}}>
+                    <PicturesWallUpdata photoType={'3'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[3]:[]} estateId={this.props.values.id}></PicturesWallUpdata>
                 </Form.Item>
                 <Form.Item label={'楼盘实景图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWallUpdata photoType={'4'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[4].name:[]} estateId={this.props.estateId}></PicturesWallUpdata>
+                    <PicturesWallUpdata photoType={'4'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[4]:[]} estateId={this.props.values.id}></PicturesWallUpdata>
                 </Form.Item>
                 <Form.Item label={'样板间'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWallUpdata photoType={'5'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[5].name:[]} estateId={this.props.estateId}></PicturesWallUpdata>
+                    <PicturesWallUpdata photoType={'5'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[5]:[]} estateId={this.props.values.id}></PicturesWallUpdata>
                 </Form.Item>
-                <Form.Item label={'添加预售'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWallUpdata photoType={'6'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[6].name:[]} estateId={this.props.estateId}></PicturesWallUpdata>
-                </Form.Item>
+                <Form.Item label={'添加预售'} className={'item'} labelCol={{span: 3}}> */}
+                    {/* <PicturesWallUpdata photoType={'6'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[6]:[]} estateId={this.props.values.id}></PicturesWallUpdata>
+                </Form.Item> */}
                 <Form.Item label={'3、楼盘动态：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'楼盘动态标题：'} className={'item'} labelCol={{span: 3}}>
@@ -1587,7 +1589,7 @@ class InformationUpdata extends React.Component {
 }
 
 const InformationFormUpdatas = connect(state => (
-    {bridalInformation: state.bridalInformation}), {setBridalInformation})(Form.create({name: 'retrieve'})(InformationUpdata));
+    {bridalInformation: state.bridalInformation}), {newEstateId})(Form.create({name: 'retrieve'})(InformationUpdata));
 
 //更新图片
 class PicturesWallUpdata extends React.Component {
@@ -1596,21 +1598,17 @@ class PicturesWallUpdata extends React.Component {
         this.state = {
             previewVisible: false,
             previewImage: '',
-            fileList: [],
+            fileList:[{
+                uid: '-1',
+                name: 'image.png',
+                status: 'done',
+                url: 'http://47.108.87.104:8601/building/7/effect/15706945654721.jpg',
+              }],
             estateId: '',
             multiple: false,
         };
     }
-    //
-    // componentDidMount(){
-    //     this.props.fileList&&this.props.fileList.map((item,index)=>{
-    //         console.log('http://47.108.87.104:8501'+item)
-    //         return ('http://47.108.87.104:8501'+item)
-    //     })
-    //     console.log(this.props.fileList)
-    // }
     handleCancel = () => this.setState({previewVisible: false});
-
     getBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -1619,12 +1617,10 @@ class PicturesWallUpdata extends React.Component {
             reader.onerror = error => reject(error);
         });
     }
-
     handlePreview = async file => {
         if (!file.url && !file.preview) {
             file.preview = await this.getBase64(file.originFileObj);
         }
-
         this.setState({
             previewImage: file.url || file.preview,
             previewVisible: true,
@@ -1633,14 +1629,16 @@ class PicturesWallUpdata extends React.Component {
 
     remove(file) {
         let params = {
-            "estateId": this.state.estateId,
-            "photoName": file.response.paths[0],
+            "estateId": this.props.estateId,
+            "photoName": '7/effect/15706945654721.jpg',
             "photoType": this.props.photoType
         }
+        this.props.getFileList([])
         delPhoto(params)
     }
 
     handleChange = ({file, fileList}) => {
+        
         this.setState({fileList})
         if (file.status === 'done' && file.response.estateId) {
             this.setState({
@@ -1652,7 +1650,24 @@ class PicturesWallUpdata extends React.Component {
     };
 
     render() {
-        const {previewVisible, previewImage, fileList} = this.state;
+        const {previewVisible, previewImage} = this.state;
+        let arrs=[];
+        // if(this.props.fileList.length!=0){
+        //      arrs=this.props.fileList.map((item,index)=>{
+        //         let obj={
+        //             uid: index,
+        //             name: 'image.png',
+        //             status: 'done',
+        //             url: item,
+        //         }
+        //         return obj
+        //     })
+        // }  
+   
+        //   let fileList=[...this.state.fileList,...arr]
+        //   this.setState(fileList)
+          console.log(this.props.fileList)
+
         const uploadButton = (
             <div>
                 <Icon type="plus"/>
@@ -1670,7 +1685,7 @@ class PicturesWallUpdata extends React.Component {
                     }}
                     listType="picture-card"
                     multiple={this.state.multiple}
-                    fileList={fileList}
+                    fileList={this.props.fileList}
                     onPreview={this.handlePreview}
                     onRemove={this.remove.bind(this)}
                     onChange={this.handleChange.bind(this)}
@@ -1685,6 +1700,8 @@ class PicturesWallUpdata extends React.Component {
     }
 }
 
+const PicturesWallUpdataId = connect(state => (
+    {fileList: state.fileList}), {getFileList})(PicturesWallUpdata);
 class bridalAdmin extends React.Component {
     constructor(props) {
         super(props);
@@ -1752,7 +1769,7 @@ class bridalAdmin extends React.Component {
 
     //退出登陆
     clear() {
-        this.props.setUserInformation({})
+        // this.props.setUserInformation({})
         localStorage.clear()
     }
 
@@ -1802,15 +1819,13 @@ class bridalAdmin extends React.Component {
             key:key,
             estateId:''
         })
+        this.props.newEstateId('')
         if(key==4){
 
         }
     }
     handleChange = info => {
         let fileList = [...info.fileList];
-
-        // 1. Limit the number of uploaded files
-        // Only to show two recent uploaded files, and old ones will be replaced by the new
         fileList = fileList.slice(-2);
 
         // 2. Read from response and show file link
@@ -1873,12 +1888,11 @@ class bridalAdmin extends React.Component {
                 })
                let x= arr.map(item=>{
                     return(item.map(items=>{
-                        return ('sdsdsa'+items)
+                        return ('http://47.108.87.104:8601/building/'+items)
                     }))
                 })
-                console.log(x)
-                res.data.estate.estatePictures=arr
-                console.log(res.data.estate.estatePictures)
+                // this.props.getFileList(x)
+                res.data.estate.estatePictures=x
                 this.setState({
                     values:res.data.estate
                 })
@@ -2051,4 +2065,5 @@ class bridalAdmin extends React.Component {
     }
 }
 
-export default bridalAdmin
+export default connect(state => (
+    {estateId: state.estateId,fileList:state.fileList}), {newEstateId,getFileList})(bridalAdmin)
