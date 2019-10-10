@@ -1,8 +1,7 @@
 import React from 'react'
 import '../css/agent.scss'
 import {Select, Button, Badge, Menu, Input, Checkbox, Modal, Pagination} from 'antd';
-import locale from 'antd/lib/date-picker/locale/zh_CN';
-import moment from 'moment';
+import {searchAgent} from '../api/index'
 
 class Agent extends React.Component {
     constructor(props) {

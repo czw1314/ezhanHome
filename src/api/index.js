@@ -230,6 +230,15 @@ axios.get(`${base}/houseAdmin/streetEstates`,{
         },
     }
 );
+//获取户型优点
+export const getHouseTraits= (params) =>
+    axios.get(`${base}/dataList/houseTraits`,{
+            params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
 //楼盘动态更新
     export const updata= (params) =>
     axios.post(`${base}/houseAdmin/dynamicUpdate`,params,{
@@ -247,3 +256,12 @@ axios.get(`${base}/estate/estateMsg`,{
         },
     }
 );
+//搜索经纪人
+export const searchAgent= (params) =>
+    axios.get(`${base}/show/searchAgent`,{
+            params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
