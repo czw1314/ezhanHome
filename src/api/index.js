@@ -149,7 +149,7 @@ export const delUser = (params) =>
     );
 //楼盘发布
 export const estatePublished = (params) =>
-    axios.post(`${base}/houseAdmin/estatePublished`, params,{
+    axios.post(`${base}/houseAdmin/estatePublished`, params, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -157,7 +157,7 @@ export const estatePublished = (params) =>
     );
 //获取建筑类型
 export const getBuildingTypes = (params) =>
-    axios.get(`${base}/dataList/buildingTypes`,{
+    axios.get(`${base}/dataList/buildingTypes`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -165,7 +165,7 @@ export const getBuildingTypes = (params) =>
     );
 //获取建筑结构
 export const getBuildingStructures = (params) =>
-    axios.get(`${base}/dataList/buildingStructures`,{
+    axios.get(`${base}/dataList/buildingStructures`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -173,7 +173,7 @@ export const getBuildingStructures = (params) =>
     );
 //获取户型结构
 export const getHousingStructures = (params) =>
-    axios.get(`${base}/dataList/housingStructures`,{
+    axios.get(`${base}/dataList/housingStructures`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -181,58 +181,58 @@ export const getHousingStructures = (params) =>
     );
 //获取物业类型
 export const getPropertyTypes = (params) =>
-    axios.get(`${base}/dataList/propertyTypes`,{
+    axios.get(`${base}/dataList/propertyTypes`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
         }
     );
 //获取物业类型
-export const getTraits= (params) =>
-    axios.get(`${base}/dataList/traits`,{
+export const getTraits = (params) =>
+    axios.get(`${base}/dataList/traits`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
         }
     );
 //获取物业权属
-export const getHouseTypes= (params) =>
-    axios.get(`${base}/dataList/houseTypes`,{
+export const getHouseTypes = (params) =>
+    axios.get(`${base}/dataList/houseTypes`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
         }
     );
 //删除楼盘照片
-export const delPhoto= (params) =>
-    axios.delete(`${base}/estate/estatePhoto`,{
-        params,
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-        }
-    );
-//删除指定户型图
-export const delHousingPictures= (params) =>
-    axios.delete(`${base}/estate/housingPictures`,{
+export const delPhoto = (params) =>
+    axios.delete(`${base}/estate/estatePhoto`, {
             params,
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
         }
     );
-    //根据街道id获取楼盘名
-export const getStreetEstates= (params) =>
-axios.get(`${base}/houseAdmin/streetEstates`,{
-        params,
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-    }
-);
+//删除指定户型图
+export const delHousingPictures = (params) =>
+    axios.delete(`${base}/estate/housingPictures`, {
+            params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+//根据街道id获取楼盘名
+export const getStreetEstates = (params) =>
+    axios.get(`${base}/houseAdmin/streetEstates`, {
+            params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
 //获取户型优点
-export const getHouseTraits= (params) =>
-    axios.get(`${base}/dataList/houseTraits`,{
+export const getHouseTraits = (params) =>
+    axios.get(`${base}/dataList/houseTraits`, {
             params,
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -240,25 +240,44 @@ export const getHouseTraits= (params) =>
         }
     );
 //楼盘动态更新
-    export const updata= (params) =>
-    axios.post(`${base}/houseAdmin/dynamicUpdate`,params,{
+export const updata = (params) =>
+    axios.post(`${base}/houseAdmin/dynamicUpdate`, params, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
         }
     );
-        //根据楼盘信息更新
-export const getEstateMsg= (params) =>
-axios.get(`${base}/estate/estateMsg`,{
-        params,
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-    }
-);
+//根据楼盘信息更新
+export const getEstateMsg = (params) =>
+    axios.get(`${base}/estate/estateMsg`, {
+            params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
 //搜索经纪人
-export const searchAgent= (params) =>
-    axios.get(`${base}/show/searchAgent`,{
+export const searchAgent = (params) =>
+    axios.get(`${base}/show/searchAgent`, {
+            params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+
+//查看户型图
+export const getHousingMsg = (params) =>
+    axios.get(`${base}/estate/housingMsg`, {
+            params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+//根据楼盘id 获取楼盘相册种类（数量）图片路径列表
+export const getStreetEstatess = (params) =>
+    axios.get(`${base}/estate/streetEstates`, {
             params,
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'

@@ -1,10 +1,13 @@
 import React from 'react'
 import '../../css/Album.scss'
-import {mapInformation} from '../../api/index'
+import {connect} from "react-redux";
+import {newEstateId} from "../../redux/action";
+import {mapInformation,getStreetEstatess} from '../../api/index'
 import routes from '../../router/index';
 import {Select, Button, Rate, Icon,Pagination, Input, Checkbox, Modal,Tabs} from 'antd';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
+import {getHousingMsg} from "../../api";
 
 class Album extends React.Component {
     constructor(props) {
@@ -47,7 +50,8 @@ class Album extends React.Component {
             active: 0,//第n张相片激活，
             keys: 1,
             location:'104.081525,30.406772',
-            map:''
+            map:'',
+            models:[]
         }
     }
 
@@ -176,7 +180,19 @@ class Album extends React.Component {
     callback(key) {
         console.log(key);
     }
+    componentDidMount(){
+        let params={
+            estateId:this.props.estateId
+        }
+        getStreetEstatess(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.models
+                })
+            }
 
+        })
+    }
     render() {
         const { TabPane } = Tabs;
         return (
@@ -307,4 +323,5 @@ class Album extends React.Component {
     }
 }
 
-export default Album
+export default connect(state => (
+    {estateId: state.estateId}), {newEstateId})(Album)

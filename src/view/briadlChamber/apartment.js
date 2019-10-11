@@ -1,6 +1,8 @@
 import React from 'react'
 import '../../css/apartment.scss'
-import {mapInformation} from '../../api/index'
+import {connect} from "react-redux";
+import {getFileList, newEstateId, setHousingPictures} from "../../redux/action";
+import {mapInformation,getHousingMsg} from '../../api/index'
 import routes from '../../router/index';
 import {Select, Button, Rate, Icon,Pagination, Input, Checkbox, Modal,Tabs} from 'antd';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
@@ -47,7 +49,8 @@ class Apartment extends React.Component {
             active: 0,//第n张相片激活，
             keys: 1,
             location:'104.081525,30.406772',
-            map:''
+            map:'',
+            models:[]
         }
     }
 
@@ -161,95 +164,100 @@ class Apartment extends React.Component {
     callback(key) {
         console.log(key);
     }
+    componentDidMount(){
+        let params={
+            estateId:this.props.estateId
+        }
+        getHousingMsg(params).then((res)=>{
+            if(res.data.code===1){
+                let arr = res.data.models.map((item,index) => {
+                    item.housingMsgs.map((itema,indexa)=>{
+                        console.log(itema.picturePath)
+                        res.data.models[index].housingMsgs[indexa].picturePath=eval("(" + itema.picturePath + ")")
+                    })
+                })
+                this.setState({
+                    models:res.data.models
+                })
+            }
+
+        })
+    }
 
     render() {
         const { TabPane } = Tabs;
+
         return (
             <div className='apartment'>
                 <div className={'title'}>
                     <p>楼盘名称相册</p>
                 </div>
                 <div className="banner">
-                    <Tabs defaultActiveKey="1" onChange={this.callback} style={{textAlign:'left'}}>
-                        <TabPane tab="区位图（20）" key="1">
-                            <Tabs defaultActiveKey="1" onChange={this.callback} style={{textAlign:'left'}} className={'item-box'}>
-                                <TabPane tab="C1户型-39m²" key="1">
-                                    <div className={'item'}>
-                                    <div className="large_box">
-                                        <div className={'go-left'} onClick={this.goLeft.bind(this)}>
-                                            <img src={require('../../img/go-left.png')}/>
-                                        </div>
-                                        <div className={'go-right'} onClick={this.goRight.bind(this)}>
-                                            <img src={require('../../img/go-right.png')}/>
-                                        </div>
-                                        <ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`}}>
-                                            <li>
-                                                <img src={require('../../img/itemApartment.png')}/>
-                                            </li>
-                                            <li>
-                                                <img src={require('../../img/apartment.png')}/>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className={'information'}>
-                                        <p className={'title'}>
-                                            C1户型-39m²
-                                        </p>
-                                        <p className={'apartment'}>1室1厅两卫</p>
-                                        <p className={'tag'}><span>户型方正</span><span>户型方正</span><span>户型方正</span><span>户型方正</span><span>户型方正</span></p>
-                                        <p dangerouslySetInnerHTML={{__html: '建面：106m²&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp朝向：朝南'}} ></p>
-                                        <p dangerouslySetInnerHTML={{__html: '层高：15.0m&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp户型结构：XXX'}} ></p>
-                                        <p>物业类型：xxxxx</p>
-                                        <p>户型优点： 1.格局方正，方便后家具摆放，利于后期
-                                            空间改造。2.空间分割多为非承重墙，可根据个人需
-                                            要进行空间改造。3.室内过道面积少，可实现功能空
-                                            间充分利用。</p>
-                                        <p>户型缺点： 1.格局方正，方便后家具摆放，利于后期
-                                            空间改造。2.空间分割多为非承重墙，可根据个人需
-                                            要进行空间改造。3.室内过道面积少，可实现功能空
-                                            间充分利用。</p>
-                                    </div>
-                                    </div>
-                                </TabPane>
-                                <TabPane tab="C1户型-39m²" key="2">
-                                </TabPane>
-                                <TabPane tab="C1户型-39m²" key="3">
-                                </TabPane>
-                            </Tabs>
-                        </TabPane>
-                        <TabPane tab="区位图（20）" key="2">
-                        </TabPane>
-                        <TabPane tab="区位图（20）" key="3">
-                        </TabPane>
+                    <Tabs defaultActiveKey="0" onChange={this.callback} style={{textAlign:'left'}}>
+                        {
+                            this.state.models&&this.state.models.map((item,index)=>{
+                                return(
+                                    <TabPane tab={item.housingType} key={index}>
+                                        <Tabs defaultActiveKey="0" onChange={this.callback} style={{textAlign:'left'}} className={'item-box'}>
+                                        {
+                                            item.housingMsgs&&item.housingMsgs.map((items,index1)=>{
+                                                return(
+                                                            <TabPane tab={items.housingTypeTitle} key={index1}>
+                                                                <div className={'item'}>
+                                                                    <div className="large_box">
+                                                                        {/*<div className={'go-left'} onClick={this.goLeft.bind(this)}>*/}
+                                                                            {/*<img src={require('../../img/go-left.png')}/>*/}
+                                                                        {/*</div>*/}
+                                                                        {/*<div className={'go-right'} onClick={this.goRight.bind(this)}>*/}
+                                                                            {/*<img src={require('../../img/go-right.png')}/>*/}
+                                                                        {/*</div>*/}
+                                                                        <ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`}}>
+                                                                            <li>
+                                                                                <img src={ ('http://47.108.87.104:8601/housing/'+items.picturePath[0])||''}/>
+                                                                            </li>
+                                                                            <li>
+                                                                                <img src={require('../../img/apartment.png')}/>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div className={'information'}>
+                                                                        <p className={'title'}>
+                                                                            {items.housingTypeTitle}
+                                                                        </p>
+                                                                        <p className={'apartment'}>{items.housingDetailName}</p>
+                                                                        <p className={'tag'}>
+                                                                            {
+                                                                                items.housingTraits && items.housingTraits.map((itema, indexa) => {
+                                                                                    return (
+                                                                                        <span>{itema.traitName}</span>
+                                                                                    )
+                                                                                })
+                                                                            }
+
+                                                                        </p>
+                                                                        <p dangerouslySetInnerHTML={{__html:`建面：${items.area}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp朝向：${items.orientations}`}} ></p>
+                                                                        <p dangerouslySetInnerHTML={{__html: `层高：${items.height}m&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp户型结构：${items.housingStructure}`}} ></p>
+                                                                        <p>物业类型：{items.propertyType}</p>
+                                                                        <p>户型优点： {items.advantage}</p>
+                                                                        <p>户型缺点： {items.drawback}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </TabPane>
+
+                                                )
+                                            })
+                                        }
+                                        </Tabs>
+                                    </TabPane>
+                                )
+                            })
+                        }
                     </Tabs>
-
-                    {/*<div className={'nearby'}>*/}
-                    {/*<h3>楼盘周边配套</h3>*/}
-                    {/*<div id="container"></div>*/}
-                    {/*<Tabs defaultActiveKey="1" onChange={this.callback}>*/}
-                    {/*<TabPane tab="交通" key="1">*/}
-                    {/*<div>*/}
-                    {/*附近地铁站<br></br>*/}
-                    {/*海昌路*/}
-                    {/*</div>*/}
-                    {/*</TabPane>*/}
-                    {/*<TabPane tab="医疗" key="2">*/}
-                    {/*Content of Tab Pane 2*/}
-                    {/*</TabPane>*/}
-                    {/*<TabPane tab="商业" key="3">*/}
-                    {/*Content of Tab Pane 3*/}
-                    {/*</TabPane>*/}
-                    {/*<TabPane tab="教育" key="4">*/}
-                    {/*Content of Tab Pane 3*/}
-                    {/*</TabPane>*/}
-                    {/*</Tabs>*/}
-                    {/*<Button block>更多</Button>*/}
-                    {/*</div>*/}
-
                 </div>
             </div>
         )
     }
 }
 
-export default Apartment
+export default connect(state => (
+    {estateId: state.estateId}), {newEstateId})(Apartment)

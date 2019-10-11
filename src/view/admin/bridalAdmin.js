@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../css/bridalAdmin.scss'
 import {connect} from "react-redux";
-import {newEstateId,getFileList} from "../../redux/action";
+import {newEstateId, getFileList,setHousingPictures} from "../../redux/action";
 import {
     Tabs, Input, Button, Form, Upload, Icon, message, Checkbox,
     Select, Modal, Cascader, Divider
@@ -72,8 +72,9 @@ class HousingPicturesWall extends React.Component {
     handleChange = ({file, fileList}) => {
         this.setState({fileList})
         if (file.status === 'done' && file.response.estateId) {
+            this.props.setId(this.props.id,file.response.estateId)
             this.setState({
-                housingMsgId: file.response.housingMsgId,
+                housingMsgId: file.response.estateId,
             })
         }
     };
@@ -92,7 +93,7 @@ class HousingPicturesWall extends React.Component {
                     action="http://47.108.87.104:8501/estate/housingPictures"
                     name={'files'}
                     data={{
-                        housingMsgId: 0,
+                        housingMsgId:this.state. housingMsgId||0,
                     }}
                     listType="picture-card"
                     onPreview={this.handlePreview}
@@ -108,6 +109,7 @@ class HousingPicturesWall extends React.Component {
         );
     }
 }
+
 //上传楼盘信息
 class Information extends React.Component {
     constructor(props) {
@@ -122,7 +124,7 @@ class Information extends React.Component {
             propertyTypeLength: [''],
             traits: [],
             houseTypes: [],
-            houseTraits:[],
+            houseTraits: [],
             housingMsgs: [{
                 advantage: '',
                 area: '',
@@ -135,7 +137,8 @@ class Information extends React.Component {
                 housingTypeTitle: '',
                 orientations: '',
                 propertyType: '',
-            }]
+            }],
+            id:[]
         }
     }
 
@@ -269,10 +272,16 @@ class Information extends React.Component {
             }
         })
         this.props.form.setFieldsValue({
-            nam:this.props.values
+            nam: this.props.values
         })
     }
-
+    setValue(index,value){
+        let arr=this.state.id
+        arr[index]=value
+        this.setState({
+            id:arr
+        })
+    }
     //转化为base64
     getBase64(img, callback) {
         const reader = new FileReader();
@@ -285,15 +294,15 @@ class Information extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                values.regionId=values.regionId[1]
-                values.estateId=this.props.estateId
-                values.matchings.map((item,index)=>{
-                    item.type=index+1
+                values.regionId = values.regionId[1]
+                values.estateId = this.props.estateId
+                values.matchings.map((item, index) => {
+                    item.type = index + 1
                 })
-                let params=values
+                let params = values
 
-                estatePublished(params).then((res)=>{
-                    if(res.data.code===1){
+                estatePublished(params).then((res) => {
+                    if (res.data.code === 1) {
                         message.success('上传成功')
                     }
                 })
@@ -303,14 +312,14 @@ class Information extends React.Component {
 
     delHousing(index) {
         this.state.housingMsgs.splice(index, 1)
-        let arr=this.props.form.getFieldValue('housingMsgs')
-       arr.splice(index, 1)
+        let arr = this.props.form.getFieldValue('housingMsgs')
+        arr.splice(index, 1)
         this.setState({
                 housingMsgs: this.state.housingMsgs
             }
         )
         this.props.form.setFieldsValue({
-            housingMsgs:arr
+            housingMsgs: arr
         })
     }
 
@@ -340,11 +349,13 @@ class Information extends React.Component {
             regionId2: checkedValues[1]
         })
     }
+
     onPosition(value) {
         this.setState({
             position: value
         })
     }
+
     render() {
         const formItemLayout = {
             labelCol: {
@@ -720,7 +731,17 @@ class Information extends React.Component {
                                         </Select>
                                     )}
                                 </Form.Item>
-                        
+                                <Form.Item label="户型特色：" style={{display:'none'}}>
+                                    {getFieldDecorator(`housingMsgs[${index}].housingMsgId`, {initialValue: this.state.id?this.state.id[index]:''})(
+                                        <Select mode="multiple">
+                                            {this.state.houseTraits && this.state.houseTraits.map(item => {
+                                                    return (<Option value={item.value}>{item.label}</Option>)
+                                                }
+                                            )}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+
                                 <Form.Item label={'户型优点：'}>
                                     {getFieldDecorator(`housingMsgs[${index}].advantage`)(
                                         <Input.TextArea/>
@@ -732,7 +753,7 @@ class Information extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'户型上传：'}>
-                                    <HousingPicturesWall></HousingPicturesWall>
+                                    <HousingPicturesWall id={index} setId={this.setValue.bind(this)}></HousingPicturesWall>
                                 </Form.Item>
                                 <Form.Item labelCol={{span: 13}}>
                                     <Button type="primary" onClick={this.delHousing.bind(this, index)}
@@ -846,8 +867,10 @@ class PicturesWall extends React.Component {
         );
     }
 }
-const PicturesWallId=connect(state => (
+
+const PicturesWallId = connect(state => (
     {estateId: state.estateId}), {newEstateId})(PicturesWall);
+
 //更新户型
 class HousingPicturesWallUpdata extends React.Component {
     constructor(props) {
@@ -879,7 +902,6 @@ class HousingPicturesWallUpdata extends React.Component {
         if (!file.url && !file.preview) {
             file.preview = await this.getBase64(file.originFileObj);
         }
-
         this.setState({
             previewImage: file.url || file.preview,
             previewVisible: true,
@@ -888,17 +910,29 @@ class HousingPicturesWallUpdata extends React.Component {
 
     remove(file) {
         let params = {
-            "housingMsgId": this.state.housingMsgId,
+            "housingMsgId": file.id,
         }
+        let fileList = this.props.housingPictures[this.props.id]
+        fileList.splice(-file.uid - 1, 1)
+        let arr = this.props.housingPictures
+        arr[this.props.id] = fileList
+        this.props.setHousingPictures(arr)
+        this.setState({
+            remove: file.id
+        })
         delHousingPictures(params)
     }
 
     handleChange = ({file, fileList}) => {
-        this.setState({fileList})
-        if (file.status === 'done' && file.response.estateId) {
-            this.setState({
-                housingMsgId: file.response.housingMsgId,
-            })
+        console.log(file)
+        let arr = this.props.housingPictures
+        arr[this.props.id] =fileList
+        this.props.setHousingPictures(arr)
+        this.setState({
+            x:1
+        })
+        if(file.response){
+            this.props.setId(this.props.id,file.response.estateId)
         }
     };
 
@@ -916,14 +950,15 @@ class HousingPicturesWallUpdata extends React.Component {
                     action="http://47.108.87.104:8501/estate/housingPictures"
                     name={'files'}
                     data={{
-                        housingMsgId: 0,
+                        housingMsgId: this.state.remove||0,
                     }}
+                    fileList={this.props.housingPictures[this.props.id]||[]}
                     listType="picture-card"
                     onPreview={this.handlePreview}
                     onRemove={this.remove.bind(this)}
                     onChange={this.handleChange.bind(this)}
                 >
-                    {fileList.length >= 1 ? null : uploadButton}
+                    {this.props.housingPictures[this.props.id]&&this.props.housingPictures[this.props.id].length>= 1 ? null : uploadButton}
                 </Upload>
                 <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel} className={'imgUp'}>
                     <img alt="example" style={{width: '100%'}} src={previewImage}/>
@@ -932,6 +967,8 @@ class HousingPicturesWallUpdata extends React.Component {
         );
     }
 }
+const HousingPicturesWallUpdataId = connect(state => (
+    {housingPictures: state.housingPictures}), {setHousingPictures})(HousingPicturesWallUpdata);
 //更新楼盘信息
 class InformationUpdata extends React.Component {
     constructor(props) {
@@ -946,7 +983,7 @@ class InformationUpdata extends React.Component {
             propertyTypeLength: [''],
             traits: [],
             houseTypes: [],
-            list:[],
+            list: [],
             housingMsgs: [{
                 advantage: '',
                 area: '',
@@ -959,7 +996,8 @@ class InformationUpdata extends React.Component {
                 housingTypeTitle: '',
                 orientations: '',
                 propertyType: ''
-            }]
+            }],
+            id:[]
         }
     }
 
@@ -1078,7 +1116,7 @@ class InformationUpdata extends React.Component {
             }
         })
         this.props.form.setFieldsValue({
-            nam:this.props.values
+            nam: this.props.values
         })
     }
 
@@ -1094,15 +1132,14 @@ class InformationUpdata extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let params=values
-                params.estateId=localStorage.getItem('estateId')
-
-                values.matchings.map((item,index)=>{
-                    item.type=index+1
+                values.estateId = this.props.values.id
+                values.regionId=values.regionId[1]
+                values.matchings.map((item, index) => {
+                    item.type = index + 1
                 })
-
-                estatePublished(params).then((res)=>{
-                    if(res.data.code===1){
+                let params = values
+                estatePublished(params).then((res) => {
+                    if (res.data.code === 1) {
                         message.success('上传成功')
                     }
                 })
@@ -1110,33 +1147,21 @@ class InformationUpdata extends React.Component {
         });
     };
 
-    setDecorateStandard(e) {
-        this.setState({
-            decorateStandard: e.value
-        })
-    }
-
-    setDeliverDecorateStandard(e) {
-        this.setState({
-            deliverDecorateStandard: e.value
-        })
-    }
-
     delHousing(index) {
         this.state.housingMsgs.splice(index, 1)
-        let arr=this.props.form.getFieldValue('housingMsgs')
+        let arr = this.props.form.getFieldValue('housingMsgs')
         arr.splice(index, 1)
         this.setState({
                 housingMsgs: this.state.housingMsgs
             }
         )
         this.props.form.setFieldsValue({
-            housingMsgs:arr
+            housingMsgs: arr
         })
     }
 
     addHousing(index) {
-        this.state.housingMsgs.push('')
+        this.props.values.housingMsgs.push('')
         this.setState({
                 housingMsgs: this.state.housingMsgs
             }
@@ -1161,14 +1186,22 @@ class InformationUpdata extends React.Component {
             regionId2: checkedValues[1]
         })
     }
+
     onPosition(value) {
         this.setState({
             position: value
         })
     }
+    setValue(index,value){
+        let arr=this.state.id
+        arr[index]=value
+        this.setState({
+            id:arr
+        })
+    }
     componentWillReceiveProps(nextProps) {
-        if(this.props.values){
-            if(this.props.values.estatePictures){
+        if (this.props.values) {
+            if (this.props.values.estatePictures) {
                 // console.log(1)
                 // // this.props.form.resetFields()
             }
@@ -1195,17 +1228,17 @@ class InformationUpdata extends React.Component {
                 <Form.Item label={'1、填写基本信息：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label='楼盘名称（推广名）：'>
-                    {getFieldDecorator('name',{ initialValue: this.props.values.name||'' })(
+                    {getFieldDecorator('name', {initialValue: this.props.values.name || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label='备案名：'>
-                    {getFieldDecorator('recordName',{ initialValue: this.props.values.recordName||'' })(
+                    {getFieldDecorator('recordName', {initialValue: this.props.values.recordName || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label='物业类型：'>
-                    {getFieldDecorator('propertyTypeIds',{ initialValue: this.props.values.propertyTypeIds||[] })(
+                    {getFieldDecorator('propertyTypeIds', {initialValue: this.props.values.propertyTypeIds || []})(
                         <Select mode="multiple">
                             {this.state.propertyTypes && this.state.propertyTypes.map(item => {
                                     return (<Option value={item.value}>{item.label}</Option>)
@@ -1215,17 +1248,17 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'楼盘价格：'}>
-                    {getFieldDecorator('referencePrice',{ initialValue: this.props.values.referencePrice||'' })(
+                    {getFieldDecorator('referencePrice', {initialValue: this.props.values.referencePrice || ''})(
                         <Input addonAfter="元m²/起"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'楼盘区域：'}>
-                    {getFieldDecorator('regionId',{ initialValue: this.props.values.distinctRegionIds||[]})(
+                    {getFieldDecorator('regionId', {initialValue: this.props.values.distinctRegionIds || []})(
                         <Cascader options={this.state.districtRegionsList}/>
                     )}
                 </Form.Item>
                 <Form.Item label="楼盘项目特色：">
-                    {getFieldDecorator('traitIds',{ initialValue: this.props.values.traitIds||[]})(
+                    {getFieldDecorator('traitIds', {initialValue: this.props.values.traitIds || []})(
                         <Select mode="multiple">
                             {this.state.traits && this.state.traits.map(item => {
                                     return (<Option value={item.value}>{item.label}</Option>)
@@ -1235,37 +1268,37 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'建面区间：'}>
-                    {getFieldDecorator('areaRange',{ initialValue: this.props.values.areaRange||''})(
+                    {getFieldDecorator('areaRange', {initialValue: this.props.values.areaRange || ''})(
                         <Input addonAfter="m²"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'上市时间：'}>
-                    {getFieldDecorator('timeToMarket',{ initialValue: this.props.values.timeToMarket||''})(
+                    {getFieldDecorator('timeToMarket', {initialValue: this.props.values.timeToMarket || ''})(
                         <Input placeholder="格式：2018-08-08"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'产权年限：'}>
-                    {getFieldDecorator('propertyRightsyears',{ initialValue: this.props.values.propertyRightsYears||''})(
+                    {getFieldDecorator('propertyRightsyears', {initialValue: this.props.values.propertyRightsYears || ''})(
                         <Input placeholder="默认70年"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'项目地址：'}>
-                    {getFieldDecorator('adress',{ initialValue: this.props.values.adress||''})(
+                    {getFieldDecorator('adress', {initialValue: this.props.values.adress || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'地址经纬度：'}>
-                    {getFieldDecorator('longitudeAndAtitude',{ initialValue: this.props.values.longitudeAtitude||''})(
+                    {getFieldDecorator('longitudeAndAtitude', {initialValue: this.props.values.longitudeAtitude || ''})(
                         <Input placeholder="164564561，154，4545645，546"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'开发商：'}>
-                    {getFieldDecorator('develpers',{ initialValue: this.props.values.develpers||''})(
+                    {getFieldDecorator('develpers', {initialValue: this.props.values.develpers || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'物业权属：'}>
-                    {getFieldDecorator('housingType',{ initialValue: this.props.values.housingType||''})(
+                    {getFieldDecorator('housingType', {initialValue: this.props.values.housingType || ''})(
                         <Select>
                             {this.state.houseTypes && this.state.houseTypes.map(item => {
                                     return (<Option value={item.label}>{item.label}</Option>)
@@ -1275,7 +1308,7 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'建筑类型：'}>
-                    {getFieldDecorator('buildingType',{ initialValue: this.props.values.buildingType||''})(
+                    {getFieldDecorator('buildingType', {initialValue: this.props.values.buildingType || ''})(
                         <Select>
                             {this.state.buildingTypes && this.state.buildingTypes.map(item => {
                                     return (<Option value={item.label}>{item.label}</Option>)
@@ -1285,12 +1318,12 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'绿化率：'}>
-                    {getFieldDecorator('greeningRate',{ initialValue: this.props.values.greeningRate||''})(
+                    {getFieldDecorator('greeningRate', {initialValue: this.props.values.greeningRate || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label="建筑结构：">
-                    {getFieldDecorator('buildingStructure',{ initialValue: this.props.values.buildingStructure||''})(
+                    {getFieldDecorator('buildingStructure', {initialValue: this.props.values.buildingStructure || ''})(
                         <Select>
                             {this.state.buildingStructures && this.state.buildingStructures.map(item => {
                                     return (<Option value={item.label}>{item.label}</Option>)
@@ -1300,7 +1333,7 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label="户型结构：">
-                    {getFieldDecorator('housingStructureIds',{ initialValue: this.props.values.housingStructureIds||[]})(
+                    {getFieldDecorator('housingStructureIds', {initialValue: this.props.values.housingStructureIds || []})(
                         <Select mode="multiple">
                             {this.state.housingStructures && this.state.housingStructures.map(item => {
                                     return (<Option value={item.value}>{item.label}</Option>)
@@ -1310,62 +1343,62 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'容积率：'}>
-                    {getFieldDecorator('volumeRate',{ initialValue: this.props.values.volumeRatio||''})(
+                    {getFieldDecorator('volumeRate', {initialValue: this.props.values.volumeRatio || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'占地面积：'}>
-                    {getFieldDecorator('areaCovered',{ initialValue: this.props.values.areaCovered||''})(
+                    {getFieldDecorator('areaCovered', {initialValue: this.props.values.areaCovered || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'拿地时间：'}>
-                    {getFieldDecorator('holdedTime',{ initialValue: this.props.values.holdedTime||''})(
+                    {getFieldDecorator('holdedTime', {initialValue: this.props.values.holdedTime || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'总建筑面积：'}>
-                    {getFieldDecorator('floorage',{ initialValue: this.props.values.floorage||''})(
+                    {getFieldDecorator('floorage', {initialValue: this.props.values.floorage || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'交房时间预计：'}>
-                    {getFieldDecorator('housekeepingTime',{ initialValue: this.props.values.housekeepingTime||''})(
+                    {getFieldDecorator('housekeepingTime', {initialValue: this.props.values.housekeepingTime || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'楼栋总数：'}>
-                    {getFieldDecorator('buildingAmount',{ initialValue: this.props.values.buildingAmount||''})(
+                    {getFieldDecorator('buildingAmount', {initialValue: this.props.values.buildingAmount || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'梯户比：'}>
-                    {getFieldDecorator('staircasesRatio',{ initialValue: this.props.values.staircasesRatio||''})(
+                    {getFieldDecorator('staircasesRatio', {initialValue: this.props.values.staircasesRatio || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'总楼层：'}>
-                    {getFieldDecorator('floors',{ initialValue: this.props.values.floors||''})(
+                    {getFieldDecorator('floors', {initialValue: this.props.values.floors || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'规划户数：'}>
-                    {getFieldDecorator('pannedHouseholds',{ initialValue: this.props.values.pannedHouseholds||''})(
+                    {getFieldDecorator('pannedHouseholds', {initialValue: this.props.values.pannedHouseholds || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'层高：'}>
-                    {getFieldDecorator('floorHeight',{ initialValue: this.props.values.floorHeight||''})(
+                    {getFieldDecorator('floorHeight', {initialValue: this.props.values.floorHeight || ''})(
                         <Input addonAfter="m"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'公摊：'}>
-                    {getFieldDecorator('shareArea',{ initialValue: this.props.values.shareArea||''})(
+                    {getFieldDecorator('shareArea', {initialValue: this.props.values.shareArea || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'交付标准：'}>
-                    {getFieldDecorator('deliveryStandard',{ initialValue: this.props.values.deliveryStandard||''})(
+                    {getFieldDecorator('deliveryStandard', {initialValue: this.props.values.deliveryStandard || ''})(
                         <Select>
                             <Option value="清水">清水</Option>
                             <Option value="精装">精装</Option>
@@ -1373,47 +1406,47 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'装修标准：'}>
-                    {getFieldDecorator('decorateStandard',{ initialValue: this.props.values.decorateStandard||''})(
+                    {getFieldDecorator('decorateStandard', {initialValue: this.props.values.decorateStandard || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'物管公司：'}>
-                    {getFieldDecorator('propertyCompany',{ initialValue: this.props.values.propertyCompany||''})(
+                    {getFieldDecorator('propertyCompany', {initialValue: this.props.values.propertyCompany || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'物管费：'}>
-                    {getFieldDecorator('propertyFee',{ initialValue: this.props.values.propertyFee||''})(
+                    {getFieldDecorator('propertyFee', {initialValue: this.props.values.propertyFee || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'车位配比：'}>
-                    {getFieldDecorator('parkingRatio',{ initialValue: this.props.values.parkingRatio||''})(
+                    {getFieldDecorator('parkingRatio', {initialValue: this.props.values.parkingRatio || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'车位数：'}>
-                    {getFieldDecorator('parkingNumbers',{ initialValue: this.props.values.parkingNumbers||''})(
+                    {getFieldDecorator('parkingNumbers', {initialValue: this.props.values.parkingNumbers || ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'项目介绍：'}>
-                    {getFieldDecorator('introduction',{ initialValue: this.props.values.introduction||''})(
+                    {getFieldDecorator('introduction', {initialValue: this.props.values.introduction || ''})(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'项目内部配套：'}>
-                    {getFieldDecorator('internalMatching',{ initialValue: this.props.values.internalMatching||''})(
+                    {getFieldDecorator('internalMatching', {initialValue: this.props.values.internalMatching || ''})(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'交付装修标准：'}>
-                    {getFieldDecorator('deliverDecorateStandard',{ initialValue: this.props.values.deliverDecorateStandard||''})(
+                    {getFieldDecorator('deliverDecorateStandard', {initialValue: this.props.values.deliverDecorateStandard || ''})(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'不利因素：'}>
-                    {getFieldDecorator('harmful_publicity',{ initialValue: this.props.values.harmfulPublicity||''})(
+                    {getFieldDecorator('harmful_publicity', {initialValue: this.props.values.harmfulPublicity || ''})(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
@@ -1428,49 +1461,55 @@ class InformationUpdata extends React.Component {
                 <Form.Item label={'楼盘总平面图'} className={'item'} labelCol={{span: 3}}>
                     <PicturesWallUpdataId photoType={'2'} estateId={this.props.values.id}></PicturesWallUpdataId>
                 </Form.Item>
-                {/* <Form.Item label={'楼盘效果图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWallUpdata photoType={'3'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[3]:[]} estateId={this.props.values.id}></PicturesWallUpdata>
+                <Form.Item label={'楼盘效果图'} className={'item'} labelCol={{span: 3}}>
+                    <PicturesWallUpdataId photoType={'3'}
+                                        estateId={this.props.values.id}></PicturesWallUpdataId>
                 </Form.Item>
                 <Form.Item label={'楼盘实景图'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWallUpdata photoType={'4'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[4]:[]} estateId={this.props.values.id}></PicturesWallUpdata>
+                    <PicturesWallUpdataId photoType={'4'}
+
+                                        estateId={this.props.values.id}></PicturesWallUpdataId>
                 </Form.Item>
                 <Form.Item label={'样板间'} className={'item'} labelCol={{span: 3}}>
-                    <PicturesWallUpdata photoType={'5'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[5]:[]} estateId={this.props.values.id}></PicturesWallUpdata>
+                    <PicturesWallUpdataId photoType={'5'}
+
+                                        estateId={this.props.values.id}></PicturesWallUpdataId>
                 </Form.Item>
-                <Form.Item label={'添加预售'} className={'item'} labelCol={{span: 3}}> */}
-                    {/* <PicturesWallUpdata photoType={'6'} fileList={this.props.values.estatePictures?this.props.values.estatePictures[6]:[]} estateId={this.props.values.id}></PicturesWallUpdata>
-                </Form.Item> */}
+                <Form.Item label={'添加预售'} className={'item'} labelCol={{span: 3}}>
+                    <PicturesWallUpdataId photoType={'6'}
+                                        estateId={this.props.values.id}></PicturesWallUpdataId>
+                </Form.Item>
                 <Form.Item label={'3、楼盘动态：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'楼盘动态标题：'} className={'item'} labelCol={{span: 3}}>
-                    {getFieldDecorator('dynamic.dynamicTitle',{ initialValue: this.props.values.estateDynamics?this.props.values.estateDynamics[0].title:''})(
+                    {getFieldDecorator('dynamic.dynamicTitle', {initialValue: this.props.values.estateDynamics ? this.props.values.estateDynamics[0].title : ''})(
                         <Input/>
                     )}
                 </Form.Item>
                 <Form.Item label={'发布内容：'} className={'item'} labelCol={{span: 3}}>
-                    {getFieldDecorator('dynamic.dynamicContent',{ initialValue: this.props.values.estateDynamics?this.props.values.estateDynamics[0].description:''})(
+                    {getFieldDecorator('dynamic.dynamicContent', {initialValue: this.props.values.estateDynamics ? this.props.values.estateDynamics[0].description : ''})(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'4、项目外部配套（从近到远排序）（3公里范围）：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'交通配套：'} className={'item'} labelCol={{span: 3}}>
-                    {getFieldDecorator('matchings[0].matching',{ initialValue: this.props.values.estateMatchings?this.props.values.estateMatchings[0]?this.props.values.estateMatchings[0].description:'':''})(
+                    {getFieldDecorator('matchings[0].matching', {initialValue: this.props.values.estateMatchings ? this.props.values.estateMatchings[0] ? this.props.values.estateMatchings[0].description : '' : ''})(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'医疗配套：'} className={'item'} labelCol={{span: 3}}>
-                    {getFieldDecorator('matchings[1].matching',{ initialValue: this.props.values.estateMatchings?this.props.values.estateMatchings[1]?this.props.values.estateMatchings[1].description:'':''})(
+                    {getFieldDecorator('matchings[1].matching', {initialValue: this.props.values.estateMatchings ? this.props.values.estateMatchings[1] ? this.props.values.estateMatchings[1].description : '' : ''})(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'商业配套：'} className={'item'} labelCol={{span: 3}}>
-                    {getFieldDecorator('matchings[2].matching',{ initialValue: this.props.values.estateMatchings?this.props.values.estateMatchings[2]?this.props.values.estateMatchings[2].description:'':''})(
+                    {getFieldDecorator('matchings[2].matching', {initialValue: this.props.values.estateMatchings ? this.props.values.estateMatchings[2] ? this.props.values.estateMatchings[2].description : '' : ''})(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'教育配套：'} className={'item'} labelCol={{span: 3}}>
-                    {getFieldDecorator('matchings[3].matching',{ initialValue: this.props.values.estateMatchings?this.props.values.estateMatchings[3]?this.props.values.estateMatchings[3].description:'':''})(
+                    {getFieldDecorator('matchings[3].matching', {initialValue: this.props.values.estateMatchings ? this.props.values.estateMatchings[3] ? this.props.values.estateMatchings[3].description : '' : ''})(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
@@ -1480,12 +1519,12 @@ class InformationUpdata extends React.Component {
                     this.props.values.housingMsgs && this.props.values.housingMsgs.map((item, index) => {
                             return (<div style={{width: '100%', display: 'flex', flexWrap: 'wrap'}}>
                                 <Form.Item label={'户型名称：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingTypeTitle`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].housingTypeTitle:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingTypeTitle`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingTypeTitle : ''})(
                                         <Input/>
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'户型选择：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingType`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].housingType:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingType`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingType : ''})(
                                         <Select>
                                             <Option value="一居室">一居室</Option>
                                             <Option value="两居室">两居室</Option>
@@ -1497,17 +1536,17 @@ class InformationUpdata extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'户型详细名称：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingDetailName`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].housingDetailName:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingDetailName`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingDetailName : ''})(
                                         <Input/>
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'建面：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].area`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].area:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].area`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].area : ''})(
                                         <Input/>
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'物业类型：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].propertyType`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].propertyType:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].propertyType`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].propertyType : ''})(
                                         <Select>
                                             {this.state.propertyTypes && this.state.propertyTypes.map(item => {
                                                     return (<Option value={item.label}>{item.label}</Option>)
@@ -1517,7 +1556,7 @@ class InformationUpdata extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'物业朝向：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].orientations`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].orientations:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].orientations`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].orientations : ''})(
                                         <Select>
                                             <Option value="东">东</Option>
                                             <Option value="东南">东南</Option>
@@ -1531,12 +1570,12 @@ class InformationUpdata extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'层高：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].height`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].height:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].height`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].height : ''})(
                                         <Input addonAfter="m"/>
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'户型结构：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingStructure`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].housingStructure:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingStructure`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingStructure : ''})(
                                         <Select>
                                             {this.state.housingStructures && this.state.housingStructures.map(item => {
                                                     return (<Option value={item.label}>{item.label}</Option>)
@@ -1546,7 +1585,17 @@ class InformationUpdata extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label="户型特色：">
-                                    {getFieldDecorator(`housingMsgs[${index}].housingTraitIds`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].housingTraits:[]})(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingTraitIds`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingTraitIds : []})(
+                                        <Select mode="multiple">
+                                            {this.state.houseTraits && this.state.houseTraits.map(item => {
+                                                    return (<Option value={item.value}>{item.label}</Option>)
+                                                }
+                                            )}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label="户型特色：" style={{display:'none'}}>
+                                    {getFieldDecorator(`housingMsgs[${index}].housingMsgId`, {initialValue: this.state.id?this.state.id[index]:''})(
                                         <Select mode="multiple">
                                             {this.state.houseTraits && this.state.houseTraits.map(item => {
                                                     return (<Option value={item.value}>{item.label}</Option>)
@@ -1557,17 +1606,17 @@ class InformationUpdata extends React.Component {
                                 </Form.Item>
 
                                 <Form.Item label={'户型优点：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].advantage`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].advantage:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].advantage`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].advantage : ''})(
                                         <Input.TextArea/>
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'户型缺点：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].drawback`,{ initialValue: this.props.values.housingMsgs?this.props.values.housingMsgs[index].drawback:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].drawback`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].drawback : ''})(
                                         <Input.TextArea/>
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'户型上传：'}>
-                                    <HousingPicturesWallUpdata></HousingPicturesWallUpdata>
+                                    <HousingPicturesWallUpdataId id={index} setId={this.setValue.bind(this)}></HousingPicturesWallUpdataId>
                                 </Form.Item>
                                 <Form.Item labelCol={{span: 13}}>
                                     <Button type="primary" onClick={this.delHousing.bind(this, index)}
@@ -1598,17 +1647,15 @@ class PicturesWallUpdata extends React.Component {
         this.state = {
             previewVisible: false,
             previewImage: '',
-            fileList:[{
-                uid: '-1',
-                name: 'image.png',
-                status: 'done',
-                url: 'http://47.108.87.104:8601/building/7/effect/15706945654721.jpg',
-              }],
+            fileList: [],
             estateId: '',
             multiple: false,
+            remove: '',
         };
     }
+
     handleCancel = () => this.setState({previewVisible: false});
+
     getBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -1617,6 +1664,7 @@ class PicturesWallUpdata extends React.Component {
             reader.onerror = error => reject(error);
         });
     }
+
     handlePreview = async file => {
         if (!file.url && !file.preview) {
             file.preview = await this.getBase64(file.originFileObj);
@@ -1630,44 +1678,41 @@ class PicturesWallUpdata extends React.Component {
     remove(file) {
         let params = {
             "estateId": this.props.estateId,
-            "photoName": '7/effect/15706945654721.jpg',
+            "photoName": file.name,
             "photoType": this.props.photoType
         }
-        this.props.getFileList([])
+        let fileList = this.props.fileList[this.props.photoType]
+        fileList.splice(-file.uid - 1, 1)
+        let arr = this.props.fileList
+        arr[this.props.photoType] = fileList
+        this.props.getFileList(arr)
+        this.setState({
+            remove: 1
+        })
         delPhoto(params)
     }
 
     handleChange = ({file, fileList}) => {
-        
-        this.setState({fileList})
-        if (file.status === 'done' && file.response.estateId) {
+        let list=fileList.map((item,index)=>{
+            item.uid=-index-1
+            item.status='done'
+            return item
+        })
+        let arr = this.props.fileList
+        arr[this.props.photoType] =list
+        this.props.getFileList(arr)
+        this.setState({
+            remove: 1
+        })
+        if (file.status === 'done') {
             this.setState({
-                estateId: file.response.estateId,
                 multiple: true
             })
-            localStorage.setItem('estateId',file.response.estateId)
         }
     };
 
     render() {
         const {previewVisible, previewImage} = this.state;
-        let arrs=[];
-        // if(this.props.fileList.length!=0){
-        //      arrs=this.props.fileList.map((item,index)=>{
-        //         let obj={
-        //             uid: index,
-        //             name: 'image.png',
-        //             status: 'done',
-        //             url: item,
-        //         }
-        //         return obj
-        //     })
-        // }  
-   
-        //   let fileList=[...this.state.fileList,...arr]
-        //   this.setState(fileList)
-          console.log(this.props.fileList)
-
         const uploadButton = (
             <div>
                 <Icon type="plus"/>
@@ -1685,7 +1730,7 @@ class PicturesWallUpdata extends React.Component {
                     }}
                     listType="picture-card"
                     multiple={this.state.multiple}
-                    fileList={this.props.fileList}
+                    fileList={this.props.fileList[this.props.photoType]||[]}
                     onPreview={this.handlePreview}
                     onRemove={this.remove.bind(this)}
                     onChange={this.handleChange.bind(this)}
@@ -1702,6 +1747,7 @@ class PicturesWallUpdata extends React.Component {
 
 const PicturesWallUpdataId = connect(state => (
     {fileList: state.fileList}), {getFileList})(PicturesWallUpdata);
+
 class bridalAdmin extends React.Component {
     constructor(props) {
         super(props);
@@ -1712,7 +1758,7 @@ class bridalAdmin extends React.Component {
             serviceChecked: [],
             region: [],
             titleChecked: [],
-            districtRegionsList:[],
+            districtRegionsList: [],
             apartmentChecked: [],
             characteristicChecked: [],
             estateId: '',
@@ -1720,16 +1766,17 @@ class bridalAdmin extends React.Component {
             toggleTime: true,
             fileList: [],
             dynamic: '',
-            title:'',
-            description:'',
-            estatesL:[],
-            values:{
-                key:2
+            title: '',
+            description: '',
+            estatesL: [],
+            values: {
+                key: 2
             }
 
         }
     }
-    componentDidMount(){
+
+    componentDidMount() {
         getDistrictRegions().then((res) => {
             if (res.data.code === 1) {
                 let option = [];
@@ -1754,6 +1801,7 @@ class bridalAdmin extends React.Component {
             }
         })
     }
+
     showModal = (str) => {
         if (str === 'login') {
             this.setState({
@@ -1813,17 +1861,19 @@ class bridalAdmin extends React.Component {
             // checkAll: checkedList.length === plainOptions.length,
         });
     };
+
 //tag切换回调
     callback(key) {
         this.setState({
-            key:key,
-            estateId:''
+            key: key,
+            estateId: ''
         })
         this.props.newEstateId('')
-        if(key==4){
+        if (key == 4) {
 
         }
     }
+
     handleChange = info => {
         let fileList = [...info.fileList];
         fileList = fileList.slice(-2);
@@ -1839,15 +1889,16 @@ class bridalAdmin extends React.Component {
 
         this.setState({fileList});
     };
-    setRegion(value){
+    //选择楼盘
+    setRegion(value) {
         this.setState({
-            region:value
+            region: value
         })
-        let params={
-            districtId:value[1]
+        let params = {
+            districtId: value[1]
         }
-        getStreetEstates(params).then((res)=>{
-            if(res.data.code===1){
+        getStreetEstates(params).then((res) => {
+            if (res.data.code === 1) {
                 let option = [];
                 for (let i = 0; i < res.data.estates.length; i++) {
                     let item = {
@@ -1862,61 +1913,81 @@ class bridalAdmin extends React.Component {
             }
         })
     }
-    onChangeDescription(e){
+
+    onChangeDescription(e) {
         this.setState({
             description: e.target.value
         })
     }
-    onChangeTitle(e){
+
+    onChangeTitle(e) {
         this.setState({
             title: e.target.value
         })
     }
-    setEstates(value){
+
+    setEstates(value) {
         this.setState({
-            estateId:value
+            estateId: value
         })
-        let params={
-            estateId:value
+        let params = {
+            estateId: value
         }
-        getEstateMsg(params).then((res)=>{
-            if(res.data.code==1){
-                res.data.estate.estatePictures=this.sortByKey(res.data.estate.estatePictures,'type')
-                let arr=res.data.estate.estatePictures.map(item=>{
-                    let arr=eval("(" + item.name + ")")
+        getEstateMsg(params).then((res) => {
+            if (res.data.code == 1) {
+                res.data.estate.estatePictures = this.sortByKey(res.data.estate.estatePictures, 'type')
+                let arr = res.data.estate.estatePictures.map(item => {
+                    let arr = eval("(" + item.name + ")")
                     return arr
                 })
-               let x= arr.map(item=>{
-                    return(item.map(items=>{
-                        return ('http://47.108.87.104:8601/building/'+items)
+                let x = arr.map(item => {
+                    return (item.map((items, index) => {
+                        return ({
+                            uid: -1 - index,
+                            name: items,
+                            status: 'done',
+                            url: 'http://47.108.87.104:8601/building/' + items
+                        })
                     }))
                 })
-                // this.props.getFileList(x)
-                res.data.estate.estatePictures=x
+                let y = res.data.estate.housingMsgs.map(item => {
+                    return (item.picturePaths.map((items, index) => {
+                        return ({
+                            uid: -1 - index,
+                            id:item.id,
+                            name: items,
+                            status: 'done',
+                            url: 'http://47.108.87.104:8601/housing/' + items
+                        })
+                    }))
+                })
+                this.props.getFileList(x)
+                this.props.setHousingPictures(y)
                 this.setState({
-                    values:res.data.estate
+                    values: res.data.estate
                 })
             }
         })
-
     }
-    push(){
-        let params={
-            description:this.state.description,
-            title:this.state.title,
-            estateId:this.state.estateId
+
+    push() {
+        let params = {
+            description: this.state.description,
+            title: this.state.title,
+            estateId: this.state.estateId
         }
-        updata(params).then((res)=>{
-            if(res.data.code==1){
+        updata(params).then((res) => {
+            if (res.data.code == 1) {
                 message.success('成功更新楼盘动态')
             }
-            else{
+            else {
                 message.error('更新楼盘动态失败')
             }
         })
     }
+
     sortByKey(array, key) {
-        return array.sort(function(a, b) {
+        return array.sort(function (a, b) {
             var x = a[key];
             var y = b[key];
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -1930,31 +2001,21 @@ class bridalAdmin extends React.Component {
         const propsFile = {
             name: 'file',
             action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-            data:{
-                estateId:this.state.estateId
+            data: {
+                estateId: this.state.estateId
             },
             headers: {
-              authorization: 'authorization-text',
+                authorization: 'authorization-text',
             },
             onChange(info) {
-              if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList);
-              }
-              if (info.file.status === 'done') {
-                message.success(`${info.file.name} 上传成功`);
-              } else if (info.file.status === 'error') {
-                message.error(`${info.file.name} 上传失败`);
-              }
+                if (info.file.status !== 'uploading') {
+                }
+                if (info.file.status === 'done') {
+                    message.success(`${info.file.name} 上传成功`);
+                } else if (info.file.status === 'error') {
+                    message.error(`${info.file.name} 上传失败`);
+                }
             },
-          };
-        function handleChange(value) {
-            console.log(`selected ${value}`);
-        }
-
-        const props = {
-            action: updata,
-            onChange: this.handleChange,
-            multiple: true,
         };
         const {TextArea} = Input;
         return (
@@ -1988,12 +2049,13 @@ class bridalAdmin extends React.Component {
                                 <p className={'title'}>楼盘一页纸发布</p>
                                 <div className={'item'}>
                                     <p>选择发布的楼盘：</p>
-                                    <Cascader options={this.state.districtRegionsList} placeholder={''} onChange={this.setRegion.bind(this)} style={{width: 200}}                          />   
+                                    <Cascader options={this.state.districtRegionsList} placeholder={''}
+                                              onChange={this.setRegion.bind(this)} style={{width: 200}}/>
                                     <Select style={{width: 200}} onChange={this.setEstates.bind(this)}>
-                                    {this.state.estates && this.state.estates.map(item => {
-                                                    return (<Option value={item.value}>{item.label}</Option>)
-                                                }
-                                            )}
+                                        {this.state.estates && this.state.estates.map(item => {
+                                                return (<Option value={item.value}>{item.label}</Option>)
+                                            }
+                                        )}
                                     </Select>
                                     <Upload {...propsFile}>
                                         <Button>
@@ -2017,17 +2079,19 @@ class bridalAdmin extends React.Component {
                                 <p className={'title'}>楼盘动态发布</p>
                                 <div className={'item'}>
                                     <p>选择更新的楼盘：</p>
-                                    <Cascader options={this.state.districtRegionsList} placeholder={''} onChange={this.setRegion.bind(this)}/>   
+                                    <Cascader options={this.state.districtRegionsList} placeholder={''}
+                                              onChange={this.setRegion.bind(this)}/>
                                     <Select style={{width: 200}} onChange={this.setEstates.bind(this)}>
-                                    {this.state.estates && this.state.estates.map(item => {
-                                                    return (<Option value={item.value}>{item.label}</Option>)
-                                                }
-                                            )}
+                                        {this.state.estates && this.state.estates.map(item => {
+                                                return (<Option value={item.value}>{item.label}</Option>)
+                                            }
+                                        )}
                                     </Select>
                                 </div>
                                 <div className={'item'}>
                                     <p>楼盘动态标题：</p>
-                                    <Input style={{width: 300, marginLeft: 30}} onChange={this.onChangeTitle.bind(this)}/>
+                                    <Input style={{width: 300, marginLeft: 30}}
+                                           onChange={this.onChangeTitle.bind(this)}/>
                                 </div>
                                 <div className={'item'}>
                                     <p>发布内容：</p>
@@ -2045,15 +2109,16 @@ class bridalAdmin extends React.Component {
                         <TabPane tab="楼盘信息编辑更新" key="4">
                             <div className={'content'}>
                                 <span className={'title'}>楼盘信息编辑更新</span>
-        
-                                <span style={{marginLeft:'50px'}}>选择编辑的楼盘：</span>
-                                    <Cascader options={this.state.districtRegionsList} placeholder={''} onChange={this.setRegion.bind(this)} style={{width: 200}}/>   
-                                    <Select style={{width: 200}} onChange={this.setEstates.bind(this)}>
+
+                                <span style={{marginLeft: '50px'}}>选择编辑的楼盘：</span>
+                                <Cascader options={this.state.districtRegionsList} placeholder={''}
+                                          onChange={this.setRegion.bind(this)} style={{width: 200}}/>
+                                <Select style={{width: 200}} onChange={this.setEstates.bind(this)}>
                                     {this.state.estates && this.state.estates.map(item => {
-                                                    return (<Option value={item.value}>{item.label}</Option>)
-                                                }
-                                            )}
-                                    </Select>
+                                            return (<Option value={item.value}>{item.label}</Option>)
+                                        }
+                                    )}
+                                </Select>
                                 <InformationFormUpdatas values={this.state.values}/>
                             </div>
                         </TabPane>
@@ -2066,4 +2131,4 @@ class bridalAdmin extends React.Component {
 }
 
 export default connect(state => (
-    {estateId: state.estateId,fileList:state.fileList}), {newEstateId,getFileList})(bridalAdmin)
+    {estateId: state.estateId, fileList: state.fileList}), {newEstateId, getFileList,setHousingPictures})(bridalAdmin)

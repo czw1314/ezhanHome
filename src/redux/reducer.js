@@ -27,7 +27,7 @@ function bridalInformation(state ={}, action) {
             return state
     }
 }
-function estateId(state = '', action) {
+function estateId(state = '7', action) {
     switch (action.type) {
         case 'estateId':
             return action.data
@@ -36,19 +36,23 @@ function estateId(state = '', action) {
     }
 }
 
-function fileList(state = [{
-    uid: '-1',
-    name: 'image.png',
-    status: 'done',
-    url: 'http://47.108.87.104:8601/building/7/effect/15706945654721.jpg',
-  }], action) {
+function fileList(state = [], action) {
     switch (action.type) {
         case 'fileList':
-            return action.data
+            return state=action.data
+        default:
+            return state
+    }
+}
+
+function housingPictures(state = [], action) {
+    switch (action.type) {
+        case 'housingPictures':
+            return state=action.data
         default:
             return state
     }
 }
 
 
-export {userInformation,bridalInformation,estateId,fileList}
+export {userInformation,bridalInformation,estateId,fileList,housingPictures}
