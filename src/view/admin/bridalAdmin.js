@@ -388,7 +388,7 @@ class Information extends React.Component {
                     {getFieldDecorator('propertyTypeIds')(
                         <Select mode="multiple">
                             {this.state.propertyTypes && this.state.propertyTypes.map(item => {
-                                    return (<Option value={item.label}>{item.label}</Option>)
+                                    return (<Option value={item.value}>{item.label}</Option>)
                                 }
                             )}
                         </Select>
@@ -520,7 +520,7 @@ class Information extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'梯户比：'}>
-                    {getFieldDecorator('contact')(
+                    {getFieldDecorator('staircasesRatio')(
                         <Input/>
                     )}
                 </Form.Item>
@@ -1029,6 +1029,21 @@ class InformationUpdata extends React.Component {
                 }
                 this.setState({
                     houseTypes: option
+                })
+            }
+        })
+        getHouseTraits().then((res) => {
+            if (res.data.code === 1) {
+                let option = [];
+                for (let i = 0; i < res.data.list.length; i++) {
+                    let item = {
+                        value: res.data.list[i].id,
+                        label: res.data.list[i].houseTraitName,
+                    }
+                    option.push(item)
+                }
+                this.setState({
+                    houseTraits: option
                 })
             }
         })

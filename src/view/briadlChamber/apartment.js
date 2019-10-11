@@ -50,7 +50,8 @@ class Apartment extends React.Component {
             keys: 1,
             location:'104.081525,30.406772',
             map:'',
-            models:[]
+            models:[],
+            modal1Visible:false
         }
     }
 
@@ -183,10 +184,15 @@ class Apartment extends React.Component {
 
         })
     }
-
+    setModal1Visible(modal1Visible) {
+        this.setState({ modal1Visible });
+        // if(modal1Visible){
+        //     console.log(d)
+        //     this.refs.model.style.height='1000px'
+        // }
+      }
     render() {
         const { TabPane } = Tabs;
-
         return (
             <div className='apartment'>
                 <div className={'title'}>
@@ -211,13 +217,27 @@ class Apartment extends React.Component {
                                                                         {/*<div className={'go-right'} onClick={this.goRight.bind(this)}>*/}
                                                                             {/*<img src={require('../../img/go-right.png')}/>*/}
                                                                         {/*</div>*/}
-                                                                        <ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`}}>
+                                                                        <ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`,position:'relative'}}>
+                                                                            <Button style={{position:'absolute',top:40,right:40,backgroundColor:'#000',color:'#fff',zIndex:1}} onClick={this.setModal1Visible.bind(this,true)}>查看原图</Button>
+                                                                            <Modal
+          title=""
+          ref={'model'}
+          className={'s'}
+          style={{ top: 20 ,zIndex:7778,width:'1200px'}}
+          footer={''}
+          width={1200}
+          visible={this.state.modal1Visible}
+          onOk={this.setModal1Visible.bind(this,false)}
+          onCancel={this.setModal1Visible.bind(this,false)}
+        >
+       <img src={ ('http://47.108.87.104:8601/housing/'+items.picturePath[0])||''}/>
+        </Modal>
                                                                             <li>
                                                                                 <img src={ ('http://47.108.87.104:8601/housing/'+items.picturePath[0])||''}/>
                                                                             </li>
-                                                                            <li>
+                                                                            {/* <li>
                                                                                 <img src={require('../../img/apartment.png')}/>
-                                                                            </li>
+                                                                            </li> */}
                                                                         </ul>
                                                                     </div>
                                                                     <div className={'information'}>
