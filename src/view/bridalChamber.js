@@ -1,7 +1,9 @@
 import React from 'react'
 import '../css/briadlChamber.scss'
-import {Select, Button, Badge, Menu, Input, Checkbox, Modal, Pagination} from 'antd';
+import {Select, Button,Radio, Menu, Input, Checkbox, Modal, Pagination} from 'antd';
 import { Link } from 'react-router-dom';
+import {searchEstate,getDistrictRegions} from '../api/index'
+import {searchAgent} from "../api";
 
 class BridalChamber extends React.Component {
     constructor(props) {
@@ -10,18 +12,61 @@ class BridalChamber extends React.Component {
             key: 1,
             left: 13,
             positionChecked: [],
-            position: ['不限', '青羊', '锦江'],
+            position: [],
             priceChecked: [],
-            price: ['15000元/m²以下'],
+            streetIdChecked:[],
+            areasChecked:[],
+            price: [{label: '8000元/m²以下', value: '8000'},{label: '8000-11000元/m²', value: '8000-11000'},
+                {label: '11000-15000元/m²', value: '11000-15000'},{label: '15000-20000元/m²', value: '15000-20000'},{label: '20000-30000元/m²', value: '20000-30000'},{label: '30000元/m²以上', value: '30000'}],
             areaChecked: [],
-            area: ['80m²以下'],
+            area: [{label: '50/m²以下', value: '50'},{label: '50-80m²', value: '50-80'},{label: '80-110m²', value: '80-110'},{label: '110-150m²', value: '110-150'},{label: '125-200m²', value: '150-200'},{label: '200m²以上', value: '200'}],
             apartmentChecked: [],
-            apartment: ['三室两厅'],
+            apartment: [{label: '一室', value: '一室'},{label: '二室', value: '二室'},{label: '三室', value: '三室'},{label: '四室', value: '四室'},{label: '伍室', value: '五室'},{label: '五室以上', value: '8000'},{label: '8000元/m²以下', value: '8000'},],
             characteristicChecked: [],
             characteristic: ['现房'],
             togglePrice: true,
             toggleTime: true
         }
+    }
+    componentDidMount(){
+        getDistrictRegions().then((res)=>{
+            if(res.data.code==1){
+                let arr=res.data.list.map((item,index)=>{
+                    return{
+                        value:item.id,
+                        label:item.name,
+                        regions:item.regions.map(items=>{
+                            return{
+                                value:items.id,
+                                label:items.street,
+                            }
+                        })
+                    }
+                })
+                arr.splice(0,0,{value:0,label:'不限'})
+                this.setState({
+                    position:arr
+                })
+                let params={
+                    area:this.state.areasChecked,
+                    housingTypes:this.state.apartmentChecked,
+                    orderType:0,
+                    prices:this.state.priceChecked,
+                    traitIds:this.state.characteristicChecked,
+                    districtIds: [],
+                    streetId:[],
+                    searchText:this.state.searchText
+                }
+                searchEstate(params).then((res)=>{
+                    if(res.data.code===1){
+                        this.setState({
+                            models:res.data.models
+                        })
+                    }
+                })
+
+            }
+        })
     }
 
     //找房与找经纪人互相切换
@@ -39,25 +84,94 @@ class BridalChamber extends React.Component {
     onChange = positionChecked => {
         this.setState({
             positionChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
         });
+        let params={
+            area:this.state.areasChecked,
+            housingTypes:this.state.apartmentChecked,
+            orderType:0,
+            prices:this.state.priceChecked,
+            traitIds:this.state.characteristicChecked,
+            districtIds:positionChecked,
+            streetId:this.state.streetIdChecked,
+            searchText:this.state.searchText
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.models
+                })
+            }
+        })
+    };
+    //选择街道
+    onChangeStreetId = streetIdChecked => {
+        console.log(streetIdChecked)
+        this.setState({
+            streetIdChecked
+        });
+        let params={
+            area:this.state.areasChecked,
+            housingTypes:this.state.apartmentChecked,
+            orderType:0,
+            prices:this.state.priceChecked,
+            traitIds:this.state.characteristicChecked,
+            districtIds: this.state.positionChecked,
+            streetId:streetIdChecked,
+            searchText:this.state.searchText
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.models
+                })
+            }
+        })
     };
     //选择价格
     onChangePrice = priceChecked => {
         this.setState({
             priceChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
         });
+        let params={
+            area:this.state.areasChecked,
+            housingTypes:this.state.apartmentChecked,
+            orderType:0,
+            prices:priceChecked,
+            traitIds:this.state.characteristicChecked,
+            districtIds: this.state.positionChecked,
+            streetId:this.state.streetIdChecked,
+            searchText:this.state.searchText
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.models
+                })
+            }
+        })
     };
     //选择面积
     onChangeArea = areaChecked => {
         this.setState({
             areaChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
         });
+        let params={
+            area:areaChecked,
+            housingTypes:this.state.apartmentChecked,
+            orderType:0,
+            prices:this.state.priceChecked,
+            traitIds:this.state.characteristicChecked,
+            districtIds: this.state.positionChecked,
+            streetId:this.state.streetIdChecked,
+            searchText:this.state.searchText
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.models
+                })
+            }
+        })
     };
     //选择户型
     onChangeApartment = apartmentChecked => {
@@ -127,28 +241,41 @@ class BridalChamber extends React.Component {
                 </div>
                 <div className={'condition'}>
                     <div className={'first'}>
+
                         <p>区域</p>
-                        <CheckboxGroup
-                            options={this.state.position}
-                            value={this.state.positionChecked}
-                            onChange={this.onChange}
-                        />
+                        <Radio.Group name="radiogroup" onChange={this.onChange.bind(this)} value={this.state.positionChecked}>
+                            {
+                                this.state.position&&this.state.position.map(item=>{
+                                    return(<Radio value={item.value}>{item.label}</Radio>)
+                                })
+                            }
+                        </Radio.Group>
                     </div>
+                    <CheckboxGroup
+                        styke={{marginBottom:20}}
+                        options={this.state.position[this.state.positionChecked]?this.state.position[this.state.positionChecked].regions:[]}
+                        value={this.state.streetIdChecked}
+                        onChange={this.onChangeStreetId.bind(this)}
+                    />
                     <div className={'second'} style={{marginTop: 10}}>
                         <p>单价</p>
-                        <CheckboxGroup
-                            options={this.state.price}
-                            value={this.state.priceChecked}
-                            onChange={this.onChangePrice}
-                        />
+                        <Radio.Group  onChange={this.onChangePrice.bind(this)} value={this.state.priceChecked}>
+                            {
+                                this.state.price&&this.state.price.map(item=>{
+                                    return(<Radio value={item.value}>{item.label}</Radio>)
+                                })
+                            }
+                        </Radio.Group>
                     </div>
                     <div className={'second'}>
                         <p>面积</p>
-                        <CheckboxGroup
-                            options={this.state.area}
-                            value={this.state.areaChecked}
-                            onChange={this.onChangeArea}
-                        />
+                        <Radio.Group  onChange={this.onChangeArea.bind(this)} value={this.state.areaChecked}>
+                            {
+                                this.state.area&&this.state.area.map(item=>{
+                                    return(<Radio value={item.value}>{item.label}</Radio>)
+                                })
+                            }
+                        </Radio.Group>
                     </div>
                     <div className={'second'}>
                         <p>户型</p>
@@ -157,6 +284,13 @@ class BridalChamber extends React.Component {
                             value={this.state.apartmentChecked}
                             onChange={this.onChangeApartment}
                         />
+                        <Radio.Group  onChange={this.onChangeApartment.bind(this)} value={this.state.apartmentChecked}>
+                            {
+                                this.state.apartment&&this.state.apartment.map(item=>{
+                                    return(<Radio value={item.value}>{item.label}</Radio>)
+                                })
+                            }
+                        </Radio.Group>
                     </div>
                     <div className={'second'}>
                         <p>特色</p>

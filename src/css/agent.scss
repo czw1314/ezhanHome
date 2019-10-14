@@ -1,7 +1,10 @@
+.ant-popover-buttons{
+  display: none;
+}
 .agent{
   margin:90px auto 40px;
   width: 1200px;
-  text-align: center;
+  text-align: left;
   color: #fff;
   .title{
     display: flex;
@@ -43,8 +46,11 @@
     .first{
       display: flex;
       border-bottom: 1px solid rgba(217,217,217,1);
-      .ant-checkbox{
+      .ant-radio{
         display: none;
+      }
+      .ant-radio-wrapper-checked{
+        color: #268AED;
       }
       p{
         font-size:15px;
@@ -110,6 +116,13 @@
           width: 100%;
           .item {
             display: flex;
+            .pic{
+              img{
+                width: 120px;
+                height: 120px;
+              }
+
+            }
             .textBox{
               width: 100%;
               margin-left: 40px;
@@ -123,6 +136,7 @@
 
             .information {
               text-align: left;
+              width: 200px;
               .name {
                 font-size:20px;
                 font-weight:bold;
@@ -146,9 +160,14 @@
             }
             .service {
               font-size:14px;
+              text-align: left;
+              width: 500px;
               color:#333333;
               .area{
                 font-family:Source Han Sans CN;
+                span{
+                  margin-right: 10px;
+                }
                 font-weight:bold;
 
               }
@@ -157,18 +176,25 @@
               }
             }
             .contact{
+              width: 200px;
               .phone{
                 font-size: 14px;
                 color: #333;
                 span{
                   font-weight: bold;
+                  margin-left: 10px;
                 }
               }
               .weixin{
                 color: #268AED;
                 font-weight: bold;
                 font-size: 14px;
+                span{
+                  margin-left: 10px;
+                  cursor: pointer;
+                }
               }
+
 
             }
             .company {

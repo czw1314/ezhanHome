@@ -62,11 +62,16 @@
     .second{
       display: flex;
       p{
+        width: 50px;
         font-size:15px;
         font-family:Source Han Sans CN;
         margin-right: 28px;
         font-weight:bold;
         color:rgba(51,51,51,1);
+      }
+      .ant-checkbox-group{
+        width: 1000px;
+        text-align: left;
       }
     }
   }

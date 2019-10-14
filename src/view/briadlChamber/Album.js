@@ -45,8 +45,8 @@ class Album extends React.Component {
             key: this.props.location.pathname || '/bridalChamber',
             translateX: 0,
             translateXs: 0,
-            num: 7,//图片数量-1
-            nums: 1,//图集-5
+            num: 0,//图片数量-1
+            nums:0,//图集-5
             active: 0,//第n张相片激活，
             keys: 1,
             location:'104.081525,30.406772',
@@ -123,12 +123,13 @@ class Album extends React.Component {
     }
 
     //大图向左
-    goLeft() {
+    goLeft(index) {
+        console.log(index)
         this.setState({
             translateX: this.state.translateX + 1100 > 0 ? 0 : this.state.translateX + 1100,
             active: this.state.active - 1 <= 0 ? 0 : this.state.active - 1
         })
-        for (let i = this.state.slideData.length - 1; i > this.state.slideData.length - 6; i--) {
+        for (let i = this.state.models[index].length - 1; i > this.state.models[index].length - 6; i--) {
             if (this.state.slideData[i].count+1 === this.state.active) {
                 this.setState({
                     translateXs: this.state.translateXs + 142 >= 0 ? 0 : this.state.translateXs + 142,
@@ -139,13 +140,14 @@ class Album extends React.Component {
     }
 
     //大图向右
-    goRight() {
+    goRight(index) {
         this.setState({
-            translateX: this.state.translateX - 1100 > (-this.state.num * 1100) ? this.state.translateX - 1100 : -this.state.num * 1100,
+            translateX: this.state.translateX - 1100 > (-(this.state.models[index].picturePaths.length-1) * 1100) ? this.state.translateX - 1100 : -(this.state.models[index].picturePaths.length-1)* 1100,
             active: this.state.active + 1 > this.state.num ? this.state.num : this.state.active + 1
         })
         for (let i = 5; i < this.state.slideData.length; i++) {
             if (this.state.slideData[i - 1].count === this.state.active) {
+                console.log(this.state.slideData[i - 1].count)
                 this.setState({
                     translateXs: this.state.translateXs - 142 >= (-this.state.nums * 142) ? this.state.translateXs - 142 : -this.state.nums * 142
                 })
@@ -162,23 +164,29 @@ class Album extends React.Component {
     }
 
     //小图向右
-    goRights() {
-        this.setState({
-            translateXs: this.state.translateXs - 142 >= (-this.state.nums * 142) ? this.state.translateXs - 142 : -this.state.nums * 142
-
-        })
+    goRights(index) {
+        if(this.state.models[index].picturePaths.length<=8){
+            return
+        }
+        else {
+            this.setState({
+                translateXs: this.state.translateXs - 142 >= (-(this.state.models[index].picturePaths.length - 1) * 142) ? this.state.translateXs - 142 : -(this.state.models[index].picturePaths.length - 1) * 142
+            })
+        }
     }
 
     //指定跳转到某一图集
     goTo(str) {
-        console.log(str)
         this.setState({
             translateX: -1100 * (str - 1) >= 0 ? 0 : -1100 * (str - 1),
             active: str > 0 ? str - 1 : 0
         })
     }
     callback(key) {
-        console.log(key);
+        this.setState({
+            translateX: 0,
+            active: 0
+        })
     }
     componentDidMount(){
         let params={
@@ -186,8 +194,14 @@ class Album extends React.Component {
         }
         getStreetEstatess(params).then((res)=>{
             if(res.data.code===1){
+                let l=0
+                for (let i=0;i<res.data.models.length;i++){
+                    l+=res.data.models[i].picturePaths.length
+                }
                 this.setState({
-                    models:res.data.models
+                    models:res.data.models,
+                    nums:res.data.models.length,
+                    num:l
                 })
             }
 
@@ -201,97 +215,71 @@ class Album extends React.Component {
                     <p>楼盘名称相册</p>
                 </div>
                 <div className="banner">
-                    <Tabs defaultActiveKey="1" onChange={this.callback} style={{textAlign:'left'}}>
-                        <TabPane tab="区位图（20）" key="1">
-                            <div className="large_box">
-                                <div className={'go-left'} onClick={this.goLeft.bind(this)}>
-                                    <img src={require('../../img/go-left.png')}/>
-                                </div>
-                                <div className={'go-right'} onClick={this.goRight.bind(this)}>
-                                    <img src={require('../../img/go-right.png')}/>
-                                </div>
-                                <ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`}}>
-                                    {this.state.slideData.map((item, index) =>
-                                            <li className="item" data-index={index}>
-                                                <img src={item.img}/>
-                                            </li>
-                                    )}
-                                </ul>
-                            </div>
-                            <div className="small_box">
-                                <span className="btns lefts_btn" onClick={this.goLefts.bind(this)}></span>
-                                <div className="small_list">
-                                    <ul style={{transform: `translateX(${this.state.translateXs}px)`}}>
-                                        {this.state.slideData.map((item, index) =>
-                                            <li className="item" data-index={index} onClick={this.goTo.bind(this,index+1)}>
-                                                <img src={item.img}/>
-                                            </li>
-                                        )}
-                                    </ul>
-                                </div>
-                                <span className="btns rights_btn" onClick={this.goRights.bind(this)}></span>
-                            </div>
-                        </TabPane>
-                        <TabPane tab="区位图（20）" key="2">
-                            <div className="large_box">
-                                <div className={'go-left'} onClick={this.goLeft.bind(this)}>
-                                    <img src={require('../../img/go-left.png')}/>
-                                </div>
-                                <div className={'go-right'} onClick={this.goRight.bind(this)}>
-                                    <img src={require('../../img/go-right.png')}/>
-                                </div>
-                                <ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`}}>
-                                    {this.state.slideData.map((item, index) =>
-                                        <li className="item" data-index={index}>
-                                            <img src={item.img}/>
-                                        </li>
-                                    )}
-                                </ul>
-                            </div>
-                            <div className="small_box">
-                                <span className="btns lefts_btn" onClick={this.goLefts.bind(this)}></span>
-                                <div className="small_list">
-                                    <ul style={{transform: `translateX(${this.state.translateXs}px)`}}>
-                                        {this.state.slideData.map((item, index) =>
-                                            <li className="item" data-index={index}>
-                                                <img src={item.img}/>
-                                            </li>
-                                        )}
-                                    </ul>
-                                </div>
-                                <span className="btns rights_btn" onClick={this.goRights.bind(this)}></span>
-                            </div>
-                        </TabPane>
-                        <TabPane tab="区位图（20）" key="3">
-                            <div className="large_box">
-                                <div className={'go-left'} onClick={this.goLeft.bind(this)}>
-                                    <img src={require('../../img/go-left.png')}/>
-                                </div>
-                                <div className={'go-right'} onClick={this.goRight.bind(this)}>
-                                    <img src={require('../../img/go-right.png')}/>
-                                </div>
-                                <ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`}}>
-                                    {this.state.slideData.map((item, index) =>
-                                        <li className="item" data-index={index}>
-                                            <img src={item.img}/>
-                                        </li>
-                                    )}
-                                </ul>
-                            </div>
-                            <div className="small_box">
-                                <span className="btns lefts_btn" onClick={this.goLefts.bind(this)}></span>
-                                <div className="small_list">
-                                    <ul style={{transform: `translateX(${this.state.translateXs}px)`}}>
-                                        {this.state.slideData.map((item, index) =>
-                                            <li className="item" data-index={index}>
-                                                <img src={item.img}/>
-                                            </li>
-                                        )}
-                                    </ul>
-                                </div>
-                                <span className="btns rights_btn" onClick={this.goRights.bind(this)}></span>
-                            </div>
-                        </TabPane>
+                    <Tabs defaultActiveKey="0" onChange={this.callback.bind(this)} style={{textAlign:'left'}}>
+                        {
+                            this.state.models&&this.state.models.map((item,index)=>{
+                                return (<TabPane tab={item.type} key={index}>
+                                    <div className="large_box">
+                                        <div className={'go-left'} onClick={this.goLeft.bind(this,index)}>
+                                            <img src={require('../../img/go-left.png')}/>
+                                        </div>
+                                        <div className={'go-right'} onClick={this.goRight.bind(this,index)}>
+                                            <img src={require('../../img/go-right.png')}/>
+                                        </div>
+                                        <ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`}}>
+                                            {item.picturePaths.map((items, indexs) =>
+                                                <li className="item" data-index={indexs}>
+                                                    <img src={'http://47.108.87.104:8601/building/'+items}/>
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                    <div className="small_box">
+                                        <span className="btns lefts_btn" onClick={this.goLefts.bind(this,index)}></span>
+                                        <div className="small_list">
+                                            <ul style={{transform: `translateX(${this.state.translateXs}px)`}}>
+                                                {item.picturePaths.map((items, index) =>
+                                                    <li className="item" data-index={index} onClick={this.goTo.bind(this,index+1)}>
+                                                        <img src={'http://47.108.87.104:8601/building/'+items}/>
+                                                    </li>
+                                                )}
+                                            </ul>
+                                        </div>
+                                        <span className="btns rights_btn" onClick={this.goRights.bind(this,index)}></span>
+                                    </div>
+                                </TabPane>)
+                            })
+                        }
+                        {/*<TabPane tab="区位图（20）" key="1">*/}
+                            {/*<div className="large_box">*/}
+                                {/*<div className={'go-left'} onClick={this.goLeft.bind(this)}>*/}
+                                    {/*<img src={require('../../img/go-left.png')}/>*/}
+                                {/*</div>*/}
+                                {/*<div className={'go-right'} onClick={this.goRight.bind(this)}>*/}
+                                    {/*<img src={require('../../img/go-right.png')}/>*/}
+                                {/*</div>*/}
+                                {/*<ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`}}>*/}
+                                    {/*{this.state.models[0]&&this.state.models[0].picturePaths.map((item, index) =>*/}
+                                            {/*<li className="item" data-index={index}>*/}
+                                                {/*<img src={'http://47.108.87.104:8601/building/'+item}/>*/}
+                                            {/*</li>*/}
+                                    {/*)}*/}
+                                {/*</ul>*/}
+                            {/*</div>*/}
+                            {/*<div className="small_box">*/}
+                                {/*<span className="btns lefts_btn" onClick={this.goLefts.bind(this)}></span>*/}
+                                {/*<div className="small_list">*/}
+                                    {/*<ul style={{transform: `translateX(${this.state.translateXs}px)`}}>*/}
+                                        {/*{this.state.slideData.map((item, index) =>*/}
+                                            {/*<li className="item" data-index={index} onClick={this.goTo.bind(this,index+1)}>*/}
+                                                {/*<img src={item.img}/>*/}
+                                            {/*</li>*/}
+                                        {/*)}*/}
+                                    {/*</ul>*/}
+                                {/*</div>*/}
+                                {/*<span className="btns rights_btn" onClick={this.goRights.bind(this)}></span>*/}
+                            {/*</div>*/}
+                        {/*</TabPane>*/}
                     </Tabs>,
 
                         {/*<div className={'nearby'}>*/}

@@ -21,7 +21,8 @@ import {
     getStreetEstates,
     updata,
     getEstateMsg,
-    getHouseTraits
+    getHouseTraits,
+    getEstateAgents
 } from '../../api/index'
 
 //上传户型
@@ -1222,6 +1223,20 @@ class InformationUpdata extends React.Component {
             }
         }
     }
+    changeValues = (rule ,value , callback)=> {
+        const { setFieldsValue } = this.props.form ;
+        let newArr ;
+        if (value.length > 3){
+            newArr = [].concat(value.slice(0,2), value.slice(-1) ) ;
+            setFieldsValue({
+                "languages" : newArr ,
+            })
+            callback('最多推荐三个经纪人')
+        } else {
+            newArr = value ;
+            callback()
+        }
+    }
 
     render() {
         const formItemLayout = {
@@ -1235,7 +1250,7 @@ class InformationUpdata extends React.Component {
             },
         };
         const {getFieldDecorator} = this.props.form;
-
+console.log(this.props.agentIds)
         const base = 'http://47.108.87.104:8501/user/uploadFile';
         const {Option} = Select
         return (
@@ -1493,6 +1508,24 @@ class InformationUpdata extends React.Component {
                 <Form.Item label={'添加预售'} className={'item'} labelCol={{span: 3}}>
                     <PicturesWallUpdataId photoType={'6'}
                                         estateId={this.props.values.id}></PicturesWallUpdataId>
+                </Form.Item>
+                <Form.Item label={'3、推荐经纪人选择：'} className={'item'} labelAlign={'left'}>
+                </Form.Item>
+                <Form.Item label={'推荐经纪人选择：'} className={'item'} labelCol={{span: 3}}>
+                    {getFieldDecorator('agentIds', {
+                        rules:[{message : '最多推荐三个经纪人',
+                            validator : this.changeValues,
+                        }],
+                        validateTrigger : 'onChange',
+                        initialValue:this.props.values.agentIds
+                    })(
+                        <Select mode="multiple">
+                            {this.props.agentIds && this.props.agentIds.map(item => {
+                                    return (<Option value={item.id}>{item.name}</Option>)
+                                }
+                            )}
+                        </Select>
+                    )}
                 </Form.Item>
                 <Form.Item label={'3、楼盘动态：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
@@ -1786,7 +1819,8 @@ class bridalAdmin extends React.Component {
             estatesL: [],
             values: {
                 key: 2
-            }
+            },
+            agentIds:[]
 
         }
     }
@@ -1983,6 +2017,13 @@ class bridalAdmin extends React.Component {
                 })
             }
         })
+        getEstateAgents(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    agentIds: res.data.users
+                })
+            }
+        })
     }
 
     push() {
@@ -2134,7 +2175,7 @@ class bridalAdmin extends React.Component {
                                         }
                                     )}
                                 </Select>
-                                <InformationFormUpdatas values={this.state.values}/>
+                                <InformationFormUpdatas values={this.state.values} agentIds={this.state.agentIds}/>
                             </div>
                         </TabPane>
                     </Tabs>

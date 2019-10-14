@@ -258,8 +258,15 @@ export const getEstateMsg = (params) =>
     );
 //搜索经纪人
 export const searchAgent = (params) =>
-    axios.get(`${base}/show/searchAgent`, {
-            params,
+    axios.post(`${base}/show/searchAgent`,params,{
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+//搜索楼盘
+export const searchEstate = (params) =>
+    axios.post(`${base}/estate/estateList`,params,{
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -279,6 +286,15 @@ export const getHousingMsg = (params) =>
 export const getStreetEstatess = (params) =>
     axios.get(`${base}/estate/streetEstates`, {
             params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+//根据楼盘id获取指定楼盘已成功入驻的经纪人（姓名-电话）
+export const getEstateAgents = (params) =>
+    axios.get(`${base}/houseAdmin/estateAgents`, {
+            params:qs.stringify(params, {arrayFormat: 'repeat'}),
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },

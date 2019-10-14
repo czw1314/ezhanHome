@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js" description="                &lt;Form.Item label={'车位配比：'}&gt;&#10;      ..." line="566" />
+    <bookmark url="file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js" description="                &lt;Form.Item label={'车位配比：'}&gt;&#10;      ..." line="567" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67f4acab-a71f-4d96-9384-c51ff552c986" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/reducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/store.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/agent.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/agent.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/css/briadlChamber.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/briadlChamber.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/admin/bridalAdmin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/admin/bridalAdmin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/agent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/agent.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/briadlChamber/Album.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/briadlChamber/Album.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/briadlChamber/apartment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/briadlChamber/apartment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/bridalChamber.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/bridalChamber.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -26,65 +26,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="bridalAdmin.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="672">
-              <caret line="283" column="5" selection-start-line="283" selection-start-column="5" selection-end-line="283" selection-end-column="5" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-                <element signature="n#PicturesWall#0" />
-                <element signature="n#!!block;n#componentDidMount#0;n#InformationUpdata#0" />
-                <element signature="e#16868#16882#0" expanded="true" />
-                <element signature="n#PicturesWallUpdata#0" />
-                <element signature="e#3660#3679#0" expanded="true" />
-                <element signature="e#4566#4580#0" expanded="true" />
-                <element signature="n#bridalAdmin#0" />
-                <element signature="e#70682#71241#0" />
-                <element signature="n#!!block;n#componentDidMount#0;n#bridalAdmin#0" />
-                <element signature="e#72221#72467#0" />
-                <element signature="n#!!block;n#clear#0;n#bridalAdmin#0" />
-                <element signature="e#72621#72858#0" />
-                <element signature="e#72911#73147#0" />
-                <element signature="e#73196#73430#0" />
-                <element signature="e#73487#73725#0" />
-                <element signature="e#73792#74035#0" />
-                <element signature="n#!!block;n#callback#0;n#bridalAdmin#0" />
-                <element signature="e#74254#74660#0" />
-                <element signature="n#!!block;n#setRegion#0;n#bridalAdmin#0" />
-                <element signature="n#!!block;n#onChangeDescription#0;n#bridalAdmin#0" />
-                <element signature="n#!!block;n#push#0;n#bridalAdmin#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="action.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/redux/action.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="18" column="25" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="reducer.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/redux/reducer.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
+            <state relative-caret-position="323">
               <caret line="29" column="28" selection-start-line="29" selection-start-column="28" selection-end-line="29" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="store.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/redux/store.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
-              <folding>
-                <element signature="e#1#70#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -92,7 +38,7 @@
       <file leaf-file-name="bridalHome.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/component/bridalHome.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-529">
+            <state>
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -100,11 +46,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/api/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="668">
-              <caret line="278" column="30" selection-start-line="278" selection-start-column="13" selection-end-line="278" selection-end-column="30" />
+            <state relative-caret-position="516">
+              <caret line="267" column="25" selection-start-line="267" selection-start-column="25" selection-end-line="267" selection-end-column="25" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -112,23 +58,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Album.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/view/briadlChamber/Album.js">
+      <file leaf-file-name="bridalIndex.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/view/briadlChamber/bridalIndex.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="186" column="8" selection-start-line="186" selection-start-column="8" selection-end-line="186" selection-end-column="8" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="apartment.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/view/briadlChamber/apartment.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
-              <caret line="215" column="153" selection-start-line="215" selection-start-column="153" selection-end-line="215" selection-end-column="153" />
+            <state>
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -139,17 +72,60 @@
       <file leaf-file-name="agent.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/view/agent.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1137">
-              <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+            <state relative-caret-position="266">
+              <caret line="107" selection-start-line="107" selection-end-line="126" selection-end-column="6" />
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
+                <element signature="n#!!block;n#componentDidMount#0;n#Agent#0" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
+      <file leaf-file-name="bridalChamber.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/view/bridalChamber.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="11" column="28" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
+            <state relative-caret-position="437">
+              <caret line="158" column="21" lean-forward="true" selection-start-line="158" selection-start-column="21" selection-end-line="158" selection-end-column="21" />
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="briadlChamber.scss" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/css/briadlChamber.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="587">
+              <caret line="72" column="21" selection-start-line="72" selection-start-column="21" selection-end-line="72" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="agent.scss" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/css/agent.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="279">
+              <caret line="62" column="7" selection-start-line="62" selection-start-column="7" selection-end-line="62" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/login.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="279">
+              <caret line="160" column="25" selection-start-line="160" selection-start-column="25" selection-end-line="160" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="agentMy.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/view/agentMy.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="19">
+              <caret line="296" column="53" selection-start-line="296" selection-start-column="22" selection-end-line="296" selection-end-column="53" />
             </state>
           </provider>
         </entry>
@@ -166,21 +142,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getDistrictRegions</find>
-      <find>districtRegionsList</find>
-      <find>setUserInformation</find>
-      <find>buildingStructure</find>
-      <find>结构</find>
-      <find>fileList</find>
-      <find>HousingPicturesWall</find>
-      <find>splice</find>
-      <find>housingType</find>
-      <find>houseTypes</find>
-      <find>houseType</find>
-      <find>creatCompare</find>
-      <find>sortByKey(</find>
-      <find>Select</find>
-      <find>特色</find>
       <find>housingStructures</find>
       <find>resetFields</find>
       <find>PicturesWallUpdata</find>
@@ -196,6 +157,21 @@
       <find>setValue</find>
       <find>户型特色</find>
       <find>户型上传</find>
+      <find>goLeft</find>
+      <find>count</find>
+      <find>show/searchAgent</find>
+      <find>slideData</find>
+      <find>districtRegions</find>
+      <find>service</find>
+      <find>head</find>
+      <find>streetIdChecked</find>
+      <find>streetId</find>
+      <find>pic</find>
+      <find>positionChecked</find>
+      <find>47</find>
+      <find>cancel</find>
+      <find>search</find>
+      <find>confirm</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -214,7 +190,6 @@
         <option value="$PROJECT_DIR$/src/view/briadlChamber/bridalIndex.js" />
         <option value="$PROJECT_DIR$/src/css/apartment.scss" />
         <option value="$PROJECT_DIR$/src/router/index.js" />
-        <option value="$PROJECT_DIR$/src/css/agent.scss" />
         <option value="$PROJECT_DIR$/src/component/home.js" />
         <option value="$PROJECT_DIR$/src/css/user.scss" />
         <option value="$PROJECT_DIR$/src/view/user.js" />
@@ -232,8 +207,6 @@
         <option value="$PROJECT_DIR$/src/component/informationForm.js" />
         <option value="$PROJECT_DIR$/src/component/register.js" />
         <option value="$PROJECT_DIR$/src/css/homePage.scss" />
-        <option value="$PROJECT_DIR$/src/css/briadlChamber.scss" />
-        <option value="$PROJECT_DIR$/src/view/bridalChamber.js" />
         <option value="$PROJECT_DIR$/src/css/RegistryCenter.scss" />
         <option value="$PROJECT_DIR$/src/css/agentMy.scss" />
         <option value="$PROJECT_DIR$/src/css/login.scss" />
@@ -246,15 +219,18 @@
         <option value="$PROJECT_DIR$/src/view/admin/admin.js" />
         <option value="$PROJECT_DIR$/src/view/registryCenter.js" />
         <option value="$PROJECT_DIR$/src/css/bridalAdmin.scss" />
-        <option value="$PROJECT_DIR$/src/view/agent.js" />
         <option value="$PROJECT_DIR$/config/webpack.config.js" />
         <option value="$PROJECT_DIR$/src/redux/store.js" />
         <option value="$PROJECT_DIR$/src/redux/action.js" />
-        <option value="$PROJECT_DIR$/src/api/index.js" />
         <option value="$PROJECT_DIR$/src/redux/reducer.js" />
-        <option value="$PROJECT_DIR$/src/view/briadlChamber/Album.js" />
         <option value="$PROJECT_DIR$/src/view/briadlChamber/apartment.js" />
+        <option value="$PROJECT_DIR$/src/view/briadlChamber/Album.js" />
         <option value="$PROJECT_DIR$/src/view/admin/bridalAdmin.js" />
+        <option value="$PROJECT_DIR$/src/css/agent.scss" />
+        <option value="$PROJECT_DIR$/src/css/briadlChamber.scss" />
+        <option value="$PROJECT_DIR$/src/view/agent.js" />
+        <option value="$PROJECT_DIR$/src/view/bridalChamber.js" />
+        <option value="$PROJECT_DIR$/src/api/index.js" />
       </list>
     </option>
   </component>
@@ -286,6 +262,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -324,6 +301,12 @@
               <item name="reactdemo" type="b2602c69:ProjectViewProjectNode" />
               <item name="reactdemo" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="reactdemo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="reactdemo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="redux" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -350,13 +333,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="D:/project/yyxt/yyxt/src/redux/reducer.js" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -436,6 +418,8 @@
       <workItem from="1570670494752" duration="20777000" />
       <workItem from="1570699743257" duration="3598000" />
       <workItem from="1570756450325" duration="28759000" />
+      <workItem from="1570937857806" duration="6907000" />
+      <workItem from="1571016203902" duration="16229000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1568629048875</created>
@@ -476,7 +460,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="411217000" />
+    <option name="totallyTimeSpent" value="454260000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -486,9 +470,9 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="7" visible="true" weight="0.0" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32897604" />
       <window_info id="npm" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.3293348" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -555,7 +539,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/briadlChamber/Album.js</url>
-          <line>202</line>
+          <line>216</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -589,46 +573,44 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js</url>
-          <line>284</line>
+          <line>285</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js</url>
-          <line>333</line>
+          <line>334</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js</url>
-          <line>112</line>
+          <line>113</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js</url>
-          <line>972</line>
-          <properties lambdaOrdinal="-1" />
+          <line>973</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js</url>
-          <line>1003</line>
-          <properties lambdaOrdinal="-1" />
+          <line>1004</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js</url>
+          <line>1984</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/view/agent.js</url>
+          <line>258</line>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="34" />
+      <option name="time" value="40" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://D:/project/eve/src/components/navT.vue">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://D:/project/eve/src/api/api.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="33" lean-forward="true" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/project/monitor/src/api/api.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
@@ -709,13 +691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/css/briadlChamber.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1406">
-          <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/css/RegistryCenter.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3040">
@@ -771,20 +746,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/login.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2926">
-          <caret line="160" column="25" selection-start-line="160" selection-start-column="25" selection-end-line="160" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/css/agentMy.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="74" column="32" selection-start-line="74" selection-start-column="32" selection-end-line="74" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/component/register.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-408">
@@ -802,20 +763,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/view/bridalChamber.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3097">
-          <caret line="166" selection-start-line="166" selection-end-line="166" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/component/menu.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
           <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -868,20 +819,10 @@
     <entry file="file://$PROJECT_DIR$/src/router/index.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/view/agentMy.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="325" column="32" selection-start-line="325" selection-start-column="32" selection-end-line="328" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
           <caret line="25" column="43" lean-forward="true" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -892,36 +833,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/view/agent.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1137">
-          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/redux/store.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
+        <state relative-caret-position="133">
           <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
-          <folding>
-            <element signature="e#1#70#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/redux/reducer.js">
+    <entry file="file://$PROJECT_DIR$/src/view/briadlChamber/apartment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="29" column="28" selection-start-line="29" selection-start-column="28" selection-end-line="29" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/bridalHome.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-529">
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="3933">
+          <caret line="215" column="84" selection-start-line="215" selection-start-column="84" selection-end-line="215" selection-end-column="84" />
         </state>
       </provider>
     </entry>
@@ -932,30 +854,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="668">
-          <caret line="278" column="30" selection-start-line="278" selection-start-column="13" selection-end-line="278" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/view/briadlChamber/Album.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="186" column="8" selection-start-line="186" selection-start-column="8" selection-end-line="186" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/view/briadlChamber/apartment.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="215" column="153" selection-start-line="215" selection-start-column="153" selection-end-line="215" selection-end-column="153" />
+        <state relative-caret-position="3838">
+          <caret line="217" column="80" selection-start-line="217" selection-start-column="80" selection-end-line="217" selection-end-column="80" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
@@ -964,31 +866,113 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="283" column="5" selection-start-line="283" selection-start-column="5" selection-end-line="283" selection-end-column="5" />
+        <state relative-caret-position="8778">
+          <caret line="1520" column="23" selection-start-line="1520" selection-start-column="23" selection-end-line="1520" selection-end-column="23" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
+            <element signature="n#HousingPicturesWall#0" />
+            <element signature="n#Information#0" />
             <element signature="n#PicturesWall#0" />
+            <element signature="n#HousingPicturesWallUpdata#0" />
             <element signature="n#!!block;n#componentDidMount#0;n#InformationUpdata#0" />
-            <element signature="e#16868#16882#0" expanded="true" />
             <element signature="n#PicturesWallUpdata#0" />
-            <element signature="e#3660#3679#0" expanded="true" />
-            <element signature="e#4566#4580#0" expanded="true" />
-            <element signature="n#bridalAdmin#0" />
-            <element signature="e#70682#71241#0" />
             <element signature="n#!!block;n#componentDidMount#0;n#bridalAdmin#0" />
-            <element signature="e#72221#72467#0" />
             <element signature="n#!!block;n#clear#0;n#bridalAdmin#0" />
-            <element signature="e#72621#72858#0" />
-            <element signature="e#72911#73147#0" />
-            <element signature="e#73196#73430#0" />
-            <element signature="e#73487#73725#0" />
-            <element signature="e#73792#74035#0" />
             <element signature="n#!!block;n#callback#0;n#bridalAdmin#0" />
-            <element signature="e#74254#74660#0" />
             <element signature="n#!!block;n#setRegion#0;n#bridalAdmin#0" />
             <element signature="n#!!block;n#onChangeDescription#0;n#bridalAdmin#0" />
             <element signature="n#!!block;n#push#0;n#bridalAdmin#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/redux/reducer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="29" column="28" selection-start-line="29" selection-start-column="28" selection-end-line="29" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/css/agentMy.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-375">
+          <caret line="74" column="32" selection-start-line="74" selection-start-column="32" selection-end-line="74" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/css/briadlChamber.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="587">
+          <caret line="72" column="21" selection-start-line="72" selection-start-column="21" selection-end-line="72" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/view/bridalChamber.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="158" column="21" lean-forward="true" selection-start-line="158" selection-start-column="21" selection-end-line="158" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/css/agent.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="62" column="7" selection-start-line="62" selection-start-column="7" selection-end-line="62" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/login.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="160" column="25" selection-start-line="160" selection-start-column="25" selection-end-line="160" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/view/agentMy.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="296" column="53" selection-start-line="296" selection-start-column="22" selection-end-line="296" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/view/briadlChamber/bridalIndex.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/view/agent.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="107" selection-start-line="107" selection-end-line="126" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+            <element signature="n#!!block;n#componentDidMount#0;n#Agent#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/bridalHome.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="267" column="25" selection-start-line="267" selection-start-column="25" selection-end-line="267" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
