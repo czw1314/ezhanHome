@@ -2,7 +2,7 @@ import React from 'react'
 import '../css/briadlChamber.scss'
 import {Select, Button,Radio, Menu, Input, Checkbox, Modal, Pagination} from 'antd';
 import { Link } from 'react-router-dom';
-import {searchEstate,getDistrictRegions} from '../api/index'
+import {searchEstate,getDistrictRegions,getTraits} from '../api/index'
 import {searchAgent} from "../api";
 
 class BridalChamber extends React.Component {
@@ -21,11 +21,14 @@ class BridalChamber extends React.Component {
             areaChecked: [],
             area: [{label: '50/m²以下', value: '50'},{label: '50-80m²', value: '50-80'},{label: '80-110m²', value: '80-110'},{label: '110-150m²', value: '110-150'},{label: '125-200m²', value: '150-200'},{label: '200m²以上', value: '200'}],
             apartmentChecked: [],
-            apartment: [{label: '一室', value: '一室'},{label: '二室', value: '二室'},{label: '三室', value: '三室'},{label: '四室', value: '四室'},{label: '伍室', value: '五室'},{label: '五室以上', value: '8000'},{label: '8000元/m²以下', value: '8000'},],
+            apartment: [{label: '一居室', value: '一居室'},{label: '二居室', value: '二居室'},{label: '三居室', value: '三居室'},{label: '四居室', value: '四居室'},{label: '五居室', value: '五居室'},{label: '五居室以上', value: '五居室以上'}],
             characteristicChecked: [],
-            characteristic: ['现房'],
+            characteristic: [],
             togglePrice: true,
-            toggleTime: true
+            toggleTime: true,
+            orderType:0,
+            models:[],
+            key:''
         }
     }
     componentDidMount(){
@@ -60,11 +63,26 @@ class BridalChamber extends React.Component {
                 searchEstate(params).then((res)=>{
                     if(res.data.code===1){
                         this.setState({
-                            models:res.data.models
+                            models:res.data.estates
                         })
                     }
                 })
 
+            }
+        })
+        getTraits().then(res=>{
+            if(res.data.code===1){
+                let option = [];
+                for (let i = 0; i < res.data.list.length; i++) {
+                    let item = {
+                        value: res.data.list[i].id,
+                        label: res.data.list[i].traitName
+                    }
+                    option.push(item)
+                }
+                this.setState({
+                    characteristic: option
+                })
             }
         })
     }
@@ -81,62 +99,70 @@ class BridalChamber extends React.Component {
 
     };
     //选择区域
-    onChange = positionChecked => {
+    onChange = e => {
+        let id=''
+        if(e.target.value==0){
+            id=[]
+        }
+        else {
+            id=[e.target.value]
+        }
         this.setState({
-            positionChecked,
+            positionChecked:e.target.value,
+            streetIdChecked:[]
+
         });
         let params={
             area:this.state.areasChecked,
             housingTypes:this.state.apartmentChecked,
-            orderType:0,
+            orderType:this.state.orderType,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
-            districtIds:positionChecked,
+            districtIds:id,
             streetId:this.state.streetIdChecked,
             searchText:this.state.searchText
         }
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.models
+                    models:res.data.estates
                 })
             }
         })
     };
     //选择街道
     onChangeStreetId = streetIdChecked => {
-        console.log(streetIdChecked)
         this.setState({
             streetIdChecked
         });
         let params={
             area:this.state.areasChecked,
             housingTypes:this.state.apartmentChecked,
-            orderType:0,
+            orderType:this.state.orderType,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
-            districtIds: this.state.positionChecked,
+            districtIds: [this.state.positionChecked],
             streetId:streetIdChecked,
             searchText:this.state.searchText
         }
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.models
+                    models:res.data.estates
                 })
             }
         })
     };
     //选择价格
-    onChangePrice = priceChecked => {
+    onChangePrice = e => {
         this.setState({
-            priceChecked,
+            priceChecked:e.target.value,
         });
         let params={
             area:this.state.areasChecked,
             housingTypes:this.state.apartmentChecked,
-            orderType:0,
-            prices:priceChecked,
+            orderType:this.state.orderType,
+            prices:[e.target.value],
             traitIds:this.state.characteristicChecked,
             districtIds: this.state.positionChecked,
             streetId:this.state.streetIdChecked,
@@ -145,20 +171,20 @@ class BridalChamber extends React.Component {
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.models
+                    models:res.data.estates
                 })
             }
         })
     };
     //选择面积
-    onChangeArea = areaChecked => {
+    onChangeArea = e => {
         this.setState({
-            areaChecked,
+            areaChecked:e.target.value,
         });
         let params={
-            area:areaChecked,
+            area:[e.target.value],
             housingTypes:this.state.apartmentChecked,
-            orderType:0,
+            orderType:this.state.orderType,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
             districtIds: this.state.positionChecked,
@@ -168,47 +194,184 @@ class BridalChamber extends React.Component {
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.models
+                    models:res.data.estates
                 })
             }
         })
     };
     //选择户型
-    onChangeApartment = apartmentChecked => {
+    onChangeApartment = e => {
         this.setState({
-            apartmentChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
+            apartmentChecked:e.target.value,
         });
+        let params={
+            area:this.state.areasChecked,
+            housingTypes:[e.target.value],
+            orderType:this.state.orderType,
+            prices:this.state.priceChecked,
+            traitIds:this.state.characteristicChecked,
+            districtIds: this.state.positionChecked,
+            streetId:this.state.streetIdChecked,
+            searchText:this.state.searchText
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.estates
+                })
+            }
+        })
     };
     //选择特色
     onChangeCharacteristic = characteristicChecked => {
         this.setState({
             characteristicChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
         });
+        let params={
+            area:this.state.areasChecked,
+            housingTypes:this.state.apartmentChecked,
+            orderType:this.state.orderType,
+            prices:this.state.priceChecked,
+            traitIds:characteristicChecked,
+            districtIds: this.state.positionChecked,
+            streetId:this.state.streetIdChecked,
+            searchText:this.state.searchText
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.estates
+                })
+            }
+        })
     };
 
     //价格排序
     selected(e) {
         this.setState({
-            togglePrice: true,
-            toggleTime: true
+            key:e.key
         })
-        console.log(this.state.togglePrice)
-    }
-
+    
+       }
+    //价格排序
     toggle(str) {
         if (str === 'price') {
-            this.setState({
-                togglePrice: !this.state.togglePrice
-            })
+            console.log(this.state.key)
+            if(this.state.togglePrice&&this.state.key=='price'){
+                console.log(1)
+                this.setState({
+                    togglePrice: !this.state.togglePrice,
+                    orderType:2
+                })
+                let params={
+                    area:this.state.areasChecked,
+                    housingTypes:this.state.apartmentChecked,
+                    orderType:2,
+                    prices:this.state.priceChecked,
+                    traitIds:this.state.characteristicChecked,
+                    districtIds: this.state.positionChecked,
+                    streetId:this.state.streetIdChecked,
+                    searchText:this.state.searchText
+                }
+                searchEstate(params).then((res)=>{
+                    if(res.data.code===1){
+                        this.setState({
+                            models:res.data.estates    
+                        })
+                    }
+                })
+            }
+            else if(this.state.key=='price'){
+                this.setState({
+                    togglePrice: !this.state.togglePrice,
+                    orderType:1
+                })
+                let params={
+                    area:this.state.areasChecked,
+                    housingTypes:this.state.apartmentChecked,
+                    orderType:1,
+                    prices:this.state.priceChecked,
+                    traitIds:this.state.characteristicChecked,
+                    districtIds: this.state.positionChecked,
+                    streetId:this.state.streetIdChecked,
+                    searchText:this.state.searchText
+                }
+                searchEstate(params).then((res)=>{
+                    if(res.data.code===1){
+                        this.setState({
+                            models:res.data.estates
+                        })
+                    }
+                })
+            }
+            else{
+                let params={
+                    area:this.state.areasChecked,
+                    housingTypes:this.state.apartmentChecked,
+                    orderType:this.state.orderType?this.state.orderType:1,
+                    prices:this.state.priceChecked,
+                    traitIds:this.state.characteristicChecked,
+                    districtIds: this.state.positionChecked,
+                    streetId:this.state.streetIdChecked,
+                    searchText:this.state.searchText
+                }
+                searchEstate(params).then((res)=>{
+                    if(res.data.code===1){
+                        this.setState({
+                            models:res.data.estates
+                        })
+                    }
+                })
+            }
+
         }
         else if (str === 'time') {
-            this.setState({
-                toggleTime: !this.state.toggleTime
-            })
+            if(this.state.togglePrice){
+                this.setState({
+                    orderType:3
+                })
+                let params={
+                    area:this.state.areasChecked,
+                    housingTypes:this.state.apartmentChecked,
+                    orderType:3,
+                    prices:this.state.priceChecked,
+                    traitIds:this.state.characteristicChecked,
+                    districtIds: this.state.positionChecked,
+                    streetId:this.state.streetIdChecked,
+                    searchText:this.state.searchText
+                }
+                searchEstate(params).then((res)=>{
+                    if(res.data.code===1){
+                        this.setState({
+                            models:res.data.estates
+                        })
+                    }
+                })
+            }
+        }
+        else if (str === 'default') {
+            if(this.state.togglePrice){
+                this.setState({
+                    orderType:0
+                })
+                let params={
+                    area:this.state.areasChecked,
+                    housingTypes:this.state.apartmentChecked,
+                    orderType:0,
+                    prices:this.state.priceChecked,
+                    traitIds:this.state.characteristicChecked,
+                    districtIds: this.state.positionChecked,
+                    streetId:this.state.streetIdChecked,
+                    searchText:this.state.searchText
+                }
+                searchEstate(params).then((res)=>{
+                    if(res.data.code===1){
+                        this.setState({
+                            models:res.data.estates
+                        })
+                    }
+                })
+            }
         }
     }
 
@@ -221,6 +384,7 @@ class BridalChamber extends React.Component {
                                 marginRight: 5
                             }}/>;
         const CheckboxGroup = Checkbox.Group;
+        console.log(this.state.togglePrice)
         return (
             <div className='bridalChamber'>
                 <div className={'title-box'}>
@@ -252,11 +416,11 @@ class BridalChamber extends React.Component {
                         </Radio.Group>
                     </div>
                     <CheckboxGroup
-                        styke={{marginBottom:20}}
-                        options={this.state.position[this.state.positionChecked]?this.state.position[this.state.positionChecked].regions:[]}
-                        value={this.state.streetIdChecked}
-                        onChange={this.onChangeStreetId.bind(this)}
-                    />
+                            styke={{marginBottom:20}}
+                            options={this.state.position[this.state.positionChecked]?this.state.position[this.state.positionChecked].regions:[]}
+                            value={this.state.streetIdChecked}
+                            onChange={this.onChangeStreetId.bind(this)}
+                        />
                     <div className={'second'} style={{marginTop: 10}}>
                         <p>单价</p>
                         <Radio.Group  onChange={this.onChangePrice.bind(this)} value={this.state.priceChecked}>
@@ -279,11 +443,6 @@ class BridalChamber extends React.Component {
                     </div>
                     <div className={'second'}>
                         <p>户型</p>
-                        <CheckboxGroup
-                            options={this.state.apartment}
-                            value={this.state.apartmentChecked}
-                            onChange={this.onChangeApartment}
-                        />
                         <Radio.Group  onChange={this.onChangeApartment.bind(this)} value={this.state.apartmentChecked}>
                             {
                                 this.state.apartment&&this.state.apartment.map(item=>{
@@ -297,7 +456,7 @@ class BridalChamber extends React.Component {
                         <CheckboxGroup
                             options={this.state.characteristic}
                             value={this.state.characteristicChecked}
-                            onChange={this.onChangeCharacteristic}
+                            onChange={this.onChangeCharacteristic.bind(this)}
 
                         />
                     </div>
@@ -306,15 +465,14 @@ class BridalChamber extends React.Component {
                 </div>
                 <div className={'result'}>
                     <div className={'find'}>
-                        找到<span>300</span>个成都楼盘
+                        找到<span>{this.state.models.length}</span>个成都楼盘
                     </div>
                     <div className={'sort'}>
-                        <Menu onSelect={this.selected.bind(this)}>
-                            <Menu.Item style={{fontSize: 18}} key={'default'}>默认排序</Menu.Item>
+                        <Menu onSelect={this.selected.bind(this)} defaultSelectedKeys={['default']}>
+                            <Menu.Item style={{fontSize: 18}} key={'default'} onClick={this.toggle.bind(this, 'default')}>默认排序</Menu.Item>
                             <Menu.Item key={'price'}
                                        onClick={this.toggle.bind(this, 'price')}>价格{this.state.togglePrice ? '↑' : '↓'}</Menu.Item>
-                            <Menu.Item key={'time'}
-                                       onClick={this.toggle.bind(this, 'time')}>最新开盘{this.state.toggleTime ? '↑' : '↓'}</Menu.Item>
+                            <Menu.Item key={'time'} onClick={this.toggle.bind(this, 'time')}>最新开盘</Menu.Item>
                         </Menu>
                         <div className={'clear'}>清空筛选条件</div>
                     </div>

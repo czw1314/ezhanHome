@@ -187,7 +187,7 @@ export const getPropertyTypes = (params) =>
             },
         }
     );
-//获取物业类型
+//获取楼盘特色
 export const getTraits = (params) =>
     axios.get(`${base}/dataList/traits`, {
             headers: {

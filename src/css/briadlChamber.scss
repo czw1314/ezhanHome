@@ -1,6 +1,6 @@
 .bridalChamber{
   margin:60px auto 40px;
-  text-align: center;
+  text-align: left;
   color: #fff;
   .title-box {
     background: rgba(242, 245, 248, 1);
@@ -48,8 +48,11 @@
     .first{
       display: flex;
       border-bottom: 1px solid rgba(217,217,217,1);
-      .ant-checkbox{
+      .ant-radio{
         display: none;
+      }
+      .ant-radio-wrapper-checked{
+        color: #268AED;
       }
       p{
         font-size:15px;
@@ -62,7 +65,6 @@
     .second{
       display: flex;
       p{
-        width: 50px;
         font-size:15px;
         font-family:Source Han Sans CN;
         margin-right: 28px;
