@@ -23,6 +23,7 @@ class Agent extends React.Component {
             togglePrice: true,
             toggleTime: true,
             models:[],
+            orderType:0
         }
     }
     componentDidMount(){
@@ -92,6 +93,7 @@ class Agent extends React.Component {
                 business:this.state.serviceChecked,
                 positions:this.state.titleChecked,
                 districtIds: id,
+                orderType:this.state.orderType,
                 streetIds:[],
                 searchText:this.state.searchText
             }
@@ -115,6 +117,7 @@ class Agent extends React.Component {
             positions:this.state.titleChecked,
             districtIds: [this.state.positionChecked],
             streetIds:streetIdChecked,
+            orderType:this.state.orderType,
             searchText:this.state.searchText
         }
         searchAgent(params).then((res)=>{
@@ -132,6 +135,7 @@ class Agent extends React.Component {
         });
         let params={
             business:serviceChecked,
+            orderType:this.state.orderType,
             positions:this.state.titleChecked,
             districtIds: [this.state.positionChecked],
             streetIds:this.state.streetIdChecked,
@@ -153,6 +157,7 @@ class Agent extends React.Component {
         let params={
             business:this.state.serviceChecked,
             positions:titleChecked,
+            orderType:this.state.orderType,
             districtIds:[this.state.positionChecked],
             streetIds:this.state.streetIdChecked,
             searchText:this.state.searchText
@@ -181,6 +186,7 @@ class Agent extends React.Component {
             districtIds:this.state.positionChecked,
             streetIds:this.state.streetIdChecked,
             searchText:value,
+            orderType:this.state.orderType,
         }
         this.setState({
             searchText:value,
@@ -211,7 +217,49 @@ class Agent extends React.Component {
     }
     推荐经纪人
 
-    recommend() {
+    recommend(str) {
+        if(str=='star'){
+            this.setState({
+                orderType:1
+            })
+            let params={
+                business:this.state.serviceChecked,
+                positions:this.state.titleChecked,
+                orderType:1,
+                districtIds:[this.state.positionChecked],
+                streetIds:this.state.streetIdChecked,
+                searchText:this.state.searchText
+            }
+    
+            searchAgent(params).then((res)=>{
+                if(res.data.code===1){
+                    this.setState({
+                        models:res.data.models
+                    })
+                }
+            })
+        }
+        else{
+            this.setState({
+                orderType:0
+            })
+            let params={
+                business:this.state.serviceChecked,
+                positions:this.state.titleChecked,
+                orderType:0,
+                districtIds:[this.state.positionChecked],
+                streetIds:this.state.streetIdChecked,
+                searchText:this.state.searchText
+            }
+    
+            searchAgent(params).then((res)=>{
+                if(res.data.code===1){
+                    this.setState({
+                        models:res.data.models
+                    })
+                }
+            })
+        }
 
     }
     info(src) {
@@ -311,9 +359,9 @@ class Agent extends React.Component {
                     </div>
                     <div className={'sort'}>
                         <Menu onSelect={this.selected.bind(this)}>
-                            <Menu.Item style={{fontSize: 18}} key={'default'}>默认排序</Menu.Item>
-                            <Menu.Item key={'price'}
-                                       onClick={this.recommend.bind(this)}>推荐经纪人</Menu.Item>
+                            <Menu.Item style={{fontSize: 18}} key={'default'} onClick={this.recommend.bind(this,'default')}>默认排序</Menu.Item>
+                            <Menu.Item key={'star'}
+                                       onClick={this.recommend.bind(this,'star')}>推荐经纪人</Menu.Item>
                             {/*<Menu.Item key={'time'}*/}
                             {/*onClick={this.toggle.bind(this, 'time')}>最新开盘{this.state.toggleTime ? '↑' : '↓'}</Menu.Item>*/}
                         </Menu>
