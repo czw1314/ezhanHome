@@ -264,6 +264,14 @@ export const searchAgent = (params) =>
             },
         }
     );
+    //获取热门楼盘
+export const getPopularEstate = (params) =>
+axios.post(`${base}/estate/popularEstate`,params,{
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+    }
+);
 //搜索楼盘
 export const searchEstate = (params) =>
     axios.post(`${base}/estate/estateList`,params,{

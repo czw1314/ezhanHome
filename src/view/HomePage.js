@@ -5,7 +5,8 @@ import Register from '../component/register'
 import { Link } from 'react-router-dom';
 import {Select, Button, Badge, Menu, Input, message, Modal, InputNumber} from 'antd';
 import {connect} from "react-redux";
-import {setUserInformation} from "../redux/action";
+import {setUserInformation,newEstateId} from "../redux/action";
+import {getPopularEstate,searchEstate} from '../api/index'
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -16,8 +17,27 @@ class HomePage extends React.Component {
             userName:this.props.userInformation.name||localStorage.getItem('userName'),
             role:this.props.userInformation.role||localStorage.getItem('role'),
             login:false,
-            register:false
+            register:false,
+            estates:[],
+            new:[]
         }
+    }
+    componentDidMount(){
+        getPopularEstate().then((res)=>{
+            this.setState({
+                estates:res.data.estates
+            })
+        })
+        let params={
+            pageSize:4
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    new:res.data.estates
+                })
+            }
+        })
     }
     //弹出注册登陆框
     showModal = (str) => {
@@ -86,6 +106,11 @@ class HomePage extends React.Component {
                 )
             }
     }
+    linkTo(estateId){
+        this.props.newEstateId(estateId)
+        this.props.history.push('/home/bridalHome/bridalIndex')
+    }
+
 
     render() {
         const {Search} = Input;
@@ -166,68 +191,64 @@ class HomePage extends React.Component {
                     <div className={'hot'}>
                         <div className={'header'}>
                             <p className={'left'}>热门楼盘</p>
-                            <p className={'more'}>查看更多楼盘</p>
+                            <p className={'more'} onClick={(e)=>{this.props.history.push('/home/bridalChamber')}}>查看更多楼盘</p>
                         </div>
                         <div className={'synopsis'}>
-                            <div className={'item'}>
-                                <div className={'rank'}>TOP1</div>
-                                <img src={require('../img/hot.png')}/>
-                                <div className={'first'}>
-                                    <p className={'name'}>蓝光·西环里</p>
-                                    <p className={'price'}>15972元/m²起</p>
-                                </div>
-                                <div className={'second'}>
-                                    <p className={'address'}>温江大学城</p>
-                                    <p className={'area'}>建面：89-232m²</p>
-                                </div>
-                                <p className={'tag'}>高层 住宅 洋房住宅 超高层住宅 别墅</p>
-                            </div>
-                            <div className={'item'}>
-                                <img src={require('../img/hot.png')}/>
-                            </div>
-                            <div className={'item'}>
-                                <img src={require('../img/hot.png')}/>
-                            </div>
-                            <div className={'item'}>
-                                <img src={require('../img/hot.png')}/>
-                            </div>
+                        {
+                                this.state.estates&&this.state.estates.map((item,index)=>{
+                                    return(
+                                        <div className={'item'} onClick={this.linkTo.bind(this,item.id)}>
+                                        <div className={'rank'}>TOP{index+1}</div>
+                                        <div className={'text'}>效果图</div>
+                                        <img src={'http://47.108.87.104:8601/building/'+item.picture}/>
+                                        <div className={'first'}>
+                                            <p className={'name'}>{item.anme}</p>
+                                            <p className={'price'}>{item.referencePrice}元/m²起</p>
+                                        </div>
+                                        <div className={'second'}>
+                                            <p className={'address'}>{item.distinctName}-{item.street}</p>
+                                            <p className={'area'}>建面：{item.areaRange}m²</p>
+                                        </div>
+                                        <p className={'tag'}>{item.propertyType}</p>
+                                    </div>
+                                    )
+                                })
+                            }
                         </div>
                     </div>
                     <div className={'new'}>
                         <div className={'header'}>
                             <p className={'left'}>最新开盘</p>
-                            <p className={'more'}>查看更多楼盘</p>
+                            <p className={'more'} onClick={(e)=>{this.props.history.push('/home/bridalChamber')}}>查看更多楼盘</p>
                         </div>
                         <div className={'synopsis'}>
-                            <div className={'item'}>
-                                <div className={'rank'}>TOP1</div>
-                                <img src={require('../img/hot.png')}/>
-                                <div className={'first'}>
-                                    <p className={'name'}>蓝光·西环里</p>
-                                    <p className={'price'}>15972元/m²起</p>
-                                </div>
-                                <div className={'second'}>
-                                    <p className={'address'}>温江大学城</p>
-                                    <p className={'area'}>建面：89-232m²</p>
-                                </div>
-                                <p className={'tag'}>高层 住宅 洋房住宅 超高层住宅 别墅</p>
-                                <p className={'time'}>上市时间：2019-08-8</p>
-                            </div>
-                            <div className={'item'}>
-                                <img src={require('../img/hot.png')}/>
-                            </div>
-                            <div className={'item'}>
-                                <img src={require('../img/hot.png')}/>
-                            </div>
-                            <div className={'item'}>
-                                <img src={require('../img/hot.png')}/>
-                            </div>
+                        {
+                                this.state.estates&&this.state.estates.map((item,index)=>{
+                                    return(
+                                        <div className={'item'} onClick={this.linkTo.bind(this,item.id)}>
+                                        <div className={'rank'}>TOP{index+1}</div>
+                                        <div className={'text'}>效果图</div>
+                                        <img src={'http://47.108.87.104:8601/building/'+item.picture}/>
+                                        <div className={'first'}>
+                                            <p className={'name'}>{item.anme}</p>
+                                            <p className={'price'}>{item.referencePrice}元/m²起</p>
+                                        </div>
+                                        <div className={'second'}>
+                                            <p className={'address'}>{item.distinctName}-{item.street}</p>
+                                            <p className={'area'}>建面：{item.areaRange}m²</p>
+                                        </div>
+                                        <p className={'tag'}>{item.propertyType}</p>
+                                        <p className={'time'}>上市时间：{item.timeToMarket}</p>
+                                    </div>
+                                    )
+                                })
+                            }
                         </div>
                     </div>
                     <div className={'agent'}>
                         <div className={'header'}>
                             <p className={'left'}>优秀经纪人</p>
-                            <p className={'more'}>更多优秀经纪人</p>
+                            <p className={'more'} onClick={(e)=>{this.props.history.push('/home/agent')}}>更多优秀经纪人</p>
                         </div>
                         <div className={'synopsis'}>
                             <div className={'item'}>
@@ -291,4 +312,4 @@ class HomePage extends React.Component {
 }
 
 export default connect(state=>(
-    {userInformation:state.userInformation}),{setUserInformation})(HomePage);
+    {userInformation:state.userInformation,estateId: state.estateId}),{setUserInformation,newEstateId})(HomePage);

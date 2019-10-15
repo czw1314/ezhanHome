@@ -2,8 +2,10 @@ import React from 'react'
 import '../css/briadlChamber.scss'
 import {Select, Button,Radio, Menu, Input, Checkbox, Modal, Pagination} from 'antd';
 import { Link } from 'react-router-dom';
-import {searchEstate,getDistrictRegions,getTraits} from '../api/index'
+import {searchEstate,getDistrictRegions,getTraits,getPopularEstate} from '../api/index'
 import {searchAgent} from "../api";
+import {connect} from "react-redux";
+import {newEstateId} from "../redux/action";
 
 class BridalChamber extends React.Component {
     constructor(props) {
@@ -28,7 +30,8 @@ class BridalChamber extends React.Component {
             toggleTime: true,
             orderType:0,
             models:[],
-            key:''
+            key:'',
+            estates:[]
         }
     }
     componentDidMount(){
@@ -50,24 +53,23 @@ class BridalChamber extends React.Component {
                 this.setState({
                     position:arr
                 })
-                let params={
-                    area:this.state.areasChecked,
-                    housingTypes:this.state.apartmentChecked,
-                    orderType:0,
-                    prices:this.state.priceChecked,
-                    traitIds:this.state.characteristicChecked,
-                    districtIds: [],
-                    streetId:[],
-                    searchText:this.state.searchText
-                }
-                searchEstate(params).then((res)=>{
-                    if(res.data.code===1){
-                        this.setState({
-                            models:res.data.estates
-                        })
-                    }
+            }
+        })
+        let params={
+            area:this.state.areasChecked,
+            housingTypes:this.state.apartmentChecked,
+            orderType:0,
+            prices:this.state.priceChecked,
+            traitIds:this.state.characteristicChecked,
+            districtIds: [],
+            streetId:[],
+            searchText:this.state.searchText
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.estates
                 })
-
             }
         })
         getTraits().then(res=>{
@@ -84,6 +86,11 @@ class BridalChamber extends React.Component {
                     characteristic: option
                 })
             }
+        })
+        getPopularEstate().then((res)=>{
+            this.setState({
+                estates:res.data.estates
+            })
         })
     }
 
@@ -374,6 +381,10 @@ class BridalChamber extends React.Component {
             }
         }
     }
+    link(estateId){
+        this.props.newEstateId(estateId)
+        this.props.history.push('/home/bridalHome/bridalIndex')
+    }
 
     render() {
         const {Search} = Input;
@@ -478,52 +489,43 @@ class BridalChamber extends React.Component {
                     </div>
                     <div className={'show'}>
                         <div className={'left'}>
-                            <div className={'showItem'}>
-                                <div className={'left'}>
-                                    <div className={'item'}>
-                                        <Link to={'/home/bridalHome'}>
-                                            <div className={'pic'}>
-                                                <img src={require('../img/bridalChamberItem.png')}/>
+                            {
+                                this.state.models&&this.state.models.map((item,index)=>{
+                                    return(
+                                        <div className={`showItem ${index === this.state.models.length-1 ? 'last' : ''}`} onClick={this.link.bind(this,item.id)}>
+                                        <div className={'left'}>
+                                            <div className={'item'}>
+                                                <Link to={'/home/bridalHome'}>
+                                                    <div className={'pic'}>
+                                                        <img src={'http://47.108.87.104:8601/building/'+item.picture}/>
+                                                    </div>
+                                                </Link>
+                                                <div className={'information'}>
+                                                    <div className={'title'}>
+                                                        <p className={'name'}>{item.name}</p>
+                                                        <p className={'price'}>{item.referencePrice}元/m²起</p>
+                                                    </div>
+                                                    <p className={'address'}>{item.distinctName}-{item.street}</p>
+                                                    <p className={'apartment'}>户型：{item.houseType}</p>
+                                                    <p className={'area'}>建面：{item.areaRange}m²</p>
+                                                    <p className={'tag'}>{item.propertyType}</p>
+                                                    <p className={'advantage'}>
+                                                        {/* {
+                                                            item.estateTraits&&item.estateTraits.map(items=>{
+                                                                return(
+                                                                    <span className={'advantageItem'}>{items}</span>
+                                                                )
+                                                            })
+                                                        } */}
+                                                        
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </Link>
-                                        <div className={'information'}>
-                                            <div className={'title'}>
-                                                <p className={'name'}>青白江天美广场</p>
-                                                <p className={'price'}>5000元/m²起</p>
-                                            </div>
-                                            <p className={'address'}>温江·温江大学城</p>
-                                            <p className={'apartment'}>户型：一居室（2），二居室（2），三居室（2），四居室（1），五居室（2）</p>
-                                            <p className={'area'}>建面：89-132m²</p>
-                                            <p className={'tag'}>高层住宅 洋房住宅 超高层住宅 别墅</p>
-                                            <p className={'advantage'}>
-                                                <span className={'advantageItem'}>品牌房企</span>
-                                            </p>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className={'showItem last'}>
-                                <div className={'left'}>
-                                    <div className={'item'}>
-                                        <div className={'pic'}>
-                                            <img src={require('../img/bridalChamberItem.png')}/>
-                                        </div>
-                                        <div className={'information'}>
-                                            <div className={'title'}>
-                                                <p className={'name'}>青白江天美广场</p>
-                                                <p className={'price'}>5000元/m²起</p>
-                                            </div>
-                                            <p className={'address'}>温江·温江大学城</p>
-                                            <p className={'apartment'}>户型：一居室（2），二居室（2），三居室（2），四居室（1），五居室（2）</p>
-                                            <p className={'area'}>建面：89-132m²</p>
-                                            <p className={'tag'}>高层住宅 洋房住宅 超高层住宅 别墅</p>
-                                            <p className={'advantage'}>
-                                                <span className={'advantageItem'}>品牌房企</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    )
+                                })
+                            }
                             <Pagination
                                 // onShowSizeChange={onShowSizeChange}
                                 defaultCurrent={1}
@@ -532,20 +534,27 @@ class BridalChamber extends React.Component {
                         </div>
                         <div className={'hot'}>
                             <p className={'title'}>热门楼盘</p>
-                            <div className={'hotItem'}>
-                                <img src={require('../img/hotItem.png')}/>
-                                <div className={'title'}>
-                                    <p className={'name'}>青白江天美广场</p>
-                                    <p className={'price'}>5000元/m²起</p>
-                                </div>
-                                <div className={'center'}>
-                                    <p className={'address'}>温江·温江大学城</p>
-                                    <p className={'area'}>建面：89-132m²</p>
-                                </div>
-                                <p className={'tag'}>超高层住宅 别墅</p>
-                            </div>
-
-                        </div>
+                            {
+                                this.state.estates&&this.state.estates.map((item,index)=>{
+                                    return(
+                          
+                                        <div className={'hotItem'} onClick={this.link.bind(this,item.id)}>
+                                        <img src={'http://47.108.87.104:8601/building/'+item.picture}/>
+                                        <div className={'title'}>
+                                            <p className={'name'}>{item.anme}</p>
+                                            <p className={'price'}>{item.referencePrice}元/m²起</p>
+                                        </div>
+                                        <div className={'center'}>
+                                            <p className={'address'}>{item.distinctName}-{item.street}</p>
+                                            <p className={'area'}>建面：{item.areaRange}m²</p>
+                                        </div>
+                                        <p className={'tag'}>{item.propertyType}</p>
+                                        </div>
+                                    )
+                                })
+                            }
+          
+</div>
                     </div>
                 </div>
             </div>
@@ -553,4 +562,5 @@ class BridalChamber extends React.Component {
     }
 }
 
-export default BridalChamber
+export default connect(state => (
+    {estateId: state.estateId}), {newEstateId})(BridalChamber)

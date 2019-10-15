@@ -204,6 +204,7 @@
           line-height: 52px;
           color: rgba(38, 138, 237, 1);
           opacity: 1;
+          cursor: pointer;
         }
       }
       .synopsis {
@@ -219,12 +220,17 @@
             position: absolute;
             text-align: center;
             left: 0;
-            right: 0;
             width: 62px;
             height: 24px;
             border-bottom-right-radius: 12px;
             border-top-left-radius: 12px;
             background-color: #FF5353;
+          }
+          .text{
+            position: absolute;
+            color: #fff;
+            width: 80px;
+            right: 0;
           }
           .first {
             display: flex;
@@ -293,6 +299,7 @@
           line-height: 52px;
           color: rgba(38, 138, 237, 1);
           opacity: 1;
+          cursor: pointer;
         }
       }
       .synopsis {
@@ -313,6 +320,12 @@
             border-bottom-right-radius: 12px;
             border-top-left-radius: 12px;
             background-color: #268AED;
+          }
+          .text{
+            position: absolute;
+            color: rgba(255,255,255,0.7);
+            width: 50px;
+            right: 0;
           }
           .first {
             display: flex;
@@ -392,6 +405,7 @@
           font-weight: bold;
           color: rgba(38, 138, 237, 1);
           opacity: 1;
+          cursor: pointer;
         }
       }
       .synopsis {
