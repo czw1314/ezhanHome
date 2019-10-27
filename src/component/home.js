@@ -6,11 +6,16 @@ import '../css/home.scss'
 import {HashRouter as Router, Route, Switch, Redirect, withRouter,Link} from 'react-router-dom';
 import Agent from "../view/agent";
 import BridalHome from "./bridalHome";
+import {connect} from "react-redux";
+import {setUserInformation,newEstateId} from "../redux/action";
 import BridalChamber from "../view/bridalChamber";
+import Login from './login'
+import Register from './register'
 class Home extends React.Component {
     state = {
         key: this.props.location.pathname || '/bridalChamber',
-        userName:'陈宗伟'
+        userName:this.props.userInformation.name||localStorage.getItem('userName'),
+        role:this.props.userInformation.role||localStorage.getItem('role'),
     }
     handleClick = (e) => {
         this.setState({
@@ -18,6 +23,61 @@ class Home extends React.Component {
 
         });
     }
+        //弹出注册登陆框
+        showModal = (str) => {
+            if(str==='login'){
+                this.setState({
+                    login: true,
+                });
+            }
+            else if(str==='register'){
+                this.setState({
+                    register: true,
+                });
+            }
+        };
+            //退出登陆
+    clear(){
+        this.props.setUserInformation({})
+        localStorage.clear()
+    }
+    handleCancel = (str,userName) => {
+        if(str==='login'){
+            this.setState({
+                login: false,
+                userName,userName
+            });
+        }
+        else if(str==='register'){
+            this.setState({
+                register: false,
+            });
+        }
+
+    };
+    link(){
+        if(this.props.userInformation.role===5||localStorage.getItem('role')==5){
+            return(
+                <Link to={'/home/user'}>
+                    <span style={{marginRight:'20px'}}>{this.props.userInformation.userName||localStorage.getItem('userName')}</span>
+                </Link>
+            )
+        }
+        else if(this.props.userInformation.role===5||localStorage.getItem('role')==3){
+            return(
+                <Link to={'/home/agentMy'}>
+                    <span style={{marginRight:'20px'}}>{this.props.userInformation.userName||localStorage.getItem('userName')}</span>
+                </Link>
+            )
+        }
+        else if(this.props.userInformation.role===4||localStorage.getItem('role')==4){
+            return(
+                <Link to={'/home/consultant'}>
+                    <span style={{marginRight:'20px'}}>{this.props.userInformation.userName||localStorage.getItem('userName')}</span>
+                </Link>
+            )
+        }
+}
     render() {
         return (
             <div className='home'>
@@ -27,21 +87,22 @@ class Home extends React.Component {
                             <Memu
                                 menus={routes.menus}
                                 handle={this.handleClick}
-                                state={this.state}
+                                state={this.props.location.pathname}
                             >
                             </Memu>
                         </div>
-                        <div className='right' style={{display:this.state.userName?'none':'block'}}>
-                            <img src={require('../img/login.png')}/>
-                            <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆/注册'}}/>
-                        </div>
-                        <div className='right' style={{display:this.state.userName?'block':'none'}}>
-                            <img src={require('../img/login.png')} style={{marginRight:'10px'}}/>
-                            <Link to={'/home/user'}>
-                            <span style={{marginRight:'20px'}}>{this.state.userName}</span>
-                            </Link>
-                            <span>退出</span>
-                        </div>
+                        <div className='right' style={{display:this.props.userInformation.userName||localStorage.getItem('userName')?'none':'block'}}>
+                                <img src={require('../img/login.png')}/>
+                                <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆&nbsp&nbsp/'}} onClick={this.showModal.bind(this,'login')}/>
+                                <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp&nbsp注册'}} onClick={this.showModal.bind(this,'register')}/>
+                                <Login login={this.state.login} handleCancel={this.handleCancel.bind(this,'login')}/>
+                                <Register register={this.state.register} handleCancel={this.handleCancel.bind(this,'register')}/>
+                            </div>
+                            <div className='right' style={{display:this.props.userInformation.userName||localStorage.getItem('userName')?'block':'none'}}>
+                                <img src={require('../img/login.png')} style={{marginRight:'10px'}}/>
+                                {this.link()}
+                                <span onClick={this.clear.bind(this)}>退出</span>
+                            </div>
                     </div>
                 </div>
                 {this.props.children}
@@ -72,4 +133,5 @@ class Home extends React.Component {
     }
 }
 
-export default withRouter(Home);
+export default connect(state=>(
+    {userInformation:state.userInformation,estateId: state.estateId}),{setUserInformation,newEstateId})(withRouter(Home))

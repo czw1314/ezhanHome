@@ -51,7 +51,10 @@ class Apartment extends React.Component {
             location:'104.081525,30.406772',
             map:'',
             models:[],
-            modal1Visible:false
+            modal1Visible:false,
+            key2:this.props.location.state?this.props.location.state.id:'0',
+            key1:this.props.location.state?this.props.location.state.key:'0'
+
         }
     }
 
@@ -162,12 +165,15 @@ class Apartment extends React.Component {
             active: str > 0 ? str - 1 : 0
         })
     }
-    callback(key) {
-        console.log(key);
+    callback1(key) {
+        this.setState({key1:key})
+    }
+    callback2(key) {
+        this.setState({key2:key})
     }
     componentDidMount(){
         let params={
-            estateId:this.props.estateId
+            estateId:this.props.estateId||localStorage.getItem('estateId')
         }
         getHousingMsg(params).then((res)=>{
             if(res.data.code===1){
@@ -193,18 +199,20 @@ class Apartment extends React.Component {
       }
     render() {
         const { TabPane } = Tabs;
+        const messages = this.props.location.state?this.props.location.state.id:'0'
+        const key = this.props.location.state?this.props.location.state.key:'0'
         return (
             <div className='apartment'>
                 <div className={'title'}>
                     <p>楼盘名称相册</p>
                 </div>
                 <div className="banner">
-                    <Tabs defaultActiveKey="0" onChange={this.callback} style={{textAlign:'left'}}>
+                    <Tabs defaultActiveKey="0" onChange={this.callback1.bind(this)} style={{textAlign:'left'}} activeKey={this.state.key1.toString()}>
                         {
                             this.state.models&&this.state.models.map((item,index)=>{
                                 return(
                                     <TabPane tab={item.housingType} key={index}>
-                                        <Tabs defaultActiveKey="0" onChange={this.callback} style={{textAlign:'left'}} className={'item-box'}>
+                                        <Tabs defaultActiveKey="0" onChange={this.callback2.bind(this)} style={{textAlign:'left'}} className={'item-box'} activeKey={this.state.key2.toString()}>
                                         {
                                             item.housingMsgs&&item.housingMsgs.map((items,index1)=>{
                                                 return(

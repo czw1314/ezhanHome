@@ -1,8 +1,10 @@
 import React from 'react';
 import '../css/agentMy.scss';
-import {getPersonMsg, getDistrictRegions, putPersonMsg} from '../api'
+import {getPersonMsg, getDistrictRegions, putPersonMsg,cancelWechat,getStreetEstates,settledInEstate,delcancelSettledInEstate} from '../api'
+import {connect} from "react-redux";
+import {newEstateId} from "../redux/action";
 import {
-    Tabs, Input, Button, Form, Upload, Icon, message, Checkbox,
+    Tabs, Input, Button, Popconfirm, Upload, Icon, message, Checkbox,
     Select, Tag, Tooltip, Cascader, Modal
 } from 'antd';
 import ChangePassWords from '../component/changePassWord'
@@ -30,6 +32,13 @@ class AgentMy extends React.Component {
             workYears: '',
             agentType: '',
             position: '',
+            weixinImg:'',
+            weixin:{
+                weChatName:'',
+                weChatNumber:'',
+                weChatAddr:'',
+                weChatSex:''
+            },                                                                                                                                                                                                                 
             plainOptions: [{label: '新房经纪', value: '新房经纪'}, {label: '二手房经纪', value: '二手房经纪'}, {
                 label: '权证代办',
                 value: '权证代办'
@@ -66,12 +75,32 @@ class AgentMy extends React.Component {
             return;
         }
         if (info.file.status === 'done') {
-            this.getBase64(info.file.originFileObj, imageUrl =>
-                this.setState({
-                    head: imageUrl,
-                    loading: false,
-                }),
-            );
+            let params = {
+                userId: localStorage.getItem('userId')
+            }
+            getPersonMsg(params).then((res) => {
+                if (res.data.code === 1) {
+                    let regions = []
+                    for (let i = 0; i < res.data.regions.length; i++) {
+                        regions.push([res.data.regions[i].districtId, res.data.regions[i].streetId])
+                    }
+                    this.setState({
+                        userInformation: res.data,
+                        name: res.data.name,
+                        regionId: regions[0] ? regions[0] : [],
+                        regionId1: regions[1] ? regions[1] : [],
+                        regionId2: regions[2] ? regions[2] : [],
+                        position: res.data.position,
+                        bussinessId: res.data.businesses,
+                        workYears: res.data.workYears,
+                        agentType: res.data.agentType,
+                        company: res.data.company,
+                        contact: res.data.contact,
+                        tags:res.data.estates,
+                        weixin:res.data.weChatPersonMsg
+                    })
+                }
+            })
         }
     };
     //微信二维码上传
@@ -84,7 +113,7 @@ class AgentMy extends React.Component {
             // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl =>
                 this.setState({
-                    weixin: imageUrl,
+                    Img: imageUrl,
                     loading1: false,
                 }),
             );
@@ -150,7 +179,9 @@ class AgentMy extends React.Component {
                     workYears: res.data.workYears,
                     agentType: res.data.agentType,
                     company: res.data.company,
-                    contact: res.data.contact
+                    contact: res.data.contact,
+                    tags:res.data.estates,
+                    weixin:res.data.weChatPersonMsg
                 })
             }
         })
@@ -179,7 +210,40 @@ class AgentMy extends React.Component {
             }
         })
     }
-
+        //选择区域
+    setRegion(value) {
+        this.setState({
+            region: value
+        })
+        let params = {
+            districtId: value[1]
+        }
+        getStreetEstates(params).then((res) => {
+            if (res.data.code === 1) {
+                let option = [];
+                for (let i = 0; i < res.data.estates.length; i++) {
+                    let item = {
+                        value: res.data.estates[i].id,
+                        label: res.data.estates[i].name,
+                    }
+                    option.push(item)
+                }
+                this.setState({
+                    estates: option
+                })
+            }
+        })
+    }
+    setEstates(value) {
+        this.setState({
+            estateId: value
+        })
+        let params = {
+            estateId: value
+        }
+        this.props.newEstateId(value)
+        localStorage.setItem('estateId',value)
+    }
     //职称改变
     changePosition(e) {
         this.setState({
@@ -209,10 +273,6 @@ class AgentMy extends React.Component {
         this.setState({
             agentType: value
         })
-    }
-
-    componentWillUnmount() {
-        console.log(1)
     }
 
     onSubmit() {
@@ -287,7 +347,52 @@ class AgentMy extends React.Component {
             },
         });
     }
+  //绑定微信
+  bindWeixin(){
+    window.location='https://open.weixin.qq.com/connect/qrconnect?appid=wx53ba91de253ea23a&redirect_uri=http%3A%2F%2Fwww.ezhanhome.com&response_type=code&scope=snsapi_login&state=bind#wechat_redirect'
+}
+//解绑微信
+cancleWeixin(){
+    let params={
+        userId:localStorage.getItem('userId')
+    }
+    cancelWechat(params).then((res)=>{
+        if(res.data.code===1){
+            message.success('解绑成功')
+        }
+    })
+}
+//申请入驻楼盘
+apply(){
+    let params={
+        userId:localStorage.getItem('userId'),
+        estateId:this.state. estateId
 
+    }
+    settledInEstate(params).then((res)=>{
+        if(res.data.code==1){
+            message.success('申请成功，等待管理员通过申请')
+        }
+    })
+}
+confirm(e) {
+    console.log(e);
+    message.success('Click on Yes');
+  }
+//取消关注楼盘
+preventDefault(e) {
+    console.log(e)
+    let params={
+        userId:localStorage.getItem('userId'),
+        estateId:e.estateId
+
+    }
+    delcancelSettledInEstate(params).then((res)=>{
+        if(res.data.code==1){
+            message.success('成功取消入驻该楼盘')
+        }
+    })
+  }
     render() {
         console.log(this.state.contact)
         const {TabPane} = Tabs;
@@ -317,7 +422,7 @@ class AgentMy extends React.Component {
                                 <p className={'data'}>个人资料/编辑</p>
                                 <div className={'first'}>
                                     <div style={{display: 'flex', alignItems: 'center'}}>
-                                        <img src={this.state.head || base + this.state.userInformation.head}
+                                        <img src={base + this.state.userInformation.head}
                                              className={'headerPic'}/>
                                         <Upload
                                             name={'file'}
@@ -337,7 +442,7 @@ class AgentMy extends React.Component {
                                         </Upload>
                                     </div>
                                     <div style={{display: 'flex', alignItems: 'center'}}>
-                                        <img src={this.state.weixin || base + this.state.userInformation.weChatQrCode}
+                                        <img src={this.state.Img || base + this.state.userInformation.weChatQrCode}
                                              className={'headerPic'} style={{borderRadius: 0}}/>
                                         <Upload
                                             name="file"
@@ -447,21 +552,21 @@ class AgentMy extends React.Component {
 
                                     </div>
                                 </div>
-                                <div className={'weixin'}>
-                                    <p className={'h2'}>微信绑定（已绑定）</p>
+                                <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'block':'none'}}>
+                                    <p className={'h2'} >微信绑定（已绑定）</p>
                                     <div className={'weixinBox'}>
                                         <img src={require('../img/weixinHeader.png')}/>
-                                        <p>微信昵称：CSD000000<br></br>微信账号：SACSDVV
+                                        <p>微信昵称：{this.state.weixin.weChatName}<br></br>微信账号：{this.state.weixin.weChatNumber}
                                         </p>
-                                        <p>地区：成都<br></br>性别：男
+                                        <p>地区：{this.state.weixin.weChatAddr}<br></br>性别：{this.state.weixin.weChatSex}
                                         </p>
-                                        <Button type="primary" style={{marginLeft: '40px'}} size={'large'}>解除绑定</Button>
+                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'} onClick={this.cancleWeixin}>解除绑定</Button>
                                     </div>
                                 </div>
-                                <div className={'weixin'}>
+                                <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'none':'block'}}>
                                     <p className={'h2'}>微信绑定（未绑定）</p>
                                     <div className={'weixinBox'}>
-                                        <Button type="primary" style={{marginLeft: '40px'}} size={'large'}>微信绑定</Button>
+                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'} onClick={this.bindWeixin}>微信绑定</Button>
                                     </div>
                                 </div>
                             </TabPane>
@@ -470,40 +575,25 @@ class AgentMy extends React.Component {
                                 <div className={'item'}>
                                     <div className={'left'}>
                                         <p>选择入驻的楼盘：</p>
-                                        <Select defaultValue="lucy" style={{width: 200}} onChange={this.handleChange}>
-                                            <Option value="jack">Jack</Option>
-                                            <Option value="lucy">Lucy</Option>
-                                            <Option value="disabled" disabled>
-                                                Disabled
-                                            </Option>
-                                            <Option value="Yiminghe">yiminghe</Option>
-                                        </Select>
-                                        <Select defaultValue="lucy" style={{width: 200}} onChange={this.handleChange}>
-                                            <Option value="jack">Jack</Option>
-                                            <Option value="lucy">Lucy</Option>
-                                            <Option value="disabled" disabled>
-                                                Disabled
-                                            </Option>
-                                            <Option value="Yiminghe">yiminghe</Option>
-                                        </Select>
+                                        <Cascader options={this.state.districtRegionsList} placeholder={''}
+                                              onChange={this.setRegion.bind(this)} style={{width: 200}} className={'apply'}/>
+                                    <Select style={{width: 200}} onChange={this.setEstates.bind(this)}>
+                                        {this.state.estates && this.state.estates.map(item => {
+                                                return (<Option value={item.value}>{item.label}</Option>)
+                                            }
+                                        )}
+                                    </Select>
                                     </div>
-                                    <Button type="primary" style={{marginLeft: '40px'}} size={'large'}>更新修改</Button>
+                                    <Button type="primary" style={{marginLeft: '40px'}} size={'large'} onClick={this.apply.bind(this)}>确认申请</Button>
                                 </div>
                                 <p style={{marginTop: '20px'}}>已入驻的楼盘：</p>
                                 {tags.map((tag, index) => {
-                                    const isLongTag = tag.length > 20;
-                                    const tagElem = (
-                                        <Tag key={tag} closable={'true'} onClose={() => this.handleClose(tag)}>
-                                            {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                                    return  (
+                                     <Tag key={index} closable onClose={this.preventDefault.bind(this,tag)}>
+                                            {tag.estateName}
                                         </Tag>
-                                    );
-                                    return isLongTag ? (
-                                        <Tooltip title={tag} key={tag}>
-                                            {tagElem}
-                                        </Tooltip>
-                                    ) : (
-                                        tagElem
-                                    );
+                                      
+                                    ) ;
                                 })}
                             </TabPane>
                             <TabPane tab="经纪人协议" key="3">
@@ -512,7 +602,7 @@ class AgentMy extends React.Component {
                             </TabPane>
                             <TabPane tab="修改密码" key="4">
                                 <p className={'data'}>修改密码</p>
-                                <ChangePassWords role={5}></ChangePassWords>
+                                <ChangePassWords role={3}></ChangePassWords>
                             </TabPane>
                         </Tabs>
                     </div>
@@ -524,4 +614,5 @@ class AgentMy extends React.Component {
 
 }
 
-export default AgentMy
+export default connect(state => (
+    {estateId: state.estateId}), {newEstateId})(AgentMy)

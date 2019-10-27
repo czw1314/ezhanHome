@@ -10,24 +10,29 @@ import Apartment from '../view/briadlChamber/apartment'
 
 class BridalHome extends React.Component {
     state = {
-        key: this.props.location.pathname || '/bridalChamber',
+        key: '',
+        searchText:''
     }
     handleClick = (e) => {
-        console.log(e)
         this.setState({
             key: e.key,
         });
     }
-
+    search(){
+        this.props.history.push({pathname:'/home/bridalChamber', state:{
+            searchText:this.state.searchText
+            }})
+    }
+   
 
     render() {
         const {Search} = Input;
-        const suffix = <img src={require('../img/search1.png')}
-                            style={{
-                                width: 20,
-                                height: 20,
-                                marginRight: 5
-                            }}/>;
+        const enterButton= <img src={require('../img/search1.png')}
+        style={{
+            width: 20,
+            height: 20,
+            marginRight: 5
+        }}/>;
         const CheckboxGroup = Checkbox.Group;
         return (
             <div className='bridalHome'>
@@ -39,20 +44,22 @@ class BridalHome extends React.Component {
                         <p>新房</p>
                         <img src={require('../img/Location2.png')} style={{height: 24, width: 16}}/>
                         <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>
-                        <p className={'address'}>找新房>天府新区楼盘>万安镇楼盘</p>
+                        <p className={'address'}>找新房>{localStorage.getItem('address0')}楼盘>{localStorage.getItem('address1')}楼盘</p>
                         <Search
-                            placeholder="input search text"
-                            onSearch={value => console.log(value)}
-                            style={{width: 400}}
-                            size={'large'}
-                            suffix={suffix}
-                        />
+                        placeholder="请输入楼盘名"
+                        value={this.state.searchText}
+                        onChange={e=>this.setState({searchText:e.target.value})}
+                        onSearch={this.search.bind(this)}
+                        style={{width: 400}}
+                        size={'large'}
+                        enterButton={enterButton}
+                    />
                     </div>
 
                     <Memu
                         menus={routes.bridalMenus}
                         handle={this.handleClick}
-                        state={this.state}
+                        state={this.props.location.pathname}
                     >
                     </Memu>
                 </div>

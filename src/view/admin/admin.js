@@ -186,10 +186,8 @@ class EditableTable extends React.Component {
                 dataIndex: 'operation',
                 render: (text, record, index) =>
                     this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="确认修改密码?" onConfirm={() => this.handleDelete(record.key, index)}
-                                    cancelText={'取消'} okText={'确认'}>
-                            <a>确认修改</a>
-                        </Popconfirm>
+                            <a onClick={() => this.handleDelete(record.key, index)}>确认修改</a>
+            
                     ) : null,
             },
         ];
@@ -204,7 +202,8 @@ class EditableTable extends React.Component {
         let params = {
             phone: this.state.dataSource[index].phone,
             newPassword: this.state.dataSource[index].passWord,
-            role: 0
+            role: 0,
+            
         }
         modifyHouseAdminPwd(params).then((res) => {
 
@@ -606,46 +605,78 @@ class Admin extends React.Component {
         )
     }
     //是否通过楼盘入驻申请
-    passApply(userId,estateId,type, str,index) {
-        let params = {
-            userId: userId,
-            estateId:estateId,
-            pass: type,
+    passApply(index,estateId,type, str,indexs) {
+        let params = {}
+        if(str == 'agentApply'){
+            console.log(this.state.agentApplyData)
+            params = {
+                userId: this.state.agentApplyData[index].personId,
+                estateId:estateId,
+                pass: type,
+            }
         }
+        else if (str == 'consultantApply'){
+            params = {
+                userId: this.state.consultantApplyData[index].personId,
+                estateId:estateId,
+                pass: type,
+            }
+        }
+ 
         settledAduit(params).then((res) => {
                 if (res.data.code === 1) {
                     if (type === 1) {
-                        message.success('已通过注册')
+                        message.success('已通过申请')
                         if (str == 'agentApply') {
-                            this.state.agentApplyData.estates[index].splice(0, 1)
-                            this.setState({
-                                    agentApplyData: this.state.agentApplyData
+                            let params = {
+                                type: 3
+                            }
+                            getAgent(params).then((res) => {
+                                if (res.data.code === 1) {
+                                    this.setState({
+                                        agentApplyData: res.data.agentResponses
+                                    })
                                 }
-                            )
+                            })
                         }
                         else if (str == 'consultantApply') {
-                            this.state.consultantApplyData.estates[index].splice(0, 1)
-                            this.setState({
-                                    consultantApplyData: this.state.consultantApplyData
+                            let params = {
+                                type: 3
+                            }
+                            getAdviser(params).then((res) => {
+                                if (res.data.code === 1) {
+                                    this.setState({
+                                        consultantApplyData: res.data.agentResponses
+                                    })
                                 }
-                            )
+                            })
                         }
                     }
                     else {
                         message.success('已反对申请')
                         if (str == 'agentApply') {
-                            this.state.agentApplyData.estates[index].splice(0, 1)
-                            this.setState({
-                                    agentApplyData: this.state.agentApplyData
+                            let params = {
+                                type: 3
+                            }
+                            getAgent(params).then((res) => {
+                                if (res.data.code === 1) {
+                                    this.setState({
+                                        agentApplyData: res.data.agentResponses
+                                    })
                                 }
-                            )
+                            })
                         }
                         else if (str == 'consultantApply') {
-                            this.state.consultantApplyData.estates[index].splice(0, 1)
-                            this.setState({
-                                    consultantApplyData: this.state.consultantApplyData
+                            let params = {
+                                type: 3
+                            }
+                            getAdviser(params).then((res) => {
+                                if (res.data.code === 1) {
+                                    this.setState({
+                                        consultantApplyData: res.data.agentResponses
+                                    })
                                 }
-                            )
+                            })
                         }
 
                     }
@@ -828,12 +859,12 @@ class Admin extends React.Component {
                 title: '经纪人服务区域',
                 dataIndex: 'regions',
                 render: (text, record, index) => (
-                    <ul>
+                    <div>
                         {text && text.map(item => {
-                            return (<li>{item}</li>)
+                            return (<p>{item.districtName+'—'+item.streetName}</p>)
                         })
                         }
-                    </ul>
+                        </div>
                 ),
             },
             {
@@ -871,7 +902,7 @@ class Admin extends React.Component {
                 ),
             },
         ];
-        //置业顾问申请
+        //置业顾问注册申请
         const consultantColumns = [
             {
                 title: '时间',
@@ -970,12 +1001,12 @@ class Admin extends React.Component {
                 title: '经纪人服务区域',
                 dataIndex: 'regions',
                 render: (text, record, index) => (
-                    <ul>
-                        {text && text.map(item => {
-                            return (<li>{item}</li>)
-                        })
-                        }
-                    </ul>
+                    <div>
+                    {text && text.map(item => {
+                        return (<p>{item.districtName+'—'+item.streetName}</p>)
+                    })
+                    }
+                    </div>
                 ),
             },
             {
@@ -996,20 +1027,22 @@ class Admin extends React.Component {
             },
             {
                 title: '是否通过',
+                dataIndex: 'estates',
                 key: 'action',
                 render: (text, record, index) => (
-                    <ul>
-                        {this.state.agentApplyData.estates && this.state.agentApplyData.estates.map(item => {
-                            return (
-                                <span>
-                   <a onClick={this.passApply.bind(this, this, this.state.consultantData[index].personId,item.estateId, 1, 'agentApply',index)}>是</a>
-                  <Divider type="vertical"/>
-                  <a onClick={this.passApply.bind(this, this, this.state.consultantData[index].personId,item.estateId, -1, 'agentApply',index)}>否</a>
-                </span>
-                            )
-                        })
-                        }
-                    </ul>
+                    <div>
+                    {text && text.map((item,indexs) => {
+                        return (
+                            <p>
+               <a onClick={this.passApply.bind(this,index, item.estateId, 1, 'agentApply',indexs)}>是</a>
+              <Divider type="vertical"/>
+              <a onClick={this.passApply.bind(this,index, item.estateId, -1, 'agentApply',indexs)}>否</a>
+            </p>
+                        )
+                    })
+                    }
+                </div>
+    
                 ),
             },
         ];
@@ -1062,30 +1095,31 @@ class Admin extends React.Component {
                 title: '申请入驻的楼盘',
                 dataIndex: 'estates',
                 render: (text, record, index) => (
-                    <ul>
+                    <div>
                         {text && text.map(item => {
                             return (<li>{item.estateName}</li>)
                         })
                         }
-                    </ul>
+                    </div>
                 ),
             },
             {
                 title: '是否通过',
                 key: 'action',
-                render: (text, record, index) => (
-                    <ul>
-                        {this.state.consultantApplyData.estates && this.state.consultantApplyData.estates.map(item => {
+                dataIndex: 'estates',
+                render: (text, record,index) => (
+                    <div>
+                        {text && text.map((item,indexs) => {
                             return (
-                                <span>
-                   <a onClick={this.passApply.bind(this,this, this.state.consultantData[index].personId,item.estateId, 1, 'consultantApply',index)}>是</a>
+                                <p>
+                   <a onClick={this.passApply.bind(this,index, item.estateId, 1, 'consultantApply',indexs)}>是</a>
                   <Divider type="vertical"/>
-                  <a onClick={this.passApply.bind(this,this, this.state.consultantData[index].personId,item.estateId, -1, 'consultantApply',index)}>否</a>
-                </span>
+                  <a onClick={this.passApply.bind(this,index, item.estateId, -1, 'consultantApply',indexs)}>否</a>
+                </p>
                             )
                         })
                         }
-                    </ul>
+                    </div>
                 ),
             }
         ]
@@ -1101,7 +1135,7 @@ class Admin extends React.Component {
             },
             {
                 title: '头像',
-                dataIndex: 'head ',
+                dataIndex: 'head',
                 render: (text, record, index) => (
                     <img src={'http://47.108.87.104:8601/user/' + text} style={{width: 60}}/>
                 ),
@@ -1129,12 +1163,12 @@ class Admin extends React.Component {
                 title: '经纪人服务区域',
                 dataIndex: 'regions',
                 render: (text, record, index) => (
-                    <ul>
-                        {text && text.map(item => {
-                            return (<li>{item}</li>)
-                        })
-                        }
-                    </ul>
+                    <div>
+                    {text && text.map(item => {
+                        return (<p>{item.districtName+'—'+item.streetName}</p>)
+                    })
+                    }
+                    </div>
                 ),
             },
             {
@@ -1362,7 +1396,7 @@ class Admin extends React.Component {
                         <TabPane tab="审核入驻申请" key="2" onChange={this.callback.bind(this)}>
                             <Tabs defaultActiveKey="21" onChange={this.callback.bind(this)}>
                                 <TabPane tab="经纪人入驻申请" key="21">
-                                    <Table columns={agentApply} dataSource={this.state.agentApplydata}
+                                    <Table columns={agentApply} dataSource={this.state.agentApplyData}
                                            scroll={{x: 1400}}/>
                                 </TabPane>
                                 <TabPane tab="置业顾问入驻申请" key="22" onChange={this.callback.bind(this)}>

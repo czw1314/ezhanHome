@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/register.scss';
 import {Modal, Button, Tabs, Form, Input, Checkbox, message} from 'antd';
+import {withRouter} from 'react-router-dom';
 import {getPhoneCode, register} from '../api/index'
 
 class Information extends React.Component {
@@ -60,7 +61,7 @@ class Information extends React.Component {
                     "verifyCode": values.verifyCode
                 }
                 register(params).then((res) => {
-                    if (res.data.code === 0) {
+                    if (res.data.code === 1) {
                         if (res.data.verifyErrorMsg) {
                             this.props.form.setFields({
                                 verifyCode: {
@@ -79,15 +80,45 @@ class Information extends React.Component {
                             })
                         }
 
-                        else if (res.data.msg === '该手机号已绑定用户') {
+                        else if (res.data.msg == '该手机号已绑定用户') {
                             message.success('该手机号已注册请去登陆！')
                             setTimeout(this.props.handleClose, 1000)
 
                         }
+                        else if(this.props.role==3){
+                                message.success('注册成功！请先去填写个人资料！')
+                                localStorage.setItem('role',3)
+                                localStorage.setItem('userId',res.data.userId)
+                                this.props.handleClose()
+                                this.props.history.push('/home/registryCenter')
+                        }
+                        else if(this.props.role==4){
+                            message.success('注册成功！请先去填写个人资料！')
+                            localStorage.setItem('role',4)
+                            localStorage.setItem('userId',res.data.userId)
+                            this.props.handleClose()
+                            this.props.history.push('/home/registryCenter')
+                    }
+                    else if(this.props.role==5){
+                              message.success('注册成功！请重新登录！')
+                            // localStorage.setItem('role',3)
+                            // localStorage.setItem('userId',res.data.userId)
+                          setTimeout(this.props.handleClose, 1000)
+                        
+                }
+
                     }
                     else {
-                        message.success('注册成功！请去登陆！')
-                        setTimeout(this.props.handleClose, 1000)
+             
+                        // if(this.props.role==3){
+                        //     message.success('注册成功！请先去填写个人资料！')
+                        //     localStorage.setItem('role',3)
+                        //     localStorage.setItem('userId',res.data.userId)
+                        //     this.props.handleClose()
+                        //     this.props.history.push('/home/registryCenter')
+                        // }
+                        // setTimeout(this.props.handleClose, 1000)
+                        message.error(res.data.verifyErrorMsg)
                     }
 
                 })
@@ -176,7 +207,7 @@ class Information extends React.Component {
     }
 }
 
-const InformationForm = Form.create({name: 'retrieve'})(Information);
+const InformationForm = Form.create({name: 'retrieve'})(withRouter(Information));
 
 class Register extends React.Component {
     constructor(props) {
@@ -234,4 +265,4 @@ class Register extends React.Component {
     }
 }
 
-export default Register
+export default withRouter(Register)

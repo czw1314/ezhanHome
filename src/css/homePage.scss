@@ -209,10 +209,10 @@
       }
       .synopsis {
         display: flex;
-        justify-content: space-between;
         flex-wrap: wrap;
         .item {
           position: relative;
+          margin-right: 25px;
           p{
             margin: 0;
           }
@@ -229,7 +229,7 @@
           .text{
             position: absolute;
             color: #fff;
-            width: 80px;
+            width: 60px;
             right: 0;
           }
           .first {
@@ -277,6 +277,9 @@
           }
 
         }
+        .item:nth-child(4n+4){
+          margin-right: 0
+        }
       }
     }
     .new {
@@ -306,6 +309,7 @@
         display: flex;
         justify-content: space-between;
         .item {
+          margin-right: 25px;
           position: relative;
           p{
             margin: 0;
@@ -324,7 +328,7 @@
           .text{
             position: absolute;
             color: rgba(255,255,255,0.7);
-            width: 50px;
+            width: 0px;
             right: 0;
           }
           .first {
@@ -378,6 +382,9 @@
           }
 
         }
+        .item:nth-child(4n+4){
+          margin-right: 0
+        }
       }
     }
     .agent {
@@ -418,6 +425,7 @@
           width: 280px;
           background-color: #fff;
           padding: 0 24px 24px;
+          margin-right: 25px;
           p{
             margin: 0;
           }
@@ -459,10 +467,7 @@
           .thirst {
             display: flex;
             padding-top: 6px;
-            color: #666;
-            .service {
-              width: 80px;
-            }
+            color: #333;
             .tag {
               font-size: 14px;
               text-align: left;
@@ -492,6 +497,9 @@
 
           }
 
+        }
+        .item:nth-child(4n+4){
+          margin-right: 0
         }
       }
     }
@@ -541,4 +549,14 @@
     }
   }
 
+}
+#phone{
+  .ant-input-group-addon{
+    padding: 0;
+    border: none;
+    .ant-btn-block{
+      height: 40px;
+      border-radius: 0;
+    }
+  }
 }

@@ -13,7 +13,7 @@ const renderMenuItem = item => ( // item.route 菜单单独跳转的路由
 );
 
 export default ({menus,handle,state}) => (
-    <Menu  mode="horizontal" selectedKeys={[state.key]} onClick={handle} defaultSelectedKeys={['1']}>
+    <Menu  mode="horizontal" selectedKeys={[state]} onClick={handle} defaultSelectedKeys={['1']}>
         {menus && menus.map(item =>
             renderMenuItem(item)
         )}

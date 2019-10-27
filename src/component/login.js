@@ -13,6 +13,18 @@ class RetreivePassword extends React.Component {
             code: 'http://47.108.87.104:8501/user/verfiyCode'
         }
     }
+    componentDidMount(){
+        //  var obj = new window.WxLogin({
+        //     self_redirect:true,
+        //     id:"login_container", 
+        //     appid: "wx53ba91de253ea23a", 
+        //     scope: "snsapi_login", 
+        //     redirect_uri: "http%3A%2F%2Fwww.ezhanhome.com",
+        //      state: ".impowerBox .qrcode {width: 200px;}",
+        //     style: "",
+        //     href: "http://www.ezhanhome.com/weixin.css"
+        //     });
+    }
     //获取手机验证码
     getCode() {
         let that = this
@@ -174,12 +186,12 @@ class NormalLoginForm extends React.Component {
                     }
                     else {
                         message.success('登陆成功！')
-                        setTimeout(this.props.handleClose, 1000)
                         this.props.setUserInformation(res.data)
                         localStorage.setItem('userName',res.data.name)
                         localStorage.setItem('role',res.data.role)
                         localStorage.setItem('userId',res.data.userId)
                         localStorage.setItem('phone',values.phone)
+                        setTimeout(this.props.handleClose, 1000)
                     }
                 })
             }
@@ -229,22 +241,30 @@ class Login extends React.Component {
         super(props)
         this.state = {
             visible: false,
-            weixin:true,
+            weixin:false,
             retrieve:false,
-            accountNumber:false
+            accountNumber:true,
+            key:5
+
         };
     }
 
-    callback(key) {
-        console.log(key);
+    callback= e =>{
+        console.log(e)
+        this.setState({
+            key: e,
+        });
     }
 
     handleCancel = e => {
         console.log(e);
         this.setState({
-            visible: false,
+            key: false,
         });
     };
+    weixin(){
+        window.location='https://open.weixin.qq.com/connect/qrconnect?appid=wx53ba91de253ea23a&redirect_uri=http%3A%2F%2Fwww.ezhanhome.com&response_type=code&scope=snsapi_login&state='+this.state.key+'#wechat_redirect'
+    }
 
     render() {
         const { TabPane } = Tabs;
@@ -256,11 +276,12 @@ class Login extends React.Component {
                     onCancel={this.props.handleCancel}
                     footer={''}
                 >
-                    <div className={'weixin'} style={{display:this.state.weixin?'block':'none'}}>
-                        <p className={'title'}>微信快捷登陆</p>
+                    {/* <div className={'weixin'} style={{display:this.state.weixin?'block':'none'}}> */}
+                        {/* <p className={'title'}>微信快捷登陆</p>
                         <Tabs defaultActiveKey="1" onChange={this.callback}>
                             <TabPane tab="普通用户" key="1">
-                                Content of Tab Pane 1
+                                <div id='login_container'>
+                                    </div>
                             </TabPane>
                             <TabPane tab="经纪人" key="2">
                                 Content of Tab Pane 2
@@ -271,31 +292,31 @@ class Login extends React.Component {
                         </Tabs>
                         <p className={'accountNumber'} onClick={()=>this.setState({weixin:false,accountNumber:true})}>账号密码登陆</p>
                         <p className={'agreement'}>登录即代表同意<a>《e站房屋经纪人协议》</a>及<a>《e站房屋免责申明》</a></p>
-                    </div>
+                    </div> */}
                     <div className={'accountNumber'} style={{display:this.state.accountNumber?'block':'none'}}>
                         <p className={'title'}>账号密码登陆</p>
-                        <Tabs defaultActiveKey="1" onChange={this.callback}>
-                            <TabPane tab="普通用户" key="1">
+                        <Tabs defaultActiveKey="5" onChange={this.callback}>
+                            <TabPane tab="普通用户" key="5">
                                 <WrappedNormalLoginForm handleClose={this.props.handleCancel} role={5}></WrappedNormalLoginForm>
                                 <p className={'retrieve'}  onClick={()=>this.setState({retrieve:true,accountNumber:false})}><a>找回密码</a></p>
                             </TabPane>
-                            <TabPane tab="经纪人" key="2">
+                            <TabPane tab="经纪人" key="3">
                                 <WrappedNormalLoginForm handleClose={this.props.handleCancel} role={3}></WrappedNormalLoginForm>
                                 <p className={'retrieve'}  onClick={()=>this.setState({retrieve:true,accountNumber:false})}><a>找回密码</a></p>
                             </TabPane>
-                            <TabPane tab="置业顾问" key="3">
+                            <TabPane tab="置业顾问" key="4">
                                 <WrappedNormalLoginForm handleClose={this.props.handleCancel} role={4}></WrappedNormalLoginForm>
                                 <p className={'retrieve'}  onClick={()=>this.setState({retrieve:true,accountNumber:false})}><a>找回密码</a></p>
                             </TabPane>
                         </Tabs>
-                        <p className={'accountNumber'} onClick={()=>this.setState({weixin:true,accountNumber:false})}>微信快捷登陆</p>
+                        <p className={'accountNumber'} onClick={this.weixin.bind(this)}>微信快捷登陆</p>
                         <p className={'agreement'}>登录即代表同意<a>《e站房屋经纪人协议》</a>及<a>《e站房屋免责申明》</a></p>
                     </div>
                     <div className={'retrieve'} style={{display:this.state.retrieve?'block':'none'}}>
                         <p className={'title'}>密码找回</p>
                         <Retreive handleClose={this.props.handleCancel}/>
                         <div style={{display:'flex',justifyContent:'space-between'}}>
-                            <p className={'retrieve'}  onClick={()=>this.setState({retrieve:false,weixin:true})}><a>微信快捷登陆</a></p>
+                            {/* <p className={'retrieve'}  onClick={this.weixin.bind(this)}><a>微信快捷登陆</a></p> */}
                             <p className={'retrieve'}  onClick={()=>this.setState({retrieve:false,accountNumber:true})}><a>账号密码登陆</a></p>
                         </div>
                     </div>

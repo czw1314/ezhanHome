@@ -1,8 +1,8 @@
 import "babel-polyfill"
 import React, {Component} from 'react';
 import {
-    HashRouter as Router,
-    Route,
+    BrowserRouter as Router,
+    Route,withRouter,
 } from 'react-router-dom'
 import './App.css';
 
@@ -32,18 +32,27 @@ const MainPaper = ({match}) => {
 
     </div>
 };
+class Div extends Component{
+    render(){
+        return(
+            <Router>
+            <Route exact path="/" component={HomePage}/>
+            <Route path="/home" component={MainPaper}/>
+            <Route path="/homePage" component={HomePage}/>
+            <Route path="/admin" component={Admin}/>
+            <Route path="/bridaladmin" component={BridalAdmin}/>
+        </Router>
+        )
+    }
+}
+withRouter(Div)
 
 class App extends Component {
     render() {
         return (
             <div>
-            <Router>
-                <Route exact path="/" component={MainPaper}/>
-                <Route path="/home" component={MainPaper}/>
-                <Route path="/homePage" component={HomePage}/>
-                <Route path="/admin" component={Admin}/>
-                <Route path="/bridaladmin" component={BridalAdmin}/>
-            </Router>
+
+<Div></Div>
                 <div>
                     <a target={'_blank'} href={''}>蜀ICP备18023206号-2</a>
                 </div>
@@ -52,4 +61,4 @@ class App extends Component {
     }
 }
 
-export default App
+export default  App

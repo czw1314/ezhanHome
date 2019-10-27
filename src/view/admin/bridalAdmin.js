@@ -1,6 +1,11 @@
 import React from 'react'
 import '../../css/bridalAdmin.scss'
 import {connect} from "react-redux";
+import axios from 'axios';
+import {
+    HashRouter as Router,
+    Route,withRouter
+} from 'react-router-dom'
 import {newEstateId, getFileList,setHousingPictures} from "../../redux/action";
 import {
     Tabs, Input, Button, Form, Upload, Icon, message, Checkbox,
@@ -299,6 +304,7 @@ class Information extends React.Component {
                 values.estateId = this.props.estateId
                 values.matchings.map((item, index) => {
                     item.type = index + 1
+                    item.matching=item.matching.replace(/\n/g,"<br></br>")
                 })
                 let params = values
 
@@ -583,12 +589,12 @@ class Information extends React.Component {
                         <Input.TextArea/>
                     )}
                 </Form.Item>
-                <Form.Item label={'项目内部配套：'}>
+                {/* <Form.Item label={'项目内部配套：'}>
                     {getFieldDecorator('internalMatching')(
                         <Input.TextArea/>
                     )}
-                </Form.Item>
-                <Form.Item label={'交付装修标准：'}>
+                </Form.Item> */}
+                {/* <Form.Item label={'交付装修标准：'}>
                     {getFieldDecorator('deliverDecorateStandard')(
                         <Input.TextArea/>
                     )}
@@ -597,7 +603,7 @@ class Information extends React.Component {
                     {getFieldDecorator('harmful_publicity')(
                         <Input.TextArea/>
                     )}
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item label={'2、添加楼盘相册：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'楼盘封面宣传图'} className={'item'} labelCol={{span: 3}}>
@@ -673,7 +679,7 @@ class Information extends React.Component {
                                             <Option value="三居室">三居室</Option>
                                             <Option value="四居室">四居室</Option>
                                             <Option value="五居室">五居室</Option>
-                                            <Option value="六居室">六居室</Option>
+                                            <Option value="五居室以上">五居室以上</Option>
                                         </Select>
                                     )}
                                 </Form.Item>
@@ -699,12 +705,16 @@ class Information extends React.Component {
                                 </Form.Item>
                                 <Form.Item label={'物业朝向：'}>
                                     {getFieldDecorator(`housingMsgs[${index}].orientations`)(
-                                        <Select>
-                                            {this.state.propertyTypes && this.state.propertyTypes.map(item => {
-                                                    return (<Option value={item.label}>{item.label}</Option>)
-                                                }
-                                            )}
-                                        </Select>
+                                       <Select>
+                                       <Option value="东">东</Option>
+                                       <Option value="东南">东南</Option>
+                                       <Option value="南">南</Option>
+                                       <Option value="西南">西南</Option>
+                                       <Option value="西">西</Option>
+                                       <Option value="西北">西北</Option>
+                                       <Option value="北">北</Option>
+                                       <Option value="东北">东北</Option>
+                                   </Select>
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'层高：'}>
@@ -925,7 +935,6 @@ class HousingPicturesWallUpdata extends React.Component {
     }
 
     handleChange = ({file, fileList}) => {
-        console.log(file)
         let arr = this.props.housingPictures
         arr[this.props.id] =fileList
         this.props.setHousingPictures(arr)
@@ -951,7 +960,7 @@ class HousingPicturesWallUpdata extends React.Component {
                     action="http://47.108.87.104:8501/estate/housingPictures"
                     name={'files'}
                     data={{
-                        housingMsgId: this.state.remove||0,
+                        housingMsgId: this.props.estateId||0,
                     }}
                     fileList={this.props.housingPictures[this.props.id]||[]}
                     listType="picture-card"
@@ -969,7 +978,7 @@ class HousingPicturesWallUpdata extends React.Component {
     }
 }
 const HousingPicturesWallUpdataId = connect(state => (
-    {housingPictures: state.housingPictures}), {setHousingPictures})(HousingPicturesWallUpdata);
+    {housingPictures: state.housingPictures,estateId: state.estateId}), {setHousingPictures})(HousingPicturesWallUpdata);
 //更新楼盘信息
 class InformationUpdata extends React.Component {
     constructor(props) {
@@ -998,7 +1007,8 @@ class InformationUpdata extends React.Component {
                 orientations: '',
                 propertyType: ''
             }],
-            id:[]
+            id:[],
+            visible:true
         }
     }
 
@@ -1145,6 +1155,9 @@ class InformationUpdata extends React.Component {
 
     //上传楼盘信息
     handleSubmit = e => {
+        this.setState({
+            visible:true
+        })
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -1152,11 +1165,13 @@ class InformationUpdata extends React.Component {
                 values.regionId=values.regionId[1]
                 values.matchings.map((item, index) => {
                     item.type = index + 1
+                    item.matching=item.matching.replace(/\n/g,"<br></br>")
                 })
                 let params = values
                 estatePublished(params).then((res) => {
                     if (res.data.code === 1) {
                         message.success('上传成功')
+                        this.props.history.push({pathname:'/home/bridalHome/bridalApartment'})
                     }
                 })
             }
@@ -1168,13 +1183,15 @@ class InformationUpdata extends React.Component {
         let arr = this.props.form.getFieldValue('housingMsgs')
         arr.splice(index, 1)
         this.setState({
-                housingMsgs: this.state.housingMsgs
+                housingMsgs: arr,
+                visible:true
             }
         )
         this.props.form.setFieldsValue({
             housingMsgs: arr
         })
     }
+    
 
     addHousing(index) {
         this.props.values.housingMsgs.push('')
@@ -1216,11 +1233,8 @@ class InformationUpdata extends React.Component {
         })
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.values) {
-            if (this.props.values.estatePictures) {
-                // console.log(1)
-                // // this.props.form.resetFields()
-            }
+        if (this.props.values !== nextProps.values){
+            this.props.form.resetFields();
         }
     }
     changeValues = (rule ,value , callback)=> {
@@ -1250,11 +1264,10 @@ class InformationUpdata extends React.Component {
             },
         };
         const {getFieldDecorator} = this.props.form;
-console.log(this.props.agentIds)
         const base = 'http://47.108.87.104:8501/user/uploadFile';
         const {Option} = Select
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form first" {...formItemLayout}>
+           <Form onSubmit={this.handleSubmit} className="login-form first" {...formItemLayout}>
                 <Form.Item label={'1、填写基本信息：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label='楼盘名称（推广名）：'>
@@ -1465,7 +1478,7 @@ console.log(this.props.agentIds)
                         <Input.TextArea/>
                     )}
                 </Form.Item>
-                <Form.Item label={'项目内部配套：'}>
+                {/* <Form.Item label={'项目内部配套：'}>
                     {getFieldDecorator('internalMatching', {initialValue: this.props.values.internalMatching || ''})(
                         <Input.TextArea/>
                     )}
@@ -1479,7 +1492,7 @@ console.log(this.props.agentIds)
                     {getFieldDecorator('harmful_publicity', {initialValue: this.props.values.harmfulPublicity || ''})(
                         <Input.TextArea/>
                     )}
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item label={'2、添加楼盘相册：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'楼盘封面宣传图'} className={'item'} labelCol={{span: 3}}>
@@ -1564,7 +1577,7 @@ console.log(this.props.agentIds)
                 <Form.Item label={'5、添加户型信息以及户型图（支持格式PNG，JPG）：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 {
-                    this.props.values.housingMsgs && this.props.values.housingMsgs.map((item, index) => {
+                    this.state.visible&&this.props.values.housingMsgs && this.props.values.housingMsgs.map((item, index) => {
                             return (<div style={{width: '100%', display: 'flex', flexWrap: 'wrap'}}>
                                 <Form.Item label={'户型名称：'}>
                                     {getFieldDecorator(`housingMsgs[${index}].housingTypeTitle`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingTypeTitle : ''})(
@@ -1579,7 +1592,7 @@ console.log(this.props.agentIds)
                                             <Option value="三居室">三居室</Option>
                                             <Option value="四居室">四居室</Option>
                                             <Option value="五居室">五居室</Option>
-                                            <Option value="六居室">六居室</Option>
+                                            <Option value="五居室以上">五居室以上</Option>
                                         </Select>
                                     )}
                                 </Form.Item>
@@ -1603,7 +1616,7 @@ console.log(this.props.agentIds)
                                         </Select>
                                     )}
                                 </Form.Item>
-                                <Form.Item label={'物业朝向：'}>
+                                <Form.Item label={'户型朝向：'}>
                                     {getFieldDecorator(`housingMsgs[${index}].orientations`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].orientations : ''})(
                                         <Select>
                                             <Option value="东">东</Option>
@@ -1663,11 +1676,16 @@ console.log(this.props.agentIds)
                                         <Input.TextArea/>
                                     )}
                                 </Form.Item>
+                                <Form.Item style={{display:'none'}}>
+                                    {getFieldDecorator(`housingMsgs[${index}].housingMsgId`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].id : ''})(
+                                        <Input.TextArea/>
+                                    )}
+                                </Form.Item>
                                 <Form.Item label={'户型上传：'}>
                                     <HousingPicturesWallUpdataId id={index} setId={this.setValue.bind(this)}></HousingPicturesWallUpdataId>
                                 </Form.Item>
                                 <Form.Item labelCol={{span: 13}}>
-                                    <Button type="primary" onClick={this.delHousing.bind(this, index)}
+                                    <Button type="primary" onClick={this.props.delHousing.bind(this, index)}
                                             style={{marginLeft: '200px', marginTop: '-50px'}}>删除户型</Button>
                                 </Form.Item>
                             </div>)
@@ -1686,7 +1704,7 @@ console.log(this.props.agentIds)
 }
 
 const InformationFormUpdatas = connect(state => (
-    {bridalInformation: state.bridalInformation}), {newEstateId})(Form.create({name: 'retrieve'})(InformationUpdata));
+    {bridalInformation: state.bridalInformation}), {newEstateId})(Form.create({name: 'retrieve'})(withRouter(InformationUpdata)));
 
 //更新图片
 class PicturesWallUpdata extends React.Component {
@@ -1820,7 +1838,9 @@ class bridalAdmin extends React.Component {
             values: {
                 key: 2
             },
-            agentIds:[]
+            agentIds:[],
+            fileList1: [],
+            uploading: false,
 
         }
     }
@@ -1910,7 +1930,45 @@ class bridalAdmin extends React.Component {
             // checkAll: checkedList.length === plainOptions.length,
         });
     };
-
+    //上传一页纸
+    handleUpload = () => {
+        const { fileList1 } = this.state;
+        const formData = new FormData();
+        fileList1.forEach(file => {
+          formData.append('file', file);
+        });
+        formData.append('estateId', this.state.estateId);
+        this.setState({
+          uploading: true,
+        });
+    
+        // You can use any AJAX library you like
+        axios({
+          url: 'http://47.108.87.104:8501/houseAdmin/paperPublished',
+          method: 'post',
+          processData: false,
+          data: formData,
+        }).then((res)=>{
+            if(res.data.code==1){
+                this.setState({
+                    fileList1: [],
+                    uploading: false,
+                  });
+                  message.success('上传成功');
+            }
+            else{
+                message.error('上传失败');
+                this.setState({
+                    uploading: false,
+                  });
+            }
+        }).catch((res)=>{
+            this.setState({
+                uploading: false,
+              });
+              message.success('上传失败');
+        })
+      };
 //tag切换回调
     callback(key) {
         this.setState({
@@ -1977,14 +2035,21 @@ class bridalAdmin extends React.Component {
 
     setEstates(value) {
         this.setState({
+            values: []
+        })
+        this.props.getFileList([])
+        this.setState({
             estateId: value
         })
         let params = {
             estateId: value
         }
+        this.props.newEstateId(value)
+        localStorage.setItem('estateId',value)
         getEstateMsg(params).then((res) => {
             if (res.data.code == 1) {
                 res.data.estate.estatePictures = this.sortByKey(res.data.estate.estatePictures, 'type')
+                res.data.estate.estateMatchings = this.sortByKey(res.data.estate.estateMatchings, 'matchingType')
                 let arr = res.data.estate.estatePictures.map(item => {
                     let arr = eval("(" + item.name + ")")
                     return arr
@@ -2024,6 +2089,17 @@ class bridalAdmin extends React.Component {
                 })
             }
         })
+    }
+    //删除户型，由于户型是props下传的，所以要更改此组件的state
+    delHousing(index) {
+        this.state.values.housingMsgs.splice(index, 1)
+        this.setState({
+            values:this.state.values
+            }
+        )
+        let arr=this.props.housingPictures
+        arr.splice(index, 1)
+        this.props.setHousingPictures(arr)
     }
 
     push() {
@@ -2074,6 +2150,26 @@ class bridalAdmin extends React.Component {
             },
         };
         const {TextArea} = Input;
+        const { uploading, fileList1 } = this.state;
+    const props = {
+      onRemove: file => {
+        this.setState(state => {
+          const index = state.fileList1.indexOf(file);
+          const newFileList = state.fileList1.slice();
+          newFileList.splice(index, 1);
+          return {
+            fileList1: newFileList,
+          };
+        });
+      },
+      beforeUpload: file => {
+        this.setState(state => ({
+          fileList1: [...state.fileList1, file],
+        }));
+        return false;
+      },
+      fileList:fileList1,
+    };
         return (
             <div className='bridalAdmin'>
                 <div className={'header'}>
@@ -2113,14 +2209,20 @@ class bridalAdmin extends React.Component {
                                             }
                                         )}
                                     </Select>
-                                    <Upload {...propsFile}>
-                                        <Button>
-                                            <Icon type="upload"/> Upload
-                                        </Button>
-                                    </Upload>
-                                    <Button type="primary" className={'push'}>
-                                        确认发布
-                                    </Button>
+                                    <Upload {...props}>
+          <Button>
+            <Icon type="upload" /> 选择楼盘一页纸
+          </Button>
+        </Upload>
+        <Button
+          type="primary"
+          onClick={this.handleUpload}
+          disabled={fileList1.length === 0}
+          loading={uploading}
+          style={{ marginLeft: 16 }}
+        >
+         确定发布
+        </Button>
                                 </div>
                             </div>
                         </TabPane>
@@ -2175,7 +2277,7 @@ class bridalAdmin extends React.Component {
                                         }
                                     )}
                                 </Select>
-                                <InformationFormUpdatas values={this.state.values} agentIds={this.state.agentIds}/>
+                                <InformationFormUpdatas values={this.state.values} agentIds={this.state.agentIds} delHousing={this.delHousing.bind(this)}/>
                             </div>
                         </TabPane>
                     </Tabs>
@@ -2187,4 +2289,4 @@ class bridalAdmin extends React.Component {
 }
 
 export default connect(state => (
-    {estateId: state.estateId, fileList: state.fileList}), {newEstateId, getFileList,setHousingPictures})(bridalAdmin)
+    {estateId: state.estateId, fileList: state.fileList,housingPictures: state.housingPictures}), {newEstateId, getFileList,setHousingPictures})(withRouter(bridalAdmin))

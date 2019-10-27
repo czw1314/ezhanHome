@@ -27,7 +27,7 @@ function bridalInformation(state ={}, action) {
             return state
     }
 }
-function estateId(state = '7', action) {
+function estateId(state = '', action) {
     switch (action.type) {
         case 'estateId':
             return action.data

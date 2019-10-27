@@ -11,8 +11,6 @@ class BridalChamber extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            key: 1,
-            left: 13,
             positionChecked: [],
             position: [],
             priceChecked: [],
@@ -31,10 +29,14 @@ class BridalChamber extends React.Component {
             orderType:0,
             models:[],
             key:'',
-            estates:[]
+            estates:[],
+            modelsShow:[],
+            counts:'',
+            searchText:''
         }
     }
     componentDidMount(){
+        //获取区域
         getDistrictRegions().then((res)=>{
             if(res.data.code==1){
                 let arr=res.data.list.map((item,index)=>{
@@ -55,6 +57,7 @@ class BridalChamber extends React.Component {
                 })
             }
         })
+        //搜索楼盘
         let params={
             area:this.state.areasChecked,
             housingTypes:this.state.apartmentChecked,
@@ -63,13 +66,20 @@ class BridalChamber extends React.Component {
             traitIds:this.state.characteristicChecked,
             districtIds: [],
             streetId:[],
-            searchText:this.state.searchText
+            searchText:this.state.searchText||this.props.location.state?this.props.location.state.searchText:'',
+            pageNum:1,
+            pageSize:10,
         }
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.estates
+                    models:res.data.estates,
+                    counts:res.data.counts,
                 })
+                this.setState({
+                    searchText:this.props.location.state?this.props.location.state.searchText:''
+                });
+
             }
         })
         getTraits().then(res=>{
@@ -93,18 +103,6 @@ class BridalChamber extends React.Component {
             })
         })
     }
-
-    //找房与找经纪人互相切换
-    handleClick = e => {
-        if (e.key == 2) {
-
-            this.setState({left: 80});
-        }
-        else {
-            this.setState({left: 13});
-        }
-
-    };
     //选择区域
     onChange = e => {
         let id=''
@@ -115,7 +113,7 @@ class BridalChamber extends React.Component {
             id=[e.target.value]
         }
         this.setState({
-            positionChecked:e.target.value,
+            positionChecked:[e.target.value],
             streetIdChecked:[]
 
         });
@@ -127,12 +125,15 @@ class BridalChamber extends React.Component {
             traitIds:this.state.characteristicChecked,
             districtIds:id,
             streetId:this.state.streetIdChecked,
-            searchText:this.state.searchText
+            searchText:this.state.searchText,
+            pageNum:1,
+            pageSize:10,
         }
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.estates
+                    models:res.data.estates,
+                    counts:res.data.counts
                 })
             }
         })
@@ -150,12 +151,15 @@ class BridalChamber extends React.Component {
             traitIds:this.state.characteristicChecked,
             districtIds: [this.state.positionChecked],
             streetId:streetIdChecked,
-            searchText:this.state.searchText
+            searchText:this.state.searchText,
+            pageNum:1,
+            pageSize:10
         }
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.estates
+                    models:res.data.estates,
+                    counts:res.data.counts
                 })
             }
         })
@@ -163,7 +167,7 @@ class BridalChamber extends React.Component {
     //选择价格
     onChangePrice = e => {
         this.setState({
-            priceChecked:e.target.value,
+            priceChecked:[e.target.value],
         });
         let params={
             area:this.state.areasChecked,
@@ -173,12 +177,15 @@ class BridalChamber extends React.Component {
             traitIds:this.state.characteristicChecked,
             districtIds: this.state.positionChecked,
             streetId:this.state.streetIdChecked,
-            searchText:this.state.searchText
+            searchText:this.state.searchText,
+            pageNum:1,
+            pageSize:10
         }
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.estates
+                    models:res.data.estates,
+                    counts:res.data.counts
                 })
             }
         })
@@ -186,7 +193,7 @@ class BridalChamber extends React.Component {
     //选择面积
     onChangeArea = e => {
         this.setState({
-            areaChecked:e.target.value,
+            areaChecked:[e.target.value],
         });
         let params={
             area:[e.target.value],
@@ -196,12 +203,15 @@ class BridalChamber extends React.Component {
             traitIds:this.state.characteristicChecked,
             districtIds: this.state.positionChecked,
             streetId:this.state.streetIdChecked,
-            searchText:this.state.searchText
+            searchText:this.state.searchText,
+            pageNum:1,
+            pageSize:10
         }
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.estates
+                    models:res.data.estates,   
+                    counts:res.data.counts    
                 })
             }
         })
@@ -209,7 +219,7 @@ class BridalChamber extends React.Component {
     //选择户型
     onChangeApartment = e => {
         this.setState({
-            apartmentChecked:e.target.value,
+            apartmentChecked:[e.target.value],
         });
         let params={
             area:this.state.areasChecked,
@@ -219,12 +229,15 @@ class BridalChamber extends React.Component {
             traitIds:this.state.characteristicChecked,
             districtIds: this.state.positionChecked,
             streetId:this.state.streetIdChecked,
-            searchText:this.state.searchText
+            searchText:this.state.searchText,
+            pageNum:1,
+            pageSize:10
         }
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.estates
+                    models:res.data.estates,
+                    counts:res.data.counts
                 })
             }
         })
@@ -242,12 +255,15 @@ class BridalChamber extends React.Component {
             traitIds:characteristicChecked,
             districtIds: this.state.positionChecked,
             streetId:this.state.streetIdChecked,
-            searchText:this.state.searchText
+            searchText:this.state.searchText,
+            pageNum:1,
+            pageSize:10
         }
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.estates
+                    models:res.data.estates,
+                    counts:res.data.counts
                 })
             }
         })
@@ -263,9 +279,7 @@ class BridalChamber extends React.Component {
     //价格排序
     toggle(str) {
         if (str === 'price') {
-            console.log(this.state.key)
             if(this.state.togglePrice&&this.state.key=='price'){
-                console.log(1)
                 this.setState({
                     togglePrice: !this.state.togglePrice,
                     orderType:2
@@ -278,12 +292,15 @@ class BridalChamber extends React.Component {
                     traitIds:this.state.characteristicChecked,
                     districtIds: this.state.positionChecked,
                     streetId:this.state.streetIdChecked,
-                    searchText:this.state.searchText
+                    searchText:this.state.searchText,
+                    pageNum:1,
+                    pageSize:10
                 }
                 searchEstate(params).then((res)=>{
                     if(res.data.code===1){
                         this.setState({
-                            models:res.data.estates    
+                            models:res.data.estates,
+                            counts:res.data.counts
                         })
                     }
                 })
@@ -301,31 +318,37 @@ class BridalChamber extends React.Component {
                     traitIds:this.state.characteristicChecked,
                     districtIds: this.state.positionChecked,
                     streetId:this.state.streetIdChecked,
-                    searchText:this.state.searchText
+                    searchText:this.state.searchText,
+                    pageNum:1,
+                    pageSize:10
                 }
                 searchEstate(params).then((res)=>{
                     if(res.data.code===1){
                         this.setState({
-                            models:res.data.estates
+                            models:res.data.estates,
+                            counts:res.data.counts
                         })
                     }
                 })
             }
             else{
                 let params={
-                    area:this.state.areasChecked,
-                    housingTypes:this.state.apartmentChecked,
-                    orderType:this.state.orderType?this.state.orderType:1,
-                    prices:this.state.priceChecked,
-                    traitIds:this.state.characteristicChecked,
-                    districtIds: this.state.positionChecked,
-                    streetId:this.state.streetIdChecked,
-                    searchText:this.state.searchText
+                    area:[],
+                    housingTypes:[],
+                    orderType:1,
+                    prices:[],
+                    traitIds:[],
+                    districtIds: [],
+                    streetId:[],
+                    searchText:'',
+                    pageNum:1,
+                    pageSize:10
                 }
                 searchEstate(params).then((res)=>{
                     if(res.data.code===1){
                         this.setState({
-                            models:res.data.estates
+                            models:res.data.estates,
+                            counts:res.data.counts
                         })
                     }
                 })
@@ -345,12 +368,15 @@ class BridalChamber extends React.Component {
                     traitIds:this.state.characteristicChecked,
                     districtIds: this.state.positionChecked,
                     streetId:this.state.streetIdChecked,
-                    searchText:this.state.searchText
+                    searchText:this.state.searchText,
+                    pageNum:1,
+                    pageSize:10
                 }
                 searchEstate(params).then((res)=>{
                     if(res.data.code===1){
                         this.setState({
-                            models:res.data.estates
+                            models:res.data.estates,
+                            counts:res.data.counts
                         })
                     }
                 })
@@ -369,12 +395,15 @@ class BridalChamber extends React.Component {
                     traitIds:this.state.characteristicChecked,
                     districtIds: this.state.positionChecked,
                     streetId:this.state.streetIdChecked,
-                    searchText:this.state.searchText
+                    searchText:this.state.searchText,
+                    pageNum:1,
+                    pageSize:10
                 }
                 searchEstate(params).then((res)=>{
                     if(res.data.code===1){
                         this.setState({
-                            models:res.data.estates
+                            models:res.data.estates,
+                            counts:res.data.counts
                         })
                     }
                 })
@@ -383,12 +412,92 @@ class BridalChamber extends React.Component {
     }
     link(estateId){
         this.props.newEstateId(estateId)
+        localStorage.setItem('estateId',estateId)
         this.props.history.push('/home/bridalHome/bridalIndex')
+    }
+    search(searchText){
+        this.setState({
+            searchText
+        });
+        let params={
+            area:this.state.areasChecked,
+            housingTypes:this.state.apartmentChecked,
+            orderType:this.state.orderType,
+            prices:this.state.priceChecked,
+            traitIds:this.state.characteristicChecked,
+            districtIds: this.state.positionChecked,
+            streetId:this.state.streetIdChecked,
+            searchText:searchText,
+            pageNum:1,
+            pageSize:10
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.estates,
+                    counts:res.data.counts
+                })
+            }
+        })
+    }
+    page(index,size){
+        let params={
+            area:this.state.areasChecked,
+            housingTypes:this.state.apartmentChecked,
+            orderType:this.state.orderType,
+            prices:this.state.priceChecked,
+            traitIds:this.state.characteristicChecked,
+            districtIds: this.state.positionChecked,
+            streetId:this.state.streetIdChecked,
+            searchText:this.state.searchText,
+            pageNum:index,
+            pageSize:10
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.estates,
+                    counts:res.data.counts
+                })
+            }
+        })
+    }
+    clear(){
+        this.setState({
+            areasChecked:[],
+            apartmentChecked:[],
+            orderType:0,
+           priceChecked:[],
+            characteristicChecked:[],
+           positionChecked:[],
+            streetIdChecked:[],
+            searchText:'',
+        })
+            let params={
+            area:[],
+            housingTypes:[],
+            orderType:0,
+            prices:[],
+            traitIds:[],
+            districtIds: [],
+            streetId:[],
+            searchText:'',
+            pageNum:1,
+            pageSize:10,
+        }
+        searchEstate(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.estates,
+                    counts:res.data.counts
+                })
+            }
+        })
     }
 
     render() {
         const {Search} = Input;
-        const suffix = <img src={require('../img/search1.png')}
+        const enterButton= <img src={require('../img/search1.png')}
                             style={{
                                 width: 20,
                                 height: 20,
@@ -407,21 +516,22 @@ class BridalChamber extends React.Component {
                     <img src={require('../img/Location2.png')} style={{height: 24, width: 16}}/>
                     <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>
                     <Search
-                        placeholder="input search text"
-                        onSearch={value => console.log(value)}
+                        placeholder="请输入楼盘名"
+                        value={this.state.searchText}
+                        onChange={e=>this.setState({searchText:e.target.value})}
+                        onSearch={this.search.bind(this)}
                         style={{width: 400}}
                         size={'large'}
-                        suffix={suffix}
+                        enterButton={enterButton}
                     />
                 </div>
                 <div className={'condition'}>
                     <div className={'first'}>
-
                         <p>区域</p>
-                        <Radio.Group name="radiogroup" onChange={this.onChange.bind(this)} value={this.state.positionChecked}>
+                        <Radio.Group name="radiogroup" onChange={this.onChange.bind(this)} value={this.state.positionChecked[0]}>
                             {
-                                this.state.position&&this.state.position.map(item=>{
-                                    return(<Radio value={item.value}>{item.label}</Radio>)
+                                this.state.position&&this.state.position.map((item,index)=>{
+                                    return(<Radio value={item.value} key={index}>{item.label}</Radio>)
                                 })
                             }
                         </Radio.Group>
@@ -434,30 +544,30 @@ class BridalChamber extends React.Component {
                         />
                     <div className={'second'} style={{marginTop: 10}}>
                         <p>单价</p>
-                        <Radio.Group  onChange={this.onChangePrice.bind(this)} value={this.state.priceChecked}>
+                        <Radio.Group  onChange={this.onChangePrice.bind(this)} value={this.state.priceChecked[0]}>
                             {
-                                this.state.price&&this.state.price.map(item=>{
-                                    return(<Radio value={item.value}>{item.label}</Radio>)
+                                this.state.price&&this.state.price.map((item,index)=>{
+                                    return(<Radio value={item.value} key={index}>{item.label}</Radio>)
                                 })
                             }
                         </Radio.Group>
                     </div>
                     <div className={'second'}>
                         <p>面积</p>
-                        <Radio.Group  onChange={this.onChangeArea.bind(this)} value={this.state.areaChecked}>
+                        <Radio.Group  onChange={this.onChangeArea.bind(this)} value={this.state.areaChecked[0]}>
                             {
-                                this.state.area&&this.state.area.map(item=>{
-                                    return(<Radio value={item.value}>{item.label}</Radio>)
+                                this.state.area&&this.state.area.map((item,index)=>{
+                                    return(<Radio value={item.value} key={index}>{item.label}</Radio>)
                                 })
                             }
                         </Radio.Group>
                     </div>
                     <div className={'second'}>
                         <p>户型</p>
-                        <Radio.Group  onChange={this.onChangeApartment.bind(this)} value={this.state.apartmentChecked}>
+                        <Radio.Group  onChange={this.onChangeApartment.bind(this)} value={this.state.apartmentChecked[0]}>
                             {
-                                this.state.apartment&&this.state.apartment.map(item=>{
-                                    return(<Radio value={item.value}>{item.label}</Radio>)
+                                this.state.apartment&&this.state.apartment.map((item,index)=>{
+                                    return(<Radio value={item.value} key={index}>{item.label}</Radio>)
                                 })
                             }
                         </Radio.Group>
@@ -465,6 +575,7 @@ class BridalChamber extends React.Component {
                     <div className={'second'}>
                         <p>特色</p>
                         <CheckboxGroup
+                        style={{marginTop:'-10px'}}
                             options={this.state.characteristic}
                             value={this.state.characteristicChecked}
                             onChange={this.onChangeCharacteristic.bind(this)}
@@ -473,10 +584,10 @@ class BridalChamber extends React.Component {
                     </div>
 
                 </div>
-                </div>
+
                 <div className={'result'}>
                     <div className={'find'}>
-                        找到<span>{this.state.models.length}</span>个成都楼盘
+                        找到<span>{this.state.counts}</span>个成都楼盘
                     </div>
                     <div className={'sort'}>
                         <Menu onSelect={this.selected.bind(this)} defaultSelectedKeys={['default']}>
@@ -485,14 +596,16 @@ class BridalChamber extends React.Component {
                                        onClick={this.toggle.bind(this, 'price')}>价格{this.state.togglePrice ? '↑' : '↓'}</Menu.Item>
                             <Menu.Item key={'time'} onClick={this.toggle.bind(this, 'time')}>最新开盘</Menu.Item>
                         </Menu>
-                        <div className={'clear'}>清空筛选条件</div>
+                        <div className={'clear'} onClick={this.clear.bind(this)}>清空筛选条件</div>
+                    </div>
+                    </div>
                     </div>
                     <div className={'show'}>
                         <div className={'left'}>
                             {
                                 this.state.models&&this.state.models.map((item,index)=>{
                                     return(
-                                        <div className={`showItem ${index === this.state.models.length-1 ? 'last' : ''}`} onClick={this.link.bind(this,item.id)}>
+                                        <div className={`showItem ${index === this.state.modelsShow.length-1 ? 'last' : ''}`} onClick={this.link.bind(this,item.id)} key={index}>
                                         <div className={'left'}>
                                             <div className={'item'}>
                                                 <Link to={'/home/bridalHome'}>
@@ -510,13 +623,13 @@ class BridalChamber extends React.Component {
                                                     <p className={'area'}>建面：{item.areaRange}m²</p>
                                                     <p className={'tag'}>{item.propertyType}</p>
                                                     <p className={'advantage'}>
-                                                        {/* {
-                                                            item.estateTraits&&item.estateTraits.map(items=>{
+                                                        {
+                                                            item.estateTraits&&item.estateTraits.map((items,index)=>{
                                                                 return(
-                                                                    <span className={'advantageItem'}>{items}</span>
+                                                                    <span className={'advantageItem'} key={index}>{items}</span>
                                                                 )
                                                             })
-                                                        } */}
+                                                        }
                                                         
                                                     </p>
                                                 </div>
@@ -526,11 +639,7 @@ class BridalChamber extends React.Component {
                                     )
                                 })
                             }
-                            <Pagination
-                                // onShowSizeChange={onShowSizeChange}
-                                defaultCurrent={1}
-                                total={500}
-                            />
+                        <Pagination defaultCurrent={1} total={this.state.models.length} pageSize={10} onChange={this.page.bind(this)}/>
                         </div>
                         <div className={'hot'}>
                             <p className={'title'}>热门楼盘</p>
@@ -538,7 +647,7 @@ class BridalChamber extends React.Component {
                                 this.state.estates&&this.state.estates.map((item,index)=>{
                                     return(
                           
-                                        <div className={'hotItem'} onClick={this.link.bind(this,item.id)}>
+                                        <div className={'hotItem'} onClick={this.link.bind(this,item.id)} key={index}>
                                         <img src={'http://47.108.87.104:8601/building/'+item.picture}/>
                                         <div className={'title'}>
                                             <p className={'name'}>{item.anme}</p>
@@ -557,10 +666,10 @@ class BridalChamber extends React.Component {
 </div>
                     </div>
                 </div>
-            </div>
+
         )
     }
 }
 
 export default connect(state => (
-    {estateId: state.estateId}), {newEstateId})(BridalChamber)
+    {estateId: state.estateId,userInformation:state.userInformation}), {newEstateId})(BridalChamber)

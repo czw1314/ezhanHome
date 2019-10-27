@@ -40,6 +40,7 @@ class Information extends React.Component {
         }
     }
     componentDidMount() {
+        localStorage.setItem('role',3)
         getDistrictRegions().then((res) => {
             if (res.data.code === 1) {
                 let option = [];
@@ -127,7 +128,7 @@ class Information extends React.Component {
                         }
                     }
                     else {
-                        message.success('注册成功！请去登陆！')
+                        message.success('信息填写成功！请等待管理员审核！')
                         setTimeout(this.props.handleClose, 1000)
                     }
 
@@ -240,7 +241,7 @@ class Information extends React.Component {
                         </div>
                     )}
                 </Form.Item>
-                <Form.Item className={'code'}  style={{display: this.state.agent ? 'block' : 'none'}}>
+                <Form.Item className={'code'}  style={{display: localStorage.getItem('role')==3 ? 'block' : 'none'}}>
                     {getFieldDecorator('verifyCode')(
                         <div className={'item'}>
                             <div className={'left'}>
@@ -277,7 +278,7 @@ class Information extends React.Component {
                         </div>
                     )}
                 </Form.Item>
-                <Form.Item  style={{display: this.state.agent ? 'block' : 'none'}}>
+                <Form.Item  style={{display: localStorage.getItem('role')==3? 'block' : 'none'}}>
                         <div className={'item'}>
                             <div className={'left'}>
                                 <p>选择服务：</p>
@@ -286,7 +287,7 @@ class Information extends React.Component {
                             </div>
                         </div>
                 </Form.Item>
-                <Form.Item  style={{display: this.state.agent ? 'block' : 'none'}}>
+                <Form.Item  style={{display: localStorage.getItem('role')==3 ? 'block' : 'none'}}>
                     {getFieldDecorator('workingYears')(
                         <div className={'item'} >
                             <div className={'left'}>
@@ -301,7 +302,7 @@ class Information extends React.Component {
                         <div className={'item'}>
                             <div className={'left'}>
                                 <p>服务公司：</p>
-                                <Select defaultValue="2"  onSelect={this.onAgentType.bind(this)} style={{display: this.state.agent ? 'block' : 'none',width:'200px'}}
+                                <Select defaultValue="2"  onSelect={this.onAgentType.bind(this)} style={{display: localStorage.getItem('role')==3 ? 'block' : 'none',width:'200px'}}
                                         size={'large'}>
                                     <Option value="2">在职公司</Option>
                                     <Option value="1">独立经纪人</Option>
@@ -311,7 +312,7 @@ class Information extends React.Component {
                         </div>
                     )}
                 </Form.Item>
-                <Form.Item  style={{display: this.state.agent ? 'block' : 'none'}}>
+                <Form.Item  style={{display: localStorage.getItem('role')==3? 'block' : 'none'}}>
 
                     <div className={'item'}>
                         <div className={'left'} style={{alignItems: 'flex-start'}}>
@@ -344,7 +345,7 @@ class Information extends React.Component {
                     </div>
 
                 </Form.Item>
-                <Form.Item  style={{display: this.state.agent ? 'block' : 'none'}}>
+                <Form.Item  style={{display: localStorage.getItem('role')==3 ? 'block' : 'none'}}>
     
                     <div className={'item'}>
                         <div className={'left'} style={{alignItems: 'flex-start'}}>
@@ -391,8 +392,8 @@ class Information extends React.Component {
                         </div>
                     </div>
                 </Form.Item>
-                <Form.Item>
-                    <div className={'weixin'}>
+                {/* <Form.Item> */}
+                    {/* <div className={'weixin'}>
                         <p className={'h2'}>微信绑定（已绑定）</p>
                         <div className={'weixinBox'}>
                             <img src={require('../img/weixinHeader.png')}/>
@@ -411,7 +412,7 @@ class Information extends React.Component {
                     </div>
                     <Button type="primary" size={'large'} style={{margin: '40px 0 20px'}} onClick={this.handleSubmit.bind(this)}>提交注册信息申请</Button>
                     <p>温馨提示：当您注册成功后，预计1-3个工作日内审核，审核成功后即可使用所有功能如有需要，可微信咨询微信号：pangzhu2018</p>
-                </Form.Item>
+                </Form.Item> */}
             </Form>
         );
     }
@@ -593,7 +594,7 @@ class RegistryCenter extends React.Component {
                 </div>
                 <div className={'userBox'}>
                     <div className={'container'}>
-                        <div className="first" style={{display: this.state.first ? "block" : 'none'}}>
+                        {/* <div className="first" style={{display: this.state.first ? "block" : 'none'}}>
                             <p className={'data'}>第一步：注册信息</p>
                             <div className={'radio-box'}>
                                 <p>账号类型：</p>
@@ -603,7 +604,7 @@ class RegistryCenter extends React.Component {
                                 </Radio.Group>
                             </div>
                             <InformationForm role={this.state.id}/>
-                        </div>
+                        </div> */}
                         <div className={'second'} style={{display: this.state.first ? "none" : 'block'}}>
                             <p className={'data'}>第二步：填写资料</p>
                             <div className={'first'}>

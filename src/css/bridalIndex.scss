@@ -69,7 +69,7 @@
           }
         }
       }
-      .apartment {
+      .apartmentShow {
         text-align: left;
         margin-top: 50px;
         color: rgba(51, 51, 51, 1);
@@ -122,6 +122,10 @@
             height: 182px;
             margin-right: 34px;
             border: 1px dotted #333;
+            img{
+              width: 202px;
+              height: 182px;
+            }
           }
           .center {
             font-size: 18px;
@@ -277,6 +281,7 @@
             color: #999;
           }
           .ant-rate-star-full svg {
+            font-size: 20px;
             color: #268AED;
           }
         }
@@ -299,6 +304,7 @@
         }
         .apartment {
           font-size: 14px;
+          margin: 10px 0;
           text-align: left;
           color: #666666;
           span {
@@ -460,10 +466,15 @@
     white-space: nowrap;
     margin-bottom: 10px;
     position: relative;
-    height: 400px;
+    width: 792px;
+    height: 410px;
     overflow: hidden;
     ul {
       text-align: left;
+      li{
+        width: 792px;
+        height: 410px;
+      }
     }
     .go-left {
       position: absolute;
@@ -494,8 +505,9 @@
   }
   .large_box img {
     display: inline-block;
-    width: 800px;
-    height: 400px;
+    width: 792px;
+    height: 410px;
+    object-fit:cover;
   }
   .small_box {
     height: 80px;
@@ -519,6 +531,7 @@
     margin-right: 10px;
     width: 132px;
     height: 80px;
+    
     p {
       position: absolute;
       height: 26px;
@@ -536,6 +549,7 @@
     display: inline-block;
     width: 132px;
     height: 80px;
+    object-fit:cover;
   }
   .small_list ul li .bun_bg {
     display: none;

@@ -8,6 +8,15 @@ const base = 'http://47.108.87.104:8501';
 export const mapInformation = (params) =>
     axios.get(map, {params: params,}
     );
+    //一页纸下载
+export const downloadPaper = (params) =>
+axios.get(`${base}/show/downloadPaper`, {
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        params: params,
+    }
+);
 //获取手机验证码
 export const getPhoneCode = (params) =>
     axios.get(`${base}/user/phoneCode`, {
@@ -147,6 +156,15 @@ export const delUser = (params) =>
             },
         }
     );
+    //删除入驻楼盘
+export const delcancelSettledInEstate = (params) =>
+axios.delete(`${base}/agent/cancelSettledInEstate`, {
+        params,
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+    }
+);
 //楼盘发布
 export const estatePublished = (params) =>
     axios.post(`${base}/houseAdmin/estatePublished`, params, {
@@ -272,6 +290,39 @@ axios.post(`${base}/estate/popularEstate`,params,{
         },
     }
 );
+    //关注楼盘
+    export const concernedEstate = (params) =>
+    axios.post(`${base}/agent/concernedEstate`,params,{
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+        //取消关注楼盘
+        export const delconcernedEstate = (params) =>
+        axios.delete(`${base}/agent/concernedEstate`,{
+            params,
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+            }
+        );
+    //电话绑定
+    export const bindPhone = (params) =>
+    axios.post(`${base}/user/bindPhone`,params,{
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+        //普通用户个人昵称修改
+        export const normalPersonMsg = (params) =>
+        axios.put(`${base}/agent/normalPersonMsg`,params,{
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+            }
+        );
 //搜索楼盘
 export const searchEstate = (params) =>
     axios.post(`${base}/estate/estateList`,params,{
@@ -290,6 +341,42 @@ export const getHousingMsg = (params) =>
             },
         }
     );
+    //经纪人申请入驻楼盘
+export const settledInEstate = (params) =>
+axios.get(`${base}/agent/settledInEstate`, {
+        params,
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+    }
+);
+    //绑定微信
+export const bindWechat = (params) =>
+axios.get(`${base}/agent/bindWechat`, {
+        params,
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+    }
+);
+    //解绑微信
+    export const cancelWechat = (params) =>
+    axios.get(`${base}/agent/cancelWechat`, {
+            params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
+    //获取关注的楼盘
+    export const concernedEstates = (params) =>
+    axios.get(`${base}/agent/concernedEstates`, {
+            params,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
 //根据楼盘id 获取楼盘相册种类（数量）图片路径列表
 export const getStreetEstatess = (params) =>
     axios.get(`${base}/estate/streetEstates`, {
@@ -302,9 +389,18 @@ export const getStreetEstatess = (params) =>
 //根据楼盘id获取指定楼盘已成功入驻的经纪人（姓名-电话）
 export const getEstateAgents = (params) =>
     axios.get(`${base}/houseAdmin/estateAgents`, {
-            params:qs.stringify(params, {arrayFormat: 'repeat'}),
+        params,
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
         }
     );
+    //根据楼盘id获取优秀经纪人，置业顾问
+export const getEstateAdvisers = (params) =>
+axios.get(`${base}/show/estateAdvisers`, {
+    params,
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+    }
+);

@@ -31,7 +31,7 @@ class ChangePassWord extends React.Component{
                 }
                 changeModifyPwd(params).then((res)=>{
                     if(res.data.code===1){
-                        message.success('修改成功,请重新登录cd')
+                        message.success('修改成功,请重新登录!')
                         localStorage.clear()
                         this.props.history.push('/homePage');
                     }

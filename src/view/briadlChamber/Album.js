@@ -61,66 +61,6 @@ class Album extends React.Component {
         });
     }
 
-    //找房与找经纪人互相切换
-    handleClick = e => {
-        if (e.key == 2) {
-
-            this.setState({left: 80});
-        }
-        else {
-            this.setState({left: 13});
-        }
-
-    };
-    //选择区域
-    onChange = positionChecked => {
-        this.setState({
-            positionChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
-        });
-    };
-    //选择价格
-    onChangeService = serviceChecked => {
-        this.setState({
-            serviceChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
-        });
-    };
-    //选择面积
-    onChangeTitle = titleChecked => {
-        this.setState({
-            titleChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
-        });
-    };
-    //选择户型
-    onChangeApartment = apartmentChecked => {
-        this.setState({
-            apartmentChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
-        });
-    };
-    //选择特色
-    onChangeCharacteristic = characteristicChecked => {
-        this.setState({
-            characteristicChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
-        });
-    };
-
-    //价格排序
-    selected(e) {
-        this.setState({
-            togglePrice: true,
-            toggleTime: true
-        })
-        console.log(this.state.togglePrice)
-    }
 
     //大图向左
     goLeft(index) {
@@ -190,7 +130,7 @@ class Album extends React.Component {
     }
     componentDidMount(){
         let params={
-            estateId:this.props.estateId
+            estateId: this.props.estateId||localStorage.getItem('estateId'),
         }
         getStreetEstatess(params).then((res)=>{
             if(res.data.code===1){

@@ -1,14 +1,11 @@
 
 .home {
   margin: auto;
+  min-width: 1200px;
   text-align: center;
   color: #fff;
   .headerBox {
     background: rgba(38, 138, 237, 1);
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 33;
     .ant-menu-item, .ant-menu-submenu-title {
       padding-left: 0;
     }

@@ -2,12 +2,14 @@
   display: none;
 }
 .agent{
-  margin:90px auto 40px;
-  width: 1200px;
   text-align: left;
   color: #fff;
+  .title-box {
+    background: rgba(242, 245, 248, 1);
   .title{
     display: flex;
+    width: 1200px;
+    margin: auto;
     height: 70px;
     font-size:41px;
     font-family:Source Han Sans CN;
@@ -35,8 +37,8 @@
     }
   }
   .condition{
-    margin-top: 30px;
-
+    width: 1200px;
+    margin:30px auto 0;
     .ant-checkbox-group-item{
       color: #333;
     }
@@ -72,7 +74,8 @@
     }
   }
   .result{
-    margin-top: 30px;
+    width: 1200px;
+    margin: auto;
     .find{
       font-size:24px;
       text-align: left;
@@ -102,10 +105,15 @@
       .clear{
         color: #5E7FB1;
         font-size: 14px;
+        cursor: pointer;
       }
     }
+  }
+}
     .show {
       display: flex;
+      width: 1200px;
+      margin: auto;
       .left{
         width: 100%;
       }
@@ -274,7 +282,7 @@
         }
       }
     }
-  }
+
   .chain{
     margin: 0;
     font-size: 14px;

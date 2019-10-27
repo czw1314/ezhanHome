@@ -85,7 +85,7 @@ class Agent extends React.Component {
             id=[e.target.value]
         }
             this.setState({
-                positionChecked:e.target.value,
+                positionChecked:[e.target.value],
                 streetIdChecked:[]
 
             });
@@ -207,7 +207,14 @@ class Agent extends React.Component {
             titleChecked: [],
             searchText:'',
         })
-        searchAgent().then((res)=>{
+        let params={
+            business:[],
+            positions:[],
+            districtIds: [],
+            streetId:[],
+            searchText:''
+        }
+        searchAgent(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
                     models:res.data.models
@@ -284,7 +291,7 @@ class Agent extends React.Component {
         // this.setState({ visible[index]:visible })
 
         // Determining condition before show the popconfirm.
-        if (this.state.condition) {
+        if (!localStorage.getItem('userId')) {
             message.info('请先登陆');; // next step
         } else {
             let arr=this.state.visible
@@ -304,6 +311,7 @@ class Agent extends React.Component {
         const CheckboxGroup = Checkbox.Group;
         return (
             <div className='agent'>
+                                <div className={'title-box'}>
                 <div className={'title'}>
                     <div className='logo'>
                         <img src={require('../img/LOGO2.png')}/>
@@ -321,10 +329,10 @@ class Agent extends React.Component {
                 <div className={'condition'}>
                     <div className={'first'}>
                         <p>区域</p>
-                        <Radio.Group name="radiogroup" onChange={this.onChange.bind(this)} value={this.state.positionChecked}>
+                        <Radio.Group name="radiogroup" onChange={this.onChange.bind(this)} value={this.state.positionChecked[0]}>
                             {
                                 this.state.position&&this.state.position.map(item=>{
-                                        return(<Radio value={item.value}>{item.label}</Radio>)
+                                        return(<Radio value={item.value} key={item.value}>{item.label}</Radio>)
                                 })
                             }
                         </Radio.Group>
@@ -367,12 +375,14 @@ class Agent extends React.Component {
                         </Menu>
                         <div className={'clear'} onClick={this.clear.bind(this)}>清空筛选条件</div>
                     </div>
+                    </div>
+                    </div>
                     <div className={'show'}>
                         <div className={'left'}>
                             {
                                 this.state.models&&this.state.models.map((item,index)=>{
                                     return(
-                                        <div className={`showItem ${index === this.state.models.length-1 ? 'last' : ''}`}>
+                                        <div className={`showItem ${index === this.state.models.length-1 ? 'last' : ''}`} key={index}>
                                             <div className={'left'}>
                                                 <div className={'item'}>
                                                     <div className={'pic'}>
@@ -388,14 +398,20 @@ class Agent extends React.Component {
                                                                 <p className={'area'}>熟悉区域：{
                                                                     item.streets&&item.streets.map(items=>{
                                                                         return(
-                                                                            <span>
+                                                                            <span key={items}> 
                                                                                 {items}
                                                                             </span>
 
                                                                         )
                                                                     })
                                                                 }</p>
-                                                                <p className={'tag'}><span>服务：</span>专车接送 新房经纪 权证代办 贷款代办 二手房经纪</p>
+                                                                <p className={'tag'}><span>服务：</span>{
+                                                                    item.businesses&&item.businesses.map(item=>{
+                                                                        return(
+                                                                            <span key={item}>{item}</span>
+                                                                        )
+                                                                    })
+                                                                }</p>
                                                             </div>
                                                             <div className={'contact'}>
                                                                 <p className={'phone'}><img src={require('../img/Phone.png')}/><span>联系电话：</span>{item.contact}</p>
@@ -428,25 +444,8 @@ class Agent extends React.Component {
                                 total={500}
                             />
                         </div>
-                        {/*<div className={'hot'}>*/}
-                            {/*<p className={'title'}>热门楼盘</p>*/}
-                            {/*<div className={'hotItem'}>*/}
-                                {/*<img src={require('../img/hotItem.png')}/>*/}
-                                {/*<div className={'title'}>*/}
-                                    {/*<p className={'name'}>青白江天美广场</p>*/}
-                                    {/*<p className={'price'}>5000元/m²起</p>*/}
-                                {/*</div>*/}
-                                {/*<div className={'center'}>*/}
-                                    {/*<p className={'address'}>温江·温江大学城</p>*/}
-                                    {/*<p className={'area'}>建面：89-132m²</p>*/}
-                                {/*</div>*/}
-                                {/*<p className={'tag'}>超高层住宅 别墅</p>*/}
-                            {/*</div>*/}
-
-                        {/*</div>*/}
                     </div>
                 </div>
-            </div>
         )
     }
 }
