@@ -129,7 +129,8 @@ class HomePage extends React.Component {
             })
         })
         let params={
-            pageSize:4
+            pageSize:4,
+            orderType:3
         }
         //最新楼盘
         searchEstate(params).then((res)=>{
@@ -432,7 +433,7 @@ show(){
                         </div>
                         <div className={'synopsis'}>
                         {
-                                this.state.estates&&this.state.estates.map((item,index)=>{
+                                this.state.new&&this.state.new.map((item,index)=>{
                                     return(
                                         <div className={'item'} onClick={this.linkTo.bind(this,item.id)}  key={index}>
                                         <div className={'rank'}>TOP{index+1}</div>
