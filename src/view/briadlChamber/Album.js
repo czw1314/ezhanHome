@@ -47,11 +47,13 @@ class Album extends React.Component {
             translateXs: 0,
             num: 0,//图片数量-1
             nums:0,//图集-5
-            active: 0,//第n张相片激活，
+            active: this.props.location.state ? this.props.location.state.active :0,//第n张相片激活，
             keys: 1,
             location:'104.081525,30.406772',
             map:'',
-            models:[]
+            models:[],
+            estateName:'',
+            key1: this.props.location.state ? this.props.location.state.key : '0',
         }
     }
 
@@ -64,7 +66,6 @@ class Album extends React.Component {
 
     //大图向左
     goLeft(index) {
-        console.log(index)
         this.setState({
             translateX: this.state.translateX + 1100 > 0 ? 0 : this.state.translateX + 1100,
             active: this.state.active - 1 <= 0 ? 0 : this.state.active - 1
@@ -125,7 +126,8 @@ class Album extends React.Component {
     callback(key) {
         this.setState({
             translateX: 0,
-            active: 0
+            active: 0,
+            key1: key
         })
     }
     componentDidMount(){
@@ -140,8 +142,8 @@ class Album extends React.Component {
                 }
                 this.setState({
                     models:res.data.models,
-                    nums:res.data.models.length,
-                    num:l
+                    estateName:res.data.estateName,
+                    translateX:this.state.active*-1100
                 })
             }
 
@@ -152,10 +154,10 @@ class Album extends React.Component {
         return (
             <div className='album'>
                 <div className={'title'}>
-                    <p>楼盘名称相册</p>
+                    <p>{this.state.estateName}相册</p>
                 </div>
                 <div className="banner">
-                    <Tabs defaultActiveKey="0" onChange={this.callback.bind(this)} style={{textAlign:'left'}}>
+                    <Tabs defaultActiveKey="0" onChange={this.callback.bind(this)} style={{textAlign:'left'}} activeKey={this.state.key1.toString()}>
                         {
                             this.state.models&&this.state.models.map((item,index)=>{
                                 return (<TabPane tab={item.type} key={index}>
@@ -168,7 +170,7 @@ class Album extends React.Component {
                                         </div>
                                         <ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`}}>
                                             {item.picturePaths.map((items, indexs) =>
-                                                <li className="item" data-index={indexs}>
+                                                <li className="item" data-index={indexs} key={indexs}>
                                                     <img src={'http://47.108.87.104:8601/building/'+items}/>
                                                 </li>
                                             )}

@@ -2,11 +2,8 @@ import React from 'react'
 import '../../css/bridalIndex.scss'
 import {downloadPaper,getEstateMsg,getHousingMsg,getEstateAdvisers,delconcernedEstate,concernedEstate } from '../../api/index'
 import {connect} from "react-redux";
-import {newEstateId} from "../../redux/action";
-import routes from '../../router/index';
-import {Select, Button, Rate, Icon,Pagination, Input, Checkbox, Modal,Tabs,message,Popconfirm} from 'antd';
-import locale from 'antd/lib/date-picker/locale/zh_CN';
-import moment from 'moment';
+import {newEstateId,setBridalInformation} from "../../redux/action";
+import {Button, Rate, Icon,Pagination,Tabs,message,Popconfirm} from 'antd';
 
 class BridalIndex extends React.Component {
     constructor(props) {
@@ -68,6 +65,7 @@ class BridalIndex extends React.Component {
             visible: [],
             visible1:[],
             star:this.props.location.state?this.props.location.state.star:0,
+            more:false
         }
     }
     
@@ -97,9 +95,7 @@ class BridalIndex extends React.Component {
                 })
             }
         }
-
     }
-
     //大图向右
     goRight() {
         this.setState({
@@ -152,7 +148,7 @@ class BridalIndex extends React.Component {
             }})
     }
     componentDidMount() {
-        //eslint-disable-next-line
+
         let params = {
             estateId: this.props.estateId||localStorage.getItem('estateId'),
         }
@@ -166,9 +162,11 @@ class BridalIndex extends React.Component {
         }
         getEstateMsg(params).then((res) => {
             if (res.data.code == 1) {
+                this.props.setBridalInformation(res.data.estate)
                 let address=res.data.estate.distinctRegion.split('—')
                 localStorage.setItem('address0',address[0])
                 localStorage.setItem('address1',address[1])
+                localStorage.setItem('positionChecked',res.data.estate.distinctRegionIds[0])
                 res.data.estate.estatePictures = this.sortByKey(res.data.estate.estatePictures, 'type')
                 res.data.estate.estateMatchings = this.sortByKey(res.data.estate.estateMatchings, 'matchingType')
                 let arr = res.data.estate.estatePictures.map(item => {
@@ -177,7 +175,6 @@ class BridalIndex extends React.Component {
                 })
                 let albumName=['楼盘封面宣传图','区位图','楼盘总平面图','效果图','实景图','样板间','预售'],x=[],l=0;
                 for(let i=0;i<arr.length;i++){
-             
                             l+=arr[i].length
                             let ll=l-1
                     let obj={
@@ -220,7 +217,6 @@ class BridalIndex extends React.Component {
                 this.setState({
                     slideData:x
                 })
-                console.log(l,res.data.estate.length-5)
            this.setState({
                     values: res.data.estate,
                     address:address,
@@ -296,10 +292,6 @@ class BridalIndex extends React.Component {
         }
     }
     handleVisibleChange = (visible,index) => {
-
-        // this.setState({ visible[index]:visible })
-
-        // Determining condition before show the popconfirm.
         if (this.state.condition) {
             message.info('请先登陆'); // next step
         } else {
@@ -309,10 +301,6 @@ class BridalIndex extends React.Component {
         }
     };
     handleVisibleChange1 = (visible,index) => {
-
-        // this.setState({ visible[index]:visible })
-
-        // Determining condition before show the popconfirm.
         if (!localStorage.getItem('userId')) {
             message.info('请先登陆'); // next step
         } else {
@@ -339,11 +327,11 @@ class BridalIndex extends React.Component {
             <div className='bridalIndex'>
                 <div className={'title'}>
                     <p>{this.state.values.name}</p>
-                    <div className={'tag'}>{this.state.values&&this.state.values.estatePropertyTypes.map(item=>{
+                    <p className={'tag'}>{this.state.values&&this.state.values.estatePropertyTypes.map(item=>{
                                         return(<span style={{marginRight:'10px'}} key={item.propertyType}>{item.propertyType}</span>)
-                                    })}</div>
+                                    })}</p>
                 </div>
-                <p>备案名：XXXXXXXXX</p>
+                <p style={{color:"rgb(51,51,51",textAlign:'left',display:this.state.values.recordName?'block':'none'}}>备案名：{this.state.values.recordName}</p>
                 <div className="banner">
                     <div className={'left'}>
                         <div className="large_box">
@@ -355,8 +343,15 @@ class BridalIndex extends React.Component {
                             </div>
                             <ul ref={'col-nav'} style={{transform: `translateX(${this.state.translateX}px)`}}>
                                 {this.state.slideData.map((item, index) =>
-                                    item.photo.map((items, index) =>
-                                        <li className="item" data-index={index} key={index}>
+                                    item.photo.map((items, indexs) =>
+                                        <li className="item" data-index={index} key={indexs}>
+                                            <div className={'picture'} onClick={(e)=>{this.props.history.push({pathname:'/home/bridalHome/bridalAlbum', state:{
+                                                    active: indexs,
+                                                    key:index
+                                                }})}}>
+                                                <img src={require('../../img/picture.png')}/>
+                                                <span>查看相册</span>
+                                            </div>
                                             <img src={items.img}/>
                                         </li>
                                     )
@@ -381,7 +376,7 @@ class BridalIndex extends React.Component {
                         </div>
                         <div className={'center'}>
                             <p>楼盘详情</p>
-                            <Button type="primary" icon="download" size={'large'} onClick={this.down.bind(this)}>
+                            <Button type="primary" icon="download" size={'large'} onClick={this.down.bind(this)} style={{display:localStorage.getItem('role')==3?"block":'none'}}>
                                 <a href={'http://47.108.87.104:8601/show/downloadPaper?estateId='+estateId} download style={{color:'#fff'}}>下载一页纸</a>
                             </Button>
                             <div className={'information'}>
@@ -415,8 +410,43 @@ class BridalIndex extends React.Component {
                                     <p>总建筑面积：{values.floorage}</p>
                                     <p>交房时间（预计）：{values.housekeepingTime}</p>
                                 </div>
-                            </div>
-                            <Button block>更多</Button>
+
+                                <div className={'item'}>
+                                    <p>规划户数：{values.pannedHouseholds}</p>
+                                    <p>公摊：{values.shareArea}</p>
+                                </div>
+                                <div style={{display:this.state.more?"block":'none'}}>
+                                    <div className={'item'}>
+                                        <p>总楼层：{values.floors}</p>
+                                        <p>梯户比：{values.staircasesRatio}</p>
+                                    </div>
+                                    <div className={'item'}>
+                                        <p>建面区间：{values.areaRange}m²</p>
+                                        <p>层高：{values.floorHeight}</p>
+                                    </div>
+                                    <div className={'item'}>
+                                        <p>楼盘户型：{this.state.models&&this.state.models.map((item,index)=>{
+                                            return(<span key={index} style={{marginRight:'20px'}}>
+                                                    {item.housingType}
+                                            </span>)
+
+                                        })}</p>
+                                    </div>
+                                    <div className={'item'}>
+                                        <p>交付标准：{values.deliveryStandard}</p>
+                                    </div>
+                                    <div className={'item'}>
+                                        <p>物管公司：{values.propertyCompany}</p>
+                                        <p>车位配比：{values.parkingRatio}</p>
+                                    </div>
+                                    <div className={'item'}>
+                                        <p>物管费：{values.propertyFee}</p>
+                                        <p>车位数：{values.parkingNumbers}</p>
+                                    </div>
+                                </div>
+                                </div>
+                                <Button block onClick={()=>this.setState({more:true})} style={{display:!this.state.more?'block':'none'}}>更多</Button>
+                                <Button block onClick={()=>this.setState({more:false})} style={{display:this.state.more?'block':'none'}}>收起</Button>
                         </div>
                         <div className={'dynamic'}>
                             <h3>楼盘动态</h3>
@@ -424,7 +454,7 @@ class BridalIndex extends React.Component {
                                 values.estateDynamics&&values.estateDynamics.map((item,index)=>{
                                     return(
                                         <div className={'item'} style={{display:index<this.state.dynamicsLength?'block':'none'}} key={index}>
-                                        <p><span>{item.title}</span>发布时间：{item.dynamicTime}</p>
+                                        <p><span>{item.title}</span>发布时间：{item.time}</p>
                                         <p>{item.description}
                                         </p>
                                     </div>
@@ -459,7 +489,6 @@ class BridalIndex extends React.Component {
                                     </div>
                                 </TabPane>
                             </Tabs>
-
                             <Button block>更多</Button>
                         </div>
                         <div className={'apartmentShow'}>
@@ -474,7 +503,8 @@ class BridalIndex extends React.Component {
                                             {
                                                   item.housingMsgs&&item.housingMsgs.map((items,index1)=>{
                                                       return(
-                                                        <div className={'item'} key={index1}>
+                                                          <div className={'item'} key={index1}
+                                                               onClick={this.goTo1.bind(this, index1)}>
                                                         <div className={'left'}>
                                                        <div className={'pic'}>
                                                        <img src={ ('http://47.108.87.104:8601/housing/'+items.picturePath[0])||''}/>
@@ -482,7 +512,7 @@ class BridalIndex extends React.Component {
                                                         <div className={'center'}>
                                                         <p>{items.housingTypeTitle}</p>
                                                         <p>户型：{items.housingDetailName}</p>
-                                                        <p>建面：{items.area}</p>
+                                                        <p>建面：{items.area}m²</p>
                                                         <p>朝向：{items.orientations}</p>
                                                         <div className={'tag'}>
                                                         {
@@ -496,7 +526,7 @@ class BridalIndex extends React.Component {
                                                         </div>
                 
                                                     </div>
-                                                        <Button type="primary" style={{width:120}} onClick={this.goTo1.bind(this,index1)}>查看</Button>
+                                                        <Button type="primary" style={{width:120}}>查看</Button>
                                                     </div>
                                                       )
                                                   })
@@ -533,35 +563,38 @@ class BridalIndex extends React.Component {
                         })
                     }</p>
                         <p className={'address'}>项目地址：<span>{values.adress}</span></p>
+
+                    </div>
+                        <div className={'second'}>
                             <p className={'star'}>推荐经纪人</p>
                             {
                                 this.state.agent&&this.state.agent.map((item,index)=>{
                                     return(
                                         <div className={'item'} key={index}>
-                                        <img src={'http://47.108.87.104:8601/user/'+item.head}/>
-                                        <div className={'right'}>
-                                        <p className={'name'}>{item.name}</p>
-                                        <p className={'title'}>{item.position}</p>
-                                        <p className={'phone'}><span>联系电话：</span>{item.contact}</p>
-                                        <p className={'weixin'}>
-                                                                    <Popconfirm
-                                                                        title=""
-                                                                        visible={this.state.visible[index]}
-                                                                        icon={<img src={'http://47.108.87.104:8601/user/'+item.wechatQrCode}/>}
-                                                                        onVisibleChange={this.handleVisibleChange.bind(this,index,index)}
-                                                                        okText="Yes"
-                                                                        cancelText="No"
-                                                                    >
-                                                                        <span>添加微信：查看二维码</span>
-                                                                    </Popconfirm>
-                                                                </p>
+                                            <img src={'http://47.108.87.104:8601/user/'+item.head}/>
+                                            <div className={'right'}>
+                                                <p className={'name'}>{item.name}</p>
+                                                <p className={'title'}>{item.position}</p>
+                                                <p className={'phone'}><span>联系电话：</span>{item.contact}</p>
+                                                <p className={'weixin'}>
+                                                    <Popconfirm
+                                                        title=""
+                                                        visible={this.state.visible[index]}
+                                                        icon={<img src={'http://47.108.87.104:8601/user/'+item.wechatQrCode}/>}
+                                                        onVisibleChange={this.handleVisibleChange.bind(this,index,index)}
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                    >
+                                                        <span>添加微信：查看二维码</span>
+                                                    </Popconfirm>
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
                                     )
                                 })
                             }
-                     
-                    </div>
+                            <Pagination defaultCurrent={1} total={this.state.consultant.length} defaultPageSize={4} onChange={this.page.bind(this)}/>
+                        </div>
                         <div className={'second'}>
                             <p className={'star'}>置业顾问</p>
                             {
@@ -599,4 +632,4 @@ class BridalIndex extends React.Component {
 }
 
 export default  connect(state => (
-    {estateId: state.estateId}), {newEstateId})(BridalIndex)
+    {estateId: state.estateId}), {newEstateId,setBridalInformation})(BridalIndex)

@@ -6,7 +6,8 @@ const rootReducer = combineReducers({
     'bridalInformation':bridalInformation,
     'estateId':estateId,
     'fileList':fileList,
-    'housingPictures':housingPictures
+    'housingPictures':housingPictures,
+
 
 })
 const store=new createStore(rootReducer)

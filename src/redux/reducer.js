@@ -27,6 +27,14 @@ function bridalInformation(state ={}, action) {
             return state
     }
 }
+function apartmentInformation(state ={}, action) {
+    switch (action.type) {
+        case 'apartmentInformation':
+            return action.data
+        default:
+            return state
+    }
+}
 function estateId(state = '', action) {
     switch (action.type) {
         case 'estateId':
@@ -55,4 +63,4 @@ function housingPictures(state = [], action) {
 }
 
 
-export {userInformation,bridalInformation,estateId,fileList,housingPictures}
+export {userInformation,bridalInformation,estateId,fileList,housingPictures,apartmentInformation}

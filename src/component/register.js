@@ -109,7 +109,6 @@ class Information extends React.Component {
 
                     }
                     else {
-             
                         // if(this.props.role==3){
                         //     message.success('注册成功！请先去填写个人资料！')
                         //     localStorage.setItem('role',3)
@@ -175,7 +174,7 @@ class Information extends React.Component {
                                addonAfter={<Button style={{cursor: 'pointer', fontWeight: 'bold'}} block={true}
                                                    onClick={this.getCode.bind(this)}
                                                    disabled={this.state.disabled}>{this.state.text}</Button>}
-                               placeholder="请输入短线验证码"/>
+                               placeholder="请输入短信验证码"/>
                     )}
                 </Form.Item>
                 <Form.Item>

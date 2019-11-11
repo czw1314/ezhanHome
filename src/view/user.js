@@ -46,7 +46,7 @@ class User extends React.Component {
                 localStorage.setItem('userName',this.state.nickname)
             }
             else{
-                message.err('昵称修改失败！')
+                message.error('昵称修改失败！')
             }
         })
     }

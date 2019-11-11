@@ -4,7 +4,7 @@ import {login} from "../api";
 import {connect} from "react-redux";
 import {setUserInformation} from "../redux/action";
 import { Modal, Button,Tabs,Form, Input, message  } from 'antd';
-import {getPhoneCode, register} from '../api/index'
+import {getPhoneCode, recoverPwd} from '../api/index'
 
 class RetreivePassword extends React.Component {
     constructor(props){
@@ -14,16 +14,6 @@ class RetreivePassword extends React.Component {
         }
     }
     componentDidMount(){
-        //  var obj = new window.WxLogin({
-        //     self_redirect:true,
-        //     id:"login_container", 
-        //     appid: "wx53ba91de253ea23a", 
-        //     scope: "snsapi_login", 
-        //     redirect_uri: "http%3A%2F%2Fwww.ezhanhome.com",
-        //      state: ".impowerBox .qrcode {width: 200px;}",
-        //     style: "",
-        //     href: "http://www.ezhanhome.com/weixin.css"
-        //     });
     }
     //获取手机验证码
     getCode() {
@@ -58,7 +48,7 @@ class RetreivePassword extends React.Component {
                     "phoneCode": values.phoneCode,
                     "verifyCode": values.verifyCode
                 }
-                register(params).then((res) => {
+                recoverPwd(params).then((res) => {
                     if (res.data.code === 0) {
                         if (res.data.verifyErrorMsg) {
                             this.props.form.setFields({
@@ -143,7 +133,7 @@ class RetreivePassword extends React.Component {
                                addonAfter={<Button style={{cursor: 'pointer', fontWeight: 'bold'}} block={true}
                                                    onClick={this.getCode.bind(this)}
                                                    disabled={this.state.disabled}>{this.state.text}</Button>}
-                               placeholder="请输入短线验证码"/>
+                               placeholder="请输入短信验证码"/>
                     )}
                 </Form.Item>
                 <Form.Item>

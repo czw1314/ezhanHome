@@ -10,9 +10,8 @@
     display: flex;
     width: 1200px;
     margin: auto;
-    height: 70px;
+    padding: 20px 0;
     font-size:41px;
-    font-family:Source Han Sans CN;
     font-weight:500;
     align-items: center;
     color:rgba(38,138,237,1);
@@ -28,7 +27,6 @@
     }
     .location{
       font-size:16px;
-      font-family:Source Han Sans CN;
       margin-right: 50px;
       color:rgba(51,51,51,1);
     }
@@ -38,7 +36,7 @@
   }
   .condition{
     width: 1200px;
-    margin:30px auto 0;
+    margin:8px auto 0;
     .ant-checkbox-group-item{
       color: #333;
     }

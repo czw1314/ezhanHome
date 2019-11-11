@@ -28,6 +28,7 @@
     .right {
       cursor: pointer;
       display: flex;
+      font-size: 18px;
       align-items: center;
       a{
         color: #fff;
@@ -82,6 +83,7 @@
   .ant-menu {
     display: flex;
     margin-right: 80px;
+    font-size: 16px;
     color: #fff;
     background-color: transparent;
     justify-content: space-between;
@@ -89,6 +91,10 @@
   }
   .ant-menu-horizontal {
     border: none;
+  }
+  .ant-menu-item{
+    font-weight: bold;
+    font-size: 18px !important;
   }
 
   .ant-menu-item > a {
@@ -143,6 +149,7 @@
       line-height: 37px;
       color: rgba(255, 255, 255, 1);
       opacity: 1;
+      margin-bottom: 50px;
     }
     .search-box{
       margin:auto;
@@ -212,7 +219,9 @@
         flex-wrap: wrap;
         .item {
           position: relative;
+          width: 280px;
           margin-right: 25px;
+          cursor: pointer;
           p{
             margin: 0;
           }
@@ -225,6 +234,7 @@
             border-bottom-right-radius: 12px;
             border-top-left-radius: 12px;
             background-color: #FF5353;
+            color: #fff;
           }
           .text{
             position: absolute;
@@ -251,6 +261,7 @@
             display: flex;
             padding-top: 6px;
             justify-content: space-between;
+            flex-wrap: wrap;
             .address {
               font-size: 16px;
               font-weight: bold;
@@ -310,7 +321,9 @@
         justify-content: space-between;
         .item {
           margin-right: 25px;
+          width: 280px;
           position: relative;
+          cursor: pointer;
           p{
             margin: 0;
           }
@@ -324,6 +337,7 @@
             border-bottom-right-radius: 12px;
             border-top-left-radius: 12px;
             background-color: #268AED;
+            color: #fff;
           }
           .text{
             position: absolute;
@@ -349,6 +363,7 @@
           .second {
             display: flex;
             padding-top: 6px;
+            flex-wrap: wrap;
             justify-content: space-between;
             .address {
               font-size: 16px;
@@ -416,16 +431,19 @@
         }
       }
       .synopsis {
-        width: 1200px;
-        margin: auto;
+        //width: 1200px;
+        white-space: nowrap;
         display: flex;
-        justify-content: space-between;
+        width: 30000px;
+        //overflow: hidden;
+        margin: auto;
         .item {
           position: relative;
+          display: inline-block;
           width: 280px;
           background-color: #fff;
-          padding: 0 24px 24px;
-          margin-right: 25px;
+          margin-right: 27px;
+          padding-bottom: 20px;
           p{
             margin: 0;
           }
@@ -438,7 +456,7 @@
           }
           .first {
             display: flex;
-            padding: 70px 0 20px;
+            padding: 70px 20px 20px;
             font-weight: bold;
             justify-content: space-between;
             .name {
@@ -451,11 +469,15 @@
             }
           }
           .second {
-            padding-top: 6px;
+            padding: 6px 20px 0;
             font-size: 14px;
             font-weight: bold;
             color: rgba(51, 51, 51, 1);
             .address {
+              p{
+                width: 100%;
+                white-space:pre-wrap;
+              }
               display: flex;
               justify-content: space-between;
             }
@@ -466,7 +488,7 @@
           }
           .thirst {
             display: flex;
-            padding-top: 6px;
+            padding: 6px 20px 0;
             color: #333;
             .tag {
               font-size: 14px;
@@ -476,7 +498,7 @@
           }
 
           .phone, .weixin {
-            padding-top: 6px;
+            padding: 6px 20px 0;
             font-size: 14px;
             text-align: left;
             color: rgba(102, 102, 102, 1);
@@ -499,7 +521,7 @@
 
         }
         .item:nth-child(4n+4){
-          margin-right: 0
+          margin-right: 0px
         }
       }
     }

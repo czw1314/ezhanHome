@@ -145,7 +145,7 @@ class Information extends React.Component {
                                addonAfter={<Button style={{cursor: 'pointer', fontWeight: 'bold'}} block={true}
                                                    onClick={this.getCode.bind(this)}
                                                    disabled={this.state.disabled}>{this.state.text}</Button>}
-                               placeholder="请输入短线验证码"/>
+                               placeholder="请输入短信验证码"/>
                     )}
                 </Form.Item>
                 <Form.Item>

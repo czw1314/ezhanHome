@@ -2,18 +2,11 @@ import React from 'react'
 import '../../css/bridalAdmin.scss'
 import {connect} from "react-redux";
 import axios from 'axios';
-import {
-    HashRouter as Router,
-    Route,withRouter
-} from 'react-router-dom'
+import {Route,withRouter} from 'react-router-dom'
 import {newEstateId, getFileList,setHousingPictures} from "../../redux/action";
-import {
-    Tabs, Input, Button, Form, Upload, Icon, message, Checkbox,
-    Select, Modal, Cascader, Divider
-} from 'antd';
+import {Tabs, Input, Button, Form, Upload, Icon, message,Select, Modal, Cascader,notification} from 'antd';
 import {
     getDistrictRegions,
-    agentRegister,
     estatePublished,
     delHousingPictures,
     getBuildingTypes,
@@ -27,7 +20,8 @@ import {
     updata,
     getEstateMsg,
     getHouseTraits,
-    getEstateAgents
+    getEstateAgents,
+    searchEstate
 } from '../../api/index'
 
 //上传户型
@@ -423,7 +417,7 @@ class Information extends React.Component {
                 </Form.Item>
                 <Form.Item label={'建面区间：'}>
                     {getFieldDecorator('areaRange')(
-                        <Input addonAfter="m²"/>
+                        <Input addonAfter="m²" placeholder="格式：100-200"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'上市时间：'}>
@@ -703,7 +697,7 @@ class Information extends React.Component {
                                         </Select>
                                     )}
                                 </Form.Item>
-                                <Form.Item label={'物业朝向：'}>
+                                <Form.Item label={'户型朝向：'}>
                                     {getFieldDecorator(`housingMsgs[${index}].orientations`)(
                                        <Select>
                                        <Option value="东">东</Option>
@@ -797,7 +791,7 @@ class PicturesWall extends React.Component {
             previewImage: '',
             fileList: [],
             estateId: '',
-            multiple: false,
+            multiple: true,
         };
     }
 
@@ -1369,7 +1363,7 @@ class InformationUpdata extends React.Component {
                     {getFieldDecorator('buildingStructure', {initialValue: this.props.values.buildingStructure || ''})(
                         <Select>
                             {this.state.buildingStructures && this.state.buildingStructures.map(item => {
-                                    return (<Option value={item.label}>{item.label}</Option>)
+                                    return (<Option value={item.label} key={item.label}>{item.label}</Option>)
                                 }
                             )}
                         </Select>
@@ -1812,7 +1806,7 @@ class PicturesWallUpdata extends React.Component {
 }
 
 const PicturesWallUpdataId = connect(state => (
-    {fileList: state.fileList}), {getFileList})(PicturesWallUpdata);
+    {fileList: state.fileList,estateId:state.estateId}), {getFileList})(PicturesWallUpdata);
 
 class bridalAdmin extends React.Component {
     constructor(props) {
@@ -1841,31 +1835,42 @@ class bridalAdmin extends React.Component {
             agentIds:[],
             fileList1: [],
             uploading: false,
+            fileList2: [
+                {
+                    uid: '-1',
+                    name: 'xxx.png',
+                    status: 'done',
+                    url: 'http://www.baidu.com/xxx.png',
+                },
+                ],            estates:[{label:'新增',value:0}]
 
         }
     }
 
     componentDidMount() {
-        getDistrictRegions().then((res) => {
+        let params={
+            area:[],
+            housingTypes:[],
+            orderType:0,
+            prices:[],
+            traitIds:[],
+            districtIds: [],
+            streetId:[],
+            searchText:'',
+        }
+        searchEstate(params).then((res) => {
             if (res.data.code === 1) {
                 let option = [];
-                for (let i = 0; i < res.data.list.length; i++) {
+                for (let i = 0; i < res.data.estates.length; i++) {
                     let item = {
-                        value: res.data.list[i].id,
-                        label: res.data.list[i].name,
-                        children: []
-                    }
-                    for (let j = 0; j < res.data.list[i].regions.length; j++) {
-                        let items = {
-                            value: res.data.list[i].regions[j].id,
-                            label: res.data.list[i].regions[j].street,
-                        }
-                        item.children.push(items)
+                        value: res.data.estates[i].id,
+                        label: res.data.estates[i].name,
+                        url:'http://47.108.87.104:8601/show/downloadPaper?estateId='+res.data.estates[i].id
                     }
                     option.push(item)
                 }
                 this.setState({
-                    districtRegionsList: option
+                    estates: option
                 })
             }
         })
@@ -1954,19 +1959,49 @@ class bridalAdmin extends React.Component {
                     fileList1: [],
                     uploading: false,
                   });
-                  message.success('上传成功');
+                const key = `open${Date.now()}`;
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        确定
+                    </Button>
+                );
+                notification.success({
+                    message: '楼盘一页纸发布成功',
+                    btn,
+                    key,
+                    duration: 0,
+                });
             }
             else{
-                message.error('上传失败');
-                this.setState({
-                    uploading: false,
-                  });
+                const key = `open${Date.now()}`;
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        确定
+                    </Button>
+                );
+                notification.error({
+                    message: '楼盘一页纸发布失败',
+                    btn,
+                    key,
+                    duration: 0,
+                });
             }
         }).catch((res)=>{
             this.setState({
                 uploading: false,
               });
-              message.success('上传失败');
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.error({
+                message: '楼盘一页纸发布失败',
+                btn,
+                key,
+                duration: 0,
+            });
         })
       };
 //tag切换回调
@@ -1999,7 +2034,8 @@ class bridalAdmin extends React.Component {
     //选择楼盘
     setRegion(value) {
         this.setState({
-            region: value
+            region: value,
+            estateId: ''
         })
         let params = {
             districtId: value[1]
@@ -2078,7 +2114,16 @@ class bridalAdmin extends React.Component {
                 this.props.getFileList(x)
                 this.props.setHousingPictures(y)
                 this.setState({
-                    values: res.data.estate
+                    values: res.data.estate,
+                    fileList1: [
+                        {
+                            uid: '-1',
+                            name: res.data.estate.name+'一页纸',
+                            status: 'done',
+                            url: 'http://47.108.87.104:8601/show/downloadPaper?estateId='+value,
+                        },
+                    ],
+
                 })
             }
         })
@@ -2164,7 +2209,7 @@ class bridalAdmin extends React.Component {
       },
       beforeUpload: file => {
         this.setState(state => ({
-          fileList1: [...state.fileList1, file],
+          fileList1: [file],
         }));
         return false;
       },
@@ -2201,15 +2246,19 @@ class bridalAdmin extends React.Component {
                                 <p className={'title'}>楼盘一页纸发布</p>
                                 <div className={'item'}>
                                     <p>选择发布的楼盘：</p>
-                                    <Cascader options={this.state.districtRegionsList} placeholder={''}
-                                              onChange={this.setRegion.bind(this)} style={{width: 200}}/>
-                                    <Select style={{width: 200}} onChange={this.setEstates.bind(this)}>
+                                    <Select style={{width: 200}} onChange={this.setEstates.bind(this)} value={this.state.estateId}
+                                            showSearch
+                                            placeholder="Select a person"
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) =>
+                                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }>
                                         {this.state.estates && this.state.estates.map(item => {
-                                                return (<Option value={item.value}>{item.label}</Option>)
+                                                return (<Option value={item.value} key={item.value}>{item.label}</Option>)
                                             }
                                         )}
                                     </Select>
-                                    <Upload {...props}>
+                                    <Upload {...props} fileList={this.state.fileList1}>
           <Button>
             <Icon type="upload" /> 选择楼盘一页纸
           </Button>
@@ -2217,11 +2266,10 @@ class bridalAdmin extends React.Component {
         <Button
           type="primary"
           onClick={this.handleUpload}
-          disabled={fileList1.length === 0}
           loading={uploading}
           style={{ marginLeft: 16 }}
         >
-         确定发布
+            {fileList1.length === 0?'发布':'更新'}
         </Button>
                                 </div>
                             </div>
@@ -2269,11 +2317,16 @@ class bridalAdmin extends React.Component {
                                 <span className={'title'}>楼盘信息编辑更新</span>
 
                                 <span style={{marginLeft: '50px'}}>选择编辑的楼盘：</span>
-                                <Cascader options={this.state.districtRegionsList} placeholder={''}
-                                          onChange={this.setRegion.bind(this)} style={{width: 200}}/>
-                                <Select style={{width: 200}} onChange={this.setEstates.bind(this)}>
+                                <Select style={{width: 200}} onChange={this.setEstates.bind(this)} value={this.state.estateId}
+                                        showSearch
+                                        placeholder="Select a person"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }>
+                                    <Option value={0} key={0}>新增</Option>
                                     {this.state.estates && this.state.estates.map(item => {
-                                            return (<Option value={item.value}>{item.label}</Option>)
+                                            return (<Option value={item.value} key={item.value}>{item.label}</Option>)
                                         }
                                     )}
                                 </Select>

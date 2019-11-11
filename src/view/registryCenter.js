@@ -392,27 +392,10 @@ class Information extends React.Component {
                         </div>
                     </div>
                 </Form.Item>
-                {/* <Form.Item> */}
-                    {/* <div className={'weixin'}>
-                        <p className={'h2'}>微信绑定（已绑定）</p>
-                        <div className={'weixinBox'}>
-                            <img src={require('../img/weixinHeader.png')}/>
-                            <p>微信昵称：CSD000000<br></br>微信账号：SACSDVV
-                            </p>
-                            <p>地区：成都<br></br>性别：男
-                            </p>
-                            <Button type="primary" style={{marginLeft: '40px'}} size={'large'}>解除绑定</Button>
-                        </div>
-                    </div>
-                    <div className={'weixin'}>
-                        <p className={'h2'}>微信绑定（未绑定）</p>
-                        <div className={'weixinBox'}>
-                            <Button type="primary" style={{marginLeft: '40px'}} size={'large'}>微信绑定</Button>
-                        </div>
-                    </div>
-                    <Button type="primary" size={'large'} style={{margin: '40px 0 20px'}} onClick={this.handleSubmit.bind(this)}>提交注册信息申请</Button>
+                <Form.Item>
+                    <Button type="primary" size={'large'} style={{margin: '40px auto 20px'}} onClick={this.handleSubmit.bind(this)}>提交注册信息申请</Button>
                     <p>温馨提示：当您注册成功后，预计1-3个工作日内审核，审核成功后即可使用所有功能如有需要，可微信咨询微信号：pangzhu2018</p>
-                </Form.Item> */}
+                </Form.Item>
             </Form>
         );
     }

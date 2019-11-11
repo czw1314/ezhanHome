@@ -1,6 +1,7 @@
 .bridalChamber{
   text-align: left;
   color: #fff;
+  font-family:Source Han Sans CN;
   .title-box {
     background: rgba(242, 245, 248, 1);
     .ant-btn-primary {
@@ -14,9 +15,9 @@
       width: 1200px;
       margin:auto;
       display: flex;
-      height: 70px;
+      //height: 70px;
       font-size: 41px;
-      font-family: Source Han Sans CN;
+      padding: 20px 0;
       font-weight: 500;
       align-items: center;
       color: rgba(38, 138, 237, 1);
@@ -42,17 +43,24 @@
     }
   }
   .condition{
-    margin-top: 30px;
     width: 1200px;
-    margin: auto;
+    margin:8px auto 0;
     .ant-checkbox-group-item{
     color: #333;
   }
+    .ant-radio-wrapper-checked{
+      font-weight: bold;
+      color: #268AED !important;
+    }
+    .ant-radio-wrapper {
+      color: #000;
+    }
   .ant-checkbox-group-item{
     margin: 10px 0;
   }
     .ant-checkbox-wrapper-checked{
       color: #268AED;
+      font-weight: bold;
     }
     .first{
       display: flex;
@@ -141,6 +149,7 @@
             .pic{
               width: 352px;
               height: 264px;
+              cursor: pointer;
               img{
                 width: 100%;
                 height: 100%;
@@ -162,34 +171,37 @@
                 }
                 .name {
                   font-size: 20px;
-                  font-family: Source Han Sans CN;
+                  cursor: pointer;
                   font-weight: bold;
                   color: rgba(51, 51, 51, 1);
                 }
+                .name:hover{
+                  color: #2f54eb;
+                }
                 .price {
                   font-size: 24px;
-                  font-family: Source Han Sans CN;
                   font-weight: bold;
                   color: rgba(255, 83, 83, 1);
                 }
               }
               .address {
                 font-size: 16px;
-                font-family: Source Han Sans CN;
+                cursor: pointer;
                 font-weight: bold;
+                margin-bottom: 10px ;
                 color: rgba(51, 51, 51, 1);
               }
               .apartment {
                 width: 100%;
                 font-size: 14px;
-                font-family: Source Han Sans CN;
+                cursor: pointer;
                 font-weight: 400;
                 color: rgba(51, 51, 51, 1);
               }
               .area {
                 font-size: 14px;
                 margin: 10px 0;
-                font-family: Source Han Sans CN;
+                cursor: pointer;
                 color: rgba(102, 102, 102, 1);
               }
               .tag {
@@ -226,6 +238,7 @@
         margin: 10px 0
       }
       .hot {
+        cursor: pointer;
         .title {
           font-size: 20px;
           font-family: Source Han Sans CN;
@@ -337,6 +350,7 @@
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
     color: #fff;
     background-color: #268AED;
+    font-size: 18px;
   }
   .ant-menu-horizontal{
     border: none;
@@ -349,7 +363,7 @@
   //  color: #434343;
   //}
   .ant-menu-item, .ant-menu-submenu-title {
-    padding: 0;
+    font-weight: bold;
   }
   .ant-menu-vertical .ant-menu-item, .ant-menu-vertical-left .ant-menu-item, .ant-menu-vertical-right .ant-menu-item, .ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-submenu-title, .ant-menu-vertical-left .ant-menu-submenu-title, .ant-menu-vertical-right .ant-menu-submenu-title, .ant-menu-inline .ant-menu-submenu-title {
     //padding:0 20px 0 0;
@@ -361,10 +375,11 @@
     padding: 0;
     color: #fff;
   }.ant-menu-horizontal > .ant-menu-item a:hover {
-     //margin: 0 7px;
+       background-color: #268AED;
      color: #fff;
    }
   .ant-menu-horizontal > .ant-menu-item:hover {
+    background-color: #268AED;
     color: #fff;
     border:none
   }
@@ -381,10 +396,11 @@
     color: #fff;
   }
   .ant-menu-horizontal > .ant-menu-item-selected>a{
-
+    color: #fff;
   }
   .ant-menu-item-active{
-    background-color: #fff;
+    color: #fff !important;
+    background-color: #268AED;
     border: none;
   }
   .ant-btn-primary:hover, .ant-btn-primary:focus {

@@ -59,7 +59,6 @@ class Agent extends React.Component {
                         })
                     }
                 })
-
             }
         })
     }
@@ -317,13 +316,14 @@ class Agent extends React.Component {
                         <img src={require('../img/LOGO2.png')}/>
                     </div>
                     <p>经纪人</p>
-                    <img src={require('../img/Location2.png')} style={{height: 24, width: 16}}/>
-                    <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>
+                    {/*<img src={require('../img/Location2.png')} style={{height: 24, width: 16}}/>*/}
+                    {/*<span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>*/}
                     <Search
                         placeholder="搜索经纪人"
                         onSearch={this.search.bind(this)}
                         enterButton={suffix}
-                        style={{ width: 200 }}
+                        style={{width: 400}}
+                        size={'large'}
                     />
                 </div>
                 <div className={'condition'}>

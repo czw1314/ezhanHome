@@ -53,7 +53,7 @@ class App extends Component {
             <div>
 
 <Div></Div>
-                <div>
+                <div style={{textAlign:'center'}}>
                     <a target={'_blank'} href={''}>蜀ICP备18023206号-2</a>
                 </div>
             </div>

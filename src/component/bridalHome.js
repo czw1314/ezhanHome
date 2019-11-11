@@ -1,17 +1,20 @@
 import React from 'react';
 import Memu from './menu'
 import routes from '../router/index';
-import {Select, Button, Badge, Menu, Input, Checkbox, Modal, Pagination, Img} from 'antd';
+import {Input,Img} from 'antd';
 import '../css/bridalHome.scss'
 import {Route, Switch, Redirect, withRouter, Link} from 'react-router-dom';
 import BridalIndex from '../view/briadlChamber/bridalIndex'
 import Album from '../view/briadlChamber/Album'
 import Apartment from '../view/briadlChamber/apartment'
+import {connect} from "react-redux";
+import {getEstateMsg} from '../api/index'
 
 class BridalHome extends React.Component {
     state = {
         key: '',
-        searchText:''
+        searchText:'',
+        address:''
     }
     handleClick = (e) => {
         this.setState({
@@ -22,9 +25,27 @@ class BridalHome extends React.Component {
         this.props.history.push({pathname:'/home/bridalChamber', state:{
             searchText:this.state.searchText
             }})
+        localStorage.setItem('searchText',this.state.searchText)
     }
-   
-
+    go(){
+        this.props.history.push({pathname:'/home/bridalChamber', state:{
+                districtIds:this.state.districtIds
+        }})
+    }
+    componentDidMount(){
+        let params = {
+            estateId: this.props.estateId||localStorage.getItem('estateId'),
+        }
+        getEstateMsg(params).then((res) => {
+            if (res.data.code == 1) {
+                let address=res.data.estate.distinctRegion.split('—')
+                this.setState({
+                    address,
+                    districtIds:res.data.estate.distinctRegionIds[0]
+                })
+            }
+        })
+    }
     render() {
         const {Search} = Input;
         const enterButton= <img src={require('../img/search1.png')}
@@ -33,7 +54,6 @@ class BridalHome extends React.Component {
             height: 20,
             marginRight: 5
         }}/>;
-        const CheckboxGroup = Checkbox.Group;
         return (
             <div className='bridalHome'>
                 <div className={'headerHome'}>
@@ -42,9 +62,9 @@ class BridalHome extends React.Component {
                             <img src={require('../img/LOGO2.png')}/>
                         </div>
                         <p>新房</p>
-                        <img src={require('../img/Location2.png')} style={{height: 24, width: 16}}/>
-                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>
-                        <p className={'address'}>找新房>{localStorage.getItem('address0')}楼盘>{localStorage.getItem('address1')}楼盘</p>
+                        {/*<img src={require('../img/Location2.png')} style={{height: 24, width: 16}}/>*/}
+                        {/*<span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>*/}
+                        <p className={'address'}><span onClick={()=>{ this.props.history.push({pathname:'/home/bridalChamber'})}}>找新房></span><span onClick={this.go.bind(this)}>{this.state.address[0]?this.state.address[0]:localStorage.getItem('address0')}楼盘</span>>{this.state.address[1]?this.state.address[1]:localStorage.getItem('address1')}楼盘</p>
                         <Search
                         placeholder="请输入楼盘名"
                         value={this.state.searchText}
@@ -71,4 +91,5 @@ class BridalHome extends React.Component {
     }
 }
 
-export default withRouter(BridalHome);
+export default  connect(state => (
+    {bridalInformation: state.bridalInformation}))(withRouter(BridalHome))

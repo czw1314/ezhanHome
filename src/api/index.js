@@ -331,6 +331,14 @@ export const searchEstate = (params) =>
             },
         }
     );
+//找回密码
+export const recoverPwd = (params) =>
+    axios.post(`${base}/user/recoverPwd`,params,{
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );
 
 //查看户型图
 export const getHousingMsg = (params) =>

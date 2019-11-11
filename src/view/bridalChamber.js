@@ -1,9 +1,8 @@
 import React from 'react'
 import '../css/briadlChamber.scss'
-import {Select, Button,Radio, Menu, Input, Checkbox, Modal, Pagination} from 'antd';
+import {Radio, Menu, Input, Checkbox, Pagination} from 'antd';
 import { Link } from 'react-router-dom';
 import {searchEstate,getDistrictRegions,getTraits,getPopularEstate} from '../api/index'
-import {searchAgent} from "../api";
 import {connect} from "react-redux";
 import {newEstateId} from "../redux/action";
 
@@ -19,7 +18,7 @@ class BridalChamber extends React.Component {
             price: [{label: '8000元/m²以下', value: '8000'},{label: '8000-11000元/m²', value: '8000-11000'},
                 {label: '11000-15000元/m²', value: '11000-15000'},{label: '15000-20000元/m²', value: '15000-20000'},{label: '20000-30000元/m²', value: '20000-30000'},{label: '30000元/m²以上', value: '30000'}],
             areaChecked: [],
-            area: [{label: '50/m²以下', value: '50'},{label: '50-80m²', value: '50-80'},{label: '80-110m²', value: '80-110'},{label: '110-150m²', value: '110-150'},{label: '125-200m²', value: '150-200'},{label: '200m²以上', value: '200'}],
+            area: [{label: '50/m²以下', value: '50'},{label: '50-80m²', value: '50-80'},{label: '80-110m²', value: '80-110'},{label: '110-150m²', value: '110-150'},{label: '150-200m²', value: '150-200'},{label: '200m²以上', value: '200'}],
             apartmentChecked: [],
             apartment: [{label: '一居室', value: '一居室'},{label: '二居室', value: '二居室'},{label: '三居室', value: '三居室'},{label: '四居室', value: '四居室'},{label: '五居室', value: '五居室'},{label: '五居室以上', value: '五居室以上'}],
             characteristicChecked: [],
@@ -64,22 +63,22 @@ class BridalChamber extends React.Component {
             orderType:0,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
-            districtIds: [],
+            districtIds: [this.props.location.state?this.props.location.state.districtIds:''],
             streetId:[],
             searchText:this.state.searchText||this.props.location.state?this.props.location.state.searchText:'',
             pageNum:1,
             pageSize:10,
         }
+        this.setState({
+            searchText:this.props.location.state?this.props.location.state.searchText:'',
+            positionChecked:[this.props.location.state?this.props.location.state.districtIds:'']
+        });
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
                     models:res.data.estates,
                     counts:res.data.counts,
                 })
-                this.setState({
-                    searchText:this.props.location.state?this.props.location.state.searchText:''
-                });
-
             }
         })
         getTraits().then(res=>{
@@ -115,7 +114,6 @@ class BridalChamber extends React.Component {
         this.setState({
             positionChecked:[e.target.value],
             streetIdChecked:[]
-
         });
         let params={
             area:this.state.areasChecked,
@@ -124,7 +122,7 @@ class BridalChamber extends React.Component {
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
             districtIds:id,
-            streetId:this.state.streetIdChecked,
+            streetId:[],
             searchText:this.state.searchText,
             pageNum:1,
             pageSize:10,
@@ -149,7 +147,7 @@ class BridalChamber extends React.Component {
             orderType:this.state.orderType,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
-            districtIds: [this.state.positionChecked],
+            districtIds: this.state.positionChecked,
             streetId:streetIdChecked,
             searchText:this.state.searchText,
             pageNum:1,
@@ -191,12 +189,12 @@ class BridalChamber extends React.Component {
         })
     };
     //选择面积
-    onChangeArea = e => {
+    onChangeArea= areaChecked => {
         this.setState({
-            areaChecked:[e.target.value],
+            areaChecked
         });
         let params={
-            area:[e.target.value],
+            area:areaChecked,
             housingTypes:this.state.apartmentChecked,
             orderType:this.state.orderType,
             prices:this.state.priceChecked,
@@ -473,6 +471,7 @@ class BridalChamber extends React.Component {
             streetIdChecked:[],
             searchText:'',
         })
+        this.props.history.push({pathname:'/home/bridalChamber'})
             let params={
             area:[],
             housingTypes:[],
@@ -504,7 +503,6 @@ class BridalChamber extends React.Component {
                                 marginRight: 5
                             }}/>;
         const CheckboxGroup = Checkbox.Group;
-        console.log(this.state.togglePrice)
         return (
             <div className='bridalChamber'>
                 <div className={'title-box'}>
@@ -513,8 +511,8 @@ class BridalChamber extends React.Component {
                         <img src={require('../img/LOGO2.png')}/>
                     </div>
                     <p>新房</p>
-                    <img src={require('../img/Location2.png')} style={{height: 24, width: 16}}/>
-                    <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>
+                    {/*<img src={require('../img/Location2.png')} style={{height: 24, width: 16}}/>*/}
+                    {/*<span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>*/}
                     <Search
                         placeholder="请输入楼盘名"
                         value={this.state.searchText}
@@ -554,13 +552,19 @@ class BridalChamber extends React.Component {
                     </div>
                     <div className={'second'}>
                         <p>面积</p>
-                        <Radio.Group  onChange={this.onChangeArea.bind(this)} value={this.state.areaChecked[0]}>
-                            {
-                                this.state.area&&this.state.area.map((item,index)=>{
-                                    return(<Radio value={item.value} key={index}>{item.label}</Radio>)
-                                })
-                            }
-                        </Radio.Group>
+                        {/*<Radio.Group  onChange={this.onChangeArea.bind(this)} value={this.state.areaChecked[0]}>*/}
+                            {/*{*/}
+                                {/*this.state.area&&this.state.area.map((item,index)=>{*/}
+                                    {/*return(<Radio value={item.value} key={index}>{item.label}</Radio>)*/}
+                                {/*})*/}
+                            {/*}*/}
+                        {/*</Radio.Group>*/}
+                        <CheckboxGroup
+                            style={{marginTop:'-10px'}}
+                            options={this.state.area}
+                            value={this.state.areaChecked}
+                            onChange={this.onChangeArea.bind(this)}
+                        />
                     </div>
                     <div className={'second'}>
                         <p>户型</p>
@@ -579,7 +583,6 @@ class BridalChamber extends React.Component {
                             options={this.state.characteristic}
                             value={this.state.characteristicChecked}
                             onChange={this.onChangeCharacteristic.bind(this)}
-
                         />
                     </div>
 
@@ -594,7 +597,7 @@ class BridalChamber extends React.Component {
                             <Menu.Item style={{fontSize: 18}} key={'default'} onClick={this.toggle.bind(this, 'default')}>默认排序</Menu.Item>
                             <Menu.Item key={'price'}
                                        onClick={this.toggle.bind(this, 'price')}>价格{this.state.togglePrice ? '↑' : '↓'}</Menu.Item>
-                            <Menu.Item key={'time'} onClick={this.toggle.bind(this, 'time')}>最新开盘</Menu.Item>
+                            <Menu.Item key={'time'} onClick={this.toggle.bind(this, 'time')}>最新开盘↑</Menu.Item>
                         </Menu>
                         <div className={'clear'} onClick={this.clear.bind(this)}>清空筛选条件</div>
                     </div>
@@ -605,22 +608,20 @@ class BridalChamber extends React.Component {
                             {
                                 this.state.models&&this.state.models.map((item,index)=>{
                                     return(
-                                        <div className={`showItem ${index === this.state.modelsShow.length-1 ? 'last' : ''}`} onClick={this.link.bind(this,item.id)} key={index}>
+                                        <div className={`showItem ${index === this.state.modelsShow.length-1 ? 'last' : ''}`} key={index}>
                                         <div className={'left'}>
                                             <div className={'item'}>
-                                                <Link to={'/home/bridalHome'}>
-                                                    <div className={'pic'}>
+                                                    <div className={'pic'} onClick={this.link.bind(this,item.id)}>
                                                         <img src={'http://47.108.87.104:8601/building/'+item.picture}/>
                                                     </div>
-                                                </Link>
                                                 <div className={'information'}>
                                                     <div className={'title'}>
-                                                        <p className={'name'}>{item.name}</p>
+                                                        <p className={'name'} onClick={this.link.bind(this,item.id)}>{item.name}</p>
                                                         <p className={'price'}>{item.referencePrice}元/m²起</p>
                                                     </div>
-                                                    <p className={'address'}>{item.distinctName}-{item.street}</p>
-                                                    <p className={'apartment'}>户型：{item.houseType}</p>
-                                                    <p className={'area'}>建面：{item.areaRange}m²</p>
+                                                    <p className={'address'} onClick={this.link.bind(this,item.id)}>{item.distinctName}-{item.street}</p>
+                                                    <p className={'apartment'} onClick={this.link.bind(this,item.id)}>户型：{item.houseType}</p>
+                                                    <p className={'area'} onClick={this.link.bind(this,item.id)}>建面：{item.areaRange}m²</p>
                                                     <p className={'tag'}>{item.propertyType}</p>
                                                     <p className={'advantage'}>
                                                         {

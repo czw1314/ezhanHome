@@ -3,7 +3,7 @@ import '../../css/admin.scss'
 import {Tabs, Table, Divider, Modal, Input, Button, Popconfirm} from 'antd';
 import ChangePassWord from '../../component/changePassWord'
 import {connect} from "react-redux";
-import {login, getAdmin, modifyHouseAdminPwd, getAdviser, aduitAgent, getAgent,settledAduit,delUser} from "../../api";
+import {login, getAdmin, modifyHouseAdminPwd, getAdviser, aduitAgent, getAgent, settledAduit, delUser} from "../../api";
 import {setUserInformation} from "../../redux/action";
 import {Form, message} from "antd/lib/index";
 
@@ -186,8 +186,8 @@ class EditableTable extends React.Component {
                 dataIndex: 'operation',
                 render: (text, record, index) =>
                     this.state.dataSource.length >= 1 ? (
-                            <a onClick={() => this.handleDelete(record.key, index)}>确认修改</a>
-            
+                        <a onClick={() => this.handleDelete(record.key, index)}>确认修改</a>
+
                     ) : null,
             },
         ];
@@ -203,7 +203,7 @@ class EditableTable extends React.Component {
             phone: this.state.dataSource[index].phone,
             newPassword: this.state.dataSource[index].passWord,
             role: 0,
-            
+
         }
         modifyHouseAdminPwd(params).then((res) => {
 
@@ -373,8 +373,9 @@ class Admin extends React.Component {
             agentData: [],
             agentApplyData: [],
             consultantApplyData: [],
-            agentControlData:[],
-            consultantControlData:[]
+            agentControlData: [],
+            consultantControlData: [],
+            visible1: false
         }
     }
 
@@ -545,7 +546,6 @@ class Admin extends React.Component {
 
     //关闭登陆弹框
     handleCancel() {
-        console.log('s')
         this.setState({
             login: false
         })
@@ -557,72 +557,76 @@ class Admin extends React.Component {
     }
 
     //是否通过
-    pass(userId, type, str,index) {
-        let params = {
-            userId: userId,
-            pass: type,
-        }
-        aduitAgent(params).then((res) => {
-                if (res.data.code === 1) {
-                    if (type === 1) {
-                        message.success('已通过注册')
-                        if (str == 'agent') {
-                            this.state.agentData.splice(0, 1)
-                            this.setState({
-                                    agentData: this.state.agentData
-                                }
-                            )
-
-                        }
-                        else if (str == 'consultant') {
-                            this.state.consultantData.splice(0, 1)
-                            this.setState({
-                                    consultantData: this.state.consultantData
-                                }
-                            )
-                        }
-                    }
-                    else {
-                        message.success('已反对申请')
-                        if (str == 'agent') {
-                            this.state.agentData.splice(0, 1)
-                            this.setState({
-                                    agentData: this.state.agentData
-                                }
-                            )
-
-                        }
-                        else if (str == 'consultant') {
-                            this.state.consultantData.splice(0, 1)
-                            this.setState({
-                                    consultantData: this.state.consultantData
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-        )
+    pass(userId, type, str, index) {
+        this.setState({
+            visible1: true
+        })
+        // let params = {
+        //     userId: userId,
+        //     pass: type,
+        // }
+        // aduitAgent(params).then((res) => {
+        //         if (res.data.code === 1) {
+        //             if (type === 1) {
+        //                 message.success('已通过注册')
+        //                 if (str == 'agent') {
+        //                     this.state.agentData.splice(0, 1)
+        //                     this.setState({
+        //                             agentData: this.state.agentData
+        //                         }
+        //                     )
+        //
+        //                 }
+        //                 else if (str == 'consultant') {
+        //                     this.state.consultantData.splice(0, 1)
+        //                     this.setState({
+        //                             consultantData: this.state.consultantData
+        //                         }
+        //                     )
+        //                 }
+        //             }
+        //             else {
+        //                 message.success('已反对申请')
+        //                 if (str == 'agent') {
+        //                     this.state.agentData.splice(0, 1)
+        //                     this.setState({
+        //                             agentData: this.state.agentData
+        //                         }
+        //                     )
+        //
+        //                 }
+        //                 else if (str == 'consultant') {
+        //                     this.state.consultantData.splice(0, 1)
+        //                     this.setState({
+        //                             consultantData: this.state.consultantData
+        //                         }
+        //                     )
+        //                 }
+        //             }
+        //         }
+        //     }
+        // )
     }
+
     //是否通过楼盘入驻申请
-    passApply(index,estateId,type, str,indexs) {
+    passApply(index, estateId, type, str, indexs) {
         let params = {}
-        if(str == 'agentApply'){
+        if (str == 'agentApply') {
             console.log(this.state.agentApplyData)
             params = {
                 userId: this.state.agentApplyData[index].personId,
-                estateId:estateId,
+                estateId: estateId,
                 pass: type,
             }
         }
-        else if (str == 'consultantApply'){
+        else if (str == 'consultantApply') {
             params = {
                 userId: this.state.consultantApplyData[index].personId,
-                estateId:estateId,
+                estateId: estateId,
                 pass: type,
             }
         }
- 
+
         settledAduit(params).then((res) => {
                 if (res.data.code === 1) {
                     if (type === 1) {
@@ -684,18 +688,22 @@ class Admin extends React.Component {
             }
         )
     }
+
     //删除经纪人、置业顾问
-    delUserData(userId,str){
-        let params={
-            userId:userId
+    delUserData(userId, str) {
+        this.setState({
+            visible1: false
+        })
+        let params = {
+            userId: userId
         }
-        delUser(params).then((res)=>{
-            if(res.data.code===1){
+        delUser(params).then((res) => {
+            if (res.data.code === 1) {
                 message.success('成功删除该账号')
                 if (str === 'agent') {
                     this.state.agentControlData.splice(0, 1)
                     this.setState({
-                        agentControlData: this.state.agentControlData
+                            agentControlData: this.state.agentControlData
                         }
                     )
 
@@ -703,14 +711,15 @@ class Admin extends React.Component {
                 else if (str === 'consultant') {
                     this.state.consultantControlData.splice(0, 1)
                     this.setState({
-                        consultantControlData: this.state.consultantControlData
+                            consultantControlData: this.state.consultantControlData
                         }
                     )
 
                 }
 
             }
-            else{
+            else {
+                message.error('删除该账号失败')
                 if (str === 'agent') {
                     this.state.agentControlData.splice(0, 1)
                     this.setState({
@@ -730,6 +739,7 @@ class Admin extends React.Component {
             }
         })
     }
+
     componentDidMount() {
         let params = {
             type: 2
@@ -745,80 +755,6 @@ class Admin extends React.Component {
 
     render() {
         const {TabPane} = Tabs;
-        const columns = [
-            {
-                title: '时间',
-                dataIndex: '时间',
-                key: '时间',
-                render: text => <a>{text}</a>,
-            },
-            {
-                title: '申请人姓名',
-                dataIndex: 'age',
-                key: 'age',
-            },
-            {
-                title: '头像',
-                dataIndex: 'address',
-                key: 'address',
-            },
-            {
-                title: '申请人账号（电话）',
-                key: 'tags',
-                dataIndex: 'tags',
-            },
-            {
-                title: '联系电话',
-                key: 'tags',
-                dataIndex: 'tags',
-            },
-            {
-                title: '微信二维码',
-                key: 'tags',
-                dataIndex: 'tags',
-            },
-            {
-                title: '申请人公司',
-                key: 'tags',
-                dataIndex: 'tags',
-            },
-            {
-                title: '经纪人服务区域',
-                key: 'tags',
-                dataIndex: 'tags',
-            },
-            {
-                title: '身份证号',
-                key: 'tags',
-                dataIndex: 'tags',
-            },
-            {
-                title: '查看身份证',
-                key: 'tags',
-                dataIndex: 'tags',
-            },
-            {
-                title: '职称',
-                key: 'tags',
-                dataIndex: 'tags',
-            },
-            {
-                title: '查看职称证件',
-                key: 'tags',
-                dataIndex: 'tags',
-            },
-            {
-                title: '是否通过',
-                key: 'action',
-                render: (text, record) => (
-                    <span>
-                  <a>Invite {record.name}</a>
-                  <Divider type="vertical"/>
-                  <a>Delete</a>
-                </span>
-                ),
-            },
-        ];
         //经纪人注册申请
         const agentColumns = [
             {
@@ -861,10 +797,10 @@ class Admin extends React.Component {
                 render: (text, record, index) => (
                     <div>
                         {text && text.map(item => {
-                            return (<p>{item.districtName+'—'+item.streetName}</p>)
+                            return (<p>{item.districtName + '—' + item.streetName}</p>)
                         })
                         }
-                        </div>
+                    </div>
                 ),
             },
             {
@@ -898,6 +834,18 @@ class Admin extends React.Component {
                    <a onClick={this.pass.bind(this, this.state.agentData[index].personId, 1, 'agent')}>是</a>
                   <Divider type="vertical"/>
                   <a onClick={this.pass.bind(this, this.state.agentData[index].personId, -1, 'agent')}>否</a>
+                        <Modal
+                            title="Basic Modal"
+                            visible={this.state.visible1}
+                            onOk={this.handleOk}
+                            onCancel={() => {
+                                this.setState({visible1: false})
+                            }}
+                        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
                 </span>
                 ),
             },
@@ -1002,10 +950,10 @@ class Admin extends React.Component {
                 dataIndex: 'regions',
                 render: (text, record, index) => (
                     <div>
-                    {text && text.map(item => {
-                        return (<p>{item.districtName+'—'+item.streetName}</p>)
-                    })
-                    }
+                        {text && text.map(item => {
+                            return (<p>{item.districtName + '—' + item.streetName}</p>)
+                        })
+                        }
                     </div>
                 ),
             },
@@ -1031,18 +979,18 @@ class Admin extends React.Component {
                 key: 'action',
                 render: (text, record, index) => (
                     <div>
-                    {text && text.map((item,indexs) => {
-                        return (
-                            <p>
-               <a onClick={this.passApply.bind(this,index, item.estateId, 1, 'agentApply',indexs)}>是</a>
-              <Divider type="vertical"/>
-              <a onClick={this.passApply.bind(this,index, item.estateId, -1, 'agentApply',indexs)}>否</a>
-            </p>
-                        )
-                    })
-                    }
-                </div>
-    
+                        {text && text.map((item, indexs) => {
+                            return (
+                                <p>
+                                    <a onClick={this.passApply.bind(this, index, item.estateId, 1, 'agentApply', indexs)}>是</a>
+                                    <Divider type="vertical"/>
+                                    <a onClick={this.passApply.bind(this, index, item.estateId, -1, 'agentApply', indexs)}>否</a>
+                                </p>
+                            )
+                        })
+                        }
+                    </div>
+
                 ),
             },
         ];
@@ -1107,15 +1055,15 @@ class Admin extends React.Component {
                 title: '是否通过',
                 key: 'action',
                 dataIndex: 'estates',
-                render: (text, record,index) => (
+                render: (text, record, index) => (
                     <div>
-                        {text && text.map((item,indexs) => {
+                        {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                   <a onClick={this.passApply.bind(this,index, item.estateId, 1, 'consultantApply',indexs)}>是</a>
-                  <Divider type="vertical"/>
-                  <a onClick={this.passApply.bind(this,index, item.estateId, -1, 'consultantApply',indexs)}>否</a>
-                </p>
+                                    <a onClick={this.passApply.bind(this, index, item.estateId, 1, 'consultantApply', indexs)}>是</a>
+                                    <Divider type="vertical"/>
+                                    <a onClick={this.passApply.bind(this, index, item.estateId, -1, 'consultantApply', indexs)}>否</a>
+                                </p>
                             )
                         })
                         }
@@ -1164,10 +1112,10 @@ class Admin extends React.Component {
                 dataIndex: 'regions',
                 render: (text, record, index) => (
                     <div>
-                    {text && text.map(item => {
-                        return (<p>{item.districtName+'—'+item.streetName}</p>)
-                    })
-                    }
+                        {text && text.map(item => {
+                            return (<p>{item.districtName + '—' + item.streetName}</p>)
+                        })
+                        }
                     </div>
                 ),
             },
@@ -1197,11 +1145,23 @@ class Admin extends React.Component {
             {
                 title: '是否删除经纪人',
                 key: 'action',
-                render: (text, record,index) => (
+                render: (text, record, index) => (
                     <span>
-                   <a onClick={this.delUserData.bind(this, this.state.agentControlData[index].personId, 1, 'agent')}>是</a>
-                  <Divider type="vertical"/>
-                  <a onClick={this.delUserData.bind(this, this.state.agentControlData[index].personId, -1, 'agent')}>否</a>
+                   <a onClick={() => {
+                       this.setState({visible1: true})
+                   }}>删除</a>
+                                                <Modal
+                                                    title="是否删除"
+                                                    okText="确认"
+                                                    cancelText="取消"
+                                                    visible={this.state.visible1}
+                                                    onOk={this.delUserData.bind(this, this.state.agentControlData[index].personId, 1, 'agent')}
+                                                    onCancel={() => {
+                                                        this.setState({visible1: false})
+                                                    }}
+                                                >
+                                                    <p>删除以后将不可恢复，请谨慎选择!</p>
+        </Modal>
                 </span>
                 ),
             },
@@ -1245,115 +1205,127 @@ class Admin extends React.Component {
             {
                 title: '是否删除置业顾问',
                 key: 'action',
-                render: (text, record,index) => (
+                render: (text, record, index) => (
                     <span>
-                   <a onClick={this.delUserData.bind(this, this.state.consultantControlData[index].personId, 'consultant')}>是</a>
-                  <Divider type="vertical"/>
-                  <a onClick={this.delUserData.bind(this, this.state.consultantControlData[index].personId,'consultant')}>否</a>
+                    <a onClick={() => {
+                        this.setState({visible1: true})
+                    }}>删除</a>
+        <Modal
+            title="是否删除"
+            okText="确认"
+            cancelText="取消"
+            visible={this.state.visible1}
+            onOk={this.delUserData.bind(this, this.state.consultantControlData[index].personId, 'consultant')}
+                onCancel={() => {
+                this.setState({visible1: false})
+            }}
+                >
+                <p>删除以后将不可恢复，请谨慎选择!</p>
+                </Modal>
                 </span>
                 ),
             },
-        ];
-        //管理新房管理员
-        const bridalControl = [
-            {
-                title: '序号',
-                dataIndex: 'no',
-                key: 'no',
-            },
-            {
-                title: '账号',
-                dataIndex: 'phone',
-                key: 'phone',
-            },
-            {
-                title: '修改密码',
-                dataIndex: 'passWord',
-                key: 'passWord',
-                render: () => (<Input onChange={this.changePassWord.bind(this)}/>)
-            },
-            {
-                title: '更新密码',
-                render: () => (<Button>确认修改</Button>)
-            },
-        ];
-        const consultant = [
-            {
-                title: '时间',
-                dataIndex: 'createTime',
-                key: 'createTime',
-            },
-            {
-                title: '申请人姓名',
-                dataIndex: 'name',
-                key: 'name',
-            },
-            {
-                title: '头像',
-                dataIndex: 'head',
-                key: 'head',
-                render: (text, record, index) => (
-                    <img src={''}/>
-                ),
-            },
-            {
-                title: '申请人账号（电话）',
-                key: 'phone',
-                dataIndex: 'phone',
-            },
-            {
-                title: '联系电话',
-                key: 'contact',
-                dataIndex: 'contact',
-            },
-            {
-                title: '微信二维码',
-                key: 'weChatQrCode',
-                dataIndex: 'weChatQrCode',
-            },
-            {
-                title: '申请人公司',
-                key: 'company',
-                dataIndex: 'company',
-            },
-            {
-                title: '是否通过',
-                key: 'action',
-                render: (text, record, index) => (
-                    <span>
-                  <a>是</a>
-                  <Divider type="vertical"/>
-                  <a>否</a>
-                </span>
-                ),
-            },
-        ];
+                        ];
+                        //管理新房管理员
+                        const bridalControl=[
+                        {
+                            title: '序号',
+                            dataIndex: 'no',
+                            key: 'no',
+                        },
+                        {
+                            title: '账号',
+                            dataIndex: 'phone',
+                            key: 'phone',
+                        },
+                        {
+                            title: '修改密码',
+                            dataIndex: 'passWord',
+                            key: 'passWord',
+                            render: () => (<Input onChange={this.changePassWord.bind(this)}/>)
+                        },
+                        {
+                            title: '更新密码',
+                            render: () => (<Button>确认修改</Button>)
+                        },
+                        ];
+                        const consultant=[
+                        {
+                            title: '时间',
+                            dataIndex: 'createTime',
+                            key: 'createTime',
+                        },
+                        {
+                            title: '申请人姓名',
+                            dataIndex: 'name',
+                            key: 'name',
+                        },
+                        {
+                            title: '头像',
+                            dataIndex: 'head',
+                            key: 'head',
+                            render: (text, record, index) => (
+                            <img src={''}/>
+                            ),
+                        },
+                        {
+                            title: '申请人账号（电话）',
+                            key: 'phone',
+                            dataIndex: 'phone',
+                        },
+                        {
+                            title: '联系电话',
+                            key: 'contact',
+                            dataIndex: 'contact',
+                        },
+                        {
+                            title: '微信二维码',
+                            key: 'weChatQrCode',
+                            dataIndex: 'weChatQrCode',
+                        },
+                        {
+                            title: '申请人公司',
+                            key: 'company',
+                            dataIndex: 'company',
+                        },
+                        {
+                            title: '是否通过',
+                            key: 'action',
+                            render: (text, record, index) => (
+                            <span>
+                            <a>是</a>
+                            <Divider type="vertical"/>
+                            <a>否</a>
+                            </span>
+                            ),
+                        },
+                        ];
 
-        const data = [
-            {
-                key: '1',
-                name: 'John Brown',
-                age: 32,
-                address: 'New York No. 1 Lake Park',
-                tags: ['nice', 'developer'],
-            },
-            {
-                key: '2',
-                name: 'Jim Green',
-                age: 42,
-                address: 'London No. 1 Lake Park',
-                tags: ['loser'],
-            },
-            {
-                key: '3',
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                tags: ['cool', 'teacher'],
-            },
-        ];
-        return (
-            <div className='admin'>
+                        const data=[
+                        {
+                            key: '1',
+                            name: 'John Brown',
+                            age: 32,
+                            address: 'New York No. 1 Lake Park',
+                            tags: ['nice', 'developer'],
+                        },
+                        {
+                            key: '2',
+                            name: 'Jim Green',
+                            age: 42,
+                            address: 'London No. 1 Lake Park',
+                            tags: ['loser'],
+                        },
+                        {
+                            key: '3',
+                            name: 'Joe Black',
+                            age: 32,
+                            address: 'Sidney No. 1 Lake Park',
+                            tags: ['cool', 'teacher'],
+                        },
+                        ];
+                        return (
+                        <div className='admin'>
                 <div className={'header'}>
                     <div className='left'>
                         <div className='logo'>
@@ -1386,7 +1358,7 @@ class Admin extends React.Component {
                         <TabPane tab="审核经纪人、置业顾问注册" key="1">
                             <Tabs defaultActiveKey="11" onChange={this.callback.bind(this)}>
                                 <TabPane tab="待审核经纪人" key="11">
-                                    <Table columns={agentColumns} dataSource={this.state.agentData} scroll={{x: 1800}}/>
+                                    <Table columns={agentColumns} dataSource={this.state.agentData}/>
                                 </TabPane>
                                 <TabPane tab="待审核置业顾问" key="12">
                                     <Table columns={consultantColumns} dataSource={this.state.consultantData}/>
@@ -1396,8 +1368,7 @@ class Admin extends React.Component {
                         <TabPane tab="审核入驻申请" key="2" onChange={this.callback.bind(this)}>
                             <Tabs defaultActiveKey="21" onChange={this.callback.bind(this)}>
                                 <TabPane tab="经纪人入驻申请" key="21">
-                                    <Table columns={agentApply} dataSource={this.state.agentApplyData}
-                                           scroll={{x: 1400}}/>
+                                    <Table columns={agentApply} dataSource={this.state.agentApplyData}/>
                                 </TabPane>
                                 <TabPane tab="置业顾问入驻申请" key="22" onChange={this.callback.bind(this)}>
                                     <Table columns={consultantApply} dataSource={this.state.consultantApplyData}/>
@@ -1407,7 +1378,7 @@ class Admin extends React.Component {
                         <TabPane tab="管理经纪人、置业顾问、新房管理员权限" key="3">
                             <Tabs defaultActiveKey="31" onChange={this.callback.bind(this)}>
                                 <TabPane tab="管理经纪人" key="31">
-                                    <Table columns={agentControl} dataSource={this.state.agentControlData} scroll={{x: 1400}}/>
+                                    <Table columns={agentControl} dataSource={this.state.agentControlData}/>
                                 </TabPane>
                                 <TabPane tab="管理置业顾问" key="32">
                                     <Table columns={consultantControl} dataSource={this.state.consultantControlData}/>
@@ -1430,4 +1401,4 @@ class Admin extends React.Component {
 }
 
 export default connect(state => (
-    {userInformation: state.userInformation}), {setUserInformation})(Admin);
+                        {userInformation: state.userInformation}), {setUserInformation})(Admin);
