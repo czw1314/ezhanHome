@@ -349,7 +349,7 @@ class BridalIndex extends React.Component {
                                                     active: indexs,
                                                     key:index
                                                 }})}}>
-                                                <img src={require('../../img/picture.png')}/>
+                                                {/* <img src={require('../../img/picture.png')}/> */}
                                                 <span>查看相册</span>
                                             </div>
                                             <img src={items.img}/>
@@ -376,7 +376,7 @@ class BridalIndex extends React.Component {
                         </div>
                         <div className={'center'}>
                             <p>楼盘详情</p>
-                            <Button type="primary" icon="download" size={'large'} onClick={this.down.bind(this)} style={{display:localStorage.getItem('role')==3?"block":'none'}}>
+                            <Button type="primary" icon="download" size={'large'} onClick={this.down.bind(this)} style={{display:(this.props.userInformation.role==3&&this.props.userInformation.state==1)||(localStorage.getItem('role')==3&&localStorage.getItem('state')==1)?"block":'none'}}>
                                 <a href={'http://47.108.87.104:8601/show/downloadPaper?estateId='+estateId} download style={{color:'#fff'}}>下载一页纸</a>
                             </Button>
                             <div className={'information'}>
@@ -632,4 +632,4 @@ class BridalIndex extends React.Component {
 }
 
 export default  connect(state => (
-    {estateId: state.estateId}), {newEstateId,setBridalInformation})(BridalIndex)
+    {estateId: state.estateId,userInformation:state.userInformation}), {newEstateId,setBridalInformation})(BridalIndex)

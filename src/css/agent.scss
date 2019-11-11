@@ -318,7 +318,9 @@
       }
     }
   }
-
+  .ant-pagination{
+    text-align: center
+  }
   .ant-menu{
     display: flex;
     margin-right: 80px;
@@ -355,9 +357,11 @@
   }.ant-menu-horizontal > .ant-menu-item a:hover {
      //margin: 0 7px;
      color: #fff;
+     background-color: #268AED;
    }
   .ant-menu-horizontal > .ant-menu-item:hover {
     color: #fff;
+    background-color: #268AED;
     border:none
   }
   //.ant-menu-horizontal > .ant-menu-item :hover {

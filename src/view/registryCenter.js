@@ -204,7 +204,6 @@ class Information extends React.Component {
             }
     //服务选择
     bussinessIdChange(value){
-        console.log(value)
         this.setState({
             bussinessId:value
         })
@@ -219,11 +218,6 @@ class Information extends React.Component {
         this.setState({
             position:value
         })
-    }
-    //公司填写
-    company(e){
-        e.preventDefault();
-        console.log(e)
     }
     render() {
         const {getFieldDecorator} = this.props.form;

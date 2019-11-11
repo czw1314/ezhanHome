@@ -304,7 +304,32 @@ class Information extends React.Component {
 
                 estatePublished(params).then((res) => {
                     if (res.data.code === 1) {
-                        message.success('上传成功')
+                        const key = `open${Date.now()}`;
+                        const btn = (
+                            <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                确定
+                            </Button>
+                        );
+                        notification.success({
+                            message: '楼盘信息发布成功',
+                            btn,
+                            key,
+                            duration: 0,
+                        });
+                    }
+                    else{
+                        const key = `open${Date.now()}`;
+                        const btn = (
+                            <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                确定
+                            </Button>
+                        );
+                        notification.error({
+                            message: '楼盘信息发布失败',
+                            btn,
+                            key,
+                            duration: 0,
+                        });
                     }
                 })
             }
@@ -375,6 +400,12 @@ class Information extends React.Component {
             <Form onSubmit={this.handleSubmit} className="login-form first" {...formItemLayout}>
                 <Form.Item label={'1、填写基本信息：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
+                <Form.Item label={'地址经纬度：'}  labelAlign={'left'} labelCol={{span: 5}}>
+                    {getFieldDecorator('longitudeAndAtitude')(
+                        <Input placeholder="164564561，154，4545645，546" style={{width:200}}/>
+                    )}
+                </Form.Item>
+                <a href='https://lbs.amap.com/console/show/picker' target="_blank" style={{width:'60%',marginLeft:20,marginTop:10}}>高德地图经纬度查询</a>
                 <Form.Item label='楼盘名称（推广名）：'>
                     {getFieldDecorator('name')(
                         <Input/>
@@ -433,11 +464,6 @@ class Information extends React.Component {
                 <Form.Item label={'项目地址：'}>
                     {getFieldDecorator('adress')(
                         <Input/>
-                    )}
-                </Form.Item>
-                <Form.Item label={'地址经纬度：'}>
-                    {getFieldDecorator('longitudeAndAtitude')(
-                        <Input placeholder="164564561，154，4545645，546"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'开发商：'}>
@@ -635,22 +661,22 @@ class Information extends React.Component {
                 </Form.Item>
                 <Form.Item label={'4、项目外部配套（从近到远排序）（3公里范围）：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
-                <Form.Item label={'交通配套：'} className={'item'} labelCol={{span: 3}}>
+                <Form.Item label={'交通配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
                     {getFieldDecorator('matchings[0].matching')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
-                <Form.Item label={'医疗配套：'} className={'item'} labelCol={{span: 3}}>
+                <Form.Item label={'医疗配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
                     {getFieldDecorator('matchings[1].matching')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
-                <Form.Item label={'商业配套：'} className={'item'} labelCol={{span: 3}}>
+                <Form.Item label={'商业配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
                     {getFieldDecorator('matchings[2].matching')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
-                <Form.Item label={'教育配套：'} className={'item'} labelCol={{span: 3}}>
+                <Form.Item label={'教育配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
                     {getFieldDecorator('matchings[3].matching')(
                         <Input.TextArea/>
                     )}
@@ -1152,6 +1178,7 @@ class InformationUpdata extends React.Component {
         this.setState({
             visible:true
         })
+        console.log(1)
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -1164,8 +1191,32 @@ class InformationUpdata extends React.Component {
                 let params = values
                 estatePublished(params).then((res) => {
                     if (res.data.code === 1) {
-                        message.success('上传成功')
-                        this.props.history.push({pathname:'/home/bridalHome/bridalApartment'})
+                        const key = `open${Date.now()}`;
+                        const btn = (
+                            <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                确定
+                            </Button>
+                        );
+                        notification.success({
+                            message: '楼盘信息发布成功',
+                            btn,
+                            key,
+                            duration: 0,
+                        });
+                    }
+                    else{
+                        const key = `open${Date.now()}`;
+                        const btn = (
+                            <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                确定
+                            </Button>
+                        );
+                        notification.error({
+                            message: '楼盘信息发布失败',
+                            btn,
+                            key,
+                            duration: 0,
+                        });
                     }
                 })
             }
@@ -2011,6 +2062,7 @@ class bridalAdmin extends React.Component {
             estateId: ''
         })
         this.props.newEstateId('')
+        localStorage.setItem('estateId','')
         if (key == 4) {
 
         }
@@ -2240,44 +2292,27 @@ class bridalAdmin extends React.Component {
                     </div>
                 </div>
                 <div className={'menu'}>
-                    <Tabs defaultActiveKey="1" onChange={this.callback.bind(this)} tabPosition={'left'}>
-                        <TabPane tab="一页纸发布" key="1">
+                    <Tabs defaultActiveKey="4" onChange={this.callback.bind(this)} tabPosition={'left'}>
+
+                        <TabPane tab="楼盘信息编辑更新" key="4">
                             <div className={'content'}>
-                                <p className={'title'}>楼盘一页纸发布</p>
-                                <div className={'item'}>
-                                    <p>选择发布的楼盘：</p>
-                                    <Select style={{width: 200}} onChange={this.setEstates.bind(this)} value={this.state.estateId}
-                                            showSearch
-                                            placeholder="Select a person"
-                                            optionFilterProp="children"
-                                            filterOption={(input, option) =>
-                                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                            }>
-                                        {this.state.estates && this.state.estates.map(item => {
-                                                return (<Option value={item.value} key={item.value}>{item.label}</Option>)
-                                            }
-                                        )}
-                                    </Select>
-                                    <Upload {...props} fileList={this.state.fileList1}>
-          <Button>
-            <Icon type="upload" /> 选择楼盘一页纸
-          </Button>
-        </Upload>
-        <Button
-          type="primary"
-          onClick={this.handleUpload}
-          loading={uploading}
-          style={{ marginLeft: 16 }}
-        >
-            {fileList1.length === 0?'发布':'更新'}
-        </Button>
-                                </div>
-                            </div>
-                        </TabPane>
-                        <TabPane tab="楼盘发布" key="2">
-                            <div className={'content'}>
-                                <p className={'title'}>楼盘发布</p>
-                                <InformationForms/>
+                                <span className={'title'}>楼盘信息编辑更新</span>
+                                <span style={{marginLeft: '50px'}}>选择编辑的楼盘：</span>
+                                <Select style={{width: 200}} onChange={this.setEstates.bind(this)} value={this.state.estateId}
+                                        showSearch
+                                        placeholder="Select a person"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }>
+                                    <Option value={0} key={0}>新增</Option>
+                                    {this.state.estates && this.state.estates.map(item => {
+                                            return (<Option value={item.value} key={item.value}>{item.label}</Option>)
+                                        }
+                                    )}
+                                </Select>
+                                <div style={{display:this.state.estateId==0?'block':'none'}} ><InformationForms/></div>
+                                <div  style={{display:this.state.estateId==0?'none':'block'}}  ><InformationFormUpdatas values={this.state.values} agentIds={this.state.agentIds} delHousing={this.delHousing.bind(this)}/></div>
                             </div>
                         </TabPane>
                         <TabPane tab="楼盘动态更新" key="3">
@@ -2312,25 +2347,37 @@ class bridalAdmin extends React.Component {
                                 </Button>
                             </div>
                         </TabPane>
-                        <TabPane tab="楼盘信息编辑更新" key="4">
+                        <TabPane tab="一页纸发布" key="1">
                             <div className={'content'}>
-                                <span className={'title'}>楼盘信息编辑更新</span>
-
-                                <span style={{marginLeft: '50px'}}>选择编辑的楼盘：</span>
-                                <Select style={{width: 200}} onChange={this.setEstates.bind(this)} value={this.state.estateId}
-                                        showSearch
-                                        placeholder="Select a person"
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }>
-                                    <Option value={0} key={0}>新增</Option>
-                                    {this.state.estates && this.state.estates.map(item => {
-                                            return (<Option value={item.value} key={item.value}>{item.label}</Option>)
-                                        }
-                                    )}
-                                </Select>
-                                <InformationFormUpdatas values={this.state.values} agentIds={this.state.agentIds} delHousing={this.delHousing.bind(this)}/>
+                                <p className={'title'}>楼盘一页纸发布</p>
+                                <div className={'item'}>
+                                    <p>选择发布的楼盘：</p>
+                                    <Select style={{width: 200}} onChange={(value)=>{this.setState({estateId:value})}} value={this.state.estateId}
+                                            showSearch
+                                            placeholder="Select a person"
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) =>
+                                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }>
+                                        {this.state.estates && this.state.estates.map(item => {
+                                                return (<Option value={item.value} key={item.value}>{item.label}</Option>)
+                                            }
+                                        )}
+                                    </Select>
+                                    <Upload {...props} fileList={this.state.fileList1}>
+          <Button>
+            <Icon type="upload" /> 选择楼盘一页纸
+          </Button>
+        </Upload>
+        <Button
+          type="primary"
+          onClick={this.handleUpload}
+          loading={uploading}
+          style={{ marginLeft: 16 }}
+        >
+            {fileList1.length === 0?'发布':'更新'}
+        </Button>
+                                </div>
                             </div>
                         </TabPane>
                     </Tabs>

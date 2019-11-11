@@ -50,7 +50,9 @@ class Agent extends React.Component {
                     positions:this.state.titleChecked,
                     districtIds: [],
                     streetId:[],
-                    searchText:this.state.searchText
+                    searchText:this.state.searchText,
+                    pageNum:1,
+                    pageSize:10
                 }
                 searchAgent(params).then((res)=>{
                     if(res.data.code===1){
@@ -94,7 +96,9 @@ class Agent extends React.Component {
                 districtIds: id,
                 orderType:this.state.orderType,
                 streetIds:[],
-                searchText:this.state.searchText
+                searchText:this.state.searchText,
+                pageNum:1,
+                pageSize:10
             }
             searchAgent(params).then((res)=>{
                 if(res.data.code===1){
@@ -117,7 +121,9 @@ class Agent extends React.Component {
             districtIds: [this.state.positionChecked],
             streetIds:streetIdChecked,
             orderType:this.state.orderType,
-            searchText:this.state.searchText
+            searchText:this.state.searchText,
+            pageNum:1,
+            pageSize:10
         }
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
@@ -138,7 +144,9 @@ class Agent extends React.Component {
             positions:this.state.titleChecked,
             districtIds: [this.state.positionChecked],
             streetIds:this.state.streetIdChecked,
-            searchText:this.state.searchText
+            searchText:this.state.searchText,
+            pageNum:1,
+            pageSize:10
         }
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
@@ -159,7 +167,9 @@ class Agent extends React.Component {
             orderType:this.state.orderType,
             districtIds:[this.state.positionChecked],
             streetIds:this.state.streetIdChecked,
-            searchText:this.state.searchText
+            searchText:this.state.searchText,
+            pageNum:1,
+            pageSize:10
         }
 
         searchAgent(params).then((res)=>{
@@ -186,6 +196,8 @@ class Agent extends React.Component {
             streetIds:this.state.streetIdChecked,
             searchText:value,
             orderType:this.state.orderType,
+            pageNum:1,
+            pageSize:10
         }
         this.setState({
             searchText:value,
@@ -234,7 +246,9 @@ class Agent extends React.Component {
                 orderType:1,
                 districtIds:[this.state.positionChecked],
                 streetIds:this.state.streetIdChecked,
-                searchText:this.state.searchText
+                searchText:this.state.searchText,
+                pageNum:1,
+                pageSize:10
             }
     
             searchAgent(params).then((res)=>{
@@ -255,7 +269,9 @@ class Agent extends React.Component {
                 orderType:0,
                 districtIds:[this.state.positionChecked],
                 streetIds:this.state.streetIdChecked,
-                searchText:this.state.searchText
+                searchText:this.state.searchText,
+                pageNum:1,
+                pageSize:10
             }
     
             searchAgent(params).then((res)=>{
@@ -298,6 +314,25 @@ class Agent extends React.Component {
             this.setState({ visible:arr });
         }
     };
+    page(index,size){
+        let params={
+            business:this.state.serviceChecked,
+            positions:this.state.titleChecked,
+            orderType:this.state.orderType,
+            districtIds:[this.state.positionChecked],
+            streetIds:this.state.streetIdChecked,
+            searchText:this.state.searchText,
+            pageNum:index,
+            pageSize:10
+        }
+        searchAgent(params).then((res)=>{
+            if(res.data.code===1){
+                this.setState({
+                    models:res.data.models
+                })
+            }
+        })
+    }
     render() {
         const {Search} = Input;
         const suffix = <Button><img src={require('../img/search1.png')}
@@ -438,11 +473,7 @@ class Agent extends React.Component {
                                     )
                                 })
                             }
-                            <Pagination
-                                // onShowSizeChange={onShowSizeChange}
-                                defaultCurrent={1}
-                                total={500}
-                            />
+                          <Pagination defaultCurrent={1} total={this.state.models.length} pageSize={10} onChange={this.page.bind(this)}/>
                         </div>
                     </div>
                 </div>

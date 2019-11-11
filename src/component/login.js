@@ -176,6 +176,7 @@ class NormalLoginForm extends React.Component {
                     }
                     else {
                         message.success('登陆成功！')
+                        localStorage.setItem('state',res.data.state)
                         this.props.setUserInformation(res.data)
                         localStorage.setItem('userName',res.data.name)
                         localStorage.setItem('role',res.data.role)

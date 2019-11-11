@@ -651,7 +651,7 @@ class BridalChamber extends React.Component {
                                         <div className={'hotItem'} onClick={this.link.bind(this,item.id)} key={index}>
                                         <img src={'http://47.108.87.104:8601/building/'+item.picture}/>
                                         <div className={'title'}>
-                                            <p className={'name'}>{item.anme}</p>
+                                            <p className={'name'}>{item.name}</p>
                                             <p className={'price'}>{item.referencePrice}元/m²起</p>
                                         </div>
                                         <div className={'center'}>

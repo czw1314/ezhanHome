@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../css/admin.scss'
-import {Tabs, Table, Divider, Modal, Input, Button, Popconfirm} from 'antd';
+import {Tabs, Table, Divider, Modal, Input, Button, Popconfirm,notification} from 'antd';
 import ChangePassWord from '../../component/changePassWord'
 import {connect} from "react-redux";
 import {login, getAdmin, modifyHouseAdminPwd, getAdviser, aduitAgent, getAgent, settledAduit, delUser} from "../../api";
@@ -195,6 +195,7 @@ class EditableTable extends React.Component {
         this.state = {
             dataSource: [],
             count: 2,
+
         };
     }
 
@@ -375,7 +376,9 @@ class Admin extends React.Component {
             consultantApplyData: [],
             agentControlData: [],
             consultantControlData: [],
-            visible1: false
+            visible1: false,
+            userId:'',
+            estateId:''
         }
     }
 
@@ -559,78 +562,105 @@ class Admin extends React.Component {
     //是否通过
     pass(userId, type, str, index) {
         this.setState({
-            visible1: true
+            visible4: false,
+            visible5:false,
+            visible6:false,
+            visible7:false
         })
-        // let params = {
-        //     userId: userId,
-        //     pass: type,
-        // }
-        // aduitAgent(params).then((res) => {
-        //         if (res.data.code === 1) {
-        //             if (type === 1) {
-        //                 message.success('已通过注册')
-        //                 if (str == 'agent') {
-        //                     this.state.agentData.splice(0, 1)
-        //                     this.setState({
-        //                             agentData: this.state.agentData
-        //                         }
-        //                     )
-        //
-        //                 }
-        //                 else if (str == 'consultant') {
-        //                     this.state.consultantData.splice(0, 1)
-        //                     this.setState({
-        //                             consultantData: this.state.consultantData
-        //                         }
-        //                     )
-        //                 }
-        //             }
-        //             else {
-        //                 message.success('已反对申请')
-        //                 if (str == 'agent') {
-        //                     this.state.agentData.splice(0, 1)
-        //                     this.setState({
-        //                             agentData: this.state.agentData
-        //                         }
-        //                     )
-        //
-        //                 }
-        //                 else if (str == 'consultant') {
-        //                     this.state.consultantData.splice(0, 1)
-        //                     this.setState({
-        //                             consultantData: this.state.consultantData
-        //                         }
-        //                     )
-        //                 }
-        //             }
-        //         }
-        //     }
-        // )
+        let params = {
+            userId: this.state.userId,
+            pass: type,
+        }
+        aduitAgent(params).then((res) => {
+                if (res.data.code === 1) {
+                    if (type === 1) {
+                        const key = `open${Date.now()}`;
+                        const btn = (
+                            <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                确定
+                            </Button>
+                        );
+                        notification.success({
+                            message: '已通过注册',
+                            btn,
+                            key,
+                            duration: 0,
+                        });
+                        if (str == 'agent') {
+                            this.state.agentData.splice(0, 1)
+                            this.setState({
+                                    agentData: this.state.agentData
+                                }
+                            )
+        
+                        }
+                        else if (str == 'consultant') {
+                            this.state.consultantData.splice(0, 1)
+                            this.setState({
+                                    consultantData: this.state.consultantData
+                                }
+                            )
+                        }
+                    }
+                    else {
+                        const key = `open${Date.now()}`;
+                        const btn = (
+                            <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                确定
+                            </Button>
+                        );
+                        notification.success({
+                            message: '已拒绝注册',
+                            btn,
+                            key,
+                            duration: 0,
+                        });
+                        if (str == 'agent') {
+                            this.state.agentData.splice(0, 1)
+                            this.setState({
+                                    agentData: this.state.agentData
+                                }
+                            )
+        
+                        }
+                        else if (str == 'consultant') {
+                            this.state.consultantData.splice(0, 1)
+                            this.setState({
+                                    consultantData: this.state.consultantData
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        )
     }
 
     //是否通过楼盘入驻申请
     passApply(index, estateId, type, str, indexs) {
-        let params = {}
-        if (str == 'agentApply') {
-            console.log(this.state.agentApplyData)
-            params = {
-                userId: this.state.agentApplyData[index].personId,
-                estateId: estateId,
+        this.setState({
+            visible8:false,visible9:false,visible10:false,visible11:false
+        })
+        let params = {
+                userId: this.state.userId,
+                estateId: this.state.estateId,
                 pass: type,
             }
-        }
-        else if (str == 'consultantApply') {
-            params = {
-                userId: this.state.consultantApplyData[index].personId,
-                estateId: estateId,
-                pass: type,
-            }
-        }
-
         settledAduit(params).then((res) => {
                 if (res.data.code === 1) {
                     if (type === 1) {
-                        message.success('已通过申请')
+                        const key = `open${Date.now()}`;
+                        const btn = (
+                            <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                确定
+                            </Button>
+                        );
+                        notification.success({
+                            message: '已通过申请',
+                            btn,
+                            key,
+                            duration: 0,
+                        });
                         if (str == 'agentApply') {
                             let params = {
                                 type: 3
@@ -657,7 +687,18 @@ class Admin extends React.Component {
                         }
                     }
                     else {
-                        message.success('已反对申请')
+                        const key = `open${Date.now()}`;
+                        const btn = (
+                            <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                确定
+                            </Button>
+                        );
+                        notification.success({
+                            message: '已拒绝申请',
+                            btn,
+                            key,
+                            duration: 0,
+                        });
                         if (str == 'agentApply') {
                             let params = {
                                 type: 3
@@ -695,11 +736,22 @@ class Admin extends React.Component {
             visible1: false
         })
         let params = {
-            userId: userId
+            userId: this.state.userId
         }
         delUser(params).then((res) => {
             if (res.data.code === 1) {
-                message.success('成功删除该账号')
+                const key = `open${Date.now()}`;
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        确定
+                    </Button>
+                );
+                notification.success({
+                    message: '成功删除',
+                    btn,
+                    key,
+                    duration: 0,
+                });
                 if (str === 'agent') {
                     this.state.agentControlData.splice(0, 1)
                     this.setState({
@@ -719,23 +771,34 @@ class Admin extends React.Component {
 
             }
             else {
-                message.error('删除该账号失败')
-                if (str === 'agent') {
-                    this.state.agentControlData.splice(0, 1)
-                    this.setState({
-                            agentControlData: this.state.agentControlData
-                        }
-                    )
+                const key = `open${Date.now()}`;
+                        const btn = (
+                            <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                确定
+                            </Button>
+                        );
+                        notification.success({
+                            message: '删除失败',
+                            btn,
+                            key,
+                            duration: 0,
+                        });
+                // if (str === 'agent') {
+                //     this.state.agentControlData.splice(0, 1)
+                //     this.setState({
+                //             agentControlData: this.state.agentControlData
+                //         }
+                //     )
 
-                }
-                else if (str === 'consultant') {
-                    this.state.consultantControlData.splice(0, 1)
-                    this.setState({
-                            consultantControlData: this.state.consultantControlData
-                        }
-                    )
+                // }
+                // else if (str === 'consultant') {
+                //     this.state.consultantControlData.splice(0, 1)
+                //     this.setState({
+                //             consultantControlData: this.state.consultantControlData
+                //         }
+                //     )
 
-                }
+                // }
             }
         })
     }
@@ -831,20 +894,32 @@ class Admin extends React.Component {
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
-                   <a onClick={this.pass.bind(this, this.state.agentData[index].personId, 1, 'agent')}>是</a>
-                  <Divider type="vertical"/>
-                  <a onClick={this.pass.bind(this, this.state.agentData[index].personId, -1, 'agent')}>否</a>
-                        <Modal
-                            title="Basic Modal"
-                            visible={this.state.visible1}
-                            onOk={this.handleOk}
+                   <a onClick={()=>{this.setState({visible5:true,userId:this.state.agentData[index].personId})}}>是</a>
+                   <Modal
+                            title="通过经纪人注册申请"
+                            visible={this.state.visible5}
+                            destroyOnClose={true}
+                            okText="确认"
+                            cancelText="取消"
+                            onOk={this.pass.bind(this, this.state.agentData[index].personId, 1, 'agent')}
                             onCancel={() => {
-                                this.setState({visible1: false})
+                                this.setState({visible5: false})
                             }}
                         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+                            </Modal>
+                  <Divider type="vertical"/>
+                  <a onClick={()=>{this.setState({visible4:true,userId:this.state.agentData[index].personId})}}>否</a>
+                        <Modal
+                            title="拒绝经纪人注册申请"
+                            okText="确认"
+                            cancelText="取消"
+                            visible={this.state.visible4}
+                            destroyOnClose={true}
+                            onOk={this.pass.bind(this, this.state.agentData[index].personId, -1, 'agent')}
+                            onCancel={() => {
+                                this.setState({visible4: false})
+                            }}
+                        >
         </Modal>
                 </span>
                 ),
@@ -901,9 +976,33 @@ class Admin extends React.Component {
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
-                  <a onClick={this.pass.bind(this, this.state.consultantData[index].personId, 1, 'consultant')}>是</a>
+                  <a onClick={()=>{this.setState({visible6:true,userId:this.state.consultantData[index].personId})}}>是</a>
+                  <Modal
+                            title="通过置业顾问注册申请"
+                            visible={this.state.visible6}
+                            okText="确认"
+                            cancelText="取消"
+                            destroyOnClose={true}
+                            onOk={this.pass.bind(this, this.state.consultantData[index].personId, 1, 'consultant')}
+                            onCancel={() => {
+                                this.setState({visible6: false})
+                            }}
+                        >
+        </Modal>
                   <Divider type="vertical"/>
-                  <a onClick={this.pass.bind(this, this.state.consultantData[index].personId, -1, 'consultant')}>否</a>
+                  <a onClick={()=>{this.setState({visible7:true,userId:this.state.consultantData[index].personId})}}>否</a>
+                  <Modal
+                            title="拒绝置业顾问注册申请"
+                            visible={this.state.visible7}
+                            okText="确认"
+                            cancelText="取消"
+                            destroyOnClose={true}
+                            onOk={this.pass.bind(this, this.state.consultantData[index].personId, -1, 'consultant')}
+                            onCancel={() => {
+                                this.setState({visible7: false})
+                            }}
+                        >
+        </Modal>
                 </span>
                 ),
             }
@@ -982,9 +1081,33 @@ class Admin extends React.Component {
                         {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                                    <a onClick={this.passApply.bind(this, index, item.estateId, 1, 'agentApply', indexs)}>是</a>
+                                    <a onClick={()=>{this.setState({visible8:true,userId:this.state.agentApplyData[index].personId,setateId:item.estateId})}}>是</a>
+                                    <Modal
+                            title="通过经纪人申请入驻"
+                            visible={this.state.visible8}
+                            okText="确认"
+                            cancelText="取消"
+                            destroyOnClose={true}
+                            onOk={this.passApply.bind(this, index, item.estateId, 1, 'agentApply', indexs)}
+                            onCancel={() => {
+                                this.setState({visible8: false})
+                            }}
+                        >
+        </Modal>
                                     <Divider type="vertical"/>
-                                    <a onClick={this.passApply.bind(this, index, item.estateId, -1, 'agentApply', indexs)}>否</a>
+                                    <a  onClick={()=>{this.setState({visible9:true,userId:this.state.agentApplyData[index].personId,setateId:item.estateId})}}>否</a>
+                                    <Modal
+                            title="拒绝经纪人申请入驻"
+                            visible={this.state.visible9}
+                            okText="确认"
+                            cancelText="取消"
+                            destroyOnClose={true}
+                            onOk={this.passApply.bind(this, index, item.estateId, -1, 'agentApply', indexs)}
+                            onCancel={() => {
+                                this.setState({visible9: false})
+                            }}
+                        >
+        </Modal>
                                 </p>
                             )
                         })
@@ -1060,9 +1183,33 @@ class Admin extends React.Component {
                         {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                                    <a onClick={this.passApply.bind(this, index, item.estateId, 1, 'consultantApply', indexs)}>是</a>
+                                    <a onClick={()=>{this.setState({visible10:true,userId:this.state.consultantApplyData[index].personId,setateId:item.estateId})}}>是</a>
+                                    <Modal
+                            title="通过置业顾问申请入驻"
+                            visible={this.state.visible10}
+                            okText="确认"
+                            cancelText="取消"
+                            destroyOnClose={true}
+                            onOk={this.passApply.bind(this, index, item.estateId, 1, 'consultantApply', indexs)}
+                            onCancel={() => {
+                                this.setState({visible10: false})
+                            }}
+                        >
+        </Modal>
                                     <Divider type="vertical"/>
-                                    <a onClick={this.passApply.bind(this, index, item.estateId, -1, 'consultantApply', indexs)}>否</a>
+                                    <a onClick={()=>{this.setState({visible11:true,userId:this.state.consultantApplyData[index].personId,setateId:item.estateId})}}>否</a>
+                                    <Modal
+                            title="拒绝置业顾问申请入驻"
+                            visible={this.state.visible11}
+                            okText="确认"
+                            cancelText="取消"
+                            destroyOnClose={true}
+                            onOk={this.passApply.bind(this, index, item.estateId, -1, 'consultantApply', indexs)}
+                            onCancel={() => {
+                                this.setState({visible11: false})
+                            }}
+                        >
+        </Modal>
                                 </p>
                             )
                         })
@@ -1148,7 +1295,7 @@ class Admin extends React.Component {
                 render: (text, record, index) => (
                     <span>
                    <a onClick={() => {
-                       this.setState({visible1: true})
+                       this.setState({visible1: true,userId:this.state.agentControlData[index].personId})
                    }}>删除</a>
                                                 <Modal
                                                     title="是否删除"
@@ -1208,7 +1355,7 @@ class Admin extends React.Component {
                 render: (text, record, index) => (
                     <span>
                     <a onClick={() => {
-                        this.setState({visible1: true})
+                        this.setState({visible1:true,userId:this.state.consultantControlData[index].personId})
                     }}>删除</a>
         <Modal
             title="是否删除"
