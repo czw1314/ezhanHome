@@ -109,9 +109,14 @@ class Home extends React.Component {
                 <div className={'bottomSide'}>
                     <p>友情链接</p>
                     <ul className={'chain'}>
-                        <li><a target='_blank' href={'https://cd.5i5j.com/ershoufang?pmf_group=baidu&pmf_medium=cpc&pmf_plan=%E4%BA%8C%E6%89%8B%E6%88%BF-%E9%80%9A%E7%94%A8%E8%AF%8D&pmf_unit=%E4%BA%8C%E6%89%8B%E6%88%BF-%E4%B8%AD%E4%BB%8B&pmf_keyword=%E6%88%90%E9%83%BD%E6%88%BF%E4%BA%A7%E7%BD%91%E7%AB%99&pmf_account=21&pmf_id=135771085814'}>透明房产网</a></li>
+                        <li><a target='_blank' href={'http://www.funi.com/'}>透明房产网</a></li>
                         <li><a  target='_blank' href={'https://www.cdfangxie.com/'}>成都住宅与房地产协会</a></li>
                         <li><a target='_blank' href={'http://cdzj.chengdu.gov.cn/'}>成都市住房和城乡建设局</a></li>
+                        <li><a target='_blank' href={'http://cdzfgjj.chengdu.gov.cn/'}>成都市住房公积金管理中心</a></li>
+                        <li><a target='_blank' href={'http://www.scfx.cn/Main.aspx'}>四川省房地产协会</a></li>
+                        <li><a target='_blank' href={'http://www.agents.org.cn'}>中国房地产经纪人</a></li>
+                        <li><a target='_blank' href={'http://mpnr.chengdu.gov.cn/'}>成都市规划与自然资源局</a></li>
+                        <li><a target='_blank' href={'https://mcmcrt.china-emu.cn/Chengdu/'}>程话成都地铁</a></li>
                     </ul>
                     <div className={'company'}>
                         <img src={require('../img/bottomLogo.png')}/>

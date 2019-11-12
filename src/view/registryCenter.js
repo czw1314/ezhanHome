@@ -3,8 +3,7 @@ import '../css/RegistryCenter.scss';
 import {connect} from "react-redux";
 import {setUserInformation} from "../redux/action";
 import {
-    Tabs, Input, Button, Form, Upload, Icon, message, Checkbox,
-    Select, Radio, Cascader
+    Tabs, Input, Button, Form, Upload, Icon, message, Checkbox, Select, Cascader
 } from 'antd';
 import {getDistrictRegions,agentRegister} from '../api/index'
 import InformationForm from '../component/informationForm'
@@ -71,7 +70,6 @@ class Information extends React.Component {
         reader.addEventListener('load', () => callback(reader.result));
         reader.readAsDataURL(img);
     }
-
     //注册
     handleSubmit(e) {
         e.preventDefault();
@@ -99,10 +97,8 @@ class Information extends React.Component {
                     "contact":values.contact,
                     "userId":localStorage.getItem('userId')
                 }
-
                 agentRegister(params).then((res) => {
                     if (res.data.code === 0) {
-                        console.log(res.data.msg === '该手机号已绑定用户')
                         if (res.data.verifyErrorMsg) {
                             this.props.form.setFields({
                                 verifyCode: {
@@ -129,6 +125,13 @@ class Information extends React.Component {
                     else {
                         message.success('信息填写成功！请等待管理员审核！')
                         setTimeout(this.props.handleClose, 1000)
+                        if(localStorage.getItem('role')==3){
+                            this.props.history.push(pathname:'/home/bridalHome/bridalApartment')
+                        }
+                        else{
+
+                        }
+
                     }
                 })
             }
@@ -175,7 +178,6 @@ class Information extends React.Component {
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl1 =>
                 this.setState({
                     idF: imageUrl1,
