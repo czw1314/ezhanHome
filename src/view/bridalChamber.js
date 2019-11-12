@@ -413,6 +413,11 @@ class BridalChamber extends React.Component {
         localStorage.setItem('estateId',estateId)
         this.props.history.push('/home/bridalHome/bridalIndex')
     }
+    link1(estateId){
+        this.props.newEstateId(estateId)
+        localStorage.setItem('estateId',estateId)
+        this.props.history.push('/home/bridalHome/bridalApartment')
+    }
     search(searchText){
         this.setState({
             searchText
@@ -620,7 +625,7 @@ class BridalChamber extends React.Component {
                                                         <p className={'price'}>{item.referencePrice}元/m²起</p>
                                                     </div>
                                                     <p className={'address'} onClick={this.link.bind(this,item.id)}>{item.distinctName}-{item.street}</p>
-                                                    <p className={'apartment'} onClick={this.link.bind(this,item.id)}>户型：{item.houseType}</p>
+                                                    <p className={'apartment'} onClick={this.link1.bind(this,item.id)}>户型：{item.houseType}</p>
                                                     <p className={'area'} onClick={this.link.bind(this,item.id)}>建面：{item.areaRange}m²</p>
                                                     <p className={'tag'}>{item.propertyType}</p>
                                                     <p className={'advantage'}>

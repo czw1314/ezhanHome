@@ -304,6 +304,7 @@ class Code extends React.Component {
                 <p onClick={this.showModal} style={{cursor: 'pointer', marginBottom: 0}}>查看</p>
                 <Modal
                     title=""
+                    centered
                     footer={null}
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
@@ -400,67 +401,6 @@ class Admin extends React.Component {
         this.props.setUserInformation({})
         localStorage.clear()
     }
-
-    //找房与找经纪人互相切换
-    handleClick = e => {
-        if (e.key == 2) {
-            this.setState({left: 80});
-        }
-        else {
-            this.setState({left: 13});
-        }
-
-    };
-    //选择区域
-    onChange = positionChecked => {
-        this.setState({
-            positionChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
-        });
-    };
-    //选择价格
-    onChangeService = serviceChecked => {
-        this.setState({
-            serviceChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
-        });
-    };
-    //选择面积
-    onChangeTitle = titleChecked => {
-        this.setState({
-            titleChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
-        });
-    };
-    //选择户型
-    onChangeApartment = apartmentChecked => {
-        this.setState({
-            apartmentChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
-        });
-    };
-    //选择特色
-    onChangeCharacteristic = characteristicChecked => {
-        this.setState({
-            characteristicChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
-        });
-    };
-
-    //价格排序
-    selected(e) {
-        this.setState({
-            togglePrice: true,
-            toggleTime: true
-        })
-    }
-
-
     //获取新房管理员列表
     callback(key) {
 
@@ -567,6 +507,7 @@ class Admin extends React.Component {
             visible6:false,
             visible7:false
         })
+        console.log(this.state.userId)
         let params = {
             userId: this.state.userId,
             pass: type,
@@ -898,6 +839,7 @@ class Admin extends React.Component {
                    <Modal
                             title="通过经纪人注册申请"
                             visible={this.state.visible5}
+                            centered
                             destroyOnClose={true}
                             okText="确认"
                             cancelText="取消"

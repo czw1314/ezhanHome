@@ -124,12 +124,11 @@ class Information extends React.Component {
                     }
                     else {
                         message.success('信息填写成功！请等待管理员审核！')
-                        setTimeout(this.props.handleClose, 1000)
                         if(localStorage.getItem('role')==3){
-                            this.props.history.push(pathname:'/home/bridalHome/bridalApartment')
+                            this.props.go.push('/home/agentMy')
                         }
                         else{
-
+                            this.props.go.push('/home/consultant')
                         }
 
                     }
@@ -623,7 +622,7 @@ class RegistryCenter extends React.Component {
                                 </div>
                             </div>
                             <p style={{marginTop: '40px'}}>账号：{localStorage.getItem('userPhone')}</p>
-                            <InformationForms userInformation={this.props.userInformation}/>
+                            <InformationForms userInformation={this.props.userInformation} go={this.props.history}/>
                         </div>
                     </div>
                 </div>

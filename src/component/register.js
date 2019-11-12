@@ -18,7 +18,6 @@ class Information extends React.Component {
     getCode() {
         let that = this
         var wait = 60;
-
         function time() {
             if (wait == 0) {
                 that.setState({text: "免费获取验证码", disabled: false})
@@ -37,7 +36,6 @@ class Information extends React.Component {
         getPhoneCode(params).then((res) => {
         })
     }
-
     //注册
     handleSubmit(e) {
         e.preventDefault();
@@ -61,7 +59,7 @@ class Information extends React.Component {
                     "verifyCode": values.verifyCode
                 }
                 register(params).then((res) => {
-                    if (res.data.code === 1) {
+                    if (res.data.code === 0) {
                         if (res.data.verifyErrorMsg) {
                             this.props.form.setFields({
                                 verifyCode: {
@@ -109,15 +107,13 @@ class Information extends React.Component {
 
                     }
                     else {
-                        // if(this.props.role==3){
-                        //     message.success('注册成功！请先去填写个人资料！')
-                        //     localStorage.setItem('role',3)
-                        //     localStorage.setItem('userId',res.data.userId)
-                        //     this.props.handleClose()
-                        //     this.props.history.push('/home/registryCenter')
-                        // }
-                        // setTimeout(this.props.handleClose, 1000)
-                        message.error(res.data.verifyErrorMsg)
+                        if(this.props.role==3||this.props.role==4){
+                            message.success('注册成功！请先去填写个人资料！')
+                            localStorage.setItem('role',this.props.role)
+                            localStorage.setItem('userId',res.data.userId)
+                            this.props.handleClose()
+                            this.props.history.push('/home/registryCenter')
+                        }
                     }
 
                 })
@@ -133,9 +129,9 @@ class Information extends React.Component {
         })
     }
 
-    componentDidMount() {
-
-    }
+    // componentDidMount() {
+    //     this.createCode()
+    // }
 
     render() {
         const {getFieldDecorator} = this.props.form;
@@ -240,6 +236,7 @@ class Register extends React.Component {
             <div className={'register'}>
                 <Modal
                     visible={register}
+                    destroyOnClose={true}
                     onCancel={this.props.handleCancel}
                     footer={''}
                 >
