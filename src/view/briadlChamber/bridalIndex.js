@@ -349,7 +349,7 @@ class BridalIndex extends React.Component {
                                                     active: indexs,
                                                     key:index
                                                 }})}}>
-                                                {/* <img src={require('../../img/picture.png')}/> */}
+                                                <img src={require('../../img/picture.png')}/>
                                                 <span>查看相册</span>
                                             </div>
                                             <img src={items.img}/>

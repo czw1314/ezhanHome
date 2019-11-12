@@ -523,8 +523,8 @@ class HomePage extends React.Component {
                             margin: 'auto',
                             justifyContent: 'space-between'
                         }}>
-                            {/* <div><img src={require('../img/go_left.png')} style={{width: '50px', height: '50px'}}
-                                      onClick={this.goLeft.bind(this)}/></div> */}
+                            <div><img src={require('../img/go_left.png')} style={{width: '50px', height: '50px'}}
+                                      onClick={this.goLeft.bind(this)}/></div>
                             <div style={{width: '1201px', overflow: 'hidden'}}>
                                 <div className={'synopsis'}
                                      style={{transform: `translateX(${this.state.translateX}px)`}}>
@@ -581,8 +581,8 @@ class HomePage extends React.Component {
                                     }
                                 </div>
                             </div>
-                            {/* <div><img src={require('../img/go_right.png')} style={{width: '50px', height: '50px'}}
-                                      onClick={this.goRight.bind(this)}/></div> */}
+                            <div><img src={require('../img/go_right.png')} style={{width: '50px', height: '50px'}}
+                                      onClick={this.goRight.bind(this)}/></div>
                         </div>
 
                     </div>

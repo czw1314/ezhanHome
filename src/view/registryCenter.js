@@ -124,14 +124,12 @@ class Information extends React.Component {
                         else if (res.data.msg === '该手机号已绑定用户') {
                             message.success('该手机号已注册请去登陆！')
                             setTimeout(this.props.handleClose, 1000)
-
                         }
                     }
                     else {
                         message.success('信息填写成功！请等待管理员审核！')
                         setTimeout(this.props.handleClose, 1000)
                     }
-
                 })
             }
         });
@@ -340,7 +338,6 @@ class Information extends React.Component {
 
                 </Form.Item>
                 <Form.Item  style={{display: localStorage.getItem('role')==3 ? 'block' : 'none'}}>
-    
                     <div className={'item'}>
                         <div className={'left'} style={{alignItems: 'flex-start'}}>
                             <p>身份证号：</p>

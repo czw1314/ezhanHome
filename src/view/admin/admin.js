@@ -1502,7 +1502,7 @@ class Admin extends React.Component {
                 </div>
                 <div className={'menu'}>
                     <Tabs defaultActiveKey="1" onChange={this.callback.bind(this)} tabPosition={'left'}>
-                        <TabPane tab="审核经纪人、置业顾问注册" key="1">
+                        <TabPane tab="注册审核" key="1">
                             <Tabs defaultActiveKey="11" onChange={this.callback.bind(this)}>
                                 <TabPane tab="待审核经纪人" key="11">
                                     <Table columns={agentColumns} dataSource={this.state.agentData}/>
@@ -1512,7 +1512,7 @@ class Admin extends React.Component {
                                 </TabPane>
                             </Tabs>
                         </TabPane>
-                        <TabPane tab="审核入驻申请" key="2" onChange={this.callback.bind(this)}>
+                        <TabPane tab="入驻审核" key="2" onChange={this.callback.bind(this)}>
                             <Tabs defaultActiveKey="21" onChange={this.callback.bind(this)}>
                                 <TabPane tab="经纪人入驻申请" key="21">
                                     <Table columns={agentApply} dataSource={this.state.agentApplyData}/>
@@ -1522,7 +1522,7 @@ class Admin extends React.Component {
                                 </TabPane>
                             </Tabs>
                         </TabPane>
-                        <TabPane tab="管理经纪人、置业顾问、新房管理员权限" key="3">
+                        <TabPane tab="权限管理" key="3">
                             <Tabs defaultActiveKey="31" onChange={this.callback.bind(this)}>
                                 <TabPane tab="管理经纪人" key="31">
                                     <Table columns={agentControl} dataSource={this.state.agentControlData}/>
@@ -1535,7 +1535,7 @@ class Admin extends React.Component {
                                 </TabPane>
                             </Tabs>
                         </TabPane>
-                        <TabPane tab="修改密码" key="4">
+                        <TabPane tab="密码修改" key="4">
                             <p>修改登陆密码</p>
                             <ChangePassWord></ChangePassWord>
                         </TabPane>
