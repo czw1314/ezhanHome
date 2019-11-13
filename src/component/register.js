@@ -1,8 +1,10 @@
 import React from 'react';
 import '../css/register.scss';
+import {connect} from "react-redux";
+import {setUserInformation} from "../redux/action";
 import {Modal, Button, Tabs, Form, Input, Checkbox, message} from 'antd';
 import {withRouter} from 'react-router-dom';
-import {getPhoneCode, register} from '../api/index'
+import {getPhoneCode, register,login} from '../api/index'
 
 class Information extends React.Component {
     constructor(props) {
@@ -97,23 +99,59 @@ class Information extends React.Component {
                             this.props.handleClose()
                             this.props.history.push('/home/registryCenter')
                     }
-                    else if(this.props.role==5){
-                              message.success('注册成功！请重新登录！')
-                            // localStorage.setItem('role',3)
-                            // localStorage.setItem('userId',res.data.userId)
-                          setTimeout(this.props.handleClose, 1000)
-                        
-                }
-
                     }
                     else {
                         if(this.props.role==3||this.props.role==4){
-                            message.success('注册成功！请先去填写个人资料！')
                             localStorage.setItem('role',this.props.role)
                             localStorage.setItem('userId',res.data.userId)
                             this.props.handleClose()
-                            this.props.history.push('/home/registryCenter')
+                            let params = {
+                                "password": values.password,
+                                "phone": values.phone,
+                                "role": this.props.role,
+                                "loginType": 2
+                            };
+                            login(params).then((res) => {
+                                if (res.data.code === 0) {
+                                    message.error(res.data.msg)
+                                }
+                                else {
+                                    message.success('注册成功！请先去填写个人资料！')
+                                    localStorage.setItem('state',res.data.state)
+                                    this.props.setUserInformation(res.data)
+                                    localStorage.setItem('userName',res.data.name)
+                                    localStorage.setItem('role',res.data.role)
+                                    localStorage.setItem('userId',res.data.userId)
+                                    localStorage.setItem('phone',values.phone)
+                                    this.props.history.push('/home/registryCenter')
+                                }
+                            })
+                           
                         }
+                        else if(this.props.role==5){
+                            message.success('注册成功！')
+                            let params = {
+                                "password": values.password,
+                                "phone": values.phone,
+                                "role": this.props.role,
+                                "loginType": 2
+                            };
+                            login(params).then((res) => {
+                                if (res.data.code === 0) {
+                                    message.error(res.data.msg)
+                                }
+                                else {
+                                    localStorage.setItem('state',res.data.state)
+                                    this.props.setUserInformation(res.data)
+                                    localStorage.setItem('userName',res.data.name)
+                                    localStorage.setItem('role',res.data.role)
+                                    localStorage.setItem('userId',res.data.userId)
+                                    localStorage.setItem('phone',values.phone)
+                                    this.props.history.push('/home/registryCenter')
+                                }
+                            })
+                        setTimeout(this.props.handleClose, 1000) 
+              }
                     }
 
                 })
@@ -202,7 +240,8 @@ class Information extends React.Component {
     }
 }
 
-const InformationForm = Form.create({name: 'retrieve'})(withRouter(Information));
+const InformationForm =connect(state=>(
+    {userInformation:state.userInformation}),{setUserInformation})(Form.create({name: 'retrieve'})(withRouter(Information)));
 
 class Register extends React.Component {
     constructor(props) {
@@ -261,4 +300,5 @@ class Register extends React.Component {
     }
 }
 
-export default withRouter(Register)
+export default connect(state=>(
+    {userInformation:state.userInformation}),{setUserInformation})(withRouter(Register))
