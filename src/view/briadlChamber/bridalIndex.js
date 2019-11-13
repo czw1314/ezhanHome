@@ -173,8 +173,8 @@ class BridalIndex extends React.Component {
                     let arr = eval("(" + item.name + ")")
                     return arr
                 })
-                let albumName=['楼盘封面宣传图','区位图','楼盘总平面图','效果图','实景图','样板间','预售'],x=[],l=0;
-                for(let i=0;i<arr.length;i++){
+                let albumName=['区位图','楼盘总平面图','效果图','实景图','样板间','预售'],x=[],l=0;
+                for(let i=1;i<arr.length;i++){
                             l+=arr[i].length
                             let ll=l-1
                     let obj={
@@ -221,7 +221,7 @@ class BridalIndex extends React.Component {
                     values: res.data.estate,
                     address:address,
                     num:l-1,
-                    nums:res.data.estate.estatePictures.length-5
+                    nums:res.data.estate.estatePictures.length-6
                 })
             }
         })

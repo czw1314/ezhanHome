@@ -298,7 +298,7 @@ class Information extends React.Component {
                 values.estateId = this.props.estateId
                 values.matchings.map((item, index) => {
                     item.type = index + 1
-                    item.matching=item.matching.replace(/\n/g,"<br></br>")
+                    item.matching=item.matching&&item.matching.replace(/\n/g,"<br></br>")
                 })
                 let params = values
 
@@ -494,17 +494,17 @@ class Information extends React.Component {
                 </Form.Item>
                 <Form.Item label={'9、占地面积：'}>
                     {getFieldDecorator('areaCovered')(
-                        <Input/>
+                        <Input addonAfter="m²"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'10、绿化率：'}>
                     {getFieldDecorator('greeningRate')(
-                        <Input/>
+                        <Input addonAfter="%"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'11、总建筑面积：'}>
                     {getFieldDecorator('floorage')(
-                        <Input/>
+                        <Input addonAfter="m²"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'12、容积率：'}>
@@ -549,7 +549,7 @@ class Information extends React.Component {
                 </Form.Item>
                 <Form.Item label={'20、车位数：'}>
                     {getFieldDecorator('parkingNumbers')(
-                        <Input/>
+                        <Input addonAfter="个"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'21、物管公司：'}>
@@ -562,16 +562,16 @@ class Information extends React.Component {
                         <Input/>
                     )}
                 </Form.Item>
-                {/*<Form.Item label="楼盘项目特色：">*/}
-                    {/*{getFieldDecorator('traitIds',)(*/}
-                        {/*<Select mode="multiple">*/}
-                            {/*{this.state.traits && this.state.traits.map(item => {*/}
-                                    {/*return (<Option value={item.value}>{item.label}</Option>)*/}
-                                {/*}*/}
-                            {/*)}*/}
-                        {/*</Select>*/}
-                    {/*)}*/}
-                {/*</Form.Item>*/}
+                <Form.Item label="23、楼盘特色：" >
+                    {getFieldDecorator('traitIds',)(
+                        <Select mode="multiple">
+                            {this.state.traits && this.state.traits.map(item => {
+                                    return (<Option value={item.value}>{item.label}</Option>)
+                                }
+                            )}
+                        </Select>
+                    )}
+                </Form.Item>
                 {/*<Form.Item label={'建面区间：'}>*/}
                     {/*{getFieldDecorator('areaRange')(*/}
                         {/*<Input addonAfter="m²" placeholder="格式：100-200"/>*/}
@@ -1409,17 +1409,17 @@ class InformationUpdata extends React.Component {
                 </Form.Item>
                 <Form.Item label={'9、占地面积：'}>
                     {getFieldDecorator('areaCovered', {initialValue: this.props.values.areaCovered || ''})(
-                        <Input/>
+                        <Input addonAfter="m²"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'10、绿化率：'}>
                     {getFieldDecorator('greeningRate', {initialValue: this.props.values.greeningRate || ''})(
-                        <Input/>
+                        <Input addonAfter="%"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'11、总建筑面积：'}>
                     {getFieldDecorator('floorage', {initialValue: this.props.values.floorage || ''})(
-                        <Input/>
+                        <Input addonAfter="m²"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'12、容积率：'}>
@@ -1464,7 +1464,7 @@ class InformationUpdata extends React.Component {
                 </Form.Item>
                 <Form.Item label={'20、车位数：'}>
                     {getFieldDecorator('parkingNumbers', {initialValue: this.props.values.parkingNumbers || ''})(
-                        <Input/>
+                        <Input addonAfter="个"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'21、物管公司：'}>
@@ -1477,6 +1477,16 @@ class InformationUpdata extends React.Component {
                         <Input/>
                     )}
                 </Form.Item>
+               <Form.Item label="23、楼盘项目特色：">
+                   {getFieldDecorator('traitIds', {initialValue: this.props.values.traitIds || []})(
+                       <Select mode="multiple" maxTagCount={4}>
+                           {this.state.traits && this.state.traits.map(item => {
+                                   return (<Option value={item.value}>{item.label}</Option>)
+                               }
+                           )}
+                       </Select>
+                   )}
+               </Form.Item>
 {/*         
                               <Form.Item label={'项目介绍：'}>
                     {getFieldDecorator('introduction', {initialValue: this.props.values.introduction || ''})(
@@ -1499,16 +1509,7 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
         
-                <Form.Item label="楼盘项目特色：">
-                    {getFieldDecorator('traitIds', {initialValue: this.props.values.traitIds || []})(
-                        <Select mode="multiple">
-                            {this.state.traits && this.state.traits.map(item => {
-                                    return (<Option value={item.value}>{item.label}</Option>)
-                                }
-                            )}
-                        </Select>
-                    )}
-                </Form.Item>
+
                 <Form.Item label={'建面区间：'}>
                     {getFieldDecorator('areaRange', {initialValue: this.props.values.areaRange || ''})(
                         <Input addonAfter="m²"/>
@@ -1519,12 +1520,6 @@ class InformationUpdata extends React.Component {
                         <Input placeholder="格式：2018-08-08"/>
                     )}
                 </Form.Item>
-     
-         
-     
-   
-
-        
                 <Form.Item label="建筑结构：">
                     {getFieldDecorator('buildingStructure', {initialValue: this.props.values.buildingStructure || ''})(
                         <Select>
@@ -1545,14 +1540,6 @@ class InformationUpdata extends React.Component {
                         </Select>
                     )}
                 </Form.Item>
-        
-  
-        
-        
-      
-        
-       
-
                 <Form.Item label={'层高：'}>
                     {getFieldDecorator('floorHeight', {initialValue: this.props.values.floorHeight || ''})(
                         <Input addonAfter="m"/>
@@ -2306,10 +2293,32 @@ class bridalAdmin extends React.Component {
         }
         updata(params).then((res) => {
             if (res.data.code == 1) {
-                message.success('成功更新楼盘动态')
+                const key = `open${Date.now()}`;
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        确定
+                    </Button>
+                );
+                notification.success({
+                    message: '成功更新楼盘动态',
+                    btn,
+                    key,
+                    duration: 0,
+                });
             }
             else {
-                message.error('更新楼盘动态失败')
+                const key = `open${Date.now()}`;
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        确定
+                    </Button>
+                );
+                notification.error({
+                    message: '更新楼盘动态失败',
+                    btn,
+                    key,
+                    duration: 0,
+                });
             }
         })
     }
@@ -2323,8 +2332,8 @@ class bridalAdmin extends React.Component {
     showConfirm(tit,fun) {
         const { confirm } = Modal;
         confirm({
-            title: tit,
-            content: 'Some descriptions',
+            title:tit,
+            content:'',
             okText:"确认",
             cancelText:"取消",
             onOk:()=>{
@@ -2477,7 +2486,7 @@ class bridalAdmin extends React.Component {
                                         autosize={{minRows: 3, maxRows: 5}}
                                     />
                                 </div>
-                                <Button type="primary" className={'push'} onClick={this.showConfirm.bind(this,this.push.bind(this))}>
+                                <Button type="primary" className={'push'} onClick={this.showConfirm.bind(this,'是否更新楼盘动态',this.push.bind(this))}>
                                     确认发布
                                 </Button>
                             </div>
@@ -2525,7 +2534,7 @@ class bridalAdmin extends React.Component {
         </Upload>
         <Button
           type="primary"
-          onClick={this.handleUpload}
+          onClick={this.showConfirm.bind(this,'是否更新楼盘一页纸',this.handleUpload.bind(this))}
           loading={uploading}
           style={{ marginLeft: 16 }}
         >

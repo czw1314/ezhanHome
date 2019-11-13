@@ -379,7 +379,8 @@ class Admin extends React.Component {
             consultantControlData: [],
             visible1: false,
             userId:'',
-            estateId:''
+            estateId:'',
+            index:0,
         }
     }
 
@@ -528,7 +529,7 @@ class Admin extends React.Component {
                             duration: 0,
                         });
                         if (str == 'agent') {
-                            this.state.agentData.splice(0, 1)
+                            this.state.agentData.splice(this.state.index, 1)
                             this.setState({
                                     agentData: this.state.agentData
                                 }
@@ -536,7 +537,7 @@ class Admin extends React.Component {
         
                         }
                         else if (str == 'consultant') {
-                            this.state.consultantData.splice(0, 1)
+                            this.state.consultantData.splice(this.state.index, 1)
                             this.setState({
                                     consultantData: this.state.consultantData
                                 }
@@ -557,7 +558,7 @@ class Admin extends React.Component {
                             duration: 0,
                         });
                         if (str == 'agent') {
-                            this.state.agentData.splice(0, 1)
+                            this.state.agentData.splice(this.state.index, 1)
                             this.setState({
                                     agentData: this.state.agentData
                                 }
@@ -565,7 +566,7 @@ class Admin extends React.Component {
         
                         }
                         else if (str == 'consultant') {
-                            this.state.consultantData.splice(0, 1)
+                            this.state.consultantData.splice(this.state.index, 1)
                             this.setState({
                                     consultantData: this.state.consultantData
                                 }
@@ -672,7 +673,7 @@ class Admin extends React.Component {
     }
 
     //删除经纪人、置业顾问
-    delUserData(userId, str) {
+    delUserData(userId, str,index) {
         this.setState({
             visible1: false
         })
@@ -694,7 +695,7 @@ class Admin extends React.Component {
                     duration: 0,
                 });
                 if (str === 'agent') {
-                    this.state.agentControlData.splice(0, 1)
+                    this.state.agentControlData.splice(this.state.index, 1)
                     this.setState({
                             agentControlData: this.state.agentControlData
                         }
@@ -702,7 +703,7 @@ class Admin extends React.Component {
 
                 }
                 else if (str === 'consultant') {
-                    this.state.consultantControlData.splice(0, 1)
+                    this.state.consultantControlData.splice(this.state.index, 1)
                     this.setState({
                             consultantControlData: this.state.consultantControlData
                         }
@@ -835,7 +836,7 @@ class Admin extends React.Component {
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
-                   <a onClick={()=>{this.setState({visible5:true,userId:this.state.agentData[index].personId})}}>是</a>
+                   <a onClick={()=>{this.setState({visible5:true,userId:this.state.agentData[index].personId,index:index})}}>是</a>
                    <Modal
                             title="通过经纪人注册申请"
                             visible={this.state.visible5}
@@ -843,14 +844,14 @@ class Admin extends React.Component {
                             destroyOnClose={true}
                             okText="确认"
                             cancelText="取消"
-                            onOk={this.pass.bind(this, this.state.agentData[index].personId, 1, 'agent')}
+                            onOk={this.pass.bind(this, this.state.agentData[index].personId, 1, 'agent',index)}
                             onCancel={() => {
                                 this.setState({visible5: false})
                             }}
                         >
                             </Modal>
                   <Divider type="vertical"/>
-                  <a onClick={()=>{this.setState({visible4:true,userId:this.state.agentData[index].personId})}}>否</a>
+                  <a onClick={()=>{this.setState({visible4:true,userId:this.state.agentData[index].personId,index:index})}}>否</a>
                         <Modal
                             title="拒绝经纪人注册申请"
                             okText="确认"
@@ -918,7 +919,7 @@ class Admin extends React.Component {
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
-                  <a onClick={()=>{this.setState({visible6:true,userId:this.state.consultantData[index].personId})}}>是</a>
+                  <a onClick={()=>{this.setState({visible6:true,userId:this.state.consultantData[index].personId,index:index})}}>是</a>
                   <Modal
                             title="通过置业顾问注册申请"
                             visible={this.state.visible6}
@@ -932,7 +933,7 @@ class Admin extends React.Component {
                         >
         </Modal>
                   <Divider type="vertical"/>
-                  <a onClick={()=>{this.setState({visible7:true,userId:this.state.consultantData[index].personId})}}>否</a>
+                  <a onClick={()=>{this.setState({visible7:true,userId:this.state.consultantData[index].personId,index:index})}}>否</a>
                   <Modal
                             title="拒绝置业顾问注册申请"
                             visible={this.state.visible7}
@@ -1023,7 +1024,7 @@ class Admin extends React.Component {
                         {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                                    <a onClick={()=>{this.setState({visible8:true,userId:this.state.agentApplyData[index].personId,setateId:item.estateId})}}>是</a>
+                                    <a onClick={()=>{this.setState({visible8:true,userId:this.state.agentApplyData[index].personId,setateId:item.estateId,index:index})}}>是</a>
                                     <Modal
                             title="通过经纪人申请入驻"
                             visible={this.state.visible8}
@@ -1037,7 +1038,7 @@ class Admin extends React.Component {
                         >
         </Modal>
                                     <Divider type="vertical"/>
-                                    <a  onClick={()=>{this.setState({visible9:true,userId:this.state.agentApplyData[index].personId,setateId:item.estateId})}}>否</a>
+                                    <a  onClick={()=>{this.setState({visible9:true,userId:this.state.agentApplyData[index].personId,setateId:item.estateId,index:index})}}>否</a>
                                     <Modal
                             title="拒绝经纪人申请入驻"
                             visible={this.state.visible9}
@@ -1125,7 +1126,7 @@ class Admin extends React.Component {
                         {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                                    <a onClick={()=>{this.setState({visible10:true,userId:this.state.consultantApplyData[index].personId,setateId:item.estateId})}}>是</a>
+                                    <a onClick={()=>{this.setState({visible10:true,userId:this.state.consultantApplyData[index].personId,setateId:item.estateId,index:index})}}>是</a>
                                     <Modal
                             title="通过置业顾问申请入驻"
                             visible={this.state.visible10}
@@ -1139,7 +1140,7 @@ class Admin extends React.Component {
                         >
         </Modal>
                                     <Divider type="vertical"/>
-                                    <a onClick={()=>{this.setState({visible11:true,userId:this.state.consultantApplyData[index].personId,setateId:item.estateId})}}>否</a>
+                                    <a onClick={()=>{this.setState({visible11:true,userId:this.state.consultantApplyData[index].personId,setateId:item.estateId,index:index})}}>否</a>
                                     <Modal
                             title="拒绝置业顾问申请入驻"
                             visible={this.state.visible11}
@@ -1237,14 +1238,14 @@ class Admin extends React.Component {
                 render: (text, record, index) => (
                     <span>
                    <a onClick={() => {
-                       this.setState({visible1: true,userId:this.state.agentControlData[index].personId})
+                       this.setState({visible1: true,userId:this.state.agentControlData[index].personId,index:index})
                    }}>删除</a>
                                                 <Modal
                                                     title="是否删除"
                                                     okText="确认"
                                                     cancelText="取消"
                                                     visible={this.state.visible1}
-                                                    onOk={this.delUserData.bind(this, this.state.agentControlData[index].personId, 1, 'agent')}
+                                                    onOk={this.delUserData.bind(this,1, 'agent',index)}
                                                     onCancel={() => {
                                                         this.setState({visible1: false})
                                                     }}
@@ -1297,7 +1298,7 @@ class Admin extends React.Component {
                 render: (text, record, index) => (
                     <span>
                     <a onClick={() => {
-                        this.setState({visible1:true,userId:this.state.consultantControlData[index].personId})
+                        this.setState({visible1:true,userId:this.state.consultantControlData[index].personId,index:index})
                     }}>删除</a>
         <Modal
             title="是否删除"
