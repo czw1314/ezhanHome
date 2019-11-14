@@ -205,6 +205,9 @@ class HomePage extends React.Component {
                     if (!res.data.bind && this.getQueryVariable('state') == 3) {
                         this.props.history.push({pathname: '/home/agentMy'})
                     }
+                    else if(!res.data.bind && this.getQueryVariable('state') == 4){
+                        this.props.history.push({pathname: '/home/consultant'})
+                    }
                     else if (!res.data.bind && this.getQueryVariable('state') == 5) {
                         this.setState({phoneShow: true})
                     }

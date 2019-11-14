@@ -39,7 +39,6 @@ class Information extends React.Component {
         }
     }
     componentDidMount() {
-        localStorage.setItem('role',3)
         getDistrictRegions().then((res) => {
             if (res.data.code === 1) {
                 let option = [];

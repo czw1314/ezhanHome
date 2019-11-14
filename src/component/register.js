@@ -147,7 +147,6 @@ class Information extends React.Component {
                                     localStorage.setItem('role',res.data.role)
                                     localStorage.setItem('userId',res.data.userId)
                                     localStorage.setItem('phone',values.phone)
-                                    this.props.history.push('/home/registryCenter')
                                 }
                             })
                         setTimeout(this.props.handleClose, 1000) 
