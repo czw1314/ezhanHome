@@ -34,7 +34,7 @@ class Information extends React.Component {
             regionId:'',
             regionId1:'',
             regionId2:'',
-            agentType:'',
+            agentType:2,
             position:''
         }
     }
@@ -260,7 +260,7 @@ class Information extends React.Component {
                         </div>
                     )}
                 </Form.Item>
-                <Form.Item>
+                {/* <Form.Item>
                     {getFieldDecorator('contact')(
                         <div className={'item'}>
                             <div className={'left'}>
@@ -269,7 +269,7 @@ class Information extends React.Component {
                             </div>
                         </div>
                     )}
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item  style={{display: localStorage.getItem('role')==3? 'block' : 'none'}}>
                         <div className={'item'}>
                             <div className={'left'}>
@@ -284,7 +284,7 @@ class Information extends React.Component {
                         <div className={'item'} >
                             <div className={'left'}>
                                 <p>从业年限：</p>
-                                <Input size={'large'}/>
+                                <Input size={'large'} addonAfter="年"/>
                             </div>
                         </div>
                     )}
@@ -299,7 +299,7 @@ class Information extends React.Component {
                                     <Option value="2">在职公司</Option>
                                     <Option value="1">独立经纪人</Option>
                                 </Select>
-                                <Input disabled={this.state.agentType===2?true:false} size={'large'} ref={'company'} />
+                                <Input disabled={this.state.agentType==1?true:false} size={'large'} ref={'company'} />
                             </div>
                         </div>
                     )}

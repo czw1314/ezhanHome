@@ -520,7 +520,7 @@ preventDefault(e) {
                                         <div className={'left'}>
                                             <p>从业年限：</p>
                                             <Input value={this.state.workYears}
-                                                   onChange={this.changeWorkYears.bind(this)}/>
+                                                   onChange={this.changeWorkYears.bind(this)} addonAfter="年"/>
                                         </div>
 
                                     </div>

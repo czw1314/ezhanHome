@@ -479,7 +479,7 @@ class Information extends React.Component {
                 </Form.Item>
                 <Form.Item label={'7、产权年限：'}>
                     {getFieldDecorator('propertyRightsyears')(
-                        <Input placeholder="默认70年"/>
+                        <Input placeholder="默认70年" addonAfter="年"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'8、建筑类型：'}>
@@ -524,12 +524,12 @@ class Information extends React.Component {
                 </Form.Item>
                 <Form.Item label={'15、规划户数：'}>
                     {getFieldDecorator('pannedHouseholds')(
-                        <Input/>
+                        <Input addonAfter="户"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'16、楼栋总数：'}>
                     {getFieldDecorator('buildingAmount')(
-                        <Input/>
+                        <Input addonAfter="栋"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'17、梯户比：'}>
@@ -1394,7 +1394,7 @@ class InformationUpdata extends React.Component {
                 </Form.Item>
                 <Form.Item label={'7、产权年限：'}>
                     {getFieldDecorator('propertyRightsyears', {initialValue: this.props.values.propertyRightsYears || ''})(
-                        <Input placeholder="默认70年"/>
+                        <Input placeholder="默认70年" addonAfter="年"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'8、建筑类型：'}>
@@ -1439,12 +1439,12 @@ class InformationUpdata extends React.Component {
                 </Form.Item>
                 <Form.Item label={'15、规划户数：'}>
                     {getFieldDecorator('pannedHouseholds', {initialValue: this.props.values.pannedHouseholds || ''})(
-                        <Input/>
+                        <Input addonAfter="户"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'16、楼栋总数：'}>
                     {getFieldDecorator('buildingAmount', {initialValue: this.props.values.buildingAmount || ''})(
-                        <Input/>
+                        <Input addonAfter="栋"/>
                     )}
                 </Form.Item>
                 <Form.Item label={'17、梯户比：'}>
@@ -2471,7 +2471,7 @@ class bridalAdmin extends React.Component {
                                 <div className={'item'}>
                                     <p>最低单价：</p>
                                     <Input style={{width: 300, marginLeft: 30}}
-                                           onChange={(e)=>{this.setState({price:e.target.value})}}/>
+                                           onChange={(e)=>{this.setState({price:e.target.value})}} addonAfter="元/m²"/>
                                 </div>
                                 <div className={'item'}>
                                     <p>楼盘动态标题：</p>

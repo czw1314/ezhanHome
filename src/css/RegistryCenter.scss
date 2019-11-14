@@ -212,6 +212,9 @@
             display: flex;
             color: #333;
             align-items: center;
+            .ant-input-group-wrapper {
+              width: auto;
+            }
             p{
               padding: 0;
               margin: 0;
