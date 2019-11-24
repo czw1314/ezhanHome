@@ -69,6 +69,7 @@ class HousingPicturesWal extends React.Component {
         this.props.setHousingPictures(arr)
         this.setState({fileList})
         if (file.status === 'done' && file.response.estateId) {
+            console.log(file.response.estateId)
             this.props.setId(this.props.id,file.response.estateId)
             this.setState({
                 housingMsgId: file.response.estateId,
@@ -77,6 +78,7 @@ class HousingPicturesWal extends React.Component {
     };
 
     render() {
+        console.log(this.state.housingMsgId)
         const {previewVisible, previewImage, fileList} = this.state;
         const uploadButton = (
             <div>
@@ -91,7 +93,7 @@ class HousingPicturesWal extends React.Component {
                     action="http://47.108.87.104:8501/estate/housingPictures"
                     name={'files'}
                     data={{
-                        housingMsgId:this.state. housingMsgId||0,
+                        housingMsgId:this.state.housingMsgId||0,
                     }}
                     fileList={this.props.housingPictures[this.props.id]||[]}
                     listType="picture-card"
@@ -300,6 +302,16 @@ class Information extends React.Component {
                     item.type = index + 1
                     item.matching=item.matching&&item.matching.replace(/\n/g,"<br></br>")
                 })
+                values.housingMsgs=values.housingMsgs[0].housingMsgId?values.housingMsgs:[]
+                values.housingMsgs.map((item, index) => {
+                    if(item.housingMsgId){
+                        return false
+                    }
+                    else{
+                        item.housingMsgId= this.state.id[index]
+                    }
+                 
+                })
                 let params = values
 
                 estatePublished(params).then((res) => {
@@ -433,7 +445,9 @@ class Information extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'3、区域位置：'}>
-                    {getFieldDecorator('regionId')(
+                    {getFieldDecorator('regionId', {
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Cascader options={this.state.districtRegionsList} placeholder={''}/>
                     )}
                 </Form.Item>
@@ -468,10 +482,12 @@ class Information extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'6、物业权属：'}>
-                    {getFieldDecorator('housingType')(
+                    {getFieldDecorator('housingType',{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Select>
                             {this.state.houseTypes && this.state.houseTypes.map(item => {
-                                    return (<Option value={item.label}>{item.label}</Option>)
+                                    return (<Option value={item.label} key={item.label}>{item.label}</Option>)
                                 }
                             )}
                         </Select>
@@ -483,10 +499,12 @@ class Information extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'8、建筑类型：'}>
-                    {getFieldDecorator('buildingType')(
+                    {getFieldDecorator('buildingType',{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Select>
                             {this.state.buildingTypes && this.state.buildingTypes.map(item => {
-                                    return (<Option value={item.label}>{item.label}</Option>)
+                                    return (<Option value={item.label} key={item.label}>{item.label}</Option>)
                                 }
                             )}
                         </Select>
@@ -563,10 +581,12 @@ class Information extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label="23、楼盘特色：" >
-                    {getFieldDecorator('traitIds',)(
+                    {getFieldDecorator('traitIds',{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Select mode="multiple">
                             {this.state.traits && this.state.traits.map(item => {
-                                    return (<Option value={item.value}>{item.label}</Option>)
+                                    return (<Option value={item.value} key={item.label}>{item.label}</Option>)
                                 }
                             )}
                         </Select>
@@ -686,22 +706,30 @@ class Information extends React.Component {
                 <Form.Item label={'三、项目外部配套（从近到远排序）（3公里范围）：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'交通配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
-                    {getFieldDecorator('matchings[0].matching')(
+                    {getFieldDecorator('matchings[0].matching',{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'医疗配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
-                    {getFieldDecorator('matchings[1].matching')(
+                    {getFieldDecorator('matchings[1].matching',{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'商业配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
-                    {getFieldDecorator('matchings[2].matching')(
+                    {getFieldDecorator('matchings[2].matching',{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'教育配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
-                    {getFieldDecorator('matchings[3].matching')(
+                    {getFieldDecorator('matchings[3].matching',{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
@@ -709,7 +737,7 @@ class Information extends React.Component {
                 </Form.Item>
                 {
                     this.state.housingMsgs && this.state.housingMsgs.map((item, index) => {
-                            return (<div style={{width: '100%', display: 'flex', flexWrap: 'wrap'}}>
+                            return (<div style={{width: '100%', display: 'flex', flexWrap: 'wrap'}} key={index}>
                                 <Form.Item label={'1、户型图上传：'}>
                                     <HousingPicturesWall id={index} setId={this.setValue.bind(this)}></HousingPicturesWall>
                                 </Form.Item>
@@ -719,7 +747,9 @@ class Information extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'3、户型选择：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingType`)(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingType`,{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                                         <Select>
                                             <Option value="一居室">一居室</Option>
                                             <Option value="两居室">两居室</Option>
@@ -746,17 +776,21 @@ class Information extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'7、物业类型：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].propertyType`)(
+                                    {getFieldDecorator(`housingMsgs[${index}].propertyType`,{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                                         <Select>
                                             {this.state.propertyTypes && this.state.propertyTypes.map(item => {
-                                                    return (<Option value={item.label}>{item.label}</Option>)
+                                                    return (<Option value={item.label} key={item.label}>{item.label}</Option>)
                                                 }
                                             )}
                                         </Select>
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'8、户型朝向：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].orientations`)(
+                                    {getFieldDecorator(`housingMsgs[${index}].orientations`,{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                                        <Select>
                                        <Option value="东">东</Option>
                                        <Option value="东南">东南</Option>
@@ -771,30 +805,36 @@ class Information extends React.Component {
                                 </Form.Item>
                     
                                 <Form.Item label={'9、户型结构：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingStructure`)(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingStructure`,{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                                         <Select>
                                             {this.state.housingStructures && this.state.housingStructures.map(item => {
-                                                    return (<Option value={item.label}>{item.label}</Option>)
+                                                    return (<Option value={item.label} key={item.label}>{item.label}</Option>)
                                                 }
                                             )}
                                         </Select>
                                     )}
                                 </Form.Item>
                                 <Form.Item label="10、户型特色：">
-                                    {getFieldDecorator(`housingMsgs[${index}].housingTraitIds`)(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingTraitIds`,{
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                                         <Select mode="multiple">
                                             {this.state.houseTraits && this.state.houseTraits.map(item => {
-                                                    return (<Option value={item.value}>{item.label}</Option>)
+                                                    return (<Option value={item.value} key={item.label}>{item.label}</Option>)
                                                 }
                                             )}
                                         </Select>
                                     )}
                                 </Form.Item>
                                 <Form.Item label="户型特色：" style={{display:'none'}}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingMsgId`, {initialValue: this.state.id?this.state.id[index]:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingMsgId`, {initialValue: this.state.id?this.state.id[index]:'1',
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                                         <Select mode="multiple">
                                             {this.state.houseTraits && this.state.houseTraits.map(item => {
-                                                    return (<Option value={item.value}>{item.label}</Option>)
+                                                    return (<Option value={item.value} key={item.label}>{item.label}</Option>)
                                                 }
                                             )}
                                         </Select>
@@ -845,10 +885,7 @@ class PicturesWall extends React.Component {
             multiple: true,
         };
     }
-
-
     handleCancel = () => this.setState({previewVisible: false});
-
     getBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -857,12 +894,10 @@ class PicturesWall extends React.Component {
             reader.onerror = error => reject(error);
         });
     }
-
     handlePreview = async file => {
         if (!file.url && !file.preview) {
             file.preview = await this.getBase64(file.originFileObj);
         }
-
         this.setState({
             previewImage: file.url || file.preview,
             previewVisible: true,
@@ -897,7 +932,6 @@ class PicturesWall extends React.Component {
                 <div className="ant-upload-text">上传图片</div>
             </div>
         );
-        console.log(this.props.fileList)
         return (
             <div className="clearfix" style={{marginLeft: '20px', width: '90%'}}>
                 <Upload
@@ -965,8 +999,16 @@ class HousingPicturesWallUpdata extends React.Component {
     };
 
     remove(file) {
-        let params = {
-            "housingMsgId": file.id,
+        let params={}
+        if(file.size){
+            params = {
+                "housingMsgId": file.response.estateId,
+            }
+        }
+        else{
+            params = {
+                "housingMsgId": file.id,
+            }
         }
         let fileList = this.props.housingPictures[this.props.id]
         fileList.splice(-file.uid - 1, 1)
@@ -1005,7 +1047,7 @@ class HousingPicturesWallUpdata extends React.Component {
                     action="http://47.108.87.104:8501/estate/housingPictures"
                     name={'files'}
                     data={{
-                        housingMsgId: this.props.estateId||0,
+                        housingMsgId: this.props.ids||0,
                     }}
                     fileList={this.props.housingPictures[this.props.id]||[]}
                     listType="picture-card"
@@ -1186,9 +1228,12 @@ class InformationUpdata extends React.Component {
                 })
             }
         })
-        this.props.form.setFieldsValue({
-            nam: this.props.values
+        this.props.values.housingMsgs&&this.props.values.housingMsgs.map(item=>{
+            this.state.id.push(item.housingMsgId)
         })
+        // this.props.form.setFieldsValue({
+        //     nam: this.props.values
+        // })
     }
 
     //转化为base64
@@ -1210,6 +1255,15 @@ class InformationUpdata extends React.Component {
                 values.matchings.map((item, index) => {
                     item.type = index + 1
                     item.matching=item.matching.replace(/\n/g,"<br></br>")
+                })
+                values.housingMsgs.map((item, index) => {
+                    if(item.housingMsgId){
+                        return false
+                    }
+                    else{
+                        item.housingMsgId= this.state.id[index]
+                    }
+                 
                 })
                 let params = values
                 estatePublished(params).then((res) => {
@@ -1294,6 +1348,7 @@ class InformationUpdata extends React.Component {
     setValue(index,value){
         let arr=this.state.id
         arr[index]=value
+        console.log(arr)
         this.setState({
             id:arr
         })
@@ -1368,7 +1423,9 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'3、区域位置：'}>
-                    {getFieldDecorator('regionId', {initialValue: this.props.values.distinctRegionIds || []})(
+                    {getFieldDecorator('regionId', {initialValue: this.props.values.distinctRegionIds || [],
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Cascader options={this.state.districtRegionsList}/>
                     )}
                 </Form.Item>
@@ -1383,10 +1440,10 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'6、物业权属：'}>
-                    {getFieldDecorator('housingType', {initialValue: this.props.values.housingType || ''})(
+                    {getFieldDecorator('housingType', {initialValue: this.props.values.housingType || '',rules: [{ required: true, message: '必填项' }],})(
                         <Select>
                             {this.state.houseTypes && this.state.houseTypes.map(item => {
-                                    return (<Option value={item.label}>{item.label}</Option>)
+                                    return (<Option value={item.label} key={item.label}>{item.label}</Option>)
                                 }
                             )}
                         </Select>
@@ -1398,10 +1455,10 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'8、建筑类型：'}>
-                    {getFieldDecorator('buildingType', {initialValue: this.props.values.buildingType || ''})(
+                    {getFieldDecorator('buildingType', {initialValue: this.props.values.buildingType || '',rules: [{ required: true, message: '必填项' }],})(
                         <Select>
                             {this.state.buildingTypes && this.state.buildingTypes.map(item => {
-                                    return (<Option value={item.label}>{item.label}</Option>)
+                                    return (<Option value={item.label} key={item.label}>{item.label}</Option>)
                                 }
                             )}
                         </Select>
@@ -1478,10 +1535,10 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                <Form.Item label="23、楼盘项目特色：">
-                   {getFieldDecorator('traitIds', {initialValue: this.props.values.traitIds || []})(
+                   {getFieldDecorator('traitIds', {initialValue: this.props.values.traitIds || [],rules: [{ required: true, message: '必填项' }],})(
                        <Select mode="multiple" maxTagCount={4}>
                            {this.state.traits && this.state.traits.map(item => {
-                                   return (<Option value={item.value}>{item.label}</Option>)
+                                   return (<Option value={item.value} key={item.label}>{item.label}</Option>)
                                }
                            )}
                        </Select>
@@ -1623,7 +1680,7 @@ class InformationUpdata extends React.Component {
                     })(
                         <Select mode="multiple">
                             {this.props.agentIds && this.props.agentIds.map(item => {
-                                    return (<Option value={item.id}>{item.name}</Option>)
+                                    return (<Option value={item.id} key={item.id}>{item.name}</Option>)
                                 }
                             )}
                         </Select>
@@ -1667,9 +1724,9 @@ class InformationUpdata extends React.Component {
                 </Form.Item>
                 {
                     this.state.visible&&this.props.values.housingMsgs && this.props.values.housingMsgs.map((item, index) => {
-                            return (<div style={{width: '100%', display: 'flex', flexWrap: 'wrap'}}>
+                            return (<div style={{width: '100%', display: 'flex', flexWrap: 'wrap'}} key={index}>
                                 <Form.Item label={'1、户型图上传：'}>
-                                    <HousingPicturesWallUpdataId id={index} setId={this.setValue.bind(this)}></HousingPicturesWallUpdataId>
+                                    <HousingPicturesWallUpdataId id={index} setId={this.setValue.bind(this)} ids={item.id}></HousingPicturesWallUpdataId>
                                 </Form.Item>
                                 <Form.Item label={'2、户型编码：'}>
                                     {getFieldDecorator(`housingMsgs[${index}].housingTypeTitle`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingTypeTitle : ''})(
@@ -1677,7 +1734,7 @@ class InformationUpdata extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'3、户型选择：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingType`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingType : ''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingType`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingType : '',rules: [{ required: true, message: '必填项' }],})(
                                         <Select>
                                             <Option value="一居室">一居室</Option>
                                             <Option value="两居室">两居室</Option>
@@ -1695,7 +1752,7 @@ class InformationUpdata extends React.Component {
                                 </Form.Item>
                                 <Form.Item label={'5、建面：'}>
                                     {getFieldDecorator(`housingMsgs[${index}].area`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].area : ''})(
-                                        <Input/>
+                                        <Input addonAfter="m²"/>
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'6、层高：'}>
@@ -1707,7 +1764,7 @@ class InformationUpdata extends React.Component {
                                     {getFieldDecorator(`housingMsgs[${index}].propertyType`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].propertyType : ''})(
                                         <Select>
                                             {this.state.propertyTypes && this.state.propertyTypes.map(item => {
-                                                    return (<Option value={item.label}>{item.label}</Option>)
+                                                    return (<Option value={item.label} key={item.label}>{item.label}</Option>)
                                                 }
                                             )}
                                         </Select>
@@ -1732,7 +1789,7 @@ class InformationUpdata extends React.Component {
                                     {getFieldDecorator(`housingMsgs[${index}].housingStructure`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingStructure : ''})(
                                         <Select>
                                             {this.state.housingStructures && this.state.housingStructures.map(item => {
-                                                    return (<Option value={item.label}>{item.label}</Option>)
+                                                    return (<Option value={item.label} key={item.label}>{item.label}</Option>)
                                                 }
                                             )}
                                         </Select>
@@ -1742,17 +1799,17 @@ class InformationUpdata extends React.Component {
                                     {getFieldDecorator(`housingMsgs[${index}].housingTraitIds`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingTraitIds : []})(
                                         <Select mode="multiple">
                                             {this.state.houseTraits && this.state.houseTraits.map(item => {
-                                                    return (<Option value={item.value}>{item.label}</Option>)
+                                                    return (<Option value={item.value} key={item.label}>{item.label}</Option>)
                                                 }
                                             )}
                                         </Select>
                                     )}
                                 </Form.Item>
                                 <Form.Item label="户型特色：" style={{display:'none'}}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingMsgId`, {initialValue: this.state.id?this.state.id[index]:''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingMsgId`, {initialValue: this.state.id?this.state.id[index]:'1'})(
                                         <Select mode="multiple">
                                             {this.state.houseTraits && this.state.houseTraits.map(item => {
-                                                    return (<Option value={item.value}>{item.label}</Option>)
+                                                    return (<Option value={item.value} key={item.label}>{item.label}</Option>)
                                                 }
                                             )}
                                         </Select>
@@ -1805,7 +1862,7 @@ class PicturesWallUpdata extends React.Component {
             previewImage: '',
             fileList: [],
             estateId: '',
-            multiple: false,
+            multiple: true,
             remove: '',
         };
     }
@@ -1820,7 +1877,6 @@ class PicturesWallUpdata extends React.Component {
             reader.onerror = error => reject(error);
         });
     }
-
     handlePreview = async file => {
         if (!file.url && !file.preview) {
             file.preview = await this.getBase64(file.originFileObj);
@@ -1832,11 +1888,22 @@ class PicturesWallUpdata extends React.Component {
     };
 
     remove(file) {
-        let params = {
-            "estateId": this.props.estateId,
-            "photoName": file.name,
-            "photoType": this.props.photoType
+        let params={}
+        if(file.size){
+            params = {
+                "estateId": this.props.estateId,
+                "photoName": file.response.paths[0],
+                "photoType": this.props.photoType
+            }
         }
+        else{
+            params = {
+                "estateId": this.props.estateId,
+                "photoName": file.name,
+                "photoType": this.props.photoType
+            }
+        }
+
         let fileList = this.props.fileList[this.props.photoType]
         fileList.splice(-file.uid - 1, 1)
         let arr = this.props.fileList
@@ -1849,18 +1916,27 @@ class PicturesWallUpdata extends React.Component {
     }
 
     handleChange = ({file, fileList}) => {
-        let list=fileList.map((item,index)=>{
-            item.uid=-index-1
-            item.status='done'
-            return item
-        })
+        console.log(file)
         let arr = this.props.fileList
-        arr[this.props.photoType] =list
-        this.props.getFileList(arr)
+        arr[this.props.photoType] =fileList
+        // this.props.getFileList(arr)
         this.setState({
             remove: 1
         })
         if (file.status === 'done') {
+            // let list=fileList.map((item,index)=>{
+            //     if(item.status){
+            //         item.uid=-index-1
+            //         item.name=file.response.paths[0]
+            //         return item
+            //     }
+            //     else{
+            //         item.uid=-index-1
+            //         return item
+            //     }
+            //
+            // })
+            // arr[this.props.photoType] =list
             this.setState({
                 multiple: true
             })
@@ -1884,8 +1960,8 @@ class PicturesWallUpdata extends React.Component {
                         estateId: this.props.estateId,
                         photoType: this.props.photoType
                     }}
+                    multiple={true}
                     listType="picture-card"
-                    multiple={this.state.multiple}
                     fileList={this.props.fileList[this.props.photoType]||[]}
                     onPreview={this.handlePreview}
                     onRemove={this.remove.bind(this)}
@@ -2110,6 +2186,7 @@ class bridalAdmin extends React.Component {
         this.setState({
             key: key,
             estateId: '',
+            values:{},
             show:false
         })
         this.props.newEstateId('')
@@ -2160,12 +2237,14 @@ class bridalAdmin extends React.Component {
     }
 
     onChangeDescription(e) {
+        console.log(e.target.value)
         this.setState({
             description: e.target.value
         })
     }
 
     onChangeTitle(e) {
+        console.log(e.target.value)
         this.setState({
             title: e.target.value
         })
@@ -2176,14 +2255,22 @@ class bridalAdmin extends React.Component {
             values: [],
             visible8:false,
             visible9:false,
-            show:false
+            show:false,
+                description:'',
+                price:'',
+                title:'',
+                time:''
         })
         this.props.getFileList([])
         this.setState({
             estateId: value
         })
         let params = {
-            estateId: value
+            estateId: value,
+            type:0
+        }
+        let params1 = {
+            estateId: value,
         }
         this.props.newEstateId(value?value:'')
         localStorage.setItem('estateId',value)
@@ -2223,7 +2310,7 @@ class bridalAdmin extends React.Component {
                 })
             }
         })
-        getEstateAgents(params).then((res)=>{
+        getEstateAgents(params1).then((res)=>{
             if(res.data.code===1){
                 this.setState({
                     agentIds: res.data.users
@@ -2237,7 +2324,8 @@ class bridalAdmin extends React.Component {
             estateId: value
         })
         let params = {
-            estateId: value
+            estateId: value,
+            type:0
         }
         this.props.newEstateId(value?value:'')
         localStorage.setItem('estateId',value)
@@ -2288,8 +2376,10 @@ class bridalAdmin extends React.Component {
     push() {
         let params = {
             description: this.state.description,
-            title: this.state.title,
-            estateId: this.state.estateId
+            estateId: this.state.estateId,
+            referencePrice:this.state.price,
+            title:this.state.title,
+            timeToMarket:this.state.time
         }
         updata(params).then((res) => {
             if (res.data.code == 1) {
@@ -2435,7 +2525,7 @@ class bridalAdmin extends React.Component {
                                 <Button type="primary" style={{display:this.state.estateId?'none':'inline'}} onClick={()=>{this.setState({visible8:true})}}>新增</Button>
                                 <Button type="primary" style={{display:this.state.estateId?'inline':'none'}} onClick={()=>{this.setState({visible9:true})}}>更新</Button>
                                 <div style={{display:this.state.visible8?'block':'none'}}><InformationForms delHousing={this.delHousing1.bind(this)}/></div>
-                                <div  style={{display:this.state.visible9?'block':'none'}}  ><InformationFormUpdatas values={this.state.values} agentIds={this.state.agentIds} delHousing={this.delHousing.bind(this)}/></div>
+                                <div  style={{display:this.state.visible9?'block':'none'}}><InformationFormUpdatas values={this.state.values} agentIds={this.state.agentIds} delHousing={this.delHousing.bind(this)}/></div>
                             </div>
                         </TabPane>
                         <TabPane tab="楼盘动态更新" key="3">
@@ -2466,21 +2556,27 @@ class bridalAdmin extends React.Component {
                                 <div className={'item'}>
                                     <p>上市时间：</p>
                                     <Input style={{width: 300, marginLeft: 30}}
+                                    value={this.state.time}
                                            onChange={(e)=>{this.setState({time:e.target.value})}}/>
+                                    <span>时间格式：2019-01-02</span>
                                 </div>
                                 <div className={'item'}>
                                     <p>最低单价：</p>
                                     <Input style={{width: 300, marginLeft: 30}}
-                                           onChange={(e)=>{this.setState({price:e.target.value})}} addonAfter="元/m²"/>
+                                     value={this.state.price}
+                                           onChange={(e)=>{this.setState({price:e.target.value})}}/>
+                                                       <span>格式：xxxx或待定</span>
                                 </div>
                                 <div className={'item'}>
                                     <p>楼盘动态标题：</p>
                                     <Input style={{width: 300, marginLeft: 30}}
-                                           onChange={this.onChangeTitle.bind(this)}/>
+                                     value={this.state.title}
+                                           onChange={(e)=>{this.setState({title:e.target.value})}}/>
                                 </div>
                                 <div className={'item'}>
                                     <p>发布内容：</p>
                                     <TextArea
+                                     value={this.state.description}
                                         onChange={this.onChangeDescription.bind(this)}
                                         style={{width: 300, marginLeft: 30}}
                                         autosize={{minRows: 3, maxRows: 5}}
@@ -2494,18 +2590,18 @@ class bridalAdmin extends React.Component {
                             <div className={'item'}>
                                     <p>现有动态信息：</p>
                                 </div>
-                                <div className={'item'}>
+                                <div>
                                 {
                                 this.state.values.estateDynamics&&this.state.values.estateDynamics.map((item,index)=>{
                                     return(
-                                        <div style={{display:'block'}} key={index}>
+                                        <div style={{display:'block',marginTop:20,borderBottom:'1px solid #333'}} key={index}>
                                         <p>{item.description}</p>
-                                        <p>上市日期：{item.timeToMarket}</p>
-                                        <p>最低单价：{item.referencePrice}</p>
                                     </div>
                                     )
                                 })
                             }
+                                    <p>上市日期：{this.state.values.estateDynamics&&this.state.values.estateDynamics[0]&&this.state.values.estateDynamics[0].timeToMarket}</p>
+                                    <p>最低单价：{this.state.values.estateDynamics&&this.state.values.estateDynamics[0]&&this.state.values.estateDynamics[0].referencePrice}</p>
                                 </div>
                             </div>
                             </div>

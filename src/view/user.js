@@ -83,6 +83,9 @@ class User extends React.Component {
         cancelWechat(params).then((res)=>{
             if(res.data.code===1){
                 message.success('解绑成功')
+                this.setState({
+                    bindWechatOrNot:false
+                })
             }
         })
     }
@@ -124,7 +127,7 @@ class User extends React.Component {
                                 <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'block':'none'}}>
                                     <p className={'h2'} >微信绑定（已绑定）</p>
                                     <div className={'weixinBox'}>
-                                        <img src={require('../img/weixinHeader.png')}/>
+                                        <img src={this.state.weixin.weChatHeadUrl}/>
                                         <p>微信昵称：{this.state.weixin.weChatName}<br></br>微信账号：{this.state.weixin.weChatNumber}
                                         </p>
                                         <p>地区：{this.state.weixin.weChatAddr}<br></br>性别：{this.state.weixin.weChatSex}

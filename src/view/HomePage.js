@@ -197,6 +197,11 @@ class HomePage extends React.Component {
                 }
                 else {
                     message.success('登陆成功！')
+                    if(Number(this.getQueryVariable('state'))==3||Number(this.getQueryVariable('state'))==4){
+                        window.onunload=function(){
+                            localStorage.clear();
+                    }
+                    }
                     this.props.setUserInformation(res.data)
                     localStorage.setItem('userName', res.data.name)
                     localStorage.setItem('role', res.data.role)
@@ -233,7 +238,11 @@ class HomePage extends React.Component {
     //退出登陆
     clear() {
         this.props.setUserInformation({})
-        localStorage.clear()
+        localStorage.setItem('state','')
+        localStorage.setItem('userName','')
+        localStorage.setItem('role','')
+        localStorage.setItem('userId','')
+        localStorage.setItem('phone','')
     }
 
     //登录或注册以后关闭弹框
@@ -254,10 +263,10 @@ class HomePage extends React.Component {
     //找房与找经纪人互相切换
     handleClick = e => {
         if (e.key == 2) {
-            this.setState({left: 94, placeholder: '请输入经纪人名字'});
+            this.setState({left: 94, placeholder: '请输入经纪人名字',key:2});
         }
         else {
-            this.setState({left: 18, placeholder: '请输入楼盘名'});
+            this.setState({left: 18, placeholder: '请输入楼盘名',key:1});
         }
 
     };
@@ -468,7 +477,7 @@ class HomePage extends React.Component {
                                             <img src={'http://47.108.87.104:8601/building/' + item.picture}/>
                                             <div className={'first'}>
                                                 <p className={'name'}>{item.name}</p>
-                                                <p className={'price'}>{item.referencePrice}元/m²起</p>
+                                                <p className={'price'}>{item.referencePrice}<span style={{display:isNaN(parseInt(item.referencePrice))?'none':'inline-block'}}>元/m²起</span></p>
                                             </div>
                                             <div className={'second'}>
                                                 <p className={'address'}>{item.distinctName}-{item.street}</p>
@@ -498,7 +507,7 @@ class HomePage extends React.Component {
                                             <img src={'http://47.108.87.104:8601/building/' + item.picture}/>
                                             <div className={'first'}>
                                                 <p className={'name'}>{item.name}</p>
-                                                <p className={'price'}>{item.referencePrice}元/m²起</p>
+                                                <p className={'price'}>{item.referencePrice}<span style={{display:isNaN(parseInt(item.referencePrice))?'none':'inline-block'}}>元/m²起</span></p>
                                             </div>
                                             <div className={'second'}>
                                                 <p className={'address'}>{item.distinctName}-{item.street}</p>
@@ -565,8 +574,8 @@ class HomePage extends React.Component {
                                                             })
                                                         }</p>
                                                     </div>
-                                                    <p className={'phone'}>联系电话：{localStorage.getItem('userId') ? item.contact : '登录后查看'}
-                                                    </p>
+                                                    {/* <p className={'phone'}>联系电话：{localStorage.getItem('userId') ? item.contact : '登录后查看'}
+                                                    </p> */}
                                                     <p className={'weixin'}><Popconfirm
                                                         title=""
                                                         visible={this.state.visible[index]}
@@ -593,9 +602,14 @@ class HomePage extends React.Component {
                 <div className={'bottomSide'}>
                     <p>友情链接</p>
                     <ul className={'chain'}>
-                        <li><a href={''}>透明房产网</a></li>
-                        <li><a href={''}>成都住宅与房地产协会</a></li>
-                        <li><a href={''}>成都市住房和城乡建设局</a></li>
+                        <li><a target='_blank' href={'http://www.funi.com/'}>透明房产网</a></li>
+                        <li><a  target='_blank' href={'https://www.cdfangxie.com/'}>成都住宅与房地产协会</a></li>
+                        <li><a target='_blank' href={'http://cdzj.chengdu.gov.cn/'}>成都市住房和城乡建设局</a></li>
+                        <li><a target='_blank' href={'http://cdzfgjj.chengdu.gov.cn/'}>成都市住房公积金管理中心</a></li>
+                        <li><a target='_blank' href={'http://www.scfx.cn/Main.aspx'}>四川省房地产协会</a></li>
+                        <li><a target='_blank' href={'http://www.agents.org.cn'}>中国房地产经纪人</a></li>
+                        <li><a target='_blank' href={'http://mpnr.chengdu.gov.cn/'}>成都市规划与自然资源局</a></li>
+                        <li><a target='_blank' href={'https://mcmcrt.china-emu.cn/Chengdu/'}>程话成都地铁</a></li>
                     </ul>
                     <div className={'company'}>
                         <img src={require('../img/bottomLogo.png')}/>
@@ -608,6 +622,9 @@ class HomePage extends React.Component {
                             </ul>
                         </div>
                     </div>
+                    <div style={{textAlign:'center'}}>
+                    <a target={'_blank'} href={''}>蜀ICP备18023206号-2</a>
+                </div>
                 </div>
             </div>
         )

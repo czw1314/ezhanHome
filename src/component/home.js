@@ -39,7 +39,14 @@ class Home extends React.Component {
             //退出登陆
     clear(){
         this.props.setUserInformation({})
-        localStorage.clear()
+        localStorage.setItem('state','')
+        localStorage.setItem('userName','')
+        localStorage.setItem('role','')
+        localStorage.setItem('userId','')
+        localStorage.setItem('phone','')
+        if(this.props.location.pathname=='/home/user'||this.props.location.pathname=='/home/agentMy'||this.props.location.pathname=='/home/consultant'){
+            this.props.history.push('/homePage')
+        }
     }
     handleCancel = (str,userName) => {
         if(str==='login'){
@@ -132,6 +139,9 @@ class Home extends React.Component {
                             {/*</div>*/}
                         </div>
                     </div>
+                    <div style={{textAlign:'center'}}>
+                    <a target={'_blank'} href={''}>蜀ICP备18023206号-2</a>
+                </div>
                 </div>
             </div>
         )

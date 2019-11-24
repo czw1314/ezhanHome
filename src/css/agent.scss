@@ -37,11 +37,28 @@
   .condition{
     width: 1200px;
     margin:8px auto 0;
+    
     .ant-checkbox-group-item{
       color: #333;
     }
-    .ant-checkbox-wrapper-checked{
+    .ant-radio-wrapper-checked{
+      font-weight: bold;
+      color: #268AED !important;
+    }
+    .ant-checkbox-wrapper-checked {
       color: #268AED;
+      font-weight: bold;
+  }
+    .ant-checkbox-checked{
+      span{
+        font-weight: bold;
+        color: #268AED !important;
+      }
+      font-weight: bold;
+      color: #268AED !important;
+    }
+    .ant-radio-wrapper {
+      color: #333;
     }
     .first{
       display: flex;
@@ -49,8 +66,9 @@
       .ant-radio{
         display: none;
       }
-      .ant-radio-wrapper-checked{
+      .ant-checkbox-wrapper-checked{
         color: #268AED;
+        font-weight: bold;
       }
       p{
         font-size:15px;
@@ -73,9 +91,10 @@
   }
   .result{
     width: 1200px;
-    margin: auto;
+    margin: 10px auto 0;
     .find{
       font-size:24px;
+      margin-bottom: 20px;
       text-align: left;
       font-family:Source Han Sans CN;
       font-weight:bold;
@@ -101,7 +120,7 @@
         margin-bottom: 0px;
       }
       .clear{
-        color: #5E7FB1;
+        color: #268AED;
         font-size: 14px;
         cursor: pointer;
       }
@@ -142,7 +161,7 @@
 
             .information {
               text-align: left;
-              width: 200px;
+              width: 220px;
               .name {
                 font-size:20px;
                 font-weight:bold;

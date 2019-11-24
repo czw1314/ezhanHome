@@ -121,6 +121,7 @@ class BridalIndex extends React.Component {
 
     //小图向右
     goRights() {
+        console.log(1)
         this.setState({
             translateXs: this.state.translateXs - 142 >= (-this.state.nums * 142) ? this.state.translateXs - 142 : -this.state.nums * 142
 
@@ -174,11 +175,12 @@ class BridalIndex extends React.Component {
                     return arr
                 })
                 let albumName=['区位图','楼盘总平面图','效果图','实景图','样板间','预售'],x=[],l=0;
-                for(let i=1;i<arr.length;i++){
-                            l+=arr[i].length
+                for(let i=0;i<arr.length;i++){
+                    let type=res.data.estate.estatePictures[i].type-1
+                            l+=arr[i].length;
                             let ll=l-1
                     let obj={
-                        albumName: albumName[i],
+                        albumName: albumName[type],
                         photo:[],
                         count:ll
                     }
@@ -195,6 +197,8 @@ class BridalIndex extends React.Component {
                 this.setState({
                     map: map
                 })
+                let long=res.data.estate.longitudeAtitude.split(",")
+            
                 //标记项目位置
                 var text = new window.AMap.Text({
                     text: res.data.estate.name,
@@ -211,7 +215,7 @@ class BridalIndex extends React.Component {
                         'font-size': '14px',
                         'color': '#fff'
                     },
-                    position: [104.081525, 30.406772]
+                    position: [parseFloat(long[0]),parseFloat(long[1])]
                 });
                 text.setMap(map);
                 this.setState({
@@ -221,7 +225,7 @@ class BridalIndex extends React.Component {
                     values: res.data.estate,
                     address:address,
                     num:l-1,
-                    nums:res.data.estate.estatePictures.length-6
+                    nums:res.data.estate.estatePictures.length-5
                 })
             }
         })
@@ -363,68 +367,81 @@ class BridalIndex extends React.Component {
                             <div className="small_list">
                                 <ul style={{transform: `translateX(${this.state.translateXs}px)`}}>
                                     {this.state.slideData.map((item,index) =>
-                                        <li className={`${this.state.active > (item.count - item.photo.length) ? (this.state.active <(item.count + 1) ? 'active' : '') : '' } `} key={index}
+                                        <li className={`${this.state.active > (item.count - item.photo.length) ? (this.state.active <(item.count + 1) ? 'active' : '') : '' } `} key={index} style={{display:item.photo[0]?'inline-block':'none'}}
                                             data-count={item.photo.length} onClick={this.goTo.bind(this, item.count,item.photo.length)}
                                             data-index={item.count}>
-                                            <img src={item.photo[0].img}/>
+                                            <img src={item.photo[0]&&item.photo[0].img}/>
                                             <p>{item.albumName + '(' + item.photo.length + ')'}</p>
                                         </li>
                                     )}
                                 </ul>
                             </div>
-                            <span className="btns rights_btn" onClick={this.goRights.bind(this)}></span>
+                            <span className="btns rights_btn" onClick={(this.goRights.bind(this))}></span>
                         </div>
                         <div className={'center'}>
+                            <div id={'container'}></div>
                             <p>楼盘详情</p>
                             <Button type="primary" icon="download" size={'large'} onClick={this.down.bind(this)} style={{display:(this.props.userInformation.role==3&&this.props.userInformation.state==1)||(localStorage.getItem('role')==3&&localStorage.getItem('state')==1)?"block":'none'}}>
-                                <a href={'http://47.108.87.104:8601/show/downloadPaper?estateId='+estateId} download style={{color:'#fff'}}>下载一页纸</a>
+                                <a href={'http://47.108.87.104:8601/building/'+this.state.values.paperPath} download style={{color:'#fff'}}>下载一页纸</a>
                             </Button>
                             <div className={'information'}>
                                 <div className={'item'}>
-                                    <p>物业类型：{this.state.values&&this.state.values.estatePropertyTypes.map(item=>{
-                                        return(<span style={{marginRight:'10px'}} key={item.propertyType}>{item.propertyType}</span>)
-                                    })}</p>
-                                    <p>区域：{values.distinctRegion}</p>
+                                    <p>区域位置：{values.distinctRegion}</p>
                                 </div>
+                                <div className={'item'}>
+                                <p>物业类型：{this.state.values&&this.state.values.estatePropertyTypes.map(item=>{
+                                    return(<span style={{marginRight:'10px'}} key={item.propertyType}>{item.propertyType}</span>)
+                                })}</p>
+                                </div>
+                                    <div className={'item'}>
+                                        <p>开发商：{this.state.values.develpers}</p>
+                                    </div>
                                 <div className={'item'}>
                                     <p>楼盘地址：{this.state.values.adress}</p>
-                                    <p>开发商：{this.state.values.develpers}</p>
                                 </div>
                                 <div className={'item'}>
-                                    <p>产权年限：{values.propertyRightsYears}</p>
                                     <p>物业权属：{values.housingType}</p>
+                                    <p>产权年限：{values.propertyRightsYears}年</p>
+
                                 </div>
                                 <div className={'item'}>
                                     <p>建筑类型：{values.buildingType}</p>
+                                    <p>占地面积：{values.areaCovered}m²</p>
+
+                                </div>
+                                <div className={'item'}>
                                     <p>绿化率：{values.greeningRate}%</p>
+                                    <p>总建筑面积：{values.floorage}m²</p>
+                                    {/*<p>建筑结构：{values.buildingStructure}</p>*/}
+
                                 </div>
                                 <div className={'item'}>
-                                    <p>建筑结构：{values.buildingStructure}</p>
-                                    <p>容积率：{values.volumeRatio}%</p>
-                                </div>
-                                <div className={'item'}>
-                                    <p>占地面积：{values.areaCovered}</p>
+                                    <p>容积率：{values.volumeRatio}</p>
                                     <p>拿地时间：{values.holdedTime}</p>
                                 </div>
                                 <div className={'item'}>
-                                    <p>总建筑面积：{values.floorage}</p>
-                                    <p>交房时间（预计）：{values.housekeepingTime}</p>
+                                    <p>交房时间：{values.housekeepingTime}</p>
+                                    <p>规划户数：{values.pannedHouseholds}户</p>
                                 </div>
 
                                 <div className={'item'}>
-                                    <p>规划户数：{values.pannedHouseholds}</p>
-                                    <p>公摊：{values.shareArea}</p>
+                                    <p>楼栋总数：{values.buildingAmount}栋</p>
+                                    <p>梯户比：{values.staircasesRatio}</p>
+                                    {/*<p>公摊：{values.shareArea}</p>*/}
                                 </div>
-                                <div style={{display:this.state.more?"block":'none'}}>
+                                <div>
                                     <div className={'item'}>
-                                        <p>总楼层：{values.floors}</p>
-                                        <p>梯户比：{values.staircasesRatio}</p>
+                                        <p>建面区间：{values.minArea}-{values.maxArea}m²</p>
+                                        <p>楼层状况：{values.floors}</p>
+
                                     </div>
                                     <div className={'item'}>
-                                        <p>建面区间：{values.areaRange}m²</p>
-                                        <p>层高：{values.floorHeight}</p>
+                                        <p>车位数：{values.parkingNumbers}个</p>
+                                        <p>装修状况：{values.decorateStandard}</p>
+                                        {/*<p>层高：{values.floorHeight}</p>*/}
                                     </div>
                                     <div className={'item'}>
+                                        <p>物管费：{values.propertyFee}</p>
                                         <p>楼盘户型：{this.state.models&&this.state.models.map((item,index)=>{
                                             return(<span key={index} style={{marginRight:'20px'}}>
                                                     {item.housingType}
@@ -433,20 +450,20 @@ class BridalIndex extends React.Component {
                                         })}</p>
                                     </div>
                                     <div className={'item'}>
-                                        <p>交付标准：{values.deliveryStandard}</p>
+
                                     </div>
                                     <div className={'item'}>
                                         <p>物管公司：{values.propertyCompany}</p>
-                                        <p>车位配比：{values.parkingRatio}</p>
+                                        {/*<p>车位配比：{values.parkingRatio}</p>*/}
                                     </div>
                                     <div className={'item'}>
-                                        <p>物管费：{values.propertyFee}</p>
-                                        <p>车位数：{values.parkingNumbers}</p>
+
+
                                     </div>
                                 </div>
                                 </div>
-                                <Button block onClick={()=>this.setState({more:true})} style={{display:!this.state.more?'block':'none'}}>更多</Button>
-                                <Button block onClick={()=>this.setState({more:false})} style={{display:this.state.more?'block':'none'}}>收起</Button>
+                                {/*<Button block onClick={()=>this.setState({more:true})} style={{display:!this.state.more?'block':'none'}}>更多</Button>*/}
+                                {/*<Button block onClick={()=>this.setState({more:false})} style={{display:this.state.more?'block':'none'}}>收起</Button>*/}
                         </div>
                         <div className={'dynamic'}>
                             <h3>楼盘动态</h3>
@@ -466,35 +483,29 @@ class BridalIndex extends React.Component {
                         </div>
                         <div className={'nearby'}>
                             <h3>楼盘周边配套</h3>
-                            <div id="container"></div>
                             <Tabs defaultActiveKey="1">
                                 <TabPane tab="交通" key="1">
-                                    <div style={{paddingTop:'14px',paddingBottom:'14px'}}>
-                                    {values.estateMatchings&&values.estateMatchings[0]&&values.estateMatchings[0].description}
+                                    <div style={{paddingTop:'14px',paddingBottom:'14px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[0]&&values.estateMatchings[0].description}}>
                                     </div>
                                 </TabPane>
                                 <TabPane tab="医疗" key="2">
-                                <div style={{paddingTop:'14px',paddingBottom:'14px'}}>
-                                    {values.estateMatchings&&values.estateMatchings[1]&&values.estateMatchings[1].description}
+                                <div style={{paddingTop:'14px',paddingBottom:'14px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[1]&&values.estateMatchings[1].description}}>
                                     </div>
                                 </TabPane>
                                 <TabPane tab="商业" key="3">
-                                <div style={{paddingTop:'14px',paddingBottom:'14px'}}>
-                                    {values.estateMatchings&&values.estateMatchings[2]&&values.estateMatchings[2].description}
+                                <div style={{paddingTop:'14px',paddingBottom:'14px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[2]&&values.estateMatchings[2].description}}>
                                     </div>
                                 </TabPane>
                                 <TabPane tab="教育" key="4">
-                                <div style={{paddingTop:'14px',paddingBottom:'14px'}}>
-                                    {values.estateMatchings&&values.estateMatchings[3]&&values.estateMatchings[3].description}
+                                <div style={{paddingTop:'14px',paddingBottom:'14px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[3]&&values.estateMatchings[3].description}}>
                                     </div>
                                 </TabPane>
                             </Tabs>
-                            <Button block>更多</Button>
                         </div>
                         <div className={'apartmentShow'}>
                             <div className={'title'}>
                                 <h3>户型介绍</h3>
-                                <p>查看全部户型详情</p>
+                                <p onClick={()=>{this.props.history.push('/home/bridalHome/bridalApartment')}}>查看全部户型详情</p>
                             </div>
                             <Tabs onChange={this.callback.bind(this)}  defaultActiveKey="0" >
                                 {
@@ -541,8 +552,8 @@ class BridalIndex extends React.Component {
                     <div className={'right'}>
                         <div className={'first'}>
                             <div className={'titles'}>
-                        <p className={'price'}><span>{values.referencePrice}</span>元/m²起</p>
-                            <Rate character={<div><Icon type="heart" /><p>{this.state.star==1?"取消关注":'关注'}</p></div>}   count={1}  onChange={this.star.bind(this)} value={this.state.star}/>
+                        <p className={'price'}>{values.referencePrice}<span style={{display:isNaN(parseInt(values.referencePrice))?'none':'inline-block'}}>元/m²起</span></p>
+                            <Rate character={<div><Icon type="heart" /><p>{this.state.star==1?"取消关注":'关注'}</p></div>}   count={1}  onChange={this.star.bind(this)} value={this.state.star} style={{display:(this.props.userInformation.role==3||this.props.userInformation.role==4||localStorage.getItem('role')==4||localStorage.getItem('role')==3)?"none":'block'}}/>
                         </div>
 
                         <p className={'name'}>{values.distinctRegion}</p>
@@ -575,7 +586,7 @@ class BridalIndex extends React.Component {
                                             <div className={'right'}>
                                                 <p className={'name'}>{item.name}</p>
                                                 <p className={'title'}>{item.position}</p>
-                                                <p className={'phone'}><span>联系电话：</span>{item.contact}</p>
+                                                {/* <p className={'phone'}><span>联系电话：</span>{item.contact}</p> */}
                                                 <p className={'weixin'}>
                                                     <Popconfirm
                                                         title=""
@@ -593,7 +604,7 @@ class BridalIndex extends React.Component {
                                     )
                                 })
                             }
-                            <Pagination defaultCurrent={1} total={this.state.consultant.length} defaultPageSize={4} onChange={this.page.bind(this)}/>
+                            {/* <Pagination defaultCurrent={1} total={this.state.consultant.length} defaultPageSize={4} onChange={this.page.bind(this)}/> */}
                         </div>
                         <div className={'second'}>
                             <p className={'star'}>置业顾问</p>
@@ -604,7 +615,7 @@ class BridalIndex extends React.Component {
                                     <div className={'right'}>
                                     <p className={'name'}>{item.name}</p>
                                         <p className={'title'}>{item.position}</p>
-                                        <p className={'phone'}><span>联系电话：</span>{item.contact}</p>
+                                        {/* <p className={'phone'}><span>联系电话：</span>{item.contact}</p> */}
                                         <p className={'weixin'}>
                                                                     <Popconfirm
                                                                         title=""
@@ -622,7 +633,7 @@ class BridalIndex extends React.Component {
                                 })
 
                             }
-                            <Pagination defaultCurrent={1} total={this.state.consultant.length} defaultPageSize={4} onChange={this.page.bind(this)}/>
+                            <Pagination defaultCurrent={1} total={this.state.consultant.length} defaultPageSize={4} onChange={this.page.bind(this)} style={{marginTop:'40px'}}/>
                         </div>
                 </div>
                 </div>

@@ -292,7 +292,6 @@ class Code extends React.Component {
     };
 
     handleCancel = e => {
-        console.log(e);
         this.setState({
             visible: false,
         });
@@ -310,7 +309,7 @@ class Code extends React.Component {
                     onCancel={this.handleCancel}
                     className={'code'}
                 >
-                    <img src={this.props.src} style={{marginTop: '20px'}}/>
+                    <img src={this.props.src} style={{marginTop: '20px',with:'100%'}}/>
                 </Modal>
             </div>
         );
@@ -327,7 +326,6 @@ class CardCode extends React.Component {
     };
 
     handleCancel = e => {
-        console.log(e);
         this.setState({
             visible: false,
         });
@@ -344,8 +342,8 @@ class CardCode extends React.Component {
                     onCancel={this.handleCancel}
                     className={'code'}
                 >
-                    <img src={this.props.src} style={{marginTop: '20px'}}/>
-                    <img src={this.props.src1} style={{marginTop: '20px'}}/>
+                    <img src={this.props.src} style={{marginTop: '20px',with:'100%'}}/>
+                    <img src={this.props.src1} style={{marginTop: '20px',with:'100%'}}/>
                 </Modal>
             </div>
         );
@@ -671,7 +669,6 @@ class Admin extends React.Component {
             }
         )
     }
-
     //删除经纪人、置业顾问
     delUserData(userId, str,index) {
         this.setState({
@@ -767,7 +764,7 @@ class Admin extends React.Component {
                 dataIndex: 'createTime',
             },
             {
-                title: '申请人姓名',
+                title: '姓名',
                 dataIndex: 'name',
             },
             {
@@ -778,26 +775,26 @@ class Admin extends React.Component {
                 ),
             },
             {
-                title: '申请人账号（电话）',
+                title: '账号',
                 dataIndex: 'phone',
             },
+            // {
+            //     title: '联系电话',
+            //     dataIndex: 'contact',
+            // },
             {
-                title: '联系电话',
-                dataIndex: 'contact',
-            },
-            {
-                title: '微信二维码',
+                title: '二维码',
                 dataIndex: 'weChatQrCode',
                 render: (text, record, index) => (
                     <Code src={'http://47.108.87.104:8601/user/' + text}/>
                 ),
             },
             {
-                title: '申请人公司',
+                title: '公司',
                 dataIndex: 'company',
             },
             {
-                title: '经纪人服务区域',
+                title: '服务区域',
                 dataIndex: 'regions',
                 render: (text, record, index) => (
                     <div>
@@ -809,11 +806,11 @@ class Admin extends React.Component {
                 ),
             },
             {
-                title: '身份证号',
+                title: '身份证',
                 dataIndex: 'cardNumber',
             },
             {
-                title: '查看身份证',
+                title: '身份证照片',
                 dataIndex: 'frontCard',
                 render: (text, record, index) => (
                     <CardCode src={'http://47.108.87.104:8601/user/' + text}
@@ -825,14 +822,14 @@ class Admin extends React.Component {
                 dataIndex: 'position',
             },
             {
-                title: '查看职称证证件',
+                title: '职称照片',
                 dataIndex: 'positionPicture',
                 render: (text, record, index) => (
                     <Code src={'http://47.108.87.104:8601/user/' + text}/>
                 ),
             },
             {
-                title: '是否通过',
+                title: '审核',
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
@@ -876,7 +873,7 @@ class Admin extends React.Component {
                 key: 'createTime',
             },
             {
-                title: '申请人姓名',
+                title: '姓名',
                 dataIndex: 'name',
                 key: 'name',
             },
@@ -889,17 +886,17 @@ class Admin extends React.Component {
                 ),
             },
             {
-                title: '申请人账号（电话）',
+                title: '账号',
                 key: 'phone',
                 dataIndex: 'phone',
             },
+            // {
+            //     title: '联系电话',
+            //     key: 'contact',
+            //     dataIndex: 'contact',
+            // },
             {
-                title: '联系电话',
-                key: 'contact',
-                dataIndex: 'contact',
-            },
-            {
-                title: '微信二维码',
+                title: '二维码',
                 key: 'weChatQrCode',
                 dataIndex: 'weChatQrCode',
                 render: (text, record, index) => (
@@ -907,7 +904,7 @@ class Admin extends React.Component {
                 ),
             },
             {
-                title: '申请人公司',
+                title: '公司',
                 key:
                     'company',
                 dataIndex:
@@ -915,7 +912,7 @@ class Admin extends React.Component {
             }
             ,
             {
-                title: '是否通过',
+                title: '审核',
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
@@ -958,7 +955,7 @@ class Admin extends React.Component {
                 dataIndex: 'createTime',
             },
             {
-                title: '申请人姓名',
+                title: '姓名',
                 dataIndex: 'name',
             },
             {
@@ -969,26 +966,26 @@ class Admin extends React.Component {
                 ),
             },
             {
-                title: '申请人账号（电话）',
+                title: '账号',
                 dataIndex: 'phone',
             },
+            // {
+            //     title: '联系电话',
+            //     dataIndex: 'contact',
+            // },
             {
-                title: '联系电话',
-                dataIndex: 'contact',
-            },
-            {
-                title: '微信二维码',
+                title: '二维码',
                 dataIndex: 'weChatQrCode',
                 render: (text, record, index) => (
                     <Code src={'http://47.108.87.104:8601/user/' + text}/>
                 ),
             },
             {
-                title: '申请人公司',
+                title: '公司',
                 dataIndex: 'company',
             },
             {
-                title: '经纪人服务区域',
+                title: '服务区域',
                 dataIndex: 'regions',
                 render: (text, record, index) => (
                     <div>
@@ -1004,7 +1001,7 @@ class Admin extends React.Component {
                 dataIndex: 'position',
             },
             {
-                title: '申请入驻的楼盘',
+                title: '入驻',
                 dataIndex: 'estates',
                 render: (text, record, index) => (
                     <ul>
@@ -1016,7 +1013,7 @@ class Admin extends React.Component {
                 ),
             },
             {
-                title: '是否通过',
+                title: '审核',
                 dataIndex: 'estates',
                 key: 'action',
                 render: (text, record, index) => (
@@ -1024,7 +1021,7 @@ class Admin extends React.Component {
                         {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                                    <a onClick={()=>{this.setState({visible8:true,userId:this.state.agentApplyData[index].personId,setateId:item.estateId,index:index})}}>是</a>
+                                    <a onClick={()=>{this.setState({visible8:true,userId:this.state.agentApplyData[index].personId,estateId:item.estateId,index:index})}}>是</a>
                                     <Modal
                             title="通过经纪人申请入驻"
                             visible={this.state.visible8}
@@ -1038,7 +1035,7 @@ class Admin extends React.Component {
                         >
         </Modal>
                                     <Divider type="vertical"/>
-                                    <a  onClick={()=>{this.setState({visible9:true,userId:this.state.agentApplyData[index].personId,setateId:item.estateId,index:index})}}>否</a>
+                                    <a  onClick={()=>{this.setState({visible9:true,userId:this.state.agentApplyData[index].personId,estateId:item.estateId,index:index})}}>否</a>
                                     <Modal
                             title="拒绝经纪人申请入驻"
                             visible={this.state.visible9}
@@ -1068,7 +1065,7 @@ class Admin extends React.Component {
                 key: 'createTime',
             },
             {
-                title: '申请人姓名',
+                title: '姓名',
                 dataIndex: 'name',
                 key: 'name',
             },
@@ -1081,17 +1078,17 @@ class Admin extends React.Component {
                 ),
             },
             {
-                title: '申请人账号（电话）',
+                title: '账号',
                 key: 'phone',
                 dataIndex: 'phone',
             },
+            // {
+            //     title: '联系电话',
+            //     key: 'contact',
+            //     dataIndex: 'contact',
+            // },
             {
-                title: '联系电话',
-                key: 'contact',
-                dataIndex: 'contact',
-            },
-            {
-                title: '微信二维码',
+                title: '二维码',
                 key: 'weChatQrCode',
                 dataIndex: 'weChatQrCode',
                 render: (text, record, index) => (
@@ -1099,14 +1096,14 @@ class Admin extends React.Component {
                 ),
             },
             {
-                title: '申请人公司',
+                title: '公司',
                 key:
                     'company',
                 dataIndex:
                     'company',
             },
             {
-                title: '申请入驻的楼盘',
+                title: '入驻',
                 dataIndex: 'estates',
                 render: (text, record, index) => (
                     <div>
@@ -1118,7 +1115,7 @@ class Admin extends React.Component {
                 ),
             },
             {
-                title: '是否通过',
+                title: '审核',
                 key: 'action',
                 dataIndex: 'estates',
                 render: (text, record, index) => (
@@ -1126,7 +1123,7 @@ class Admin extends React.Component {
                         {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                                    <a onClick={()=>{this.setState({visible10:true,userId:this.state.consultantApplyData[index].personId,setateId:item.estateId,index:index})}}>是</a>
+                                    <a onClick={()=>{this.setState({visible10:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index})}}>是</a>
                                     <Modal
                             title="通过置业顾问申请入驻"
                             visible={this.state.visible10}
@@ -1140,7 +1137,7 @@ class Admin extends React.Component {
                         >
         </Modal>
                                     <Divider type="vertical"/>
-                                    <a onClick={()=>{this.setState({visible11:true,userId:this.state.consultantApplyData[index].personId,setateId:item.estateId,index:index})}}>否</a>
+                                    <a onClick={()=>{this.setState({visible11:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index})}}>否</a>
                                     <Modal
                             title="拒绝置业顾问申请入驻"
                             visible={this.state.visible11}
@@ -1171,69 +1168,69 @@ class Admin extends React.Component {
                 title: '姓名',
                 dataIndex: 'name',
             },
+            // {
+            //     title: '头像',
+            //     dataIndex: 'head',
+            //     render: (text, record, index) => (
+            //         <img src={'http://47.108.87.104:8601/user/' + text} style={{width: 60}}/>
+            //     ),
+            // },
             {
-                title: '头像',
-                dataIndex: 'head',
-                render: (text, record, index) => (
-                    <img src={'http://47.108.87.104:8601/user/' + text} style={{width: 60}}/>
-                ),
-            },
-            {
-                title: '账号（电话）',
+                title: '账号',
                 dataIndex: 'phone',
             },
+            // {
+            //     title: '联系电话',
+            //     dataIndex: 'contact',
+            // },
+            // {
+            //     title: '微信二维码',
+            //     dataIndex: 'weChatQrCode',
+            //     render: (text, record, index) => (
+            //         <Code src={'http://47.108.87.104:8601/user/' + text}/>
+            //     ),
+            // },
+            // {
+            //     title: '公司',
+            //     dataIndex: 'company',
+            // },
+            // {
+            //     title: '经纪人服务区域',
+            //     dataIndex: 'regions',
+            //     render: (text, record, index) => (
+            //         <div>
+            //             {text && text.map(item => {
+            //                 return (<p>{item.districtName + '—' + item.streetName}</p>)
+            //             })
+            //             }
+            //         </div>
+            //     ),
+            // },
+            // {
+            //     title: '身份证号',
+            //     dataIndex: 'cardNumber',
+            // },
+            // {
+            //     title: '查看身份证',
+            //     dataIndex: 'frontCard',
+            //     render: (text, record, index) => (
+            //         <CardCode src={'http://47.108.87.104:8601/user/' + text}
+            //                   src1={'http://47.108.87.104:8601/user/' + this.state.agentControlData[index].backCard}/>
+            //     ),
+            // },
+            // {
+            //     title: '职称',
+            //     dataIndex: 'position',
+            // },
+            // {
+            //     title: '查看职称证件',
+            //     dataIndex: 'positionPicture',
+            //     render: (text, record, index) => (
+            //         <Code src={'http://47.108.87.104:8601/user/' + text}/>
+            //     ),
+            // },
             {
-                title: '联系电话',
-                dataIndex: 'contact',
-            },
-            {
-                title: '微信二维码',
-                dataIndex: 'weChatQrCode',
-                render: (text, record, index) => (
-                    <Code src={'http://47.108.87.104:8601/user/' + text}/>
-                ),
-            },
-            {
-                title: '公司',
-                dataIndex: 'company',
-            },
-            {
-                title: '经纪人服务区域',
-                dataIndex: 'regions',
-                render: (text, record, index) => (
-                    <div>
-                        {text && text.map(item => {
-                            return (<p>{item.districtName + '—' + item.streetName}</p>)
-                        })
-                        }
-                    </div>
-                ),
-            },
-            {
-                title: '身份证号',
-                dataIndex: 'cardNumber',
-            },
-            {
-                title: '查看身份证',
-                dataIndex: 'frontCard',
-                render: (text, record, index) => (
-                    <CardCode src={'http://47.108.87.104:8601/user/' + text}
-                              src1={'http://47.108.87.104:8601/user/' + this.state.agentControlData[index].backCard}/>
-                ),
-            },
-            {
-                title: '职称',
-                dataIndex: 'position',
-            },
-            {
-                title: '查看职称证件',
-                dataIndex: 'positionPicture',
-                render: (text, record, index) => (
-                    <Code src={'http://47.108.87.104:8601/user/' + text}/>
-                ),
-            },
-            {
-                title: '是否删除经纪人',
+                title: '权限管理',
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
@@ -1259,41 +1256,41 @@ class Admin extends React.Component {
         //管理置业顾问
         const consultantControl = [
             {
-                title: '注册时间',
+                title: '时间',
                 dataIndex: 'createTime',
             },
             {
                 title: '姓名',
                 dataIndex: 'name',
             },
+            // {
+            //     title: '头像',
+            //     dataIndex: 'head',
+            //     render: (text, record, index) => (
+            //         <img src={'http://47.108.87.104:8601/user/' + text} style={{width: 60}}/>
+            //     ),
+            // },
             {
-                title: '头像',
-                dataIndex: 'head',
-                render: (text, record, index) => (
-                    <img src={'http://47.108.87.104:8601/user/' + text} style={{width: 60}}/>
-                ),
-            },
-            {
-                title: '账号（电话）',
+                title: '账号',
                 dataIndex: 'phone',
             },
+            // {
+            //     title: '联系电话',
+            //     dataIndex: 'contact',
+            // },
+            // {
+            //     title: '微信二维码',
+            //     dataIndex: 'weChatQrCode',
+            //     render: (text, record, index) => (
+            //         <Code src={'http://47.108.87.104:8601/user/' + text}/>
+            //     ),
+            // },
+            // {
+            //     title: '公司',
+            //     dataIndex: 'company',
+            // },
             {
-                title: '联系电话',
-                dataIndex: 'contact',
-            },
-            {
-                title: '微信二维码',
-                dataIndex: 'weChatQrCode',
-                render: (text, record, index) => (
-                    <Code src={'http://47.108.87.104:8601/user/' + text}/>
-                ),
-            },
-            {
-                title: '公司',
-                dataIndex: 'company',
-            },
-            {
-                title: '是否删除置业顾问',
+                title: '权限管理',
                 key: 'action',
                 render: (text, record, index) => (
                     <span>

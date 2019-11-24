@@ -17,6 +17,7 @@ import Consultant from './view/consultant'
 import RegistryCenter from './view/registryCenter'
 import Admin from './view/admin/admin'
 import BridalAdmin from './view/admin/bridalAdmin'
+import ScrollToTop from './component/ScrollToTop'
 
 const MainPaper = ({match}) => {
     return <div>
@@ -29,18 +30,19 @@ const MainPaper = ({match}) => {
             <Route path={'/home/consultant'} exact component={Consultant}/>
             <Route path={'/home/registryCenter'} exact component={RegistryCenter}/>
         </Home>
-
     </div>
 };
 class Div extends Component{
     render(){
         return(
             <Router>
+                <ScrollToTop>
             <Route exact path="/" component={HomePage}/>
             <Route path="/home" component={MainPaper}/>
             <Route path="/homePage" component={HomePage}/>
             <Route path="/admin" component={Admin}/>
             <Route path="/bridaladmin" component={BridalAdmin}/>
+            </ScrollToTop>
         </Router>
         )
     }
@@ -51,14 +53,11 @@ class App extends Component {
     render() {
         return (
             <div>
-
 <Div></Div>
-                <div style={{textAlign:'center'}}>
-                    <a target={'_blank'} href={''}>蜀ICP备18023206号-2</a>
-                </div>
+    
             </div>
         );
-    }
+    };
 }
 
 export default  App

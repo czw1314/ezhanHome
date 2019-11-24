@@ -71,6 +71,14 @@ class Information extends React.Component {
     }
     //注册
     handleSubmit(e) {
+        if(!this.state.title){
+            message.error('请先上传职称照片')
+            return
+        }
+        if(!this.state.idF||!this.state.idT){
+            message.error('请先上传身份证照片')
+            return
+        }
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -93,8 +101,17 @@ class Information extends React.Component {
                     "company":this.refs.company.state.value,
                     "cardNo":this.refs.cardNo.state.value,
                     "position":this.state.position||"房地产经纪人",
-                    "contact":values.contact,
                     "userId":localStorage.getItem('userId')
+                }
+                for (let key in params){
+                    if(params[key]||key=='company'){
+
+                    }
+                    else{
+                        message.error('所有信息必填，请检查是否完成信息填写')
+                        return false
+                    }
+                   
                 }
                 agentRegister(params).then((res) => {
                     if (res.data.code === 0) {
@@ -224,7 +241,9 @@ class Information extends React.Component {
         return (
             <Form onSubmit={this.handleSubmit.bind(this)} className="login-form center">
                 <Form.Item>
-                    {getFieldDecorator('name')(
+                    {getFieldDecorator('name', {
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <div className={'item'}>
                             <div className={'left'}>
                                 <p>编辑姓名：</p>
@@ -271,16 +290,21 @@ class Information extends React.Component {
                     )}
                 </Form.Item> */}
                 <Form.Item  style={{display: localStorage.getItem('role')==3? 'block' : 'none'}}>
-                        <div className={'item'}>
+                {getFieldDecorator('working', {
+                        rules: [{ required: true, message: '必填项' }],
+                    })( <div className={'item'}>
                             <div className={'left'}>
                                 <p>选择服务：</p>
                                 <Checkbox.Group options={this.state.plainOptions}
                                                 onChange={this.bussinessIdChange.bind(this)}/>
                             </div>
                         </div>
+                               )}
                 </Form.Item>
                 <Form.Item  style={{display: localStorage.getItem('role')==3 ? 'block' : 'none'}}>
-                    {getFieldDecorator('workingYears')(
+                    {getFieldDecorator('workingYears', {
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <div className={'item'} >
                             <div className={'left'}>
                                 <p>从业年限：</p>
@@ -319,7 +343,7 @@ class Information extends React.Component {
                                     listType="picture-card"
                                     className="avatar-uploader"
                                     data={{
-                                        type: '3',
+                                        type: '2',
                                         userId:localStorage.getItem('userId')
                                     }}
                                     showUploadList={false}
@@ -347,7 +371,7 @@ class Information extends React.Component {
                                     listType="picture-card"
                                     className="avatar-uploader"
                                     data={{
-                                    type: '3',
+                                    type: '4',
                                     userId: localStorage.getItem('userId')
                                 }}
                                     showUploadList={false}
@@ -366,7 +390,7 @@ class Information extends React.Component {
                                     listType="picture-card"
                                     className="avatar-uploader"
                                     data={{
-                                        type: '3',
+                                        type: '5',
                                         userId: localStorage.getItem('userId')
                                     }}
                                     showUploadList={false}

@@ -7,7 +7,7 @@ class Agent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            positionChecked: [],
+            positionChecked: [0],
             serviceChecked: [],
             streetIdChecked:[],
             titleChecked: [],
@@ -57,7 +57,8 @@ class Agent extends React.Component {
                 searchAgent(params).then((res)=>{
                     if(res.data.code===1){
                         this.setState({
-                            models:res.data.models
+                            models:res.data.models,
+                            counts:res.data.counts
                         })
                     }
                 })
@@ -103,7 +104,8 @@ class Agent extends React.Component {
             searchAgent(params).then((res)=>{
                 if(res.data.code===1){
                     this.setState({
-                        models:res.data.models
+                        models:res.data.models,
+                        counts:res.data.counts
                     })
                 }
             })
@@ -118,7 +120,7 @@ class Agent extends React.Component {
         let params={
             business:this.state.serviceChecked,
             positions:this.state.titleChecked,
-            districtIds: [this.state.positionChecked],
+            districtIds: this.state.positionChecked,
             streetIds:streetIdChecked,
             orderType:this.state.orderType,
             searchText:this.state.searchText,
@@ -128,7 +130,8 @@ class Agent extends React.Component {
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.models
+                    models:res.data.models,
+                    counts:res.data.counts
                 })
             }
         })
@@ -142,7 +145,7 @@ class Agent extends React.Component {
             business:serviceChecked,
             orderType:this.state.orderType,
             positions:this.state.titleChecked,
-            districtIds: [this.state.positionChecked],
+            districtIds:this.state.positionChecked,
             streetIds:this.state.streetIdChecked,
             searchText:this.state.searchText,
             pageNum:1,
@@ -151,7 +154,8 @@ class Agent extends React.Component {
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.models
+                    models:res.data.models,
+                    counts:res.data.counts
                 })
             }
         })
@@ -165,7 +169,7 @@ class Agent extends React.Component {
             business:this.state.serviceChecked,
             positions:titleChecked,
             orderType:this.state.orderType,
-            districtIds:[this.state.positionChecked],
+            districtIds:this.state.positionChecked,
             streetIds:this.state.streetIdChecked,
             searchText:this.state.searchText,
             pageNum:1,
@@ -175,7 +179,8 @@ class Agent extends React.Component {
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.models
+                    models:res.data.models,
+                    counts:res.data.counts
                 })
             }
         })
@@ -205,7 +210,8 @@ class Agent extends React.Component {
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.models
+                    models:res.data.models,
+                    counts:res.data.counts
                 })
             }
         })
@@ -228,7 +234,8 @@ class Agent extends React.Component {
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.models
+                    models:res.data.models,
+                    counts:res.data.counts
                 })
             }
         })
@@ -244,7 +251,7 @@ class Agent extends React.Component {
                 business:this.state.serviceChecked,
                 positions:this.state.titleChecked,
                 orderType:1,
-                districtIds:[this.state.positionChecked],
+                districtIds:this.state.positionChecked,
                 streetIds:this.state.streetIdChecked,
                 searchText:this.state.searchText,
                 pageNum:1,
@@ -254,7 +261,8 @@ class Agent extends React.Component {
             searchAgent(params).then((res)=>{
                 if(res.data.code===1){
                     this.setState({
-                        models:res.data.models
+                        models:res.data.models,
+                        counts:res.data.counts
                     })
                 }
             })
@@ -267,7 +275,7 @@ class Agent extends React.Component {
                 business:this.state.serviceChecked,
                 positions:this.state.titleChecked,
                 orderType:0,
-                districtIds:[this.state.positionChecked],
+                districtIds:this.state.positionChecked,
                 streetIds:this.state.streetIdChecked,
                 searchText:this.state.searchText,
                 pageNum:1,
@@ -277,7 +285,8 @@ class Agent extends React.Component {
             searchAgent(params).then((res)=>{
                 if(res.data.code===1){
                     this.setState({
-                        models:res.data.models
+                        models:res.data.models,
+                        counts:res.data.counts
                     })
                 }
             })
@@ -328,7 +337,8 @@ class Agent extends React.Component {
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
                 this.setState({
-                    models:res.data.models
+                    models:res.data.models,
+                    counts:res.data.counts
                 })
             }
         })
@@ -398,10 +408,10 @@ class Agent extends React.Component {
                 </div>
                 <div className={'result'}>
                     <div className={'find'}>
-                        找到<span>{this.state.models.length}</span>个经纪人
+                        找到<span>{this.state.counts}</span>个经纪人
                     </div>
                     <div className={'sort'}>
-                        <Menu onSelect={this.selected.bind(this)}>
+                        <Menu onSelect={this.selected.bind(this)} defaultSelectedKeys={['default']}>
                             <Menu.Item style={{fontSize: 18}} key={'default'} onClick={this.recommend.bind(this,'default')}>默认排序</Menu.Item>
                             <Menu.Item key={'star'}
                                        onClick={this.recommend.bind(this,'star')}>推荐经纪人</Menu.Item>
@@ -449,7 +459,7 @@ class Agent extends React.Component {
                                                                 }</p>
                                                             </div>
                                                             <div className={'contact'}>
-                                                                <p className={'phone'}><img src={require('../img/Phone.png')}/><span>联系电话：</span>{item.contact}</p>
+                                                                {/* <p className={'phone'}><img src={require('../img/Phone.png')}/><span>联系电话：</span>{item.contact}</p> */}
                                                                 <p className={'weixin'}><img src={require('../img/weixin.png')}/>
                                                                     <Popconfirm
                                                                         title=""
@@ -473,7 +483,7 @@ class Agent extends React.Component {
                                     )
                                 })
                             }
-                          <Pagination defaultCurrent={1} total={this.state.models.length} pageSize={10} onChange={this.page.bind(this)}/>
+                          <Pagination defaultCurrent={1} total={this.state.counts} pageSize={10} onChange={this.page.bind(this)}/>
                         </div>
                     </div>
                 </div>

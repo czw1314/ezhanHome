@@ -6,6 +6,9 @@
     font-size: 18px;
     color: #333;
     font-weight: bold;
+    img{
+      width: 100%;
+    }
   }
   .weixin{
     .ant-tabs-bar{
@@ -24,6 +27,11 @@
       text-align: center;
       color: #268AED;
       cursor: pointer;
+      img{
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+      }
     }
     .agreement{
       color: #666;
@@ -34,12 +42,18 @@
     }
   }
   .accountNumber{
+    img{
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
     .ant-tabs-bar{
       font-weight:bold;
     }
 
     .ant-tabs-content{
       margin-top: 30px;
+      height: 240px !important;
     }
     .title{
       font-size:20px;
@@ -49,7 +63,6 @@
     }
     .accountNumber{
       text-align: center;
-      margin-top: 20px;
       color: #268AED;
       cursor: pointer;
     }
@@ -61,7 +74,7 @@
       }
     }
     .retrieve{
-
+      font-size: 18px;
       text-align: right;
       a{
         color: #333;

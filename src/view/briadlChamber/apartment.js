@@ -177,7 +177,7 @@ class Apartment extends React.Component {
                                                                     <p className={'title'}>
                                                                         {items.housingTypeTitle}
                                                                     </p>
-                                                                    <p className={'apartment'}>{items.housingDetailName}</p>
+                                                                    <p className={'apartment'}><span style={{marginRight:'20px'}}>{items.propertyType}</span>{items.housingDetailName}</p>
                                                                     <p className={'tag'}>
                                                                         {
                                                                             items.housingTraits && items.housingTraits.map((itema, indexa) => {
@@ -189,11 +189,9 @@ class Apartment extends React.Component {
                                                                         }
 
                                                                     </p>
-                                                                    <p dangerouslySetInnerHTML={{__html: `建面：${items.area}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp朝向：${items.orientations}`}}></p>
-                                                                    <p dangerouslySetInnerHTML={{__html: `层高：${items.height}m&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp户型结构：${items.housingStructure}`}}></p>
-                                                                    <p>物业类型：{items.propertyType}</p>
-                                                                    <p>户型优点： {items.advantage}</p>
-                                                                    <p>户型缺点： {items.drawback}</p>
+                                                                    <p dangerouslySetInnerHTML={{__html: `建面：${items.area}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp层高：${items.height}m`}}></p>
+                                                                    <p dangerouslySetInnerHTML={{__html: `朝向：${items.orientations}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp户型结构：${items.housingStructure}`}}></p>
+                                                                    <p>户型点评： {items.advantage}</p>
                                                                 </div>
                                                             </div>
                                                         </TabPane>

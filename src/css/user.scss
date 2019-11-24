@@ -118,6 +118,7 @@
         }
         .synopsis {
           display: flex;
+          min-height: 260px;
           flex-wrap: wrap;
           .item:nth-child(3n+3){
             margin-right: 0;

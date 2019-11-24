@@ -18,25 +18,37 @@ class Information extends React.Component {
 
     //获取手机验证码
     getCode() {
-        let that = this
-        var wait = 60;
-        function time() {
-            if (wait == 0) {
-                that.setState({text: "免费获取验证码", disabled: false})
-                wait = 60;
-            } else {
-                that.setState({text: "重新发送(" + wait + ")", disabled: true})
-                wait--;
-                setTimeout(function () {
-                    time()
-                }, 1000)
-            }
+        if(!this.props.form.getFieldValue('phone')){
+            message.error('请输入手机号！')
+            return
         }
-
-        time()
-        let params = {phone: this.props.form.getFieldValue('phone')}
+    
+        let params = {phone: this.props.form.getFieldValue('phone'),verifyCode:this.props.form.getFieldValue('verifyCode')}
         getPhoneCode(params).then((res) => {
+            if(res.data.code==0){
+                message.error(res.data.msg)
+                return
+            }
+            else{
+                let that = this
+                var wait = 60;
+                function time() {
+                    if (wait == 0) {
+                        that.setState({text: "免费获取验证码", disabled: false})
+                        wait = 60;
+                    } else {
+                        that.setState({text: "重新发送(" + wait + ")", disabled: true})
+                        wait--;
+                        setTimeout(function () {
+                            time()
+                        }, 1000)
+                    }
+                }
+        
+                time()
+            }
         })
+
     }
     //注册
     handleSubmit(e) {
@@ -180,6 +192,7 @@ class Information extends React.Component {
                     })(
                         <Input
                             placeholder="请输入手机号"
+                            autocomplete="off"
                             size={'large'}
                         />,
                     )}
@@ -193,6 +206,7 @@ class Information extends React.Component {
                     })(
                         <Input
                             placeholder="请输入验证码"
+                            autocomplete="off"
                             size={'large'}
                         />,
                     )}
@@ -204,6 +218,7 @@ class Information extends React.Component {
                         rules: [{required: true, message: '请输入短信验证码!'}],
                     })(
                         <Input size={'large'}
+                        autocomplete="off"
                                addonAfter={<Button style={{cursor: 'pointer', fontWeight: 'bold'}} block={true}
                                                    onClick={this.getCode.bind(this)}
                                                    disabled={this.state.disabled}>{this.state.text}</Button>}
@@ -217,6 +232,7 @@ class Information extends React.Component {
                         <Input
                             size={'large'}
                             type="password"
+                            autocomplete="off"
                             placeholder="请输入密码"
                         />,
                     )}

@@ -28,6 +28,13 @@
 .ant-modal-body {
  text-align: center;
 }
+.ant-modal-body img {
+  width: 100%;
+ }
+ .ant-popover-message img{
+   width: 60px;
+   height: 60px;
+ }
 /*.ant-modal.code{*/
   /*width: 4 !important;*/
 /*}*/

@@ -20,8 +20,29 @@
     .left {
       width: 800px;
       .center {
+        position: relative;
         text-align: left;
-        margin-top: 50px;
+        padding-top: 50px;
+        #container {
+          height: 220px;
+          right: 0;
+          width: 300px;
+          position: absolute;
+          top:0;
+          .amap-marker-content:after {
+            content: "";
+            width: 0;
+            height: 0;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: rgb(49, 156, 119) transparent transparent; /*灰 透明 透明 */
+            margin: auto;
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+        }
         .ant-btn-lg {
           margin-bottom: 20px;
         }
@@ -89,7 +110,7 @@
             font-family: Source Han Sans CN;
             font-weight: 400;
             color: rgba(38, 138, 237, 1);
-            text-decoration: underline;
+            cursor: pointer;
           }
         }
         .ant-tabs-nav .ant-tabs-tab {
@@ -114,7 +135,6 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
-          border-bottom: 1px solid rgba(217, 217, 217, 1);
           .left {
             display: flex;
           }
@@ -122,14 +142,14 @@
             width: 202px;
             height: 182px;
             margin-right: 34px;
-            border: 1px dotted #333;
             img{
-              width: 202px;
-              height: 182px;
+              width: 200px;
+              height: 180px;
             }
           }
           .center {
             font-size: 18px;
+            padding: 0;
             margin-top: 0;
             p:first-child {
               font-size: 18px;
@@ -166,22 +186,6 @@
           font-size: 22px;
           font-weight: bold;
           line-height: 24px;
-        }
-        #container {
-          height: 320px;
-          .amap-marker-content:after {
-            content: "";
-            width: 0;
-            height: 0;
-            border-width: 10px 10px 0;
-            border-style: solid;
-            border-color: rgb(49, 156, 119) transparent transparent; /*灰 透明 透明 */
-            margin: auto;
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-          }
         }
       }
       .ant-menu {
@@ -263,11 +267,12 @@
           align-items: center;
           .price {
             padding: 0;
+            font-size: 42px;
             margin: 0;
             span {
-              font-size: 42px;
+              font-size: 16px;
             }
-            font-size: 16px;
+        
             font-weight: bold;
             line-height: 42px;
             color: rgba(255, 83, 83, 1);
@@ -290,6 +295,7 @@
           text-align: left;
           font-size: 16px;
           font-family: Source Han Sans CN;
+          margin: 10px 0 20px;
           font-weight: bold;
           color: rgba(51, 51, 51, 1);
         }

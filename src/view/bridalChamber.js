@@ -71,7 +71,7 @@ class BridalChamber extends React.Component {
         }
         this.setState({
             searchText:this.props.location.state?this.props.location.state.searchText:'',
-            positionChecked:[this.props.location.state?this.props.location.state.districtIds:'']
+            positionChecked:[this.props.location.state?this.props.location.state.districtIds:0]
         });
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
@@ -467,7 +467,7 @@ class BridalChamber extends React.Component {
     }
     clear(){
         this.setState({
-            areasChecked:[],
+            areaChecked:[],
             apartmentChecked:[],
             orderType:0,
            priceChecked:[],
@@ -602,7 +602,7 @@ class BridalChamber extends React.Component {
                             <Menu.Item style={{fontSize: 18}} key={'default'} onClick={this.toggle.bind(this, 'default')}>默认排序</Menu.Item>
                             <Menu.Item key={'price'}
                                        onClick={this.toggle.bind(this, 'price')}>价格{this.state.togglePrice ? '↑' : '↓'}</Menu.Item>
-                            <Menu.Item key={'time'} onClick={this.toggle.bind(this, 'time')}>最新开盘↑</Menu.Item>
+                            <Menu.Item key={'time'} onClick={this.toggle.bind(this, 'time')}>最新开盘</Menu.Item>
                         </Menu>
                         <div className={'clear'} onClick={this.clear.bind(this)}>清空筛选条件</div>
                     </div>
@@ -622,7 +622,7 @@ class BridalChamber extends React.Component {
                                                 <div className={'information'}>
                                                     <div className={'title'}>
                                                         <p className={'name'} onClick={this.link.bind(this,item.id)}>{item.name}</p>
-                                                        <p className={'price'}>{item.referencePrice}元/m²起</p>
+                                                        <p className={'price'}>{item.referencePrice}<span style={{display:isNaN(parseInt(item.referencePrice))?'none':'inline-block'}}>元/m²起</span></p>
                                                     </div>
                                                     <p className={'address'} onClick={this.link.bind(this,item.id)}>{item.distinctName}-{item.street}</p>
                                                     <p className={'apartment'} onClick={this.link1.bind(this,item.id)}>户型：{item.houseType}</p>
@@ -645,7 +645,7 @@ class BridalChamber extends React.Component {
                                     )
                                 })
                             }
-                        <Pagination defaultCurrent={1} total={this.state.models.length} pageSize={10} onChange={this.page.bind(this)}/>
+                        <Pagination defaultCurrent={1} total={this.state.counts} pageSize={10} onChange={this.page.bind(this)}/>
                         </div>
                         <div className={'hot'}>
                             <p className={'title'}>热门楼盘</p>
@@ -657,7 +657,7 @@ class BridalChamber extends React.Component {
                                         <img src={'http://47.108.87.104:8601/building/'+item.picture}/>
                                         <div className={'title'}>
                                             <p className={'name'}>{item.name}</p>
-                                            <p className={'price'}>{item.referencePrice}元/m²起</p>
+                                            <p className={'price'}>{item.referencePrice}<span style={{display:isNaN(parseInt(item.referencePrice))?'none':'inline-block'}}>元/m²起</span></p>
                                         </div>
                                         <div className={'center'}>
                                             <p className={'address'}>{item.distinctName}-{item.street}</p>

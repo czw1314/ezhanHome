@@ -203,6 +203,7 @@ apply(){
                     company: res.data.company,
                     contact: res.data.contact,
                     userInformation: res.data,
+                    bindWechatOrNot:res.data.bindWechatOrNot,
                     weixinImg:res.data.weChatQrCode,
                 })
             }
@@ -294,6 +295,9 @@ cancleWeixin(){
     cancelWechat(params).then((res)=>{
         if(res.data.code===1){
             message.success('解绑成功')
+            this.setState({
+                bindWechatOrNot:false
+            })
         }
     })
 }
@@ -361,7 +365,7 @@ cancleWeixin(){
                                         </Upload>
                                     </div>
                                 </div>
-                                <p>账号：12909138409</p>
+                                <p>账号：{localStorage.getItem('phone')}</p>
                                 <div className={'center'}>
                                     <div className={'item'}>
                                         <div className={'left'}>
@@ -369,12 +373,12 @@ cancleWeixin(){
                                             <Input value={this.state.name} onChange={this.onChangeName.bind(this)}/>
                                         </div>
                                     </div>
-                                    <div className={'item'}>
+                                    {/* <div className={'item'}>
                                         <div className={'left'}>
                                             <p>联系电话：</p>
                                             <Input value={this.state.contact} onChange={this.onChangeContact.bind(this)}/>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>服务公司：</p>
@@ -392,7 +396,7 @@ cancleWeixin(){
                                 <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'block':'none'}}>
                                     <p className={'h2'} >微信绑定（已绑定）</p>
                                     <div className={'weixinBox'}>
-                                        <img src={require('../img/weixinHeader.png')}/>
+                                        <img src={this.state.weixin.weChatHeadUrl}/>
                                         <p>微信昵称：{this.state.weixin.weChatName}<br></br>微信账号：{this.state.weixin.weChatNumber}
                                         </p>
                                         <p>地区：{this.state.weixin.weChatAddr}<br></br>性别：{this.state.weixin.weChatSex}

@@ -175,6 +175,7 @@ class AgentMy extends React.Component {
                     company: res.data.company,
                     contact: res.data.contact,
                     tags:res.data.estates,
+                    bindWechatOrNot:res.data.bindWechatOrNot,
                     weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin
                 })
             }
@@ -314,7 +315,8 @@ class AgentMy extends React.Component {
                             workYears: res.data.workYears,
                             agentType: res.data.agentType,
                             company: res.data.company,
-                            contact: res.data.contact
+                            contact: res.data.contact,
+                            
                         })
                     }
                 })
@@ -333,6 +335,8 @@ class AgentMy extends React.Component {
         confirm({
             title: '是否确认更新修改信息?',
             content: '',
+            okText:"确认",
+            cancelText:"取消",
             onOk: () => {
                 this.onSubmit()
             },
@@ -353,6 +357,9 @@ cancleWeixin(){
     cancelWechat(params).then((res)=>{
         if(res.data.code===1){
             message.success('解绑成功')
+            this.setState({
+                bindWechatOrNot:false
+            })
         }
     })
 }
@@ -370,7 +377,6 @@ apply(){
     })
 }
 confirm(e) {
-    console.log(e);
     message.success('Click on Yes');
   }
 //取消关注楼盘
@@ -388,7 +394,6 @@ preventDefault(e) {
     })
   }
     render() {
-        console.log(this.state.contact)
         const {TabPane} = Tabs;
         const {imageUrl, imageUrl1} = this.state;
         const {Option} = Select;
@@ -502,13 +507,6 @@ preventDefault(e) {
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
-                                            <p>联系电话：</p>
-                                            <Input value={this.state.contact}
-                                                   onChange={this.onChangeContact.bind(this)}/>
-                                        </div>
-                                    </div>
-                                    <div className={'item'}>
-                                        <div className={'left'}>
                                             <p>选择服务：</p>
                                             <Checkbox.Group options={this.state.plainOptions}
                                                             value={this.state.bussinessId}
@@ -549,7 +547,7 @@ preventDefault(e) {
                                 <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'block':'none'}}>
                                     <p className={'h2'} >微信绑定（已绑定）</p>
                                     <div className={'weixinBox'}>
-                                        <img src={require('../img/weixinHeader.png')}/>
+                                        <img src={this.state.weixin.weChatHeadUrl}/>
                                         <p>微信昵称：{this.state.weixin.weChatName}<br></br>微信账号：{this.state.weixin.weChatNumber}
                                         </p>
                                         <p>地区：{this.state.weixin.weChatAddr}<br></br>性别：{this.state.weixin.weChatSex}

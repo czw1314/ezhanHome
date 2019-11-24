@@ -10,32 +10,45 @@ class RetreivePassword extends React.Component {
     constructor(props){
         super(props)
         this.state={
-            code: 'http://47.108.87.104:8501/user/verfiyCode'
+            code: 'http://47.108.87.104:8501/user/verfiyCode',
+            text: '获取验证码',
+            disabled: false,                                                                                         
         }
     }
     componentDidMount(){
     }
     //获取手机验证码
     getCode() {
-        let that = this
-        var wait = 60;
 
-        function time() {
-            if (wait == 0) {
-                that.setState({text: "免费获取验证码", disabled: false})
-                wait = 60;
-            } else {
-                that.setState({text: "重新发送(" + wait + ")", disabled: true})
-                wait--;
-                setTimeout(function () {
-                    time()
-                }, 1000)
-            }
+        if(!this.props.form.getFieldValue('phone')){
+            message.error('请输入手机号！')
+            return
         }
 
-        time()
-        let params = {phone: this.props.form.getFieldValue('phone')}
+        let params = {phone: this.props.form.getFieldValue('phone'),verifyCode:this.props.form.getFieldValue('verifyCode')}
         getPhoneCode(params).then((res) => {
+            if(res.data.code==0){
+                message.error(res.data.msg)
+                return
+            }
+            else{
+                let that = this
+                var wait = 60;
+                function time() {
+                    if (wait == 0) {
+                        that.setState({text: "免费获取验证码", disabled: false})
+                        wait = 60;
+                    } else {
+                        that.setState({text: "重新发送(" + wait + ")", disabled: true})
+                        wait--;
+                        setTimeout(function () {
+                            time()
+                        }, 1000)
+                    }
+                }
+        
+                time()
+            }
         })
     }
     handleSubmit = e => {
@@ -106,6 +119,7 @@ class RetreivePassword extends React.Component {
                     })(
                         <Input
                             placeholder="请输入手机号"
+                            autocomplete="off"
                             size={'large'}
                         />,
                     )}
@@ -119,6 +133,7 @@ class RetreivePassword extends React.Component {
                     })(
                         <Input
                             placeholder="请输入验证码"
+                            autocomplete="off"
                             size={'large'}
                         />,
                     )}
@@ -130,6 +145,7 @@ class RetreivePassword extends React.Component {
                         rules: [{required: true, message: '请输入短信验证码!'}],
                     })(
                         <Input size={'large'}
+                        autocomplete="off"
                                addonAfter={<Button style={{cursor: 'pointer', fontWeight: 'bold'}} block={true}
                                                    onClick={this.getCode.bind(this)}
                                                    disabled={this.state.disabled}>{this.state.text}</Button>}
@@ -141,6 +157,7 @@ class RetreivePassword extends React.Component {
                         rules: [{required: true, message: '请输入新密码!'}, {min: 6, message: '密码至少6位数'}],
                     })(
                         <Input
+                        autocomplete="off"
                             size={'large'}
                             type="password"
                             placeholder="请输入密码"
@@ -176,6 +193,11 @@ class NormalLoginForm extends React.Component {
                     }
                     else {
                         message.success('登陆成功！')
+                        if(this.props.role==3||this.props.role==4){
+                            window.onunload=function(){
+                                localStorage.clear();
+                        }
+                        }
                         localStorage.setItem('state',res.data.state)
                         this.props.setUserInformation(res.data)
                         localStorage.setItem('userName',res.data.name)
@@ -198,6 +220,7 @@ class NormalLoginForm extends React.Component {
                         rules: [{ required: true, message: '请输入手机号!' }],
                     })(
                         <Input
+                        autocomplete="off"
                             size={'large'}
                             placeholder="请输入手机号"
                         />,
@@ -208,6 +231,7 @@ class NormalLoginForm extends React.Component {
                         rules: [{ required: true, message: '请输入密码!' }],
                     })(
                         <Input
+                        autocomplete="off"
                             type="password"
                             size={'large'}
                             placeholder="请输入密码"
@@ -241,14 +265,12 @@ class Login extends React.Component {
     }
 
     callback= e =>{
-        console.log(e)
         this.setState({
             key: e,
         });
     }
 
     handleCancel = e => {
-        console.log(e);
         this.setState({
             key: false,
         });
@@ -264,6 +286,8 @@ class Login extends React.Component {
             <div className={'login'}>
                 <Modal
                     visible={this.props.login}
+                    destroyOnClose={true}
+                    afterClose={()=>this.setState({retrieve:false,accountNumber:true})}
                     onCancel={this.props.handleCancel}
                     footer={''}
                 >
@@ -300,7 +324,7 @@ class Login extends React.Component {
                                 <p className={'retrieve'}  onClick={()=>this.setState({retrieve:true,accountNumber:false})}><a>找回密码</a></p>
                             </TabPane>
                         </Tabs>
-                        <p className={'accountNumber'} onClick={this.weixin.bind(this)}>微信快捷登陆</p>
+                        <p className={'accountNumber'} onClick={this.weixin.bind(this)}><img src={require('../img/weinxinLogo.png')}/></p>
                         <p className={'agreement'}>登录即代表同意<a>《e站房屋经纪人协议》</a>及<a>《e站房屋免责申明》</a></p>
                     </div>
                     <div className={'retrieve'} style={{display:this.state.retrieve?'block':'none'}}>
