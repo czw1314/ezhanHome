@@ -197,11 +197,6 @@ class HomePage extends React.Component {
                 }
                 else {
                     message.success('登陆成功！')
-                    if(Number(this.getQueryVariable('state'))==3||Number(this.getQueryVariable('state'))==4){
-                        window.onunload=function(){
-                            localStorage.clear();
-                    }
-                    }
                     this.props.setUserInformation(res.data)
                     localStorage.setItem('userName', res.data.name)
                     localStorage.setItem('role', res.data.role)

@@ -193,11 +193,6 @@ class NormalLoginForm extends React.Component {
                     }
                     else {
                         message.success('登陆成功！')
-                        if(this.props.role==3||this.props.role==4){
-                            window.onunload=function(){
-                                localStorage.clear();
-                        }
-                        }
                         localStorage.setItem('state',res.data.state)
                         this.props.setUserInformation(res.data)
                         localStorage.setItem('userName',res.data.name)

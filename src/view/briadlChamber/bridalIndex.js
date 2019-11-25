@@ -297,6 +297,7 @@ class BridalIndex extends React.Component {
         downloadPaper(params)
     }
     render() {
+        console.log(this.state.values)
         const { TabPane } = Tabs,{values}=this.state;
         const estateId=this.props.estateId||localStorage.getItem('estateId')
         return (

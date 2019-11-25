@@ -1046,10 +1046,7 @@ class HousingPicturesWallUpdata extends React.Component {
             housingMsgId: ''
         };
     }
-
-
     handleCancel = () => this.setState({previewVisible: false});
-
     getBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -1305,18 +1302,13 @@ class InformationUpdata extends React.Component {
         this.props.values.housingMsgs&&this.props.values.housingMsgs.map(item=>{
             this.state.id.push(item.housingMsgId)
         })
-        this.setState({
-            type:this.props.values.state==1?'danger':'primary'
-        })
     }
-
     //转化为base64
     getBase64(img, callback) {
         const reader = new FileReader();
         reader.addEventListener('load', () => callback(reader.result));
         reader.readAsDataURL(img);
     }
-
     //上传楼盘信息
     handleSubmit = e => {
         this.setState({
@@ -1479,8 +1471,9 @@ class InformationUpdata extends React.Component {
                     duration: 0,
                 });
                 this.setState({
-                    type:'primary'
+                    type:'primary',
                 })
+                this.props.change()
             }
             else{
                 const key = `open${Date.now()}`;
@@ -1507,8 +1500,9 @@ class InformationUpdata extends React.Component {
             wrapperCol: {
                 xs: {span: 24},
                 sm: {span: 12},
-            },
+            },    
         };
+        console.log(this.props.state)
         const {getFieldDecorator} = this.props.form;
         const base = 'http://47.108.87.104:8501/user/uploadFile';
         const {Option} = Select
@@ -1518,11 +1512,11 @@ class InformationUpdata extends React.Component {
                 </Form.Item>
                 <Form.Item label={'地址经纬度：'}  labelAlign={'left'} labelCol={{span: 5}}>
                 {getFieldDecorator('longitudeAndAtitude', {initialValue: this.props.values.longitudeAtitude || ''})(
-                        <Input placeholder="164564561，154，4545645，546"/>
+                        <Input placeholder="164564561.154，4545645.546"/>
                     )}
                 </Form.Item>
                 <a href='https://lbs.amap.com/console/show/picker' target="_blank" style={{width:'50%',marginLeft:20,marginTop:10}}>高德地图经纬度查询</a>
-               <Button size={'large'} type={this.state.type} onClick={this.showConfirm1.bind(this,this.change.bind(this))} disabled={this.state.type=='primary'}>{this.state.type=='primary'?'已下架':'售罄下架'}</Button>
+               <Button size={'large'} type={this.state.type} onClick={this.showConfirm1.bind(this,this.change.bind(this))} disabled={this.props.state==-1}>{this.props.state==-1?'已下架':'售罄下架'}</Button>
                 <Form.Item label='1、楼盘名称（推广名）：'>
                     {getFieldDecorator('name', {initialValue: this.props.values.name || ''})(
                         <Input/>
@@ -1551,7 +1545,7 @@ class InformationUpdata extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label={'6、物业权属：'}>
-                    {getFieldDecorator('housingType', {initialValue: this.props.values.housingType || '',rules: [{ required: true, message: '必填项' }],})(
+                    {getFieldDecorator('housingType', {initialValue: this.props.values.housingType|| '',rules: [{ required: true, message: '必填项' }],})(
                         <Select>
                             {this.state.houseTypes && this.state.houseTypes.map(item => {
                                     return (<Option value={item.label} key={item.label}>{item.label}</Option>)
@@ -1726,8 +1720,6 @@ class InformationUpdata extends React.Component {
                         </Select>
                     )}
                 </Form.Item>
-    
-
                 <Form.Item label={'车位配比：'}>
                     {getFieldDecorator('parkingRatio', {initialValue: this.props.values.parkingRatio || ''})(
                         <Input/>
@@ -1895,7 +1887,6 @@ class InformationUpdata extends React.Component {
                                         </Select>
                                     )}
                                 </Form.Item>
-                      
                                 <Form.Item label={'9、户型结构：'}>
                                     {getFieldDecorator(`housingMsgs[${index}].housingStructure`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingStructure : ''})(
                                         <Select>
@@ -2147,10 +2138,8 @@ class bridalAdmin extends React.Component {
            price:'',
            time:'',
             login:false
-
         }
     }
-
     componentDidMount() {
         let params={
             area:[],
@@ -2161,6 +2150,7 @@ class bridalAdmin extends React.Component {
             districtIds: [],
             streetId:[],
             searchText:'',
+            type:0
         }
         searchEstate(params).then((res) => {
             if (res.data.code === 1) {
@@ -2243,8 +2233,6 @@ class bridalAdmin extends React.Component {
         this.setState({
           uploading: true,
         });
-    
-        // You can use any AJAX library you like
         axios({
           url: 'http://47.108.87.104:8501/houseAdmin/paperPublished',
           method: 'post',
@@ -2301,7 +2289,6 @@ class bridalAdmin extends React.Component {
             });
         })
       };
-//tag切换回调
     callback(key) {
         this.setState({
             key: key,
@@ -2355,21 +2342,18 @@ class bridalAdmin extends React.Component {
             }
         })
     }
-
     onChangeDescription(e) {
         console.log(e.target.value)
         this.setState({
             description: e.target.value
         })
     }
-
     onChangeTitle(e) {
         console.log(e.target.value)
         this.setState({
             title: e.target.value
         })
     }
-
     setEstates(value) {
         this.setState({
             values: [],
@@ -2427,6 +2411,7 @@ class bridalAdmin extends React.Component {
                 this.props.setHousingPictures(y)
                 this.setState({
                     values: res.data.estate,
+                    state:res.data.estate.state
                 })
             }
         })
@@ -2457,17 +2442,25 @@ class bridalAdmin extends React.Component {
                     let arr = eval("(" + item.name + ")")
                     return arr
                 })
-                this.setState({
-                    fileList1: [
-                        {
-                            uid: '-1',
-                            name: res.data.estate.name+'一页纸',
-                            status: 'done',
-                            url: 'http://47.108.87.104:8601/building/'+res.data.estate.paperPath
-                        },
-                    ],
-
-                })
+                if(res.data.estate.hasPaper){
+                    this.setState({
+                        fileList1: [
+                            {
+                                uid: '-1',
+                                name: res.data.estate.name+'一页纸',
+                                status: 'done',
+                                url: 'http://47.108.87.104:8601/building/'+res.data.estate.paperPath
+                            },
+                        ],
+    
+                    })
+                }
+                else{
+                    this.setState({
+                        fileList1: [],
+                    })
+                }
+           
             }
         })
     }
@@ -2492,7 +2485,6 @@ class bridalAdmin extends React.Component {
         arr.splice(index, 1)
         this.props.setHousingPictures(arr)
     }
-
     push() {
         let params = {
             description: this.state.description,
@@ -2607,7 +2599,7 @@ class bridalAdmin extends React.Component {
                         </div>
                         <p>新房管理中心</p>
                     </div>
-                    <div className='right' style={{display: localStorage.getItem('userName') ? 'none' : 'block'}}>
+                    <div className='right' style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'none' : 'block'}}>
                         <img src={require('../../img/admin.png')}/>
                         <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆'}}
                               onClick={()=>{this.setState({login:true})}}/>
@@ -2621,7 +2613,7 @@ class bridalAdmin extends React.Component {
                             <WrappedNormalLoginForm ></WrappedNormalLoginForm>
                         </Modal>
                     </div>
-                    <div className='right' style={{display: localStorage.getItem('userName') ? 'block' : 'none'}}>
+                    <div className='right' style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'block' : 'none'}}>
                         <img src={require('../../img/admin.png')} style={{marginRight: '10px'}}/>
                         <span onClick={this.clear.bind(this)}>退出</span>
                     </div>
@@ -2648,7 +2640,7 @@ class bridalAdmin extends React.Component {
                                 <Button type="primary" style={{display:this.state.estateId?'none':'inline'}} onClick={()=>{this.setState({visible8:true})}}>新增</Button>
                                 <Button type="primary" style={{display:this.state.estateId?'inline':'none'}} onClick={()=>{this.setState({visible9:true})}}>更新</Button>
                                 <div style={{display:this.state.visible8?'block':'none'}}><InformationForms delHousing={this.delHousing1.bind(this)}/></div>
-                                <div  style={{display:this.state.visible9?'block':'none'}}><InformationFormUpdatas values={this.state.values} agentIds={this.state.agentIds} delHousing={this.delHousing.bind(this)}/></div>
+                                <div  style={{display:this.state.visible9?'block':'none'}}><InformationFormUpdatas values={this.state.values} agentIds={this.state.agentIds} delHousing={this.delHousing.bind(this)} change={()=>{this.setState({state:-1})}} state={this.state.state}/></div>
                             </div>
                         </TabPane>
                         <TabPane tab="楼盘动态更新" key="3">
@@ -2771,4 +2763,4 @@ class bridalAdmin extends React.Component {
 }
 
 export default connect(state => (
-    {estateId: state.estateId, fileList: state.fileList,housingPictures: state.housingPictures}), {newEstateId, getFileList,setHousingPictures})(withRouter(bridalAdmin))
+    {estateId: state.estateId, fileList: state.fileList,housingPictures: state.housingPictures,userInformation: state.userInformation}), {newEstateId, setUserInformation,getFileList,setHousingPictures})(withRouter(bridalAdmin))
