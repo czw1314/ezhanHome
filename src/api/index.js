@@ -412,3 +412,11 @@ axios.get(`${base}/show/estateAdvisers`, {
         },
     }
 );
+//根据楼盘id上下架
+export const changeState= (params) =>
+    axios.put(`${base}/houseAdmin/changeState`,params,{
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        }
+    );

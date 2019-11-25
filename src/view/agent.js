@@ -50,10 +50,13 @@ class Agent extends React.Component {
                     positions:this.state.titleChecked,
                     districtIds: [],
                     streetId:[],
-                    searchText:this.state.searchText,
+                    searchText:this.state.searchText||this.props.location.state?this.props.location.state.searchText:'',
                     pageNum:1,
                     pageSize:10
                 }
+                this.setState({
+                    searchText:this.props.location.state?this.props.location.state.searchText:'',
+                });
                 searchAgent(params).then((res)=>{
                     if(res.data.code===1){
                         this.setState({
@@ -365,6 +368,8 @@ class Agent extends React.Component {
                     {/*<span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>*/}
                     <Search
                         placeholder="搜索经纪人"
+                        value={this.state.searchText}
+                        onChange={e=>this.setState({searchText:e.target.value})}
                         onSearch={this.search.bind(this)}
                         enterButton={suffix}
                         style={{width: 400}}

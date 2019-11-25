@@ -1,9 +1,10 @@
 import React from 'react'
 import '../../css/bridalAdmin.scss'
+import Login from '../../component/login'
 import {connect} from "react-redux";
 import axios from 'axios';
 import {Route,withRouter} from 'react-router-dom'
-import {newEstateId, getFileList,setHousingPictures} from "../../redux/action";
+import {newEstateId, getFileList, setHousingPictures, setUserInformation} from "../../redux/action";
 import {Tabs, Input, Button, Form, Upload, Icon, message,Select, Modal, Cascader,notification} from 'antd';
 import {
     getDistrictRegions,
@@ -21,9 +22,81 @@ import {
     getEstateMsg,
     getHouseTraits,
     getEstateAgents,
-    searchEstate
+    searchEstate, changeState,login
 } from '../../api/index'
+class NormalLoginForm extends React.Component {
+    //登陆
+    handleSubmit = e => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                let params = {
+                    "password": values.password,
+                    "phone": values.phone,
+                    "role": 2,
+                    "loginType": 2
+                };
+                login(params).then((res) => {
+                    if (res.data.code === 0) {
+                        message.error(res.data.msg)
+                    }
+                    else {
+                        message.success('登陆成功！')
+                            window.onunload=function(){
+                                localStorage.clear();
+                            }
+                        localStorage.setItem('state',res.data.state)
+                        this.props.setUserInformation(res.data)
+                        localStorage.setItem('userName',res.data.name)
+                        localStorage.setItem('role',res.data.role)
+                        localStorage.setItem('userId',res.data.userId)
+                        localStorage.setItem('phone',values.phone)
+                        setTimeout(this.props.handleClose, 1000)
+                    }
+                })
+            }
+        });
+    };
 
+    render() {
+        const { getFieldDecorator } = this.props.form;
+        return (
+            <Form onSubmit={this.handleSubmit} className="login-form">
+                <Form.Item>
+                    {getFieldDecorator('phone', {
+                        rules: [{ required: true, message: '请输入手机号!' }],
+                    })(
+                        <Input
+                            autocomplete="off"
+                            size={'large'}
+                            placeholder="请输入手机号"
+                        />,
+                    )}
+                </Form.Item>
+                <Form.Item>
+                    {getFieldDecorator('password', {
+                        rules: [{ required: true, message: '请输入密码!' }],
+                    })(
+                        <Input
+                            autocomplete="off"
+                            type="password"
+                            size={'large'}
+                            placeholder="请输入密码"
+                        />,
+                    )}
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" className="login-form-button" size={'large'}>
+                        登陆
+                    </Button>
+                </Form.Item>
+            </Form>
+        );
+    }
+}
+
+const WrappedNormalLoginForm =connect(state=>(
+    {userInformation:state.userInformation}),{setUserInformation})(Form.create({ name: 'normal_login' })(NormalLoginForm))
 //上传户型
 class HousingPicturesWal extends React.Component {
     constructor(props) {
@@ -1095,7 +1168,8 @@ class InformationUpdata extends React.Component {
                 propertyType: ''
             }],
             id:[],
-            visible:true
+            visible:true,
+            type:"danger"
         }
     }
 
@@ -1231,9 +1305,9 @@ class InformationUpdata extends React.Component {
         this.props.values.housingMsgs&&this.props.values.housingMsgs.map(item=>{
             this.state.id.push(item.housingMsgId)
         })
-        // this.props.form.setFieldsValue({
-        //     nam: this.props.values
-        // })
+        this.setState({
+            type:this.props.values.state==1?'danger':'primary'
+        })
     }
 
     //转化为base64
@@ -1327,28 +1401,9 @@ class InformationUpdata extends React.Component {
             regionId: checkedValues[1]
         })
     }
-
-    onChange1(checkedValues) {
-        this.setState({
-            regionId1: checkedValues[1]
-        })
-    }
-
-    onChange2(checkedValues) {
-        this.setState({
-            regionId2: checkedValues[1]
-        })
-    }
-
-    onPosition(value) {
-        this.setState({
-            position: value
-        })
-    }
     setValue(index,value){
         let arr=this.state.id
         arr[index]=value
-        console.log(arr)
         this.setState({
             id:arr
         })
@@ -1358,6 +1413,7 @@ class InformationUpdata extends React.Component {
             this.props.form.resetFields();
         }
     }
+    //推荐经纪人选择
     changeValues = (rule ,value , callback)=> {
         const { setFieldsValue } = this.props.form ;
         let newArr ;
@@ -1388,6 +1444,60 @@ class InformationUpdata extends React.Component {
           },
         });
       }
+    showConfirm1(fun) {
+        const { confirm } = Modal;
+        confirm({
+            title: '是否下架楼盘?',
+            content: '',
+            okText:"确认",
+            cancelText:"取消",
+            onOk:()=> {
+                fun()
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+    change(){
+        let param={
+            estateId:this.props.values.id,
+            state:-1
+        }
+        changeState(param).then((res)=>{
+            if(res.data.code==1){
+                const key = `open${Date.now()}`;
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        确定
+                    </Button>
+                );
+                notification.success({
+                    message: '楼盘下架成功',
+                    btn,
+                    key,
+                    duration: 0,
+                });
+                this.setState({
+                    type:'primary'
+                })
+            }
+            else{
+                const key = `open${Date.now()}`;
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        确定
+                    </Button>
+                );
+                notification.success({
+                    message: '楼盘下架失败',
+                    btn,
+                    key,
+                    duration: 0,
+                });
+            }
+        })
+    }
     render() {
         const formItemLayout = {
             labelCol: {
@@ -1411,7 +1521,8 @@ class InformationUpdata extends React.Component {
                         <Input placeholder="164564561，154，4545645，546"/>
                     )}
                 </Form.Item>
-                <a href='https://lbs.amap.com/console/show/picker' target="_blank" style={{width:'60%',marginLeft:20,marginTop:10}}>高德地图经纬度查询</a>
+                <a href='https://lbs.amap.com/console/show/picker' target="_blank" style={{width:'50%',marginLeft:20,marginTop:10}}>高德地图经纬度查询</a>
+               <Button size={'large'} type={this.state.type} onClick={this.showConfirm1.bind(this,this.change.bind(this))} disabled={this.state.type=='primary'}>{this.state.type=='primary'?'已下架':'售罄下架'}</Button>
                 <Form.Item label='1、楼盘名称（推广名）：'>
                     {getFieldDecorator('name', {initialValue: this.props.values.name || ''})(
                         <Input/>
@@ -1843,7 +1954,7 @@ class InformationUpdata extends React.Component {
                     <Button icon={'plus'} type="primary" onClick={this.addHousing.bind(this)}>继续添加户型</Button>
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" onClick={this.showConfirm.bind(this,this.handleSubmit.bind(this))}>确认更新楼盘信息并打开该楼盘详情页</Button>
+                    <Button type="primary" onClick={this.showConfirm.bind(this,this.handleSubmit.bind(this))}>确认更新楼盘信息</Button>
                 </Form.Item>
             </Form>
         );
@@ -1866,6 +1977,21 @@ class PicturesWallUpdata extends React.Component {
             remove: '',
         };
     }
+    //登录或注册以后关闭弹框
+    handleCancel1 = (str, userName) => {
+        if (str === 'login') {
+            this.setState({
+                login: false,
+                userName, userName
+            });
+        }
+        else if (str === 'register') {
+            this.setState({
+                register: false,
+            });
+        }
+
+    };
 
     handleCancel = () => this.setState({previewVisible: false});
 
@@ -2020,6 +2146,7 @@ class bridalAdmin extends React.Component {
            estates:[],
            price:'',
            time:'',
+            login:false
 
         }
     }
@@ -2053,17 +2180,10 @@ class bridalAdmin extends React.Component {
         })
     }
 
-    showModal = (str) => {
-        if (str === 'login') {
+    showModal (){
             this.setState({
                 login: true,
             });
-        }
-        else if (str === 'register') {
-            this.setState({
-                register: true,
-            });
-        }
     };
 
     //退出登陆
@@ -2343,7 +2463,7 @@ class bridalAdmin extends React.Component {
                             uid: '-1',
                             name: res.data.estate.name+'一页纸',
                             status: 'done',
-                            url: 'http://47.108.87.104:8601/show/downloadPaper?estateId='+value,
+                            url: 'http://47.108.87.104:8601/building/'+res.data.estate.paperPath
                         },
                     ],
 
@@ -2489,22 +2609,25 @@ class bridalAdmin extends React.Component {
                     </div>
                     <div className='right' style={{display: localStorage.getItem('userName') ? 'none' : 'block'}}>
                         <img src={require('../../img/admin.png')}/>
-                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆&nbsp&nbsp/'}}
-                              onClick={this.showModal.bind(this, 'login')}/>
-                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp&nbsp注册'}}
-                              onClick={this.showModal.bind(this, 'register')}/>
-                        {/* <Login login={this.state.login} handleCancel={this.handleCancel.bind(this,'login')}/>
-                                <Register register={this.state.register} handleCancel={this.handleCancel.bind(this,'register')}/> */}
+                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆'}}
+                              onClick={()=>{this.setState({login:true})}}/>
+                        <Modal
+                            visible={this.state.login}
+                            destroyOnClose={true}
+                            onCancel={()=>{this.setState({login:false})}}
+                            footer={''}
+                        >
+                            <p style={{fontSize:'22px'}}>新房管理员登陆</p>
+                            <WrappedNormalLoginForm ></WrappedNormalLoginForm>
+                        </Modal>
                     </div>
                     <div className='right' style={{display: localStorage.getItem('userName') ? 'block' : 'none'}}>
                         <img src={require('../../img/admin.png')} style={{marginRight: '10px'}}/>
-
                         <span onClick={this.clear.bind(this)}>退出</span>
                     </div>
                 </div>
                 <div className={'menu'}>
                     <Tabs defaultActiveKey="4" onChange={this.callback.bind(this)} tabPosition={'left'}>
-
                         <TabPane tab="楼盘信息编辑更新" key="4">
                             <div className={'content'}>
                                 <span className={'title'}>楼盘信息编辑更新</span>
