@@ -42,15 +42,7 @@ class NormalLoginForm extends React.Component {
                     }
                     else {
                         message.success('登陆成功！')
-                            window.onunload=function(){
-                                localStorage.clear();
-                            }
-                        localStorage.setItem('state',res.data.state)
                         this.props.setUserInformation(res.data)
-                        localStorage.setItem('userName',res.data.name)
-                        localStorage.setItem('role',res.data.role)
-                        localStorage.setItem('userId',res.data.userId)
-                        localStorage.setItem('phone',values.phone)
                         setTimeout(this.props.handleClose, 1000)
                     }
                 })
@@ -366,7 +358,21 @@ class Information extends React.Component {
 
     //上传楼盘信息
     handleSubmit = e => {
-
+        if(!this.props.userInformation.name){
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.success({
+                message: '请先登录',
+                btn,
+                key,
+                duration: 0,
+            });
+            return
+        }
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 values.regionId = values.regionId[1]
@@ -469,6 +475,21 @@ class Information extends React.Component {
     }
     //确定弹出框
     showConfirm(fun) {
+        if(!this.props.userInformation.name){
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.success({
+                message: '请先登录',
+                btn,
+                key,
+                duration: 0,
+            });
+            return
+        }
         const { confirm } = Modal;
         confirm({
           title: '是否发布楼盘信息?',
@@ -944,7 +965,7 @@ class Information extends React.Component {
 }
 
 const InformationForms = connect(state => (
-    {estateId: state.estateId}), {newEstateId})(Form.create({name: 'retrieve'})(Information));
+    {estateId: state.estateId,userInformation: state.userInformation}), {newEstateId})(Form.create({name: 'retrieve'})(Information));
 
 //上传图片
 class PicturesWall extends React.Component {
@@ -1032,7 +1053,7 @@ class PicturesWall extends React.Component {
 }
 
 const PicturesWallId = connect(state => (
-    {estateId: state.estateId}), {newEstateId})(PicturesWall);
+    {estateId: state.estateId,userInformation: state.userInformation}), {newEstateId})(PicturesWall);
 
 //更新户型
 class HousingPicturesWallUpdata extends React.Component {
@@ -1135,7 +1156,7 @@ class HousingPicturesWallUpdata extends React.Component {
     }
 }
 const HousingPicturesWallUpdataId = connect(state => (
-    {housingPictures: state.housingPictures,estateId: state.estateId}), {setHousingPictures})(HousingPicturesWallUpdata);
+    {housingPictures: state.housingPictures,estateId: state.estateId,userInformation: state.userInformation}), {setHousingPictures})(HousingPicturesWallUpdata);
 //更新楼盘信息
 class InformationUpdata extends React.Component {
     constructor(props) {
@@ -1311,6 +1332,21 @@ class InformationUpdata extends React.Component {
     }
     //上传楼盘信息
     handleSubmit = e => {
+        if(!this.props.userInformation.name){
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.success({
+                message: '请先登录',
+                btn,
+                key,
+                duration: 0,
+            });
+            return
+        }
         this.setState({
             visible:true
         })
@@ -1422,6 +1458,21 @@ class InformationUpdata extends React.Component {
     }
     //确定弹出框
     showConfirm(fun) {
+        if(!this.props.userInformation.name){
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.success({
+                message: '请先登录',
+                btn,
+                key,
+                duration: 0,
+            });
+            return
+        }
         const { confirm } = Modal;
         confirm({
           title: '是否更新楼盘信息?',
@@ -1437,6 +1488,21 @@ class InformationUpdata extends React.Component {
         });
       }
     showConfirm1(fun) {
+        if(!this.props.userInformation.name){
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.success({
+                message: '请先登录',
+                btn,
+                key,
+                duration: 0,
+            });
+            return
+        }
         const { confirm } = Modal;
         confirm({
             title: '是否下架楼盘?',
@@ -1502,7 +1568,6 @@ class InformationUpdata extends React.Component {
                 sm: {span: 12},
             },    
         };
-        console.log(this.props.state)
         const {getFieldDecorator} = this.props.form;
         const base = 'http://47.108.87.104:8501/user/uploadFile';
         const {Option} = Select
@@ -1953,7 +2018,7 @@ class InformationUpdata extends React.Component {
 }
 
 const InformationFormUpdatas = connect(state => (
-    {bridalInformation: state.bridalInformation}), {newEstateId})(Form.create({name: 'retrieve'})(withRouter(InformationUpdata)));
+    {bridalInformation: state.bridalInformation,userInformation: state.userInformation}), {newEstateId})(Form.create({name: 'retrieve'})(withRouter(InformationUpdata)));
 
 //更新图片
 class PicturesWallUpdata extends React.Component {
@@ -2095,7 +2160,7 @@ class PicturesWallUpdata extends React.Component {
 }
 
 const PicturesWallUpdataId = connect(state => (
-    {fileList: state.fileList,estateId:state.estateId}), {getFileList})(PicturesWallUpdata);
+    {fileList: state.fileList,estateId:state.estateId,userInformation: state.userInformation}), {getFileList})(PicturesWallUpdata);
 
 class bridalAdmin extends React.Component {
     constructor(props) {
@@ -2141,6 +2206,9 @@ class bridalAdmin extends React.Component {
         }
     }
     componentDidMount() {
+        if(!this.props.userInformation.name){
+            this.setState({login:true})
+        }
         let params={
             area:[],
             housingTypes:[],
@@ -2179,7 +2247,7 @@ class bridalAdmin extends React.Component {
     //退出登陆
     clear() {
         // this.props.setUserInformation({})
-        localStorage.clear()
+        sessionStorage.clear()
     }
 
     //选择区域
@@ -2297,7 +2365,7 @@ class bridalAdmin extends React.Component {
             show:false
         })
         this.props.newEstateId('')
-        localStorage.setItem('estateId','')
+        sessionStorage.setItem('estateId','')
         if (key == 4) {
         }
     }
@@ -2377,7 +2445,7 @@ class bridalAdmin extends React.Component {
             estateId: value,
         }
         this.props.newEstateId(value?value:'')
-        localStorage.setItem('estateId',value)
+        sessionStorage.setItem('estateId',value)
         getEstateMsg(params).then((res) => {
             if (res.data.code == 1) {
                 res.data.estate.estatePictures = this.sortByKey(res.data.estate.estatePictures, 'type')
@@ -2433,7 +2501,7 @@ class bridalAdmin extends React.Component {
             type:0
         }
         this.props.newEstateId(value?value:'')
-        localStorage.setItem('estateId',value)
+        sessionStorage.setItem('estateId',value)
         getEstateMsg(params).then((res) => {
             if (res.data.code == 1) {
                 res.data.estate.estatePictures = this.sortByKey(res.data.estate.estatePictures, 'type')
@@ -2486,6 +2554,21 @@ class bridalAdmin extends React.Component {
         this.props.setHousingPictures(arr)
     }
     push() {
+        if(!this.props.userInformation.name){
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.success({
+                message: '请先登录',
+                btn,
+                key,
+                duration: 0,
+            });
+            return
+        }
         let params = {
             description: this.state.description,
             estateId: this.state.estateId,
@@ -2532,6 +2615,21 @@ class bridalAdmin extends React.Component {
         })
     }
     showConfirm(tit,fun) {
+        if(!this.props.userInformation.name){
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.success({
+                message: '请先登录',
+                btn,
+                key,
+                duration: 0,
+            });
+            return
+        }
         const { confirm } = Modal;
         confirm({
             title:tit,
@@ -2599,7 +2697,7 @@ class bridalAdmin extends React.Component {
                         </div>
                         <p>新房管理中心</p>
                     </div>
-                    <div className='right' style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'none' : 'block'}}>
+                    <div className='right' style={{display: this.props.userInformation.name ? 'none' : 'block'}}>
                         <img src={require('../../img/admin.png')}/>
                         <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆'}}
                               onClick={()=>{this.setState({login:true})}}/>
@@ -2613,7 +2711,7 @@ class bridalAdmin extends React.Component {
                             <WrappedNormalLoginForm ></WrappedNormalLoginForm>
                         </Modal>
                     </div>
-                    <div className='right' style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'block' : 'none'}}>
+                    <div className='right' style={{display: this.props.userInformation.name ? 'block' : 'none'}}>
                         <img src={require('../../img/admin.png')} style={{marginRight: '10px'}}/>
                         <span onClick={this.clear.bind(this)}>退出</span>
                     </div>
