@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {newEstateId} from "../redux/action";
 import { Tabs,Input,Button,Cascader,Upload, Icon, message,Checkbox,
     Select,Tag,Tooltip,} from 'antd';
-import {getPersonMsg, putPersonMsg,cancelWechat,getDistrictRegions,getStreetEstates,settledInEstate,delcancelSettledInEstate} from '../api'
+import {getPersonMsg, putPersonMsg,cancelWechat,getDistrictRegions,getStreetEstates,settledInEstate,delcancelSettledInEstate,searchEstate} from '../api'
 import {Modal} from "antd/lib/index";
 import ChangePassWord from '../component/changePassWord'
 //上传头像
@@ -20,7 +20,7 @@ class Consultant extends React.Component {
             contact:'',
             company:"",
             districtRegionsList: [],
-            tags: ['Unremovable', 'Tag 2', 'Tag 3'],
+            tags: [],
             inputVisible: false,
             inputValue: '',
             head:'',
@@ -232,6 +232,32 @@ apply(){
                 })
             }
         })
+        let params2={
+            area:[],
+            housingTypes:[],
+            orderType:0,
+            prices:[],
+            traitIds:[],
+            districtIds: [],
+            streetId:[],
+            searchText:'',
+        }
+        searchEstate(params2).then((res) => {
+            if (res.data.code === 1) {
+                let option = [];
+                for (let i = 0; i < res.data.estates.length; i++) {
+                    let item = {
+                        value: res.data.estates[i].id,
+                        label: res.data.estates[i].name,
+                        url:'http://47.108.87.104:8601/show/downloadPaper?estateId='+res.data.estates[i].id
+                    }
+                    option.push(item)
+                }
+                this.setState({
+                    estates: option
+                })
+            }
+        })
     }
     onSubmit() {
         let params = {
@@ -301,6 +327,41 @@ cancleWeixin(){
         }
     })
 }
+        //确认修改？
+        showConfirm1() {
+            const {confirm} = Modal;
+            const that = this
+            confirm({
+                title: '是否确认申请入驻?',
+                content: '',
+                okText:"确认",
+                cancelText:"取消",
+                onOk: () => {
+                    this.apply()
+                },
+                onCancel() {
+                    console.log('Cancel');
+                },
+            });
+        }
+        showConfirm2(e,tag,index) {
+            const {confirm} = Modal;
+            e.preventDefault();
+            const that = this
+            confirm({
+                title: '确认退出该楼盘?',
+                content: '',
+                okText:"确认",
+                cancelText:"取消",
+                onOk: () => {
+                    this.state.tags.splice(index, 1)
+                    this.setState({tags:this.state.tags})
+                    this.preventDefault(tag)
+                },
+                onCancel:()=> {
+                },
+            });
+        }
     render(){
         const { TabPane } = Tabs;
         const { imageUrl,imageUrl1 } = this.state;
@@ -322,10 +383,10 @@ cancleWeixin(){
                         <div className={'menu'}>
                             <img className={'headerPic'} src={base + this.state.head}/>
                             <p>欢迎您，{this.state.name}</p>
-                            <p>账号：{localStorage.getItem('phone')}</p>
+                            {/* <p>账号：{localStorage.getItem('phone')}</p> */}
                         </div>
                         <Tabs defaultActiveKey="1" onChange={this.callback} tabPosition={'left'} tabBarStyle={{textAlign:'center',marginRight:20}}>
-                            <TabPane tab="个人信息/微信绑定" key="1">
+                            <TabPane tab="个人信息" key="1">
                                 <p className={'data'}>个人资料/编辑</p>
                                 <div className={'first'}>
                                     <div style={{display:'flex',alignItems:'center'}} className={'headerPic'}>
@@ -365,11 +426,11 @@ cancleWeixin(){
                                         </Upload>
                                     </div>
                                 </div>
-                                <p>账号：{localStorage.getItem('phone')}</p>
+                                <p style={{marginTop: '30px',fontWeight:'bold'}}>账号：{localStorage.getItem('phone')}</p>
                                 <div className={'center'}>
                                     <div className={'item'}>
                                         <div className={'left'}>
-                                            <p>编辑姓名：</p>
+                                            <p>姓名：</p>
                                             <Input value={this.state.name} onChange={this.onChangeName.bind(this)}/>
                                         </div>
                                     </div>
@@ -381,7 +442,7 @@ cancleWeixin(){
                                     </div> */}
                                     <div className={'item'}>
                                         <div className={'left'}>
-                                            <p>服务公司：</p>
+                                            <p>公司：</p>
                                             <Input value={this.state.company} onChange={this.onChangeCompany.bind(this)}/>
                                         </div>
                                     </div>
@@ -405,39 +466,43 @@ cancleWeixin(){
                                     </div>
                                 </div>
                                 <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'none':'block'}}>
-                                    <p className={'h2'}>微信绑定（未绑定）</p>
-                                    <div className={'weixinBox'}>
+                                    <div className={'weixinBox'} style={{marginTop:'30px'}}>
                                         <Button type="primary" style={{marginLeft:'40px'}} size={'large'} onClick={this.bindWeixin}>微信绑定</Button>
                                     </div>
                                 </div>
                             </TabPane>
-                            <TabPane tab="申请入住楼盘" key="2">
+                            <TabPane tab="楼盘入驻" key="2">
                             <p className={'data'} style={{marginBottom: '-20px'}}>入驻申请</p>
                                 <div className={'item'}>
                                     <div className={'left'}>
                                         <p>选择入驻的楼盘：</p>
-                                        <Cascader options={this.state.districtRegionsList} placeholder={''}
-                                              onChange={this.setRegion.bind(this)} style={{width: 200}} className={'apply'}/>
-                                    <Select style={{width: 200}} onChange={this.setEstates.bind(this)} value={this.state.estateId}>
-                                        {this.state.estates && this.state.estates.map(item => {
-                                                return (<Option value={item.value} key={item.value}>{item.label}</Option>)
-                                            }
-                                        )}
-                                    </Select>
+                                        <Select style={{width: 200,marginRight:'20px'}} onChange={this.setEstates.bind(this)} value={this.state.estateId}
+                                        allowClear
+                                        showSearch
+                                        placeholder="输入楼盘名搜索"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }>
+                                    {this.state.estates && this.state.estates.map(item => {
+                                            return (<Option value={item.value} key={item.value}>{item.label}</Option>)
+                                        }
+                                    )}
+                                </Select>
                                     </div>
-                                    <Button type="primary" style={{marginLeft: '40px'}} size={'large'} onClick={this.apply.bind(this)}>确认申请</Button>
+                                    <Button type="primary" style={{marginLeft: '40px'}} size={'large'} onClick={this.showConfirm1.bind(this)}>确认申请</Button>
                                 </div>
                                 <p style={{marginTop: '20px'}}>已入驻的楼盘：</p>
                                 {tags.map((tag, index) => {
                                     return  (
-                                     <Tag key={index} closable onClose={this.preventDefault.bind(this,tag)}>
+                                     <Tag key={index} closable onClose={(e)=>{this.showConfirm2(e,tag,index)}}>
                                             {tag.estateName}
                                         </Tag>
                                       
                                     ) ;
                                 })}
                             </TabPane>
-                            <TabPane tab="置业顾问协议" key="3">
+                            <TabPane tab="合作协议" key="3">
                                 <p className={'data'}>置业顾问协议</p>
                             </TabPane>
                             <TabPane tab="修改密码" key="4">

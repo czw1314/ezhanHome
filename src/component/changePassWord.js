@@ -18,9 +18,7 @@ class ChangePassWord extends React.Component{
     password=(rule,value) => {
         this.setState({password:value})
     };
-    handleSubmit = e => {
-        e.preventDefault();
-     
+    handleSubmit () {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 let params={
@@ -36,7 +34,7 @@ class ChangePassWord extends React.Component{
                         this.props.history.push('/homePage');
                     }
                     else{
-                        message.error('修改失败')
+                        message.error(res.data.msg)
                     }
                 })
             }
@@ -60,19 +58,26 @@ class ChangePassWord extends React.Component{
     };
         //确认修改？
         showConfirm() {
-            const { confirm } = Modal;
-            const that=this
-            confirm({
-              title: '是否确认更新修改信息?',
-              content: '',
-              onOk:()=> {
-                this.handleSubmit()
-              },
-              onCancel() {
-                console.log('Cancel');
-              },
-            });
-          }
+            this.props.form.validateFieldsAndScroll((err, values) => {
+                if (!err) {
+                    const { confirm } = Modal;
+                    const that=this
+                    confirm({
+                      title: '是否确认修改密码?',
+                      content: '',
+                      okText:"确认",
+                      cancelText:"取消",
+                      onOk:()=> {
+                          that.handleSubmit()
+                      },
+                      onCancel() {
+                        console.log('Cancel');
+                      },
+                    });
+                }
+            })
+
+          };
     render(){
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -99,7 +104,7 @@ class ChangePassWord extends React.Component{
         };
 
         return(
-            <Form {...formItemLayout} onSubmit={this.handleSubmit} style={{width:'400px',margin:'auto'}}>
+            <Form {...formItemLayout}  style={{width:'400px',margin:'auto'}}>
                 <Form.Item label="输入旧密码" >
                     {getFieldDecorator('password', {
                         rules: [
@@ -137,7 +142,7 @@ class ChangePassWord extends React.Component{
                     })(<Input.Password />)}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit" onSubmit={this.handleSubmit}>
+                    <Button type="primary" onClick={this.showConfirm.bind(this)}>
                         确认修改
                     </Button>
                 </Form.Item>

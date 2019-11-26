@@ -38,10 +38,11 @@
         z-index: 222;
         padding-top: 30px;
         width: 200px;
-        font-size: 14px;
+        font-size: 18px;
         font-family: Source Han Sans CN;
         font-weight: 400;
         color: rgba(102, 102, 102, 1);
+    
         .headerPic {
           width: 80px;
           height: 80px;
@@ -186,9 +187,8 @@
         .item{
           display: flex;
           margin-top: 20px;
-          justify-content: space-between;
           .left{
-            width: 85%;
+            width:40%;
             display: flex;
             align-items: center;
             p{

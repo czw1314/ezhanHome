@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/agentMy.scss';
-import {getPersonMsg, getDistrictRegions, putPersonMsg,cancelWechat,getStreetEstates,settledInEstate,delcancelSettledInEstate} from '../api'
+import {getPersonMsg, getDistrictRegions, putPersonMsg,cancelWechat,getStreetEstates,settledInEstate,delcancelSettledInEstate,searchEstate} from '../api'
 import {connect} from "react-redux";
 import {newEstateId} from "../redux/action";
 import {
@@ -204,6 +204,32 @@ class AgentMy extends React.Component {
                 })
             }
         })
+        let params2={
+            area:[],
+            housingTypes:[],
+            orderType:0,
+            prices:[],
+            traitIds:[],
+            districtIds: [],
+            streetId:[],
+            searchText:'',
+        }
+        searchEstate(params2).then((res) => {
+            if (res.data.code === 1) {
+                let option = [];
+                for (let i = 0; i < res.data.estates.length; i++) {
+                    let item = {
+                        value: res.data.estates[i].id,
+                        label: res.data.estates[i].name,
+                        url:'http://47.108.87.104:8601/show/downloadPaper?estateId='+res.data.estates[i].id
+                    }
+                    option.push(item)
+                }
+                this.setState({
+                    estates: option
+                })
+            }
+        })
     }
         //选择区域
     setRegion(value) {
@@ -345,6 +371,41 @@ class AgentMy extends React.Component {
             },
         });
     }
+        //确认修改？
+        showConfirm1() {
+            const {confirm} = Modal;
+            const that = this
+            confirm({
+                title: '是否确认申请入驻?',
+                content: '',
+                okText:"确认",
+                cancelText:"取消",
+                onOk: () => {
+                    this.apply()
+                },
+                onCancel() {
+                    console.log('Cancel');
+                },
+            });
+        }
+        showConfirm2(e,tag,index) {
+            const {confirm} = Modal;
+            e.preventDefault();
+            const that = this
+            confirm({
+                title: '确认退出该楼盘?',
+                content: '',
+                okText:"确认",
+                cancelText:"取消",
+                onOk: () => {
+                    this.state.tags.splice(index, 1)
+                    this.setState({tags:this.state.tags})
+                    this.preventDefault(tag)
+                },
+                onCancel:()=> {
+                },
+            });
+        }
   //绑定微信
   bindWeixin(){
     window.location='https://open.weixin.qq.com/connect/qrconnect?appid=wx53ba91de253ea23a&redirect_uri=http%3A%2F%2Fwww.ezhanhome.com&response_type=code&scope=snsapi_login&state=bind#wechat_redirect'
@@ -374,6 +435,9 @@ apply(){
         if(res.data.code==1){
             message.success('申请成功，等待管理员通过申请')
         }
+        else{
+            message.error(res.data.msg)
+        }
     })
 }
 confirm(e) {
@@ -381,7 +445,6 @@ confirm(e) {
   }
 //取消关注楼盘
 preventDefault(e) {
-    console.log(e)
     let params={
         userId:localStorage.getItem('userId'),
         estateId:e.estateId
@@ -413,11 +476,11 @@ preventDefault(e) {
                         <div className={'menu'}>
                             <img className={'headerPic'} src={base + this.state.userInformation.head}/>
                             <p>欢迎您，{this.state.userInformation.name}</p>
-                            <p>账号：{localStorage.getItem('phone')}</p>
+                            {/* <p>账号：{localStorage.getItem('phone')}</p> */}
                         </div>
                         <Tabs defaultActiveKey="1" onChange={this.callback} tabPosition={'left'}
                               tabBarStyle={{textAlign: 'center', marginRight: 20}}>
-                            <TabPane tab="个人信息/微信绑定" key="1">
+                            <TabPane tab="个人信息" key="1">
                                 <p className={'data'}>个人资料/编辑</p>
                                 <div className={'first'}>
                                     <div style={{display: 'flex', alignItems: 'center'}}>
@@ -461,17 +524,17 @@ preventDefault(e) {
                                         </Upload>
                                     </div>
                                 </div>
-                                <p style={{marginTop: '30px'}}>账号：{localStorage.getItem('phone')}</p>
+                                <p style={{marginTop: '30px',fontWeight:'bold'}}>账号：{localStorage.getItem('phone')}</p>
                                 <div className={'center'}>
                                     <div className={'item'}>
                                         <div className={'left'}>
-                                            <p>编辑姓名：</p>
-                                            <Input value={this.state.name} onChange={this.onChangeName.bind(this)}/>
+                                            <p>姓名：</p>
+                                            <Input value={this.state.name} onChange={this.onChangeName.bind(this)} size={'large'}/>
                                         </div>
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
-                                            <p>服务区域：</p>
+                                            <p>区域：</p>
                                             <Cascader
                                                 value={this.state.regionId}
                                                 options={this.state.districtRegionsList}
@@ -497,7 +560,7 @@ preventDefault(e) {
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
-                                            <p dangerouslySetInnerHTML={{__html: '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp职称：'}}></p>
+                                            <p dangerouslySetInnerHTML={{__html: '职称：'}}></p>
                                             <Select value={this.state.position} style={{width: 200}}
                                                     onChange={this.changePosition.bind(this)}>
                                                 <Option value="房地产经纪人">房地产经纪人</Option>
@@ -507,7 +570,7 @@ preventDefault(e) {
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
-                                            <p>选择服务：</p>
+                                            <p>服务：</p>
                                             <Checkbox.Group options={this.state.plainOptions}
                                                             value={this.state.bussinessId}
                                                             onChange={this.bussinessIdChange.bind(this)}/>
@@ -516,16 +579,17 @@ preventDefault(e) {
 
                                     <div className={'item'}>
                                         <div className={'left'}>
-                                            <p>从业年限：</p>
+                                            <p>工龄：</p>
                                             <Input value={this.state.workYears}
+                                            style={{width: 200}}
                                                    onChange={this.changeWorkYears.bind(this)} addonAfter="年"/>
                                         </div>
 
                                     </div>
                                     <div className={'item'}>
                                         <div className={'left'}>
-                                            <p>服务公司：</p>
-                                            <Select value={this.state.agentType} onSelect={this.onAgentType.bind(this)}
+                                            <p>公司：</p>
+                                            <Select value={this.state.agentType} onSelect={this.onAgentType.bind(this)} style={{width: 200}}
                                                     size={'large'}>
                                                 <Option value={2}>在职公司</Option>
                                                 <Option value={1}>独立经纪人</Option>
@@ -539,7 +603,7 @@ preventDefault(e) {
                                     <div className={'item'}>
                                         <div className={'left'} style={{textAlign: 'center'}}>
                                             <Button type="primary" style={{width: '200px'}} size={'large'}
-                                                    onClick={this.showConfirm.bind(this)}>更新修改</Button>
+                                                    onClick={this.showConfirm.bind(this)}>确认修改</Button>
                                         </div>
 
                                     </div>
@@ -556,39 +620,43 @@ preventDefault(e) {
                                     </div>
                                 </div>
                                 <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'none':'block'}}>
-                                    <p className={'h2'}>微信绑定（未绑定）</p>
-                                    <div className={'weixinBox'}>
+                                    <div className={'weixinBox'} style={{marginTop:'30px'}}>
                                         <Button type="primary" style={{marginLeft:'40px'}} size={'large'} onClick={this.bindWeixin}>微信绑定</Button>
                                     </div>
                                 </div>
                             </TabPane>
-                            <TabPane tab="申请入住楼盘" key="2">
+                            <TabPane tab="楼盘入驻" key="2">
                                 <p className={'data'} style={{marginBottom: '-20px'}}>入驻申请</p>
                                 <div className={'item'}>
                                     <div className={'left'}>
                                         <p>选择入驻的楼盘：</p>
-                                        <Cascader options={this.state.districtRegionsList} placeholder={''}
-                                              onChange={this.setRegion.bind(this)} style={{width: 200}} className={'apply'}/>
-                                    <Select style={{width: 200}} onChange={this.setEstates.bind(this)}>
-                                        {this.state.estates && this.state.estates.map(item => {
-                                                return (<Option value={item.value}>{item.label}</Option>)
-                                            }
-                                        )}
-                                    </Select>
+                                        <Select style={{width: 200,marginRight:'20px'}} onChange={this.setEstates.bind(this)} value={this.state.estateId}
+                                        allowClear
+                                        showSearch
+                                        placeholder="输入楼盘名搜索"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }>
+                                    {this.state.estates && this.state.estates.map(item => {
+                                            return (<Option value={item.value} key={item.value}>{item.label}</Option>)
+                                        }
+                                    )}
+                                </Select>
                                     </div>
-                                    <Button type="primary" style={{marginLeft: '40px'}} size={'large'} onClick={this.apply.bind(this)}>确认申请</Button>
+                                    <Button type="primary" style={{marginLeft: '40px'}} size={'large'} onClick={this.showConfirm1.bind(this)}>确认申请</Button>
                                 </div>
                                 <p style={{marginTop: '20px'}}>已入驻的楼盘：</p>
                                 {tags.map((tag, index) => {
                                     return  (
-                                     <Tag key={index} closable onClose={this.preventDefault.bind(this,tag)}>
+                                     <Tag key={index} closable onClose={(e)=>{this.showConfirm2(e,tag,index)}}>
                                             {tag.estateName}
                                         </Tag>
                                       
                                     ) ;
                                 })}
                             </TabPane>
-                            <TabPane tab="经纪人协议" key="3">
+                            <TabPane tab="合作协议" key="3">
                                 <p className={'data'}>经纪人协议</p>
                                 <ChangePassWords></ChangePassWords>
                             </TabPane>

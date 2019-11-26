@@ -44,6 +44,7 @@ class Login extends React.Component {
                     })(
                         <Input
                             size={'large'}
+                            autocomplete="off"
                             placeholder="请输入手机号"
                         />,
                     )}
@@ -54,6 +55,7 @@ class Login extends React.Component {
                     })(
                         <Input
                             type="password"
+                            autocomplete="off"
                             size={'large'}
                             placeholder="请输入密码"
                         />,

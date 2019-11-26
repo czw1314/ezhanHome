@@ -122,11 +122,10 @@ class User extends React.Component {
                     <div className={'container'}>
                     <div className={'menu'}>
                         <img className={'headerPic'} src={require('../img/agent.png')}/>
-                        <p>欢迎您，{this.state.name}</p>
-                        <p>账号：{this.state.phone}</p>
+                        <p>欢迎您，{this.state.name}</p> 
                     </div>
                         <Tabs defaultActiveKey="1" onChange={this.callback} tabPosition={'left'} tabBarStyle={{textAlign:'center',marginRight:20}}>
-                            <TabPane tab="个人信息/微信绑定" key="1">
+                            <TabPane tab="个人信息" key="1">
                                 <p className={'data'}>基本资料</p>
                                 <p>账号：{this.state.phone}</p>
                                 <div style={{display:'flex',alignItems:'center'}}>
@@ -146,8 +145,7 @@ class User extends React.Component {
                                     </div>
                                 </div>
                                 <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'none':'block'}}>
-                                    <p className={'h2'}>微信绑定（未绑定）</p>
-                                    <div className={'weixinBox'}>
+                                    <div className={'weixinBox'} style={{marginTop:'30px'}}>
                                         <Button type="primary" style={{marginLeft:'40px'}} size={'large'} onClick={this.bindWeixin}>微信绑定</Button>
                                     </div>
                                 </div>

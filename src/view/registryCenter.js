@@ -246,7 +246,7 @@ class Information extends React.Component {
                     })(
                         <div className={'item'}>
                             <div className={'left'}>
-                                <p>编辑姓名：</p>
+                                <p>姓名：</p>
                                 <Input size={'large'}/>
                             </div>
                         </div>
@@ -256,7 +256,7 @@ class Information extends React.Component {
                     {getFieldDecorator('verifyCode')(
                         <div className={'item'}>
                             <div className={'left'}>
-                                <p>服务区域：</p>
+                                <p>区域：</p>
                                 <Cascader
                                     options={this.state.districtRegionsList}
                                     onChange={this.onChange.bind(this)}
@@ -294,7 +294,7 @@ class Information extends React.Component {
                         rules: [{ required: true, message: '必填项' }],
                     })( <div className={'item'}>
                             <div className={'left'}>
-                                <p>选择服务：</p>
+                                <p>服务：</p>
                                 <Checkbox.Group options={this.state.plainOptions}
                                                 onChange={this.bussinessIdChange.bind(this)}/>
                             </div>
@@ -307,7 +307,7 @@ class Information extends React.Component {
                     })(
                         <div className={'item'} >
                             <div className={'left'}>
-                                <p>从业年限：</p>
+                                <p>工龄：</p>
                                 <Input size={'large'} addonAfter="年"/>
                             </div>
                         </div>
@@ -317,7 +317,7 @@ class Information extends React.Component {
                     {getFieldDecorator('check')(
                         <div className={'item'}>
                             <div className={'left'}>
-                                <p>服务公司：</p>
+                                <p>公司：</p>
                                 <Select defaultValue="2"  onSelect={this.onAgentType.bind(this)} style={{display: localStorage.getItem('role')==3 ? 'block' : 'none',width:'200px'}}
                                         size={'large'}>
                                     <Option value="2">在职公司</Option>
@@ -332,7 +332,7 @@ class Information extends React.Component {
 
                     <div className={'item'}>
                         <div className={'left'} style={{alignItems: 'flex-start'}}>
-                            <p dangerouslySetInnerHTML={{__html: '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp职称：'}}></p>
+                            <p dangerouslySetInnerHTML={{__html: '职称：'}}></p>
                             <Select defaultValue="房地产经纪人" style={{width: 200}} onSelect={this.onPosition.bind(this)}
                                     size={'large'}>
                                 <Option value="房地产经纪人">房地产经纪人</Option>

@@ -3,7 +3,7 @@
     background-color: rgb(247, 247, 247);
     .header {
         height: 60px;
-      width: 1600px;
+      width: 1400px;
         margin: auto;
         display: flex;
         justify-content: space-between;
@@ -33,7 +33,7 @@
     
       }
       .menu{
-        width: 1600px;
+        width: 1400px;
           margin: 20px auto;
           text-align: left;
           background-color: rgb(239, 239, 244);
@@ -65,10 +65,10 @@
             background-color: #fff;
 
             .ant-table table {
-
                     text-align: center;
                 
             .ant-table-thead > tr > th{
+              width: auto;
                 text-align: center
             }
               .ant-tabs-nav-scroll{

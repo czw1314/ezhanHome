@@ -957,7 +957,7 @@ class Information extends React.Component {
                     <Button icon={'plus'} type="primary" onClick={this.addHousing.bind(this)}>继续添加户型</Button>
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" onClick={this.showConfirm.bind(this,this.handleSubmit.bind(this))}>确认发布并打开该楼盘详情页</Button>
+                    <Button type="primary" onClick={this.showConfirm.bind(this,this.handleSubmit.bind(this))}>确认发布</Button>
                 </Form.Item>
             </Form>
         );
