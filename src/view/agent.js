@@ -52,7 +52,7 @@ class Agent extends React.Component {
                     streetId:[],
                     searchText:this.state.searchText||this.props.location.state?this.props.location.state.searchText:'',
                     pageNum:1,
-                    pageSize:10
+                    pageSize:20
                 }
                 this.setState({
                     searchText:this.props.location.state?this.props.location.state.searchText:'',
@@ -102,7 +102,7 @@ class Agent extends React.Component {
                 streetIds:[],
                 searchText:this.state.searchText,
                 pageNum:1,
-                pageSize:10
+                pageSize:20
             }
             searchAgent(params).then((res)=>{
                 if(res.data.code===1){
@@ -128,7 +128,7 @@ class Agent extends React.Component {
             orderType:this.state.orderType,
             searchText:this.state.searchText,
             pageNum:1,
-            pageSize:10
+            pageSize:20
         }
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
@@ -152,7 +152,7 @@ class Agent extends React.Component {
             streetIds:this.state.streetIdChecked,
             searchText:this.state.searchText,
             pageNum:1,
-            pageSize:10
+            pageSize:20
         }
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
@@ -176,7 +176,7 @@ class Agent extends React.Component {
             streetIds:this.state.streetIdChecked,
             searchText:this.state.searchText,
             pageNum:1,
-            pageSize:10
+            pageSize:20
         }
 
         searchAgent(params).then((res)=>{
@@ -205,7 +205,7 @@ class Agent extends React.Component {
             searchText:value,
             orderType:this.state.orderType,
             pageNum:1,
-            pageSize:10
+            pageSize:20
         }
         this.setState({
             searchText:value,
@@ -258,7 +258,7 @@ class Agent extends React.Component {
                 streetIds:this.state.streetIdChecked,
                 searchText:this.state.searchText,
                 pageNum:1,
-                pageSize:10
+                pageSize:20
             }
     
             searchAgent(params).then((res)=>{
@@ -282,7 +282,7 @@ class Agent extends React.Component {
                 streetIds:this.state.streetIdChecked,
                 searchText:this.state.searchText,
                 pageNum:1,
-                pageSize:10
+                pageSize:20
             }
     
             searchAgent(params).then((res)=>{
@@ -335,7 +335,7 @@ class Agent extends React.Component {
             streetIds:this.state.streetIdChecked,
             searchText:this.state.searchText,
             pageNum:index,
-            pageSize:10
+            pageSize:20
         }
         searchAgent(params).then((res)=>{
             if(res.data.code===1){
@@ -430,7 +430,7 @@ class Agent extends React.Component {
                     <div className={'show'}>
                         <div className={'left'}>
                             {
-                                this.state.models&&this.state.models.map((item,index)=>{
+                                this.state.models&&this.state.models.slice(0,10).map((item,index)=>{
                                     return(
                                         <div className={`showItem ${index === this.state.models.length-1 ? 'last' : ''}`} key={index}>
                                             <div className={'left'}>
@@ -440,10 +440,7 @@ class Agent extends React.Component {
                                                     </div>
                                                     <div className={'textBox'}>
                                                         <div className={'text'}>
-                                                            <div className={'information'}>
-                                                                <p className={'name'}>{item.name}<span>{item.position}</span></p>
-                                                                <p className={'year'}>从业年限：{item.workingYears}年</p>
-                                                            </div>
+                                                            <p className={'name'}>{item.name}<span>{item.position}</span><span>工龄：{item.workingYears}年</span></p>
                                                             <div className={'service'}>
                                                                 <p className={'area'}>熟悉区域：{
                                                                     item.streets&&item.streets.map(items=>{
@@ -463,11 +460,12 @@ class Agent extends React.Component {
                                                                     })
                                                                 }</p>
                                                             </div>
+                                                            <p className={'company'}>独立经纪人</p>
                                                             <div className={'contact'}>
                                                                 {/* <p className={'phone'}><img src={require('../img/Phone.png')}/><span>联系电话：</span>{item.contact}</p> */}
                                                                 <p className={'weixin'}><img src={require('../img/weixin.png')}/>
                                                                     <Popconfirm
-                                                                        title=""
+                                                                        title="微信扫描二维码添加经纪人"
                                                                         visible={this.state.visible[index]}
                                                                         icon={<img src={'http://47.108.87.104:8601/user/'+item.wechatQrCode}/>}
                                                                         onVisibleChange={this.handleVisibleChange.bind(this,index,index)}
@@ -479,7 +477,6 @@ class Agent extends React.Component {
                                                                 </p>
                                                             </div>
                                                         </div>
-                                                        <p className={'company'}>独立经纪人</p>
                                                     </div>
 
                                                 </div>
@@ -488,8 +485,8 @@ class Agent extends React.Component {
                                     )
                                 })
                             }
-                          <Pagination defaultCurrent={1} total={this.state.counts} pageSize={10} onChange={this.page.bind(this)}/>
                         </div>
+                        <Pagination defaultCurrent={1} total={this.state.counts} pageSize={10} onChange={this.page.bind(this)}/>
                     </div>
                 </div>
         )

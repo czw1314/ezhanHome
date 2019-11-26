@@ -43,7 +43,7 @@ class NormalLoginForm extends React.Component {
                     else {
                         message.success('登陆成功！')
                         this.props.setUserInformation(res.data)
-                        setTimeout(this.props.handleClose, 1000)
+                        setTimeout(this.props.handleCancel, 1000)
                     }
                 })
             }
@@ -2708,11 +2708,12 @@ class bridalAdmin extends React.Component {
                             footer={''}
                         >
                             <p style={{fontSize:'22px'}}>新房管理员登陆</p>
-                            <WrappedNormalLoginForm ></WrappedNormalLoginForm>
+                            <WrappedNormalLoginForm handleCancel={()=>{this.setState({login:false})}}></WrappedNormalLoginForm>
                         </Modal>
                     </div>
                     <div className='right' style={{display: this.props.userInformation.name ? 'block' : 'none'}}>
                         <img src={require('../../img/admin.png')} style={{marginRight: '10px'}}/>
+                        <span style={{marginRight: '20px'}}>{this.props.userInformation.name}</span>
                         <span onClick={this.clear.bind(this)}>退出</span>
                     </div>
                 </div>

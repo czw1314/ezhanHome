@@ -128,17 +128,19 @@
   }
 }
     .show {
-      display: flex;
       width: 1200px;
       margin: auto;
       .left{
         width: 100%;
+        display: flex;
+        flex-wrap: wrap;
       }
       .showItem {
         padding: 40px 0;
+        width: 50%;
         border-bottom: 1px solid rgba(217, 217, 217, 1);
         .left {
-          width: 100%;
+
           .item {
             display: flex;
             .pic{
@@ -154,14 +156,11 @@
               .text{
                 display: flex;
                 justify-content: space-between;
+                flex-wrap: wrap;
                 text-align: left;
               }
 
             }
-
-            .information {
-              text-align: left;
-              width: 220px;
               .name {
                 font-size:20px;
                 font-weight:bold;
@@ -175,7 +174,7 @@
                   font-size: 14px;
                   background:rgba(222,229,237,1);
                 }
-              }
+
               .year {
                 font-size:14px;
                 font-family:Source Han Sans CN;
@@ -198,10 +197,11 @@
               }
               span{
                 font-weight:bold;
+                margin-right: 10px;
               }
             }
             .contact{
-              width: 200px;
+              width: 100%;
               .phone{
                 font-size: 14px;
                 color: #333;
@@ -295,6 +295,9 @@
             font-size:14px;
             color:rgba(102,102,102,1);
             text-align: left;
+            span{
+              margin-right: 8px;
+            }
           }
         }
       }

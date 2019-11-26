@@ -571,8 +571,10 @@ class HomePage extends React.Component {
                                                     </div>
                                                     {/* <p className={'phone'}>联系电话：{localStorage.getItem('userId') ? item.contact : '登录后查看'}
                                                     </p> */}
-                                                    <p className={'weixin'}><Popconfirm
-                                                        title=""
+                                                    <p className={'weixin'}>
+                                                        <Popconfirm
+                                                        title="微信扫描二维码添加经纪人"
+                                                        placement="topLeft"
                                                         visible={this.state.visible[index]}
                                                         icon={<img
                                                             src={'http://47.108.87.104:8601/user/' + item.wechatQrCode}/>}
@@ -618,7 +620,8 @@ class HomePage extends React.Component {
                         </div>
                     </div>
                     <div style={{textAlign:'center'}}>
-                    <a target={'_blank'} href={''}>蜀ICP备18023206号-2</a>
+                        <span>Copyright©2019 成都叁城房地产经纪有限公司 版权所有 ©</span>
+                    <a target={'_blank'} href={'http://www.028icp.com/'} style={{color:'#666'}}> 蜀ICP备18023206号-2</a>
                 </div>
                 </div>
             </div>

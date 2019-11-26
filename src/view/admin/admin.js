@@ -28,10 +28,6 @@ class Login extends React.Component {
                         message.success('登陆成功！')
                         this.props.setUserInformation(res.data)
                         setTimeout(this.props.handleClose, 1000)
-                        localStorage.setItem('userName', res.data.name)
-                        localStorage.setItem('role', res.data.role)
-                        localStorage.setItem('userId', res.data.userId)
-                        localStorage.setItem('phone', values.phone)
                     }
                 })
             }
@@ -500,6 +496,21 @@ class Admin extends React.Component {
 
     //是否通过
     pass(userId, type, str, index) {
+        if(!this.props.userInformation.name){
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.success({
+                message: '请先登录',
+                btn,
+                key,
+                duration: 0,
+            });
+            return
+        }
         this.setState({
             visible4: false,
             visible5:false,
@@ -578,6 +589,21 @@ class Admin extends React.Component {
 
     //是否通过楼盘入驻申请
     passApply(index, estateId, type, str, indexs) {
+        if(!this.props.userInformation.name){
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.success({
+                message: '请先登录',
+                btn,
+                key,
+                duration: 0,
+            });
+            return
+        }
         this.setState({
             visible8:false,visible9:false,visible10:false,visible11:false
         })
@@ -671,6 +697,22 @@ class Admin extends React.Component {
     }
     //删除经纪人、置业顾问
     delUserData(userId, str,index) {
+        if(!this.props.userInformation.name){
+            console.log(1)
+            const key = `open${Date.now()}`;
+            const btn = (
+                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                    确定
+                </Button>
+            );
+            notification.success({
+                message: '请先登录',
+                btn,
+                key,
+                duration: 0,
+            });
+            return
+        }
         this.setState({
             visible1: false
         })
@@ -743,6 +785,9 @@ class Admin extends React.Component {
     }
 
     componentDidMount() {
+        if(!this.props.userInformation.name){
+            this.setState({login:true})
+        }
         let params = {
             type: 2
         }
@@ -833,7 +878,24 @@ class Admin extends React.Component {
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
-                   <a onClick={()=>{this.setState({visible5:true,userId:this.state.agentData[index].personId,index:index})}}>是</a>
+                   <a onClick={()=>{
+                       if(!this.props.userInformation.name){
+                           console.log(1)
+                           const key = `open${Date.now()}`;
+                           const btn = (
+                               <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                   确定
+                               </Button>
+                           );
+                           notification.success({
+                               message: '请先登录',
+                               btn,
+                               key,
+                               duration: 0,
+                           });
+                           return
+                       }
+                       this.setState({visible5:true,userId:this.state.agentData[index].personId,index:index})}}>是</a>
                    <Modal
                             title="通过经纪人注册申请"
                             visible={this.state.visible5}
@@ -848,7 +910,24 @@ class Admin extends React.Component {
                         >
                             </Modal>
                   <Divider type="vertical"/>
-                  <a onClick={()=>{this.setState({visible4:true,userId:this.state.agentData[index].personId,index:index})}}>否</a>
+                  <a onClick={()=>{
+                      if(!this.props.userInformation.name){
+                          console.log(1)
+                          const key = `open${Date.now()}`;
+                          const btn = (
+                              <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                  确定
+                              </Button>
+                          );
+                          notification.success({
+                              message: '请先登录',
+                              btn,
+                              key,
+                              duration: 0,
+                          });
+                          return
+                      }
+                      this.setState({visible4:true,userId:this.state.agentData[index].personId,index:index})}}>否</a>
                         <Modal
                             title="拒绝经纪人注册申请"
                             okText="确认"
@@ -916,7 +995,24 @@ class Admin extends React.Component {
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
-                  <a onClick={()=>{this.setState({visible6:true,userId:this.state.consultantData[index].personId,index:index})}}>是</a>
+                  <a onClick={()=>{
+                      if(!this.props.userInformation.name){
+                          console.log(1)
+                          const key = `open${Date.now()}`;
+                          const btn = (
+                              <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                  确定
+                              </Button>
+                          );
+                          notification.success({
+                              message: '请先登录',
+                              btn,
+                              key,
+                              duration: 0,
+                          });
+                          return
+                      }
+                      this.setState({visible6:true,userId:this.state.consultantData[index].personId,index:index})}}>是</a>
                   <Modal
                             title="通过置业顾问注册申请"
                             visible={this.state.visible6}
@@ -930,7 +1026,24 @@ class Admin extends React.Component {
                         >
         </Modal>
                   <Divider type="vertical"/>
-                  <a onClick={()=>{this.setState({visible7:true,userId:this.state.consultantData[index].personId,index:index})}}>否</a>
+                  <a onClick={()=>{
+                      if(!this.props.userInformation.name){
+                          console.log(1)
+                          const key = `open${Date.now()}`;
+                          const btn = (
+                              <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                  确定
+                              </Button>
+                          );
+                          notification.success({
+                              message: '请先登录',
+                              btn,
+                              key,
+                              duration: 0,
+                          });
+                          return
+                      }
+                      this.setState({visible7:true,userId:this.state.consultantData[index].personId,index:index})}}>否</a>
                   <Modal
                             title="拒绝置业顾问注册申请"
                             visible={this.state.visible7}
@@ -1021,7 +1134,24 @@ class Admin extends React.Component {
                         {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                                    <a onClick={()=>{this.setState({visible8:true,userId:this.state.agentApplyData[index].personId,estateId:item.estateId,index:index})}}>是</a>
+                                    <a onClick={()=>{
+                                        if(!this.props.userInformation.name){
+                                            console.log(1)
+                                            const key = `open${Date.now()}`;
+                                            const btn = (
+                                                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                                    确定
+                                                </Button>
+                                            );
+                                            notification.success({
+                                                message: '请先登录',
+                                                btn,
+                                                key,
+                                                duration: 0,
+                                            });
+                                            return
+                                        }
+                                        this.setState({visible8:true,userId:this.state.agentApplyData[index].personId,estateId:item.estateId,index:index})}}>是</a>
                                     <Modal
                             title="通过经纪人申请入驻"
                             visible={this.state.visible8}
@@ -1123,7 +1253,24 @@ class Admin extends React.Component {
                         {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                                    <a onClick={()=>{this.setState({visible10:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index})}}>是</a>
+                                    <a onClick={()=>{
+                                        if(!this.props.userInformation.name){
+                                            console.log(1)
+                                            const key = `open${Date.now()}`;
+                                            const btn = (
+                                                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                                    确定
+                                                </Button>
+                                            );
+                                            notification.success({
+                                                message: '请先登录',
+                                                btn,
+                                                key,
+                                                duration: 0,
+                                            });
+                                            return
+                                        }
+                                        this.setState({visible10:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index})}}>是</a>
                                     <Modal
                             title="通过置业顾问申请入驻"
                             visible={this.state.visible10}
@@ -1137,7 +1284,24 @@ class Admin extends React.Component {
                         >
         </Modal>
                                     <Divider type="vertical"/>
-                                    <a onClick={()=>{this.setState({visible11:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index})}}>否</a>
+                                    <a onClick={()=>{
+                                        if(!this.props.userInformation.name){
+                                            console.log(1)
+                                            const key = `open${Date.now()}`;
+                                            const btn = (
+                                                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                                    确定
+                                                </Button>
+                                            );
+                                            notification.success({
+                                                message: '请先登录',
+                                                btn,
+                                                key,
+                                                duration: 0,
+                                            });
+                                            return
+                                        }
+                                        this.setState({visible11:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index})}}>否</a>
                                     <Modal
                             title="拒绝置业顾问申请入驻"
                             visible={this.state.visible11}
@@ -1235,6 +1399,21 @@ class Admin extends React.Component {
                 render: (text, record, index) => (
                     <span>
                    <a onClick={() => {
+                       if(!this.props.userInformation.name){
+                           const key = `open${Date.now()}`;
+                           const btn = (
+                               <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                   确定
+                               </Button>
+                           );
+                           notification.success({
+                               message: '请先登录',
+                               btn,
+                               key,
+                               duration: 0,
+                           });
+                           return
+                       }
                        this.setState({visible1: true,userId:this.state.agentControlData[index].personId,index:index})
                    }}>删除</a>
                                                 <Modal
@@ -1295,6 +1474,21 @@ class Admin extends React.Component {
                 render: (text, record, index) => (
                     <span>
                     <a onClick={() => {
+                        if(!this.props.userInformation.name){
+                            const key = `open${Date.now()}`;
+                            const btn = (
+                                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                    确定
+                                </Button>
+                            );
+                            notification.success({
+                                message: '请先登录',
+                                btn,
+                                key,
+                                duration: 0,
+                            });
+                            return
+                        }
                         this.setState({visible1:true,userId:this.state.consultantControlData[index].personId,index:index})
                     }}>删除</a>
         <Modal
@@ -1420,7 +1614,7 @@ class Admin extends React.Component {
                         </div>
                         <p>管理员中心</p>
                     </div>
-                    <div className='right' style={{display: localStorage.getItem('userName') ? 'none' : 'block'}}>
+                    <div className='right' style={{display: this.props.userInformation.name ? 'none' : 'block'}}>
                         <img src={require('../../img/admin.png')}/>
                         <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆'}}
                               onClick={this.showModal.bind(this, 'login')}/>
@@ -1429,14 +1623,15 @@ class Admin extends React.Component {
                             onCancel={this.handleCancel.bind(this)}
                             footer={''}
                         >
+                            <p style={{fontSize:'22px'}}>超级管理员登陆</p>
                             <Logins handleClose={this.handleCancel.bind(this)}/>
                         </Modal>
                         {/* <Login login={this.state.login} handleCancel={this.handleCancel.bind(this,'login')}/>
                                 <Register register={this.state.register} handleCancel={this.handleCancel.bind(this,'register')}/> */}
                     </div>
-                    <div className='right' style={{display: localStorage.getItem('userName') ? 'block' : 'none'}}>
+                    <div className='right' style={{display: this.props.userInformation.name ? 'block' : 'none'}}>
                         <img src={require('../../img/admin.png')} style={{marginRight: '10px'}}/>
-                        {localStorage.getItem('userName')}
+                        <span style={{marginRight: '20px'}}>{this.props.userInformation.name}</span>
                         <span onClick={this.clear.bind(this)} style={{marginLeft: '10px'}}>退出</span>
                     </div>
                 </div>

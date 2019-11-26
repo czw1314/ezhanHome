@@ -1,14 +1,7 @@
 import React from 'react';
 import '../css/user.scss';
-import { Tabs,Input,Button,Form,message,
-    Icon,
-    Cascader,
-    Select,
-    Row,
-    Col,
-    Checkbox,
-    AutoComplete, } from 'antd';
-    import {getPersonMsg, cancelWechat, putPersonMsg,normalPersonMsg,concernedEstates} from '../api'
+import { Tabs,Input,Button,message,} from 'antd';
+    import {getPersonMsg, cancelWechat, normalPersonMsg, concernedEstates, delconcernedEstate} from '../api'
     import ChangePassWords from '../component/changePassWord'
     import {connect} from "react-redux";
 import {newEstateId} from "../redux/action";
@@ -31,6 +24,23 @@ class User extends React.Component {
     }
     callback(key) {
         console.log(key);
+    }
+    //取消关注
+    delStar(id,index){
+        console.log(1)
+        let params = {
+            estateId:id,
+            userId:localStorage.getItem('userId')
+        }
+        delconcernedEstate(params).then((res)=>{
+            if(res.data.code==1){
+                this.state.estates.splice(index, 1)
+                message.success('成功取消关注楼盘')
+                this.setState({
+                    estates:this.state.estates
+                })
+            }
+        })
     }
     changeName(){
         let params={
@@ -106,7 +116,7 @@ class User extends React.Component {
                     <div className='logo'>
                         <img src={require('../img/LOGO2.png')}/>
                     </div>
-                    <p>个人中心</p>
+                    <p>用户个人中心</p>
                 </div>
                 <div className={'userBox'}>
                     <div className={'container'}>
@@ -148,8 +158,8 @@ class User extends React.Component {
                                     {
                                         this.state.estates&&this.state.estates.map((item,index)=>{
                                             return(
-                                                <div className={'item'} key={index} onClick={this.goTo.bind(this,item.id)}>
-                                                <img src={'http://47.108.87.104:8601/building/'+item.picture}/>
+                                                <div className={'item'} key={index}>
+                                                <img src={'http://47.108.87.104:8601/building/'+item.picture} onClick={this.goTo.bind(this,item.id)}/>
                                                 <div className={'first'}>
                                                     <p className={'name'}>{item.name}</p>
                                                     <p className={'price'}>{item.referencePrice}元/m²起</p>
@@ -159,6 +169,7 @@ class User extends React.Component {
                                                     <p className={'area'}>建面：{item.areaRange}m²</p>
                                                 </div>
                                                 <p className={'tag'}>{item.propertyType}</p>
+                                                    <Button type="primary" style={{width:'200px',margin:'auto',display:'block'}} block onClick={this.delStar.bind(this,item.id,index)}>取消关注</Button>
                                             </div>
                                             )
                                         })
