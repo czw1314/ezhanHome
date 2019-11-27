@@ -3,6 +3,9 @@
 }
 .agent{
   text-align: left;
+  height: auto !important;
+    height: 100%; 
+    min-height: 100%;
   color: #fff;
   .title-box {
     background: rgba(242, 245, 248, 1);
@@ -145,8 +148,8 @@
             display: flex;
             .pic{
               img{
-                width: 120px;
-                height: 120px;
+                width: 102px;
+                height: 136px;
               }
 
             }
@@ -356,6 +359,7 @@
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
     color: #fff;
     background-color: #268AED;
+    font-size: 18px;
   }
   .ant-menu-horizontal{
     border: none;
@@ -368,7 +372,7 @@
   //  color: #434343;
   //}
   .ant-menu-item, .ant-menu-submenu-title {
-    padding: 0;
+    font-weight: bold;
   }
   .ant-menu-vertical .ant-menu-item, .ant-menu-vertical-left .ant-menu-item, .ant-menu-vertical-right .ant-menu-item, .ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-submenu-title, .ant-menu-vertical-left .ant-menu-submenu-title, .ant-menu-vertical-right .ant-menu-submenu-title, .ant-menu-inline .ant-menu-submenu-title {
     //padding:0 20px 0 0;
@@ -380,13 +384,12 @@
     padding: 0;
     color: #fff;
   }.ant-menu-horizontal > .ant-menu-item a:hover {
-     //margin: 0 7px;
+       background-color: #268AED;
      color: #fff;
-     background-color: #268AED;
    }
   .ant-menu-horizontal > .ant-menu-item:hover {
-    color: #fff;
     background-color: #268AED;
+    color: #fff;
     border:none
   }
   //.ant-menu-horizontal > .ant-menu-item :hover {
@@ -402,10 +405,11 @@
     color: #fff;
   }
   .ant-menu-horizontal > .ant-menu-item-selected>a{
-
+    color: #fff;
   }
   .ant-menu-item-active{
-    background-color: #fff;
+    color: #fff !important;
+    background-color: #268AED;
     border: none;
   }
   .ant-btn-primary:hover, .ant-btn-primary:focus {

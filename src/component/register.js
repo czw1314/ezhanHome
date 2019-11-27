@@ -237,7 +237,7 @@ class Information extends React.Component {
                         />,
                     )}
                 </Form.Item>
-                <Form.Item>
+                <Form.Item style={{textAlign:'left'}}>
                     {getFieldDecorator('check', {
                         rules: [{required: true, message: '请勾选同意相关协议!'}],
                     })(
@@ -290,6 +290,7 @@ class Register extends React.Component {
             <div className={'register'}>
                 <Modal
                     visible={register}
+                    width={390}
                     destroyOnClose={true}
                     onCancel={this.props.handleCancel}
                     footer={''}

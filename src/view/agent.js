@@ -432,7 +432,7 @@ class Agent extends React.Component {
                             {
                                 this.state.models&&this.state.models.slice(0,10).map((item,index)=>{
                                     return(
-                                        <div className={`showItem ${index === this.state.models.length-1 ? 'last' : ''}`} key={index}>
+                                        <div className={`showItem ${index === this.state.models.length-1||index === this.state.models.length-2 ? 'last' : ''}`} key={index}>
                                             <div className={'left'}>
                                                 <div className={'item'}>
                                                     <div className={'pic'}>

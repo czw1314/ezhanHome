@@ -36,12 +36,6 @@
     }
 
   }
-  .bottomSide {
-    width: 1200px;
-    margin: auto;
-    text-align: left;
-    color: #333333;
-  }
   .chain {
     margin: 0;
     font-size: 14px;
@@ -66,12 +60,18 @@
     }
     .right {
       margin-left: 40px;
+      ul{
+        margin: 0;
+        padding: 0;
+      }
+
+      
       a {
         color: #999;
       }
-
+    
       li {
-        margin-right: 60px;
+        margin-right: 44px;
         display: inline-block;
         a {
           color: #999;
@@ -192,7 +192,7 @@
     }
   }
   .main {
-    margin: 70px auto;
+    margin: 70px auto 0;
     .hot {
       width: 1200px;
       margin: auto;
@@ -532,13 +532,6 @@
         }
       }
     }
-  }
-  .bottomSide {
-    width: 1200px;
-    margin: auto;
-    text-align: left;
-    padding-bottom: 20px;
-    color: #333333;
   }
   .chain {
     margin: 0;

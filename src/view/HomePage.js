@@ -617,12 +617,13 @@ class HomePage extends React.Component {
                                 <li><a href={''}>用户协议</a></li>
                                 <li><a href={''}>免责申明</a></li>
                             </ul>
-                        </div>
-                    </div>
-                    <div style={{textAlign:'center'}}>
+                            <div style={{textAlign:'center'}}>
                         <span>Copyright©2019 成都叁城房地产经纪有限公司 版权所有 ©</span>
                     <a target={'_blank'} href={'http://www.028icp.com/'} style={{color:'#666'}}> 蜀ICP备18023206号-2</a>
                 </div>
+                        </div>
+                    </div>
+               
                 </div>
             </div>
         )

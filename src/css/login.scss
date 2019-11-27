@@ -10,6 +10,9 @@
       width: 100%;
     }
   }
+  .ant-tabs-nav .ant-tabs-tab {
+    margin: 0;
+  }
   .weixin{
     .ant-tabs-bar{
       font-weight:bold;
@@ -68,6 +71,7 @@
     }
     .agreement{
       color: #666;
+      text-align: left;
       a{
         color: #666;
         text-decoration:underline;

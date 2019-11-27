@@ -197,7 +197,8 @@ class BridalIndex extends React.Component {
                     values: res.data.estate,
                     address:address,
                     num:l-1,
-                    nums:res.data.estate.estatePictures.length-5
+                    nums:res.data.estate.estatePictures.length-5,
+                    star:res.data.estate.userConcernedEstateOrNot?1:''
                 })
             }
         })

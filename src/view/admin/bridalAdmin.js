@@ -523,7 +523,9 @@ class Information extends React.Component {
                 <Form.Item label={'一、填写基本信息：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'地址经纬度：'}  labelAlign={'left'} labelCol={{span: 5}}>
-                    {getFieldDecorator('longitudeAndAtitude')(
+                    {getFieldDecorator('longitudeAndAtitude', {
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Input placeholder="164564561，154，4545645，546" style={{width:200}}/>
                     )}
                 </Form.Item>
@@ -1576,7 +1578,9 @@ class InformationUpdata extends React.Component {
                 <Form.Item label={'一、填写基本信息：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'地址经纬度：'}  labelAlign={'left'} labelCol={{span: 5}}>
-                {getFieldDecorator('longitudeAndAtitude', {initialValue: this.props.values.longitudeAtitude || ''})(
+                {getFieldDecorator('longitudeAndAtitude', {initialValue: this.props.values.longitudeAtitude || '',
+                        rules: [{ required: true, message: '必填项' }],
+                    })(
                         <Input placeholder="164564561.154，4545645.546"/>
                     )}
                 </Form.Item>

@@ -613,7 +613,7 @@ class BridalChamber extends React.Component {
                             {
                                 this.state.models&&this.state.models.map((item,index)=>{
                                     return(
-                                        <div className={`showItem ${index === this.state.modelsShow.length-1 ? 'last' : ''}`} key={index}>
+                                        <div className={`showItem ${index === this.state.models.length-1? 'last' : ''}`} key={index}>
                                         <div className={'left'}>
                                             <div className={'item'}>
                                                     <div className={'pic'} onClick={this.link.bind(this,item.id)}>

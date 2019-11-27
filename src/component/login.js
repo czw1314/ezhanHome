@@ -281,6 +281,7 @@ class Login extends React.Component {
             <div className={'login'}>
                 <Modal
                     visible={this.props.login}
+                    width={390}
                     destroyOnClose={true}
                     afterClose={()=>this.setState({retrieve:false,accountNumber:true})}
                     onCancel={this.props.handleCancel}

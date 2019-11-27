@@ -2,6 +2,7 @@
 .home {
   margin: auto;
   min-width: 1200px;
+  height: 100%;
   text-align: center;
   color: #fff;
   .headerBox {
@@ -38,12 +39,7 @@
     }
 
   }
-  .bottomSide {
-    width: 1200px;
-    margin:40px auto 0;
-    text-align: left;
-    color: #333333;
-  }
+
   .chain {
     margin: 0;
     font-size: 14px;
@@ -68,13 +64,17 @@
     }
     .right {
       margin-left: 40px;
+      ul{
+        margin: 0;
+        padding: 0;
+      }
 
       a {
         color: #999;
       }
 
       li {
-        margin-right: 60px;
+        margin-right: 44px;
         display: inline-block;
         a {
           color: #999;

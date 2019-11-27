@@ -160,7 +160,7 @@ class User extends React.Component {
                                                 <img src={'http://47.108.87.104:8601/building/'+item.picture} onClick={this.goTo.bind(this,item.id)}/>
                                                 <div className={'first'}>
                                                     <p className={'name'}>{item.name}</p>
-                                                    <p className={'price'}>{item.referencePrice}元/m²起</p>
+                                                    <p className={'price'}>{item.referencePrice}<span style={{display:isNaN(parseInt(item.referencePrice))?'none':'inline-block'}}>元/m²起</span></p>
                                                 </div>
                                                 <div className={'second'}>
                                                     <p className={'address'}>{item.distinctName}</p>
