@@ -25,7 +25,7 @@ class Phone extends React.Component {
                 let params = {
                     "phoneCode": values.phoneCode,
                     "phone": values.phone,
-                    "userId": localStorage.getItem('userId')
+                    "userId":localStorage.getItem("userId")
                 };
                 bindPhone(params).then((res) => {
                     if (res.data.code === 0) {
@@ -33,11 +33,9 @@ class Phone extends React.Component {
                     }
                     else {
                         message.success('绑定成功！')
-                        this.props.setUserInformation(res.data)
-                        localStorage.setItem('userName', res.data.name)
-                        localStorage.setItem('role', res.data.role)
-                        localStorage.setItem('userId', res.data.userId)
-                        localStorage.setItem('phone', values.phone)
+                        if(localStorage.getItem('role')==3||localStorage.getItem('role')==4){
+                            this.props.history.push({pathname: '/home/registryCenter'})
+                        }
                         this.props.show()
                     }
                 })
@@ -47,25 +45,35 @@ class Phone extends React.Component {
 
     //获取手机验证码
     getCode() {
-        let that = this
-        var wait = 60;
 
-        function time() {
-            if (wait == 0) {
-                that.setState({text: "免费获取验证码", disabled: false})
-                wait = 60;
-            } else {
-                that.setState({text: "重新发送(" + wait + ")", disabled: true})
-                wait--;
-                setTimeout(function () {
-                    time()
-                }, 1000)
-            }
+        if(!this.props.form.getFieldValue('phone')){
+            message.error('请输入手机号！')
+            return
         }
-
-        time()
         let params = {phone: this.props.form.getFieldValue('phone')}
         getPhoneCode(params).then((res) => {
+            if(res.data.code==0){
+                message.error(res.data.msg)
+                return
+            }
+            else{
+                let that = this
+                var wait = 60;
+                function time() {
+                    if (wait == 0) {
+                        that.setState({text: "免费获取验证码", disabled: false})
+                        wait = 60;
+                    } else {
+                        that.setState({text: "重新发送(" + wait + ")", disabled: true})
+                        wait--;
+                        setTimeout(function () {
+                            time()
+                        }, 1000)
+                    }
+                }
+        
+                time()
+            }
         })
     }
 
@@ -130,7 +138,6 @@ class HomePage extends React.Component {
             translateX: 0
         }
     }
-
     //获取信息
     componentDidMount() {
         //热门楼盘
@@ -196,17 +203,16 @@ class HomePage extends React.Component {
                     message.error(res.data.msg)
                 }
                 else {
-                    message.success('登陆成功！')
                     this.props.setUserInformation(res.data)
                     localStorage.setItem('userName', res.data.name)
                     localStorage.setItem('role', res.data.role)
                     localStorage.setItem('userId', res.data.userId)
                     localStorage.setItem('bind', res.data.bind)
                     if (!res.data.bind && this.getQueryVariable('state') == 3) {
-                        this.props.history.push({pathname: '/home/agentMy'})
+                        this.setState({phoneShow: true})
                     }
                     else if(!res.data.bind && this.getQueryVariable('state') == 4){
-                        this.props.history.push({pathname: '/home/consultant'})
+                        this.setState({phoneShow: true})
                     }
                     else if (!res.data.bind && this.getQueryVariable('state') == 5) {
                         this.setState({phoneShow: true})
@@ -378,6 +384,7 @@ class HomePage extends React.Component {
                     visible={this.state.phoneShow}
                     width={400}
                     footer={''}
+                    onCancel={this.show.bind(this)}
                 >
                     <p className={'title'}>您还未绑定手机号，请先绑定手机号</p>
                     <PhoneBind show={this.show.bind(this)}></PhoneBind>

@@ -113,7 +113,7 @@ class Home extends React.Component {
                     </div>
                 </div>
                 {this.props.children}
-                <div className={'bottomSide'}>
+                <div className={'bottomSide'} style={{backgroundColor:(this.props.location.pathname=='/home/user'||this.props.location.pathname=='/home/consultant'||this.props.location.pathname=='/home/agentMy')?"#f2f5f8":"#fff"}}>
                     <p>友情链接</p>
                     <ul className={'chain'}>
                         <li><a target='_blank' href={'http://www.funi.com/'}>透明房产网</a></li>

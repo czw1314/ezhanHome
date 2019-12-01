@@ -446,8 +446,7 @@ class BridalIndex extends React.Component {
                                     return(
                                         <div className={'item'} style={{display:index<this.state.dynamicsLength?'block':'none'}} key={index}>
                                         <p><span>{item.title}</span>发布时间：{item.time}</p>
-                                        <p>{item.description}
-                                        </p>
+                                        <p>{item.description}</p>
                                     </div>
                                     )
                                 })
@@ -459,19 +458,19 @@ class BridalIndex extends React.Component {
                             <h3>楼盘周边配套</h3>
                             <Tabs defaultActiveKey="1">
                                 <TabPane tab="交通" key="1">
-                                    <div style={{paddingTop:'14px',paddingBottom:'14px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[0]&&values.estateMatchings[0].description}}>
+                                    <div style={{paddingTop:'14px',paddingBottom:'14px',lineHeight:'13px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[0]&&values.estateMatchings[0].description}}>
                                     </div>
                                 </TabPane>
                                 <TabPane tab="医疗" key="2">
-                                <div style={{paddingTop:'14px',paddingBottom:'14px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[1]&&values.estateMatchings[1].description}}>
+                                <div style={{paddingTop:'14px',paddingBottom:'14px',lineHeight:'13px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[1]&&values.estateMatchings[1].description}}>
                                     </div>
                                 </TabPane>
                                 <TabPane tab="商业" key="3">
-                                <div style={{paddingTop:'14px',paddingBottom:'14px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[2]&&values.estateMatchings[2].description}}>
+                                <div style={{paddingTop:'14px',paddingBottom:'14px',lineHeight:'13px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[2]&&values.estateMatchings[2].description}}>
                                     </div>
                                 </TabPane>
                                 <TabPane tab="教育" key="4">
-                                <div style={{paddingTop:'14px',paddingBottom:'14px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[3]&&values.estateMatchings[3].description}}>
+                                <div style={{paddingTop:'14px',paddingBottom:'14px',lineHeight:'13px'}} dangerouslySetInnerHTML={{ __html: values.estateMatchings&&values.estateMatchings[3]&&values.estateMatchings[3].description}}>
                                     </div>
                                 </TabPane>
                             </Tabs>
@@ -563,7 +562,7 @@ class BridalIndex extends React.Component {
                                                 {/* <p className={'phone'}><span>联系电话：</span>{item.contact}</p> */}
                                                 <p className={'weixin'}>
                                                     <Popconfirm
-                                                        title=""
+                                                        title="微信扫描二维码添加经纪人"
                                                         visible={this.state.visible[index]}
                                                         icon={<img src={'http://47.108.87.104:8601/user/'+item.wechatQrCode}/>}
                                                         onVisibleChange={this.handleVisibleChange.bind(this,index,index)}
@@ -572,6 +571,7 @@ class BridalIndex extends React.Component {
                                                     >
                                                         <span>添加微信：查看二维码</span>
                                                     </Popconfirm>
+                                                    
                                                 </p>
                                             </div>
                                         </div>
@@ -592,7 +592,7 @@ class BridalIndex extends React.Component {
                                         {/* <p className={'phone'}><span>联系电话：</span>{item.contact}</p> */}
                                         <p className={'weixin'}>
                                                                     <Popconfirm
-                                                                        title=""
+                                                                        title="微信扫描二维码添加经纪人"
                                                                         visible={this.state.visible1[index]}
                                                                         icon={<img src={'http://47.108.87.104:8601/user/'+item.wechatQrCode}/>}
                                                                         onVisibleChange={this.handleVisibleChange1.bind(this,index,index)}

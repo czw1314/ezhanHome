@@ -31,7 +31,8 @@ class BridalChamber extends React.Component {
             estates:[],
             modelsShow:[],
             counts:'',
-            searchText:''
+            searchText:'',
+            index:1
         }
     }
     componentDidMount(){
@@ -63,7 +64,7 @@ class BridalChamber extends React.Component {
             orderType:0,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
-            districtIds: [this.props.location.state?this.props.location.state.districtIds:''],
+            districtIds: (this.props.location.state&&this.props.location.state.districtIds)?[this.props.location.state.districtIds]:[],
             streetId:[],
             searchText:this.state.searchText||this.props.location.state?this.props.location.state.searchText:'',
             pageNum:1,
@@ -71,7 +72,7 @@ class BridalChamber extends React.Component {
         }
         this.setState({
             searchText:this.props.location.state?this.props.location.state.searchText:'',
-            positionChecked:[this.props.location.state?this.props.location.state.districtIds:0]
+            positionChecked:(this.props.location.state&&this.props.location.state.districtIds==0)?[this.props.location.state.districtIds]:[0],
         });
         searchEstate(params).then((res)=>{
             if(res.data.code===1){
@@ -147,7 +148,7 @@ class BridalChamber extends React.Component {
             orderType:this.state.orderType,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
-            districtIds: this.state.positionChecked,
+            districtIds: this.state.positionChecked[0]==0?[]:this.state.positionChecked,
             streetId:streetIdChecked,
             searchText:this.state.searchText,
             pageNum:1,
@@ -173,7 +174,7 @@ class BridalChamber extends React.Component {
             orderType:this.state.orderType,
             prices:[e.target.value],
             traitIds:this.state.characteristicChecked,
-            districtIds: this.state.positionChecked,
+            districtIds: this.state.positionChecked[0]==0?[]:this.state.positionChecked,
             streetId:this.state.streetIdChecked,
             searchText:this.state.searchText,
             pageNum:1,
@@ -199,7 +200,7 @@ class BridalChamber extends React.Component {
             orderType:this.state.orderType,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
-            districtIds: this.state.positionChecked,
+            districtIds: this.state.positionChecked[0]==0?[]:this.state.positionChecked,
             streetId:this.state.streetIdChecked,
             searchText:this.state.searchText,
             pageNum:1,
@@ -225,7 +226,7 @@ class BridalChamber extends React.Component {
             orderType:this.state.orderType,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
-            districtIds: this.state.positionChecked,
+            districtIds: this.state.positionChecked[0]==0?[]:this.state.positionChecked,
             streetId:this.state.streetIdChecked,
             searchText:this.state.searchText,
             pageNum:1,
@@ -251,7 +252,7 @@ class BridalChamber extends React.Component {
             orderType:this.state.orderType,
             prices:this.state.priceChecked,
             traitIds:characteristicChecked,
-            districtIds: this.state.positionChecked,
+            districtIds: this.state.positionChecked[0]==0?[]:this.state.positionChecked,
             streetId:this.state.streetIdChecked,
             searchText:this.state.searchText,
             pageNum:1,
@@ -276,7 +277,13 @@ class BridalChamber extends React.Component {
        }
     //价格排序
     toggle(str) {
-        if (str === 'price') {
+        this.setState({index:1})
+        if(!this.state.key){
+            this.setState({
+                orderType:1
+            })
+        }
+        if (str == 'price') {
             if(this.state.togglePrice&&this.state.key=='price'){
                 this.setState({
                     togglePrice: !this.state.togglePrice,
@@ -288,7 +295,7 @@ class BridalChamber extends React.Component {
                     orderType:2,
                     prices:this.state.priceChecked,
                     traitIds:this.state.characteristicChecked,
-                    districtIds: this.state.positionChecked,
+                    districtIds: this.state.positionChecked[0]==0?[]:this.state.positionChecked,
                     streetId:this.state.streetIdChecked,
                     searchText:this.state.searchText,
                     pageNum:1,
@@ -303,7 +310,7 @@ class BridalChamber extends React.Component {
                     }
                 })
             }
-            else if(this.state.key=='price'){
+            else if(!this.state.togglePrice&&this.state.key=='price'){
                 this.setState({
                     togglePrice: !this.state.togglePrice,
                     orderType:1
@@ -314,7 +321,7 @@ class BridalChamber extends React.Component {
                     orderType:1,
                     prices:this.state.priceChecked,
                     traitIds:this.state.characteristicChecked,
-                    districtIds: this.state.positionChecked,
+                    districtIds:this.state.positionChecked[0]==0?[]:this.state.positionChecked,
                     streetId:this.state.streetIdChecked,
                     searchText:this.state.searchText,
                     pageNum:1,
@@ -331,14 +338,14 @@ class BridalChamber extends React.Component {
             }
             else{
                 let params={
-                    area:[],
-                    housingTypes:[],
-                    orderType:1,
-                    prices:[],
-                    traitIds:[],
-                    districtIds: [],
-                    streetId:[],
-                    searchText:'',
+                    area:this.state.areasChecked,
+                    housingTypes:this.state.apartmentChecked,
+                    orderType:(this.state.orderType==0||this.state.orderType==3)&&this.state.togglePrice?1:2,
+                    prices:this.state.priceChecked,
+                    traitIds:this.state.characteristicChecked,
+                    districtIds:this.state.positionChecked[0]==0?[]:this.state.positionChecked,
+                    streetId:this.state.streetIdChecked,
+                    searchText:this.state.searchText,
                     pageNum:1,
                     pageSize:10
                 }
@@ -353,8 +360,7 @@ class BridalChamber extends React.Component {
             }
 
         }
-        else if (str === 'time') {
-            if(this.state.togglePrice){
+        else if (str == 'time') {
                 this.setState({
                     orderType:3
                 })
@@ -364,7 +370,7 @@ class BridalChamber extends React.Component {
                     orderType:3,
                     prices:this.state.priceChecked,
                     traitIds:this.state.characteristicChecked,
-                    districtIds: this.state.positionChecked,
+                    districtIds: this.state.positionChecked[0]==0?[]:this.state.positionChecked,
                     streetId:this.state.streetIdChecked,
                     searchText:this.state.searchText,
                     pageNum:1,
@@ -378,10 +384,10 @@ class BridalChamber extends React.Component {
                         })
                     }
                 })
-            }
+    
         }
-        else if (str === 'default') {
-            if(this.state.togglePrice){
+        else if (str == 'default') {
+
                 this.setState({
                     orderType:0
                 })
@@ -391,7 +397,7 @@ class BridalChamber extends React.Component {
                     orderType:0,
                     prices:this.state.priceChecked,
                     traitIds:this.state.characteristicChecked,
-                    districtIds: this.state.positionChecked,
+                    districtIds:this.state.positionChecked[0]==0?[]:this.state.positionChecked,
                     streetId:this.state.streetIdChecked,
                     searchText:this.state.searchText,
                     pageNum:1,
@@ -405,7 +411,7 @@ class BridalChamber extends React.Component {
                         })
                     }
                 })
-            }
+            
         }
     }
     link(estateId){
@@ -428,7 +434,7 @@ class BridalChamber extends React.Component {
             orderType:this.state.orderType,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
-            districtIds: this.state.positionChecked,
+            districtIds: this.state.positionChecked[0]==0?[]:this.state.positionChecked,
             streetId:this.state.streetIdChecked,
             searchText:searchText,
             pageNum:1,
@@ -444,13 +450,14 @@ class BridalChamber extends React.Component {
         })
     }
     page(index,size){
+        this.setState({index})
         let params={
             area:this.state.areasChecked,
             housingTypes:this.state.apartmentChecked,
             orderType:this.state.orderType,
             prices:this.state.priceChecked,
             traitIds:this.state.characteristicChecked,
-            districtIds: this.state.positionChecked,
+            districtIds: this.state.positionChecked[0]==0?[]:this.state.positionChecked,
             streetId:this.state.streetIdChecked,
             searchText:this.state.searchText,
             pageNum:index,
@@ -645,7 +652,7 @@ class BridalChamber extends React.Component {
                                     )
                                 })
                             }
-                        <Pagination defaultCurrent={1} total={this.state.counts} pageSize={10} onChange={this.page.bind(this)}/>
+                        <Pagination defaultCurrent={1} total={this.state.counts} pageSize={10} onChange={this.page.bind(this)} current={this.state.index}/>
                         </div>
                         <div className={'hot'}>
                             <p className={'title'}>热门楼盘</p>

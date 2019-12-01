@@ -1622,6 +1622,7 @@ class Admin extends React.Component {
                               onClick={this.showModal.bind(this, 'login')}/>
                         <Modal
                             visible={this.state.login}
+                            width={390}
                             onCancel={this.handleCancel.bind(this)}
                             footer={''}
                         >

@@ -311,7 +311,7 @@ class AgentMy extends React.Component {
             "name": this.state.name,
             "regionIds": re,
             "bussinessId": this.state.bussinessId,
-            "workingYears": this.state.workingYears,
+            "workingYears": this.state.workYears,
             "agentType": this.state.agentType,
             "company": this.state.company,
             "position": this.state.position,
@@ -505,7 +505,7 @@ preventDefault(e) {
                                     </div>
                                     <div style={{display: 'flex', alignItems: 'center'}}>
                                         <img src={this.state.Img || base + this.state.userInformation.weChatQrCode}
-                                             className={'headerPic'} style={{borderRadius: 0}}/>
+                                             className={'weixinPic'} style={{borderRadius: 0}}/>
                                         <Upload
                                             name="file"
                                             data={{

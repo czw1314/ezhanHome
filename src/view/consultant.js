@@ -390,7 +390,7 @@ cancleWeixin(){
                                 <p className={'data'}>个人资料/编辑</p>
                                 <div className={'first'}>
                                     <div style={{display:'flex',alignItems:'center'}} className={'headerPic'}>
-                                        <img src={ base + this.state.head} style={{width:'120px',height:'120px'}}/>
+                                        <img src={ base + this.state.head} style={{width:'102px',height:'136px'}}/>
                                         <Upload
                                             name="file"
                                             listType="picture-card"
@@ -507,7 +507,7 @@ cancleWeixin(){
                             </TabPane>
                             <TabPane tab="修改密码" key="4">
                                 <p className={'data'}>修改密码</p>
-                                <ChangePassWord></ChangePassWord>
+                                <ChangePassWord role={4}></ChangePassWord>
                             </TabPane>
                         </Tabs>
                     </div>

@@ -24,7 +24,6 @@ class RetreivePassword extends React.Component {
             message.error('请输入手机号！')
             return
         }
-
         let params = {phone: this.props.form.getFieldValue('phone'),verifyCode:this.props.form.getFieldValue('verifyCode')}
         getPhoneCode(params).then((res) => {
             if(res.data.code==0){
@@ -79,6 +78,9 @@ class RetreivePassword extends React.Component {
                                     errors: [new Error('手机验证码错误')],
                                 },
                             })
+                        }
+                        else{
+                            message.error(res.data.msg)
                         }
 
                     }
@@ -160,7 +162,7 @@ class RetreivePassword extends React.Component {
                         autocomplete="off"
                             size={'large'}
                             type="password"
-                            placeholder="请输入密码"
+                            placeholder="请输入新密码"
                         />,
                     )}
                 </Form.Item>

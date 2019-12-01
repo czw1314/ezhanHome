@@ -458,7 +458,7 @@
           }
           .first {
             display: flex;
-            padding: 70px 20px 20px;
+            padding: 90px 20px 0px;
             font-weight: bold;
             justify-content: space-between;
             .name {
@@ -597,12 +597,13 @@
     border-radius: 10px;
   }
   .ant-popover-message img {
-    margin-top: 20px;
-    width: 120px;
-    height: 120px;
+    margin-top: 10px;
+    width: 160px;
+    height: 160px;
   }
   .ant-popover-message-title{
     color: #268AED;
+    padding: 0;
     margin-top: 10px;
   }
 }

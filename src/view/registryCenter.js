@@ -71,11 +71,11 @@ class Information extends React.Component {
     }
     //注册
     handleSubmit(e) {
-        if(!this.state.title){
+        if(!this.state.title&&localStorage.getItem('role')==3){
             message.error('请先上传职称照片')
             return
         }
-        if(!this.state.idF||!this.state.idT){
+        if((!this.state.idF||!this.state.idT)&&localStorage.getItem('role')==3){
             message.error('请先上传身份证照片')
             return
         }
@@ -103,16 +103,16 @@ class Information extends React.Component {
                     "position":this.state.position||"房地产经纪人",
                     "userId":localStorage.getItem('userId')
                 }
-                for (let key in params){
-                    if(params[key]||key=='company'){
+                // for (let key in params){
+                //     if(params[key]||key=='company'){
 
-                    }
-                    else{
-                        message.error('所有信息必填，请检查是否完成信息填写')
-                        return false
-                    }
+                //     }
+                //     else{
+                //         message.error('所有信息必填，请检查是否完成信息填写')
+                //         return false
+                //     }
                    
-                }
+                // }
                 agentRegister(params).then((res) => {
                     if (res.data.code === 0) {
                         if (res.data.verifyErrorMsg) {
@@ -253,7 +253,6 @@ class Information extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item className={'code'}  style={{display: localStorage.getItem('role')==3 ? 'block' : 'none'}}>
-                    {getFieldDecorator('verifyCode')(
                         <div className={'item'}>
                             <div className={'left'}>
                                 <p>区域：</p>
@@ -277,7 +276,6 @@ class Information extends React.Component {
                                 />
                             </div>
                         </div>
-                    )}
                 </Form.Item>
                 {/* <Form.Item>
                     {getFieldDecorator('contact')(
@@ -291,7 +289,7 @@ class Information extends React.Component {
                 </Form.Item> */}
                 <Form.Item  style={{display: localStorage.getItem('role')==3? 'block' : 'none'}}>
                 {getFieldDecorator('working', {
-                        rules: [{ required: true, message: '必填项' }],
+                        rules: [{ required: localStorage.getItem('role')==3, message: '必填项' }],
                     })( <div className={'item'}>
                             <div className={'left'}>
                                 <p>服务：</p>
@@ -303,7 +301,7 @@ class Information extends React.Component {
                 </Form.Item>
                 <Form.Item  style={{display: localStorage.getItem('role')==3 ? 'block' : 'none'}}>
                     {getFieldDecorator('workingYears', {
-                        rules: [{ required: true, message: '必填项' }],
+                        rules: [{ required: localStorage.getItem('role')==3, message: '必填项' }],
                     })(
                         <div className={'item'} >
                             <div className={'left'}>

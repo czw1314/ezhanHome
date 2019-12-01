@@ -42,11 +42,9 @@
         font-family: Source Han Sans CN;
         font-weight: 400;
         color: rgba(102, 102, 102, 1);
-    
         .headerPic {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
+          width: 102px;
+          height: 136px;
           margin-bottom: 16px;
         }
       }
@@ -54,6 +52,9 @@
         position: relative;
         .ant-tabs-tab-active {
           font-weight: bold;
+        }
+        .ant-tabs-nav-wrap {
+          margin-top: 20px;
         }
         .ant-tabs-left-bar {
           padding-top: 20px;
@@ -63,7 +64,7 @@
           font-weight: bold;
           border: none;
           width: 200px;
-          height: 220px;
+          height: 240px;
           .ant-tabs-tab {
             text-align: center;
           }
@@ -95,6 +96,12 @@
             justify-content: space-between;
             background-color: transparent;
             .headerPic{
+              width: 102px !important;
+              height: 136px;
+              background-color: transparent;
+              display: inline-block;
+            }
+            .weixinPic{
               width: 120px !important;
               height: 120px;
               background-color: transparent;

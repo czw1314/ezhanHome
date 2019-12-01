@@ -59,7 +59,8 @@ class NormalLoginForm extends React.Component {
                         rules: [{ required: true, message: '请输入手机号!' }],
                     })(
                         <Input
-                            autocomplete="off"
+
+                            // autocomplete="off"
                             size={'large'}
                             placeholder="请输入手机号"
                         />,
@@ -71,6 +72,7 @@ class NormalLoginForm extends React.Component {
                     })(
                         <Input
                             autocomplete="off"
+            
                             type="password"
                             size={'large'}
                             placeholder="请输入密码"
@@ -802,30 +804,22 @@ class Information extends React.Component {
                 <Form.Item label={'三、项目外部配套（从近到远排序）（3公里范围）：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
                 <Form.Item label={'交通配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
-                    {getFieldDecorator('matchings[0].matching',{
-                        rules: [{ required: true, message: '必填项' }],
-                    })(
+                    {getFieldDecorator('matchings[0].matching')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'医疗配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
-                    {getFieldDecorator('matchings[1].matching',{
-                        rules: [{ required: true, message: '必填项' }],
-                    })(
+                    {getFieldDecorator('matchings[1].matching')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'商业配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
-                    {getFieldDecorator('matchings[2].matching',{
-                        rules: [{ required: true, message: '必填项' }],
-                    })(
+                    {getFieldDecorator('matchings[2].matching')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
                 <Form.Item label={'教育配套：'} className={'item'} labelCol={{span: 3}} wrapperCol={{span: 17}}>
-                    {getFieldDecorator('matchings[3].matching',{
-                        rules: [{ required: true, message: '必填项' }],
-                    })(
+                    {getFieldDecorator('matchings[3].matching')(
                         <Input.TextArea/>
                     )}
                 </Form.Item>
@@ -1352,8 +1346,19 @@ class InformationUpdata extends React.Component {
         this.setState({
             visible:true
         })
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
+        let values=this.props.form.getFieldsValue()
+        for(var key in values){
+            if(!values['longitudeAndAtitude']||!values['regionId']||!values['housingType']||!values['buildingType']||!values['traitIds']){
+                const keys = `open${Date.now()}`;
+                notification.success({
+                    message: '请检查楼盘信息是否填写完成',
+                    keys,
+                    duration: 0,
+                });
+                return
+            }    
+        }
+       this.props.form.validateFields()
                 values.estateId = this.props.values.id
                 values.regionId=values.regionId[1]
                 values.matchings.map((item, index) => {
@@ -1400,8 +1405,56 @@ class InformationUpdata extends React.Component {
                         });
                     }
                 })
-            }
-        });
+        // this.props.form.validateFields((err, values) => {
+        //     if (!err) {
+        //         values.estateId = this.props.values.id
+        //         values.regionId=values.regionId[1]
+        //         values.matchings.map((item, index) => {
+        //             item.type = index + 1
+        //             item.matching=item.matching.replace(/\n/g,"<br></br>")
+        //         })
+        //         values.housingMsgs.map((item, index) => {
+        //             if(item.housingMsgId){
+        //                 return false
+        //             }
+        //             else{
+        //                 item.housingMsgId= this.state.id[index]
+        //             }
+                 
+        //         })
+        //         let params = values
+        //         estatePublished(params).then((res) => {
+        //             if (res.data.code === 1) {
+        //                 const key = `open${Date.now()}`;
+        //                 const btn = (
+        //                     <Button type="primary" size="small" onClick={() => notification.close(key)}>
+        //                         确定
+        //                     </Button>
+        //                 );
+        //                 notification.success({
+        //                     message: '楼盘信息发布成功',
+        //                     btn,
+        //                     key,
+        //                     duration: 0,
+        //                 });
+        //             }
+        //             else{
+        //                 const key = `open${Date.now()}`;
+        //                 const btn = (
+        //                     <Button type="primary" size="small" onClick={() => notification.close(key)}>
+        //                         确定
+        //                     </Button>
+        //                 );
+        //                 notification.error({
+        //                     message: '楼盘信息发布失败',
+        //                     btn,
+        //                     key,
+        //                     duration: 0,
+        //                 });
+        //             }
+        //         })
+        //     }
+        // });
     };
 
     delHousing(index) {
@@ -1577,7 +1630,7 @@ class InformationUpdata extends React.Component {
            <Form onSubmit={this.handleSubmit} className="login-form first" {...formItemLayout}>
                 <Form.Item label={'一、填写基本信息：'} className={'item'} labelAlign={'left'}>
                 </Form.Item>
-                <Form.Item label={'地址经纬度：'}  labelAlign={'left'} labelCol={{span: 5}}>
+                <Form.Item label={'地址经纬度：'}  labelAlign={'left'} labelCol={{span: 6}}>
                 {getFieldDecorator('longitudeAndAtitude', {initialValue: this.props.values.longitudeAtitude || '',
                         rules: [{ required: true, message: '必填项' }],
                     })(
@@ -1933,7 +1986,7 @@ class InformationUpdata extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'7、物业类型：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].propertyType`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].propertyType : ''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].propertyType`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].propertyType : '', rules: [{ required: true, message: '必填项' }],})(
                                         <Select>
                                             {this.state.propertyTypes && this.state.propertyTypes.map(item => {
                                                     return (<Option value={item.label} key={item.label}>{item.label}</Option>)
@@ -1943,7 +1996,7 @@ class InformationUpdata extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'8、户型朝向：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].orientations`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].orientations : ''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].orientations`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].orientations : '', rules: [{ required: true, message: '必填项' }],})(
                                         <Select>
                                             <Option value="东">东</Option>
                                             <Option value="东南">东南</Option>
@@ -1957,7 +2010,7 @@ class InformationUpdata extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label={'9、户型结构：'}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingStructure`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingStructure : ''})(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingStructure`, {initialValue: this.props.values.housingMsgs ? this.props.values.housingMsgs[index].housingStructure : '', rules: [{ required: true, message: '必填项' }],})(
                                         <Select>
                                             {this.state.housingStructures && this.state.housingStructures.map(item => {
                                                     return (<Option value={item.label} key={item.label}>{item.label}</Option>)
@@ -1977,7 +2030,7 @@ class InformationUpdata extends React.Component {
                                     )}
                                 </Form.Item>
                                 <Form.Item label="户型特色：" style={{display:'none'}}>
-                                    {getFieldDecorator(`housingMsgs[${index}].housingMsgId`, {initialValue: this.state.id?this.state.id[index]:'1'})(
+                                    {getFieldDecorator(`housingMsgs[${index}].housingMsgId`, {initialValue: this.state.id?this.state.id[index]:'1', rules: [{ required: true, message: '必填项' }],})(
                                         <Select mode="multiple">
                                             {this.state.houseTraits && this.state.houseTraits.map(item => {
                                                     return (<Option value={item.value} key={item.label}>{item.label}</Option>)
@@ -2415,13 +2468,11 @@ class bridalAdmin extends React.Component {
         })
     }
     onChangeDescription(e) {
-        console.log(e.target.value)
         this.setState({
             description: e.target.value
         })
     }
     onChangeTitle(e) {
-        console.log(e.target.value)
         this.setState({
             title: e.target.value
         })
@@ -2707,6 +2758,7 @@ class bridalAdmin extends React.Component {
                               onClick={()=>{this.setState({login:true})}}/>
                         <Modal
                             visible={this.state.login}
+                            width={390}
                             destroyOnClose={true}
                             onCancel={()=>{this.setState({login:false})}}
                             footer={''}

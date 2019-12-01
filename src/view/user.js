@@ -167,7 +167,7 @@ class User extends React.Component {
                                                     <p className={'area'}>建面：{item.areaRange}m²</p>
                                                 </div>
                                                 <p className={'tag'}>{item.propertyType}</p>
-                                                    <Button type="primary" style={{width:'200px',margin:'auto',display:'block'}} block onClick={this.delStar.bind(this,item.id,index)}>取消关注</Button>
+                                                    <Button type="primary" style={{width:'200px',margin:'auto',display:'block',marginTop:'20px'}} block onClick={this.delStar.bind(this,item.id,index)}>取消关注</Button>
                                             </div>
                                             )
                                         })
