@@ -34,7 +34,7 @@ export const register = (params) =>
             },
         }
     );
-//账号密码登陆
+//账号密码登录
 export const login = (params) =>
     axios.post(`${base}/user/login`, params, {
             headers: {

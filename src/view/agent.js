@@ -312,14 +312,14 @@ class Agent extends React.Component {
     sure(){
         return false
     }
-    //登陆以后才能开二维码
+    //登录以后才能开二维码
     handleVisibleChange = (visible,index) => {
 
         // this.setState({ visible[index]:visible })
 
         // Determining condition before show the popconfirm.
         if (!localStorage.getItem('userId')) {
-            message.info('请先登陆');; // next step
+            message.info('请先登录');; // next step
         } else {
             let arr=this.state.visible
             arr[index]=!arr[index]
@@ -460,7 +460,7 @@ class Agent extends React.Component {
                                                                     })
                                                                 }</p>
                                                             </div>
-                                                            <p className={'company'}>独立经纪人</p>
+                                                            <p className={'company'}>{item.agentType}</p>
                                                             <div className={'contact'}>
                                                                 {/* <p className={'phone'}><img src={require('../img/Phone.png')}/><span>联系电话：</span>{item.contact}</p> */}
                                                                 <p className={'weixin'}><img src={require('../img/weixin.png')}/>

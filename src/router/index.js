@@ -12,5 +12,5 @@ export default {
         // { key: '/home/bridalHome/bridalSet', title: '楼盘配套', component: 'aboutUs' },
         { key: '/home/bridalHome/bridalApartment', title: '楼盘户型', component: 'aboutUs' },
     ],
-    others: [ { key: '/main/login', title: '登陆', component: 'login' },] // 非菜单相关路由
+    others: [ { key: '/main/login', title: '登录', component: 'login' },] // 非菜单相关路由
 }

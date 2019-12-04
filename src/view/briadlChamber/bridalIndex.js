@@ -236,7 +236,7 @@ class BridalIndex extends React.Component {
     }
     star(star){
         if(!localStorage.getItem('userId')){
-            message.info('请先登陆');
+            message.info('请先登录');
             return // next step
         }
         if(star==1){
@@ -270,7 +270,7 @@ class BridalIndex extends React.Component {
     }
     handleVisibleChange = (visible,index) => {
         if (this.state.condition) {
-            message.info('请先登陆'); // next step
+            message.info('请先登录'); // next step
         } else {
             let arr=this.state.visible
             arr[index]=!arr[index]
@@ -279,7 +279,7 @@ class BridalIndex extends React.Component {
     };
     handleVisibleChange1 = (visible,index) => {
         if (!localStorage.getItem('userId')) {
-            message.info('请先登陆'); // next step
+            message.info('请先登录'); // next step
         } else {
             let arr=this.state.visible1
             arr[index]=!arr[index]

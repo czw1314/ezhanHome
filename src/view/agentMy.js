@@ -37,7 +37,8 @@ class AgentMy extends React.Component {
                 weChatName:'',
                 weChatNumber:'',
                 weChatAddr:'',
-                weChatSex:''
+                weChatSex:'',
+                weChatHeadUrl:''
             },                                                                                                                                                                                                                 
             plainOptions: [{label: '新房经纪', value: '新房经纪'}, {label: '二手房经纪', value: '二手房经纪'}, {
                 label: '权证代办',
@@ -86,12 +87,12 @@ class AgentMy extends React.Component {
                         regionId2: regions[2] ? regions[2] : [],
                         position: res.data.position,
                         bussinessId: res.data.businesses,
-                        workYears: res.data.workYears,
+                        workYears: res.data.workingYears,
                         agentType: res.data.agentType,
                         company: res.data.company,
                         contact: res.data.contact,
                         tags:res.data.estates,
-                        weixin:res.data.weChatPersonMsg
+                        weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin,
                     })
                 }
             })
@@ -170,13 +171,13 @@ class AgentMy extends React.Component {
                     regionId2: regions[2] ? regions[2] : [],
                     position: res.data.position,
                     bussinessId: res.data.businesses,
-                    workYears: res.data.workYears,
+                    workYears: res.data.workingYears,
                     agentType: res.data.agentType,
                     company: res.data.company,
                     contact: res.data.contact,
                     tags:res.data.estates,
                     bindWechatOrNot:res.data.bindWechatOrNot,
-                    weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin
+                    weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin,
                 })
             }
         })
@@ -338,10 +339,11 @@ class AgentMy extends React.Component {
                             regionId2: regions[2] ? regions[2] : [],
                             position: res.data.position,
                             bussinessId: res.data.businesses,
-                            workYears: res.data.workYears,
+                            workYears: res.data.workingYears,
                             agentType: res.data.agentType,
                             company: res.data.company,
                             contact: res.data.contact,
+                            weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin,
                             
                         })
                     }

@@ -25,7 +25,7 @@ import {
     searchEstate, changeState,login
 } from '../../api/index'
 class NormalLoginForm extends React.Component {
-    //登陆
+    //登录
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -41,7 +41,7 @@ class NormalLoginForm extends React.Component {
                         message.error(res.data.msg)
                     }
                     else {
-                        message.success('登陆成功！')
+                        message.success('登录成功！')
                         this.props.setUserInformation(res.data)
                         setTimeout(this.props.handleCancel, 1000)
                     }
@@ -81,7 +81,7 @@ class NormalLoginForm extends React.Component {
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" className="login-form-button" size={'large'}>
-                        登陆
+                        登录
                     </Button>
                 </Form.Item>
             </Form>
@@ -2301,7 +2301,7 @@ class bridalAdmin extends React.Component {
             });
     };
 
-    //退出登陆
+    //退出登录
     clear() {
         // this.props.setUserInformation({})
         sessionStorage.clear()
@@ -2754,7 +2754,7 @@ class bridalAdmin extends React.Component {
                     </div>
                     <div className='right' style={{display: this.props.userInformation.name ? 'none' : 'block'}}>
                         <img src={require('../../img/admin.png')}/>
-                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆'}}
+                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登录'}}
                               onClick={()=>{this.setState({login:true})}}/>
                         <Modal
                             visible={this.state.login}
@@ -2763,7 +2763,7 @@ class bridalAdmin extends React.Component {
                             onCancel={()=>{this.setState({login:false})}}
                             footer={''}
                         >
-                            <p style={{fontSize:'22px'}}>新房管理员登陆</p>
+                            <p style={{fontSize:'22px'}}>新房管理员登录</p>
                             <WrappedNormalLoginForm handleCancel={()=>{this.setState({login:false})}}></WrappedNormalLoginForm>
                         </Modal>
                     </div>

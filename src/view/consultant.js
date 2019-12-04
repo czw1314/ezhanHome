@@ -25,7 +25,13 @@ class Consultant extends React.Component {
             inputValue: '',
             head:'',
             weixinImg:'',
-            weixin:''
+            weixin:{
+                weChatName:'',
+                weChatNumber:'',
+                weChatAddr:'',
+                weChatSex:'',
+                weChatHeadUrl:''
+            },  
         }
     }
     preventDefault(e) {
@@ -205,6 +211,7 @@ apply(){
                     userInformation: res.data,
                     bindWechatOrNot:res.data.bindWechatOrNot,
                     weixinImg:res.data.weChatQrCode,
+                    weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin,
                 })
             }
         })
@@ -279,7 +286,7 @@ apply(){
                             name: res.data.name,
                             head:res.data.head,
                             weixinImg:res.data.weChatQrCode,
-                            weixin:res.data.weChatPersonMsg,
+                            weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin,
                             company: res.data.company,
                             contact: res.data.contact,
                             tags:res.data.estates,

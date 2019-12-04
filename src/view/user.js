@@ -141,7 +141,7 @@ class User extends React.Component {
                                         </p>
                                         <p>地区：{this.state.weixin.weChatAddr}<br></br>性别：{this.state.weixin.weChatSex}
                                         </p>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'} onClick={this.cancleWeixin}>解除绑定</Button>
+                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'} onClick={this.cancleWeixin.bind(this)}>解除绑定</Button>
                                     </div>
                                 </div>
                                 <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'none':'block'}}>

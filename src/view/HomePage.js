@@ -2,7 +2,7 @@ import React from 'react'
 import '../css/homePage.scss'
 import Login from '../component/login'
 import Register from '../component/register'
-import {Link} from 'react-router-dom';
+import {HashRouter as Router, Route, Switch, Redirect, withRouter,Link} from 'react-router-dom';
 import {Button, Form, Menu, Input, message, Modal, Popconfirm} from 'antd';
 import {connect} from "react-redux";
 import {setUserInformation, newEstateId} from "../redux/action";
@@ -30,10 +30,13 @@ class Phone extends React.Component {
                 bindPhone(params).then((res) => {
                     if (res.data.code === 0) {
                         message.error(res.data.msg)
+                        console.log((this.props.userInformation.role==3||this.props.userInformation.role==4)&&!this.props.userInformation.fillOrNot)
                     }
                     else {
+                        localStorage.setItem('userPhone',values.phone)
+                        console.log((this.props.userInformation.role==3||this.props.userInformation.role==4)&&!this.props.userInformation.fillOrNot)
                         message.success('绑定成功！')
-                        if(localStorage.getItem('role')==3||localStorage.getItem('role')==4){
+                        if((this.props.userInformation.role==3||this.props.userInformation.role==4)&&!this.props.userInformation.fillOrNot){
                             this.props.history.push({pathname: '/home/registryCenter'})
                         }
                         this.props.show()
@@ -45,7 +48,6 @@ class Phone extends React.Component {
 
     //获取手机验证码
     getCode() {
-
         if(!this.props.form.getFieldValue('phone')){
             message.error('请输入手机号！')
             return
@@ -113,10 +115,7 @@ class Phone extends React.Component {
 }
 
 const PhoneBind = connect(state => (
-    {userInformation: state.userInformation, estateId: state.estateId}), {
-    setUserInformation,
-    newEstateId
-})(Form.create({name: 'normal_login'})(Phone));
+    {userInformation: state.userInformation}), {setUserInformation})(Form.create({name: 'normal_login'})(withRouter(Phone)));
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -204,6 +203,7 @@ class HomePage extends React.Component {
                 }
                 else {
                     this.props.setUserInformation(res.data)
+                    localStorage.setItem('userPhone',res.data.phone)
                     localStorage.setItem('userName', res.data.name)
                     localStorage.setItem('role', res.data.role)
                     localStorage.setItem('userId', res.data.userId)
@@ -217,12 +217,17 @@ class HomePage extends React.Component {
                     else if (!res.data.bind && this.getQueryVariable('state') == 5) {
                         this.setState({phoneShow: true})
                     }
+                    else if(res.data.bind){
+                        if((res.data.role==3||res.data.role==4)&&!this.props.userInformation.fillOrNot){
+                            this.props.history.push({pathname: '/home/registryCenter'})
+                        }
+                    }
                 }
             })
         }
     }
 
-    //弹出注册登陆框
+    //弹出注册登录框
     showModal = (str) => {
         if (str === 'login') {
             this.setState({
@@ -236,7 +241,7 @@ class HomePage extends React.Component {
         }
     };
 
-    //退出登陆
+    //退出登录
     clear() {
         this.props.setUserInformation({})
         localStorage.setItem('state','')
@@ -296,7 +301,7 @@ class HomePage extends React.Component {
                 </Link>
             )
         }
-        else if (this.props.userInformation.role === 5 || localStorage.getItem('role') == 3) {
+        else if (this.props.userInformation.role === 3 || localStorage.getItem('role') == 3) {
             return (
                 <Link to={'/home/agentMy'}>
                     <img src={require('../img/login.png')} style={{marginRight: '10px'}}/>
@@ -323,10 +328,10 @@ class HomePage extends React.Component {
         this.props.history.push('/home/bridalHome/bridalIndex')
     }
 
-    //登陆以后才能开二维码
+    //登录以后才能开二维码
     handleVisibleChange = (visible, index) => {
         if (!localStorage.getItem('userId')) {
-            message.info('请先登陆');
+            message.info('请先登录');
             ; // next step
         } else {
             let arr = this.state.visible
@@ -422,7 +427,7 @@ class HomePage extends React.Component {
                             <div className='right'
                                  style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'none' : 'block'}}>
                                 <img src={require('../img/login.png')}/>
-                                <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆&nbsp&nbsp/'}}
+                                <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登录&nbsp&nbsp/'}}
                                       onClick={this.showModal.bind(this, 'login')}/>
                                 <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp&nbsp注册'}}
                                       onClick={this.showModal.bind(this, 'register')}/>
@@ -430,8 +435,7 @@ class HomePage extends React.Component {
                                 <Register register={this.state.register}
                                           handleCancel={this.handleCancel.bind(this, 'register')}/>
                             </div>
-                            <div className='right'
-                                 style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'block' : 'none'}}>
+                            <div className='right' style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'block' : 'none'}}>
                                 {this.link()}
                                 <span onClick={this.clear.bind(this)}>退出</span>
                             </div>

@@ -58,7 +58,7 @@ class BridalHome extends React.Component {
                             </Memu>
                         </div>
                         <div className='right'>
-                            <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆/注册'}}/>
+                            <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登录/注册'}}/>
                         </div>
                     </div>
                 </div>

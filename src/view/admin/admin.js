@@ -8,7 +8,7 @@ import {setUserInformation} from "../../redux/action";
 import {Form, message} from "antd/lib/index";
 
 class Login extends React.Component {
-    //登陆
+    //登录
     handleSubmit = e => {
         console.log(this.props)
         e.preventDefault();
@@ -25,7 +25,7 @@ class Login extends React.Component {
                         message.error(res.data.msg)
                     }
                     else {
-                        message.success('登陆成功！')
+                        message.success('登录成功！')
                         this.props.setUserInformation(res.data)
                         setTimeout(this.props.handleClose, 1000)
                     }
@@ -64,7 +64,7 @@ class Login extends React.Component {
                 <Form.Item>
                     <Button type="primary" htmlType="submit" className="login-form-button" size={'large'}
                             style={{width: '100%'}}>
-                        登陆
+                        登录
                     </Button>
                 </Form.Item>
             </Form>
@@ -274,6 +274,7 @@ class EditableTable extends React.Component {
                     bordered
                     dataSource={dataSource}
                     columns={columns}
+                    pagination={ false }
                 />
             </div>
         );
@@ -393,7 +394,7 @@ class Admin extends React.Component {
         }
     };
 
-    //退出登陆
+    //退出登录
     clear() {
         this.props.setUserInformation({})
         localStorage.clear()
@@ -484,7 +485,7 @@ class Admin extends React.Component {
 
     }
 
-    //关闭登陆弹框
+    //关闭登录弹框
     handleCancel() {
         this.setState({
             login: false
@@ -1618,7 +1619,7 @@ class Admin extends React.Component {
                     </div>
                     <div className='right' style={{display: this.props.userInformation.name ? 'none' : 'block'}}>
                         <img src={require('../../img/admin.png')}/>
-                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆'}}
+                        <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登录'}}
                               onClick={this.showModal.bind(this, 'login')}/>
                         <Modal
                             visible={this.state.login}
@@ -1626,7 +1627,7 @@ class Admin extends React.Component {
                             onCancel={this.handleCancel.bind(this)}
                             footer={''}
                         >
-                            <p style={{fontSize:'22px'}}>超级管理员登陆</p>
+                            <p style={{fontSize:'22px'}}>超级管理员登录</p>
                             <Logins handleClose={this.handleCancel.bind(this)}/>
                         </Modal>
                         {/* <Login login={this.state.login} handleCancel={this.handleCancel.bind(this,'login')}/>
@@ -1643,38 +1644,38 @@ class Admin extends React.Component {
                         <TabPane tab="注册审核" key="1">
                             <Tabs defaultActiveKey="11" onChange={this.callback.bind(this)}>
                                 <TabPane tab="待审核经纪人" key="11">
-                                    <Table columns={agentColumns} dataSource={this.state.agentData}/>
+                                    <Table columns={agentColumns} dataSource={this.state.agentData} pagination={ false }/>
                                 </TabPane>
                                 <TabPane tab="待审核置业顾问" key="12">
-                                    <Table columns={consultantColumns} dataSource={this.state.consultantData}/>
+                                    <Table columns={consultantColumns} dataSource={this.state.consultantData} pagination={ false }/>
                                 </TabPane>
                             </Tabs>
                         </TabPane>
                         <TabPane tab="入驻审核" key="2" onChange={this.callback.bind(this)}>
                             <Tabs defaultActiveKey="21" onChange={this.callback.bind(this)}>
                                 <TabPane tab="经纪人入驻申请" key="21">
-                                    <Table columns={agentApply} dataSource={this.state.agentApplyData}/>
+                                    <Table columns={agentApply} dataSource={this.state.agentApplyData} pagination={ false }/>
                                 </TabPane>
                                 <TabPane tab="置业顾问入驻申请" key="22" onChange={this.callback.bind(this)}>
-                                    <Table columns={consultantApply} dataSource={this.state.consultantApplyData}/>
+                                    <Table columns={consultantApply} dataSource={this.state.consultantApplyData} pagination={ false }/>
                                 </TabPane>
                             </Tabs>
                         </TabPane>
                         <TabPane tab="权限管理" key="3">
                             <Tabs defaultActiveKey="31" onChange={this.callback.bind(this)}>
                                 <TabPane tab="管理经纪人" key="31">
-                                    <Table columns={agentControl} dataSource={this.state.agentControlData}/>
+                                    <Table columns={agentControl} dataSource={this.state.agentControlData} pagination={ false }/>
                                 </TabPane>
                                 <TabPane tab="管理置业顾问" key="32">
-                                    <Table columns={consultantControl} dataSource={this.state.consultantControlData}/>
+                                    <Table columns={consultantControl} dataSource={this.state.consultantControlData} pagination={ false }/>
                                 </TabPane>
                                 <TabPane tab="管理新房管理员" key='33'>
-                                    <EditableTable dataSource={this.state.adminData}/>
+                                    <EditableTable dataSource={this.state.adminData} pagination={ false }/>
                                 </TabPane>
                             </Tabs>
                         </TabPane>
                         <TabPane tab="密码修改" key="4">
-                            <p>修改登陆密码</p>
+                            <p>修改登录密码</p>
                             <ChangePassWord></ChangePassWord>
                         </TabPane>
                     </Tabs>

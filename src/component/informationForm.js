@@ -81,13 +81,13 @@ class Information extends React.Component {
                         }
 
                         else if (res.data.msg === '该手机号已绑定用户') {
-                            message.success('该手机号已注册请去登陆！')
+                            message.success('该手机号已注册请去登录！')
                             setTimeout(this.props.handleClose, 1000)
 
                         }
                     }
                     else {
-                        message.success('注册成功！请去登陆！')
+                        message.success('注册成功！请去登录！')
                         setTimeout(this.props.handleClose, 1000)
                     }
 

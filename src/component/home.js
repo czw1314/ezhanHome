@@ -23,7 +23,7 @@ class Home extends React.Component {
 
         });
     }
-        //弹出注册登陆框
+        //弹出注册登录框
         showModal = (str) => {
             if(str==='login'){
                 this.setState({
@@ -36,7 +36,7 @@ class Home extends React.Component {
                 });
             }
         };
-            //退出登陆
+            //退出登录
     clear(){
         this.props.setUserInformation({})
         localStorage.setItem('state','')
@@ -100,7 +100,7 @@ class Home extends React.Component {
                         </div>
                         <div className='right' style={{display:this.props.userInformation.userName||localStorage.getItem('userName')?'none':'block'}}>
                                 <img src={require('../img/login.png')}/>
-                                <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登陆&nbsp&nbsp/'}} onClick={this.showModal.bind(this,'login')}/>
+                                <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登录&nbsp&nbsp/'}} onClick={this.showModal.bind(this,'login')}/>
                                 <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp&nbsp注册'}} onClick={this.showModal.bind(this,'register')}/>
                                 <Login login={this.state.login} handleCancel={this.handleCancel.bind(this,'login')}/>
                                 <Register register={this.state.register} handleCancel={this.handleCancel.bind(this,'register')}/>

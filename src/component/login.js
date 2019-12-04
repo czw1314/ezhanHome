@@ -85,7 +85,7 @@ class RetreivePassword extends React.Component {
 
                     }
                     else {
-                        message.success('密码修改成功！请去登陆！')
+                        message.success('密码修改成功！请去登录！')
                         setTimeout(this.props.handleClose, 1000)
                     }
 
@@ -178,7 +178,7 @@ class RetreivePassword extends React.Component {
 
 const Retreive = Form.create({ name: 'retrieve' })(RetreivePassword);
 class NormalLoginForm extends React.Component {
-    //登陆
+    //登录
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -194,7 +194,7 @@ class NormalLoginForm extends React.Component {
                         message.error(res.data.msg)
                     }
                     else {
-                        message.success('登陆成功！')
+                        message.success('登录成功！')
                         localStorage.setItem('state',res.data.state)
                         this.props.setUserInformation(res.data)
                         localStorage.setItem('userName',res.data.name)
@@ -237,7 +237,7 @@ class NormalLoginForm extends React.Component {
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" className="login-form-button" size={'large'}>
-                        登陆
+                        登录
                     </Button>
                 </Form.Item>
             </Form>
@@ -290,7 +290,7 @@ class Login extends React.Component {
                     footer={''}
                 >
                     {/* <div className={'weixin'} style={{display:this.state.weixin?'block':'none'}}> */}
-                        {/* <p className={'title'}>微信快捷登陆</p>
+                        {/* <p className={'title'}>微信快捷登录</p>
                         <Tabs defaultActiveKey="1" onChange={this.callback}>
                             <TabPane tab="普通用户" key="1">
                                 <div id='login_container'>
@@ -303,11 +303,11 @@ class Login extends React.Component {
                                 Content of Tab Pane 3
                             </TabPane>
                         </Tabs>
-                        <p className={'accountNumber'} onClick={()=>this.setState({weixin:false,accountNumber:true})}>账号密码登陆</p>
+                        <p className={'accountNumber'} onClick={()=>this.setState({weixin:false,accountNumber:true})}>账号密码登录</p>
                         <p className={'agreement'}>登录即代表同意<a>《e站房屋经纪人协议》</a>及<a>《e站房屋免责申明》</a></p>
                     </div> */}
                     <div className={'accountNumber'} style={{display:this.state.accountNumber?'block':'none'}}>
-                        <p className={'title'}>账号密码登陆</p>
+                        <p className={'title'}>账号密码登录</p>
                         <Tabs defaultActiveKey="5" onChange={this.callback}>
                             <TabPane tab="普通用户" key="5">
                                 <WrappedNormalLoginForm handleClose={this.props.handleCancel} role={5}></WrappedNormalLoginForm>
@@ -329,8 +329,8 @@ class Login extends React.Component {
                         <p className={'title'}>密码找回</p>
                         <Retreive handleClose={this.props.handleCancel}/>
                         <div style={{display:'flex',justifyContent:'space-between'}}>
-                            {/* <p className={'retrieve'}  onClick={this.weixin.bind(this)}><a>微信快捷登陆</a></p> */}
-                            <p className={'retrieve'}  onClick={()=>this.setState({retrieve:false,accountNumber:true})}><a>账号密码登陆</a></p>
+                            {/* <p className={'retrieve'}  onClick={this.weixin.bind(this)}><a>微信快捷登录</a></p> */}
+                            <p className={'retrieve'}  onClick={()=>this.setState({retrieve:false,accountNumber:true})}><a>账号密码登录</a></p>
                         </div>
                     </div>
                 </Modal>
