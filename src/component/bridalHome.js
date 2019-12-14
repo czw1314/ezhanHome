@@ -38,7 +38,7 @@ class BridalHome extends React.Component {
         }
         getEstateMsg(params).then((res) => {
             if (res.data.code == 1) {
-                let address=res.data.estate.distinctRegion.split('—')
+                let address=res.data.estate.distinctRegion.split('-')
                 this.setState({
                     address,
                     districtIds:res.data.estate.distinctRegionIds[0]

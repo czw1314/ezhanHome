@@ -44,7 +44,7 @@ class Login extends React.Component {
                     })(
                         <Input
                             size={'large'}
-                            autocomplete="off"
+                            autoComplete="off"
                             placeholder="请输入手机号"
                         />,
                     )}
@@ -55,7 +55,7 @@ class Login extends React.Component {
                     })(
                         <Input
                             type="password"
-                            autocomplete="off"
+                            autoComplete="off"
                             size={'large'}
                             placeholder="请输入密码"
                         />,
@@ -205,10 +205,35 @@ class EditableTable extends React.Component {
 
         }
         modifyHouseAdminPwd(params).then((res) => {
-
+            if (res.data.code === 1) {
+                const key = `open${Date.now()}`;
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        确定
+                    </Button>
+                );
+                notification.success({
+                    message: '修改成功',
+                    btn,
+                    key,
+                    duration: 0,
+                });
+            }
+            else{
+                const key = `open${Date.now()}`;
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        确定
+                    </Button>
+                );
+                notification.error({
+                    message: '修改删除',
+                    btn,
+                    key,
+                    duration: 0,
+                });
+            }
         })
-        // const dataSource = [...this.state.dataSource];
-        // this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
     };
 
 
@@ -301,6 +326,7 @@ class Code extends React.Component {
             <div>
                 <p onClick={this.showModal} style={{cursor: 'pointer', marginBottom: 0}}>查看</p>
                 <Modal
+                destroyOnClose={true}
                     title=""
                     centered
                     footer={null}
@@ -336,6 +362,7 @@ class CardCode extends React.Component {
                 <p onClick={this.showModal} style={{cursor: 'pointer', marginBottom: 0}}>查看</p>
                 <Modal
                     title=""
+                    destroyOnClose={true}
                     footer={null}
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
@@ -375,6 +402,17 @@ class Admin extends React.Component {
             agentControlData: [],
             consultantControlData: [],
             visible1: false,
+            visible2: false,
+            visible3: false,
+            visible4: false,
+            visible5: false,
+            visible6: false,
+            visible7: false,
+            visible8: false,
+            visible9: false,
+            visible10: false,
+            visible11: false,
+            visible12: false,
             userId:'',
             estateId:'',
             index:0,
@@ -520,7 +558,6 @@ class Admin extends React.Component {
             visible6:false,
             visible7:false
         })
-        console.log(this.state.userId)
         let params = {
             userId: this.state.userId,
             pass: type,
@@ -589,7 +626,6 @@ class Admin extends React.Component {
             }
         )
     }
-
     //是否通过楼盘入驻申请
     passApply(index, estateId, type, str, indexs) {
         if(!this.props.userInformation.name){
@@ -717,7 +753,7 @@ class Admin extends React.Component {
             return
         }
         this.setState({
-            visible1: false
+            visible6: false
         })
         let params = {
             userId: this.state.userId
@@ -826,10 +862,6 @@ class Admin extends React.Component {
                 title: '账号',
                 dataIndex: 'phone',
             },
-            // {
-            //     title: '联系电话',
-            //     dataIndex: 'contact',
-            // },
             {
                 title: '二维码',
                 dataIndex: 'weChatQrCode',
@@ -883,7 +915,6 @@ class Admin extends React.Component {
                     <span>
                    <a onClick={()=>{
                        if(!this.props.userInformation.name){
-                           console.log(1)
                            const key = `open${Date.now()}`;
                            const btn = (
                                <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -898,24 +929,10 @@ class Admin extends React.Component {
                            });
                            return
                        }
-                       this.setState({visible5:true,userId:this.state.agentData[index].personId,index:index})}}>是</a>
-                   <Modal
-                            title="通过经纪人注册申请"
-                            visible={this.state.visible5}
-                            centered
-                            destroyOnClose={true}
-                            okText="确认"
-                            cancelText="取消"
-                            onOk={this.pass.bind(this, this.state.agentData[index].personId, 1, 'agent',index)}
-                            onCancel={() => {
-                                this.setState({visible5: false})
-                            }}
-                        >
-                            </Modal>
+                       this.setState({visible5:true,userId:this.state.agentData[index].personId,index:index,onOk:this.pass.bind(this, this.state.agentData[index].personId, 1, 'agent'),title:'通过经纪人注册申请'})}}>是</a>
                   <Divider type="vertical"/>
                   <a onClick={()=>{
                       if(!this.props.userInformation.name){
-                          console.log(1)
                           const key = `open${Date.now()}`;
                           const btn = (
                               <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -930,19 +947,7 @@ class Admin extends React.Component {
                           });
                           return
                       }
-                      this.setState({visible4:true,userId:this.state.agentData[index].personId,index:index})}}>否</a>
-                        <Modal
-                            title="拒绝经纪人注册申请"
-                            okText="确认"
-                            cancelText="取消"
-                            visible={this.state.visible4}
-                            destroyOnClose={true}
-                            onOk={this.pass.bind(this, this.state.agentData[index].personId, -1, 'agent')}
-                            onCancel={() => {
-                                this.setState({visible4: false})
-                            }}
-                        >
-        </Modal>
+                      this.setState({visible5:true,userId:this.state.agentData[index].personId,index:index,onOk:this.pass.bind(this, this.state.agentData[index].personId, -1, 'agent'),title:"拒绝经纪人注册申请"})}}>否</a>
                 </span>
                 ),
             },
@@ -972,11 +977,6 @@ class Admin extends React.Component {
                 key: 'phone',
                 dataIndex: 'phone',
             },
-            // {
-            //     title: '联系电话',
-            //     key: 'contact',
-            //     dataIndex: 'contact',
-            // },
             {
                 title: '二维码',
                 key: 'weChatQrCode',
@@ -1000,7 +1000,6 @@ class Admin extends React.Component {
                     <span>
                   <a onClick={()=>{
                       if(!this.props.userInformation.name){
-                          console.log(1)
                           const key = `open${Date.now()}`;
                           const btn = (
                               <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -1015,23 +1014,10 @@ class Admin extends React.Component {
                           });
                           return
                       }
-                      this.setState({visible6:true,userId:this.state.consultantData[index].personId,index:index})}}>是</a>
-                  <Modal
-                            title="通过置业顾问注册申请"
-                            visible={this.state.visible6}
-                            okText="确认"
-                            cancelText="取消"
-                            destroyOnClose={true}
-                            onOk={this.pass.bind(this, this.state.consultantData[index].personId, 1, 'consultant')}
-                            onCancel={() => {
-                                this.setState({visible6: false})
-                            }}
-                        >
-        </Modal>
+                      this.setState({visible5:true,userId:this.state.consultantData[index].personId,index:index,onOk:this.pass.bind(this, this.state.consultantData[index].personId, 1, 'consultant'),title:"通过置业顾问注册申请"})}}>是</a>
                   <Divider type="vertical"/>
                   <a onClick={()=>{
                       if(!this.props.userInformation.name){
-                          console.log(1)
                           const key = `open${Date.now()}`;
                           const btn = (
                               <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -1046,19 +1032,7 @@ class Admin extends React.Component {
                           });
                           return
                       }
-                      this.setState({visible7:true,userId:this.state.consultantData[index].personId,index:index})}}>否</a>
-                  <Modal
-                            title="拒绝置业顾问注册申请"
-                            visible={this.state.visible7}
-                            okText="确认"
-                            cancelText="取消"
-                            destroyOnClose={true}
-                            onOk={this.pass.bind(this, this.state.consultantData[index].personId, -1, 'consultant')}
-                            onCancel={() => {
-                                this.setState({visible7: false})
-                            }}
-                        >
-        </Modal>
+                      this.setState({visible7:true,userId:this.state.consultantData[index].personId,index:index,onOk:this.pass.bind(this, this.state.consultantData[index].personId, -1, 'consultant'),title:"拒绝置业顾问注册申请"})}}>否</a>
                 </span>
                 ),
             }
@@ -1085,10 +1059,6 @@ class Admin extends React.Component {
                 title: '账号',
                 dataIndex: 'phone',
             },
-            // {
-            //     title: '联系电话',
-            //     dataIndex: 'contact',
-            // },
             {
                 title: '二维码',
                 dataIndex: 'weChatQrCode',
@@ -1154,33 +1124,9 @@ class Admin extends React.Component {
                                             });
                                             return
                                         }
-                                        this.setState({visible8:true,userId:this.state.agentApplyData[index].personId,estateId:item.estateId,index:index})}}>是</a>
-                                    <Modal
-                            title="通过经纪人申请入驻"
-                            visible={this.state.visible8}
-                            okText="确认"
-                            cancelText="取消"
-                            destroyOnClose={true}
-                            onOk={this.passApply.bind(this, index, item.estateId, 1, 'agentApply', indexs)}
-                            onCancel={() => {
-                                this.setState({visible8: false})
-                            }}
-                        >
-        </Modal>
+                                        this.setState({visible5:true,userId:this.state.agentApplyData[index].personId,estateId:item.estateId,index:index,onOk:this.passApply.bind(this, index, item.estateId, 1, 'agentApply', indexs),title:"通过经纪人申请入驻"})}}>是</a>
                                     <Divider type="vertical"/>
-                                    <a  onClick={()=>{this.setState({visible9:true,userId:this.state.agentApplyData[index].personId,estateId:item.estateId,index:index})}}>否</a>
-                                    <Modal
-                            title="拒绝经纪人申请入驻"
-                            visible={this.state.visible9}
-                            okText="确认"
-                            cancelText="取消"
-                            destroyOnClose={true}
-                            onOk={this.passApply.bind(this, index, item.estateId, -1, 'agentApply', indexs)}
-                            onCancel={() => {
-                                this.setState({visible9: false})
-                            }}
-                        >
-        </Modal>
+                                    <a  onClick={()=>{this.setState({visible5:true,userId:this.state.agentApplyData[index].personId,estateId:item.estateId,index:index,onOk:this.passApply.bind(this, index, item.estateId, -1, 'agentApply', indexs),title:"拒绝经纪人申请入驻"})}}>否</a>
                                 </p>
                             )
                         })
@@ -1215,11 +1161,6 @@ class Admin extends React.Component {
                 key: 'phone',
                 dataIndex: 'phone',
             },
-            // {
-            //     title: '联系电话',
-            //     key: 'contact',
-            //     dataIndex: 'contact',
-            // },
             {
                 title: '二维码',
                 key: 'weChatQrCode',
@@ -1273,23 +1214,10 @@ class Admin extends React.Component {
                                             });
                                             return
                                         }
-                                        this.setState({visible10:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index})}}>是</a>
-                                    <Modal
-                            title="通过置业顾问申请入驻"
-                            visible={this.state.visible10}
-                            okText="确认"
-                            cancelText="取消"
-                            destroyOnClose={true}
-                            onOk={this.passApply.bind(this, index, item.estateId, 1, 'consultantApply', indexs)}
-                            onCancel={() => {
-                                this.setState({visible10: false})
-                            }}
-                        >
-        </Modal>
+                                        this.setState({visible10:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index,onOk:this.passApply.bind(this, index, item.estateId, 1, 'consultantApply', indexs),title:"通过置业顾问申请入驻"})}}>是</a>
                                     <Divider type="vertical"/>
                                     <a onClick={()=>{
                                         if(!this.props.userInformation.name){
-                                            console.log(1)
                                             const key = `open${Date.now()}`;
                                             const btn = (
                                                 <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -1304,19 +1232,7 @@ class Admin extends React.Component {
                                             });
                                             return
                                         }
-                                        this.setState({visible11:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index})}}>否</a>
-                                    <Modal
-                            title="拒绝置业顾问申请入驻"
-                            visible={this.state.visible11}
-                            okText="确认"
-                            cancelText="取消"
-                            destroyOnClose={true}
-                            onOk={this.passApply.bind(this, index, item.estateId, -1, 'consultantApply', indexs)}
-                            onCancel={() => {
-                                this.setState({visible11: false})
-                            }}
-                        >
-        </Modal>
+                                        this.setState({visible5:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index,onOk:this.passApply.bind(this, index, item.estateId, -1, 'consultantApply', indexs),title:"拒绝置业顾问申请入驻"})}}>否</a>
                                 </p>
                             )
                         })
@@ -1345,6 +1261,10 @@ class Admin extends React.Component {
             {
                 title: '账号',
                 dataIndex: 'phone',
+            },
+            {
+                title: '状态',
+                dataIndex: 'state',
             },
             // {
             //     title: '联系电话',
@@ -1417,20 +1337,8 @@ class Admin extends React.Component {
                            });
                            return
                        }
-                       this.setState({visible1: true,userId:this.state.agentControlData[index].personId,index:index})
+                       this.setState({visible6: true,userId:this.state.agentControlData[index].personId,index:index,onOk1:this.delUserData.bind(this,1, 'agent',index),title1:"是否删除"})
                    }}>删除</a>
-                                                <Modal
-                                                    title="是否删除"
-                                                    okText="确认"
-                                                    cancelText="取消"
-                                                    visible={this.state.visible1}
-                                                    onOk={this.delUserData.bind(this,1, 'agent',index)}
-                                                    onCancel={() => {
-                                                        this.setState({visible1: false})
-                                                    }}
-                                                >
-                                                    <p>删除以后将不可恢复，请谨慎选择!</p>
-        </Modal>
                 </span>
                 ),
             },
@@ -1445,32 +1353,14 @@ class Admin extends React.Component {
                 title: '姓名',
                 dataIndex: 'name',
             },
-            // {
-            //     title: '头像',
-            //     dataIndex: 'head',
-            //     render: (text, record, index) => (
-            //         <img src={'http://47.108.87.104:8601/user/' + text} style={{width: 60}}/>
-            //     ),
-            // },
             {
                 title: '账号',
                 dataIndex: 'phone',
             },
-            // {
-            //     title: '联系电话',
-            //     dataIndex: 'contact',
-            // },
-            // {
-            //     title: '微信二维码',
-            //     dataIndex: 'weChatQrCode',
-            //     render: (text, record, index) => (
-            //         <Code src={'http://47.108.87.104:8601/user/' + text}/>
-            //     ),
-            // },
-            // {
-            //     title: '公司',
-            //     dataIndex: 'company',
-            // },
+            {
+                title: '状态',
+                dataIndex: 'state',
+            },
             {
                 title: '权限管理',
                 key: 'action',
@@ -1492,20 +1382,8 @@ class Admin extends React.Component {
                             });
                             return
                         }
-                        this.setState({visible1:true,userId:this.state.consultantControlData[index].personId,index:index})
+                        this.setState({visible6:true,userId:this.state.consultantControlData[index].personId,index:index,onOk1:this.delUserData.bind(this, this.state.consultantControlData[index].personId, 'consultant'),title1:"是否删除"})
                     }}>删除</a>
-        <Modal
-            title="是否删除"
-            okText="确认"
-            cancelText="取消"
-            visible={this.state.visible1}
-            onOk={this.delUserData.bind(this, this.state.consultantControlData[index].personId, 'consultant')}
-                onCancel={() => {
-                this.setState({visible1: false})
-            }}
-                >
-                <p>删除以后将不可恢复，请谨慎选择!</p>
-                </Modal>
                 </span>
                 ),
             },
@@ -1584,32 +1462,34 @@ class Admin extends React.Component {
                             ),
                         },
                         ];
-
-                        const data=[
-                        {
-                            key: '1',
-                            name: 'John Brown',
-                            age: 32,
-                            address: 'New York No. 1 Lake Park',
-                            tags: ['nice', 'developer'],
-                        },
-                        {
-                            key: '2',
-                            name: 'Jim Green',
-                            age: 42,
-                            address: 'London No. 1 Lake Park',
-                            tags: ['loser'],
-                        },
-                        {
-                            key: '3',
-                            name: 'Joe Black',
-                            age: 32,
-                            address: 'Sidney No. 1 Lake Park',
-                            tags: ['cool', 'teacher'],
-                        },
-                        ];
                         return (
                         <div className='admin'>
+                                               <Modal
+                            title={this.state.title}
+                            visible={this.state.visible5}
+                            centered
+                            destroyOnClose={true}
+                            okText="确认"
+                            cancelText="取消"
+                            onOk={this.state.onOk}
+                            onCancel={() => {
+                                this.setState({visible5: false})
+                            }}
+                        >
+                            </Modal>
+                            <Modal
+            title={this.state.title1}
+            destroyOnClose={true}
+            okText="确认"
+            cancelText="取消"
+            visible={this.state.visible6}
+            onOk={this.state.onOk1}
+                onCancel={() => {
+                this.setState({visible6: false})
+            }}
+                >
+                <p>删除以后将不可恢复，请谨慎选择!</p>
+                </Modal>
                 <div className={'header'}>
                     <div className='left'>
                         <div className='logo'>
@@ -1623,6 +1503,10 @@ class Admin extends React.Component {
                               onClick={this.showModal.bind(this, 'login')}/>
                         <Modal
                             visible={this.state.login}
+                            maskStyle={{backgroundColor:"black"}}
+                            destroyOnClose={true}
+                            maskClosable={false}
+                            closable={false}
                             width={390}
                             onCancel={this.handleCancel.bind(this)}
                             footer={''}

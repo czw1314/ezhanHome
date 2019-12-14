@@ -388,6 +388,8 @@ class HomePage extends React.Component {
                 <Modal
                     visible={this.state.phoneShow}
                     width={400}
+                    maskClosable={false}
+                    closable={false}
                     footer={''}
                     onCancel={this.show.bind(this)}
                 >
@@ -398,8 +400,6 @@ class HomePage extends React.Component {
                     <div className='header'>
                         <div className='left'>
                             <img src={require('../img/LOGO.png')} className='logo'/>
-                            {/*<img src={require('../img/Location.png')}/>*/}
-                            {/*<span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}}/>*/}
                         </div>
                         <div className='right'>
                             <Menu>
@@ -407,7 +407,9 @@ class HomePage extends React.Component {
                                     key='/home/bridalChamber'
                                 >
                                     <Link to={'/home/bridalChamber'}>
+                                        <span>
                                         找新房
+                                        </span>
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item
@@ -424,18 +426,19 @@ class HomePage extends React.Component {
                                     关于我们
                                 </Menu.Item>
                             </Menu>
-                            <div className='right'
-                                 style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'none' : 'block'}}>
+                            <div className='login'
+                                 style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'none' : 'flex'}}>
                                 <img src={require('../img/login.png')}/>
-                                <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登录&nbsp&nbsp/'}}
+                                <span dangerouslySetInnerHTML={{__html: '登录'}}
                                       onClick={this.showModal.bind(this, 'login')}/>
-                                <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp&nbsp注册'}}
+                                      <span style={{cursor: 'default'}}>/</span>
+                                <span dangerouslySetInnerHTML={{__html: '注册'}}
                                       onClick={this.showModal.bind(this, 'register')}/>
                                 <Login login={this.state.login} handleCancel={this.handleCancel.bind(this, 'login')}/>
                                 <Register register={this.state.register}
                                           handleCancel={this.handleCancel.bind(this, 'register')}/>
                             </div>
-                            <div className='right' style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'block' : 'none'}}>
+                            <div className='login' style={{display: this.props.userInformation.name || localStorage.getItem('userName') ? 'block' : 'none'}}>
                                 {this.link()}
                                 <span onClick={this.clear.bind(this)}>退出</span>
                             </div>
@@ -593,7 +596,7 @@ class HomePage extends React.Component {
                                                         okText="Yes"
                                                         cancelText="No"
                                                     >
-                                                        <span>添加微信：查看二维码</span>
+                                                        <span>添加微信：查看微信二维码</span>
                                                     </Popconfirm></p>
                                                 </div>
                                             )

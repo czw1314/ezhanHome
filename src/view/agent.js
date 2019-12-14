@@ -364,8 +364,6 @@ class Agent extends React.Component {
                         <img src={require('../img/LOGO2.png')}/>
                     </div>
                     <p>经纪人</p>
-                    {/*<img src={require('../img/Location2.png')} style={{height: 24, width: 16}}/>*/}
-                    {/*<span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>*/}
                     <Search
                         placeholder="搜索经纪人"
                         value={this.state.searchText}
@@ -388,12 +386,7 @@ class Agent extends React.Component {
                         </Radio.Group>
 
                     </div>
-                        <CheckboxGroup
-                            styke={{marginBottom:20}}
-                            options={this.state.position[this.state.positionChecked]?this.state.position[this.state.positionChecked].regions:[]}
-                            value={this.state.streetIdChecked}
-                            onChange={this.onChangeStreetId.bind(this)}
-                        />
+         
                     <div className={'second'} style={{marginTop: 10}}>
                         <p>服务</p>
                         <CheckboxGroup
@@ -440,7 +433,7 @@ class Agent extends React.Component {
                                                     </div>
                                                     <div className={'textBox'}>
                                                         <div className={'text'}>
-                                                            <p className={'name'}>{item.name}<span>{item.position}</span><span>工龄：{item.workingYears}年</span></p>
+                                                            <p className={'name'}><span>{item.name}</span><span>{item.position}</span><span>工龄：{item.workingYears}年</span></p>
                                                             <div className={'service'}>
                                                                 <p className={'area'}>熟悉区域：{
                                                                     item.streets&&item.streets.map(items=>{
@@ -448,7 +441,6 @@ class Agent extends React.Component {
                                                                             <span key={items}> 
                                                                                 {items}
                                                                             </span>
-
                                                                         )
                                                                     })
                                                                 }</p>
@@ -472,7 +464,7 @@ class Agent extends React.Component {
                                                                         okText="Yes"
                                                                         cancelText="No"
                                                                     >
-                                                                        <span>添加微信：查看二维码</span>
+                                                                        <span>添加微信：查看微信二维码</span>
                                                                     </Popconfirm>
                                                                 </p>
                                                             </div>

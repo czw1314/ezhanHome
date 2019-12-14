@@ -564,13 +564,6 @@ class BridalChamber extends React.Component {
                     </div>
                     <div className={'second'}>
                         <p>面积</p>
-                        {/*<Radio.Group  onChange={this.onChangeArea.bind(this)} value={this.state.areaChecked[0]}>*/}
-                            {/*{*/}
-                                {/*this.state.area&&this.state.area.map((item,index)=>{*/}
-                                    {/*return(<Radio value={item.value} key={index}>{item.label}</Radio>)*/}
-                                {/*})*/}
-                            {/*}*/}
-                        {/*</Radio.Group>*/}
                         <CheckboxGroup
                             style={{marginTop:'-10px'}}
                             options={this.state.area}

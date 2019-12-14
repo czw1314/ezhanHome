@@ -60,7 +60,7 @@ class NormalLoginForm extends React.Component {
                     })(
                         <Input
 
-                            // autocomplete="off"
+                            // autoComplete="off"
                             size={'large'}
                             placeholder="请输入手机号"
                         />,
@@ -71,7 +71,7 @@ class NormalLoginForm extends React.Component {
                         rules: [{ required: true, message: '请输入密码!' }],
                     })(
                         <Input
-                            autocomplete="off"
+                            autoComplete="off"
             
                             type="password"
                             size={'large'}
@@ -2775,7 +2775,7 @@ class bridalAdmin extends React.Component {
                 </div>
                 <div className={'menu'}>
                     <Tabs defaultActiveKey="4" onChange={this.callback.bind(this)} tabPosition={'left'}>
-                        <TabPane tab="楼盘信息编辑更新" key="4">
+                        <TabPane tab="楼盘资料" key="4">
                             <div className={'content'}>
                                 <span className={'title'}>楼盘信息编辑更新</span>
                                 <span style={{marginLeft: '50px'}}>选择编辑的楼盘：</span>
@@ -2798,7 +2798,7 @@ class bridalAdmin extends React.Component {
                                 <div  style={{display:this.state.visible9?'block':'none'}}><InformationFormUpdatas values={this.state.values} agentIds={this.state.agentIds} delHousing={this.delHousing.bind(this)} change={()=>{this.setState({state:-1})}} state={this.state.state}/></div>
                             </div>
                         </TabPane>
-                        <TabPane tab="楼盘动态更新" key="3">
+                        <TabPane tab="楼盘动态" key="3">
                             <div className={'content'}>
                                 <p className={'title'}>楼盘动态发布</p>
                                 <div className={'item'}>
@@ -2876,7 +2876,7 @@ class bridalAdmin extends React.Component {
                             </div>
                             </div>
                         </TabPane>
-                        <TabPane tab="一页纸发布" key="1">
+                        <TabPane tab="楼盘一页纸" key="1">
                             <div className={'content'}>
                                 <p className={'title'}>楼盘一页纸发布</p>
                                 <div className={'item'}>

@@ -121,7 +121,7 @@ class RetreivePassword extends React.Component {
                     })(
                         <Input
                             placeholder="请输入手机号"
-                            autocomplete="off"
+                            autoComplete="off"
                             size={'large'}
                         />,
                     )}
@@ -135,7 +135,7 @@ class RetreivePassword extends React.Component {
                     })(
                         <Input
                             placeholder="请输入验证码"
-                            autocomplete="off"
+                            autoComplete="off"
                             size={'large'}
                         />,
                     )}
@@ -147,7 +147,7 @@ class RetreivePassword extends React.Component {
                         rules: [{required: true, message: '请输入短信验证码!'}],
                     })(
                         <Input size={'large'}
-                        autocomplete="off"
+                        autoComplete="off"
                                addonAfter={<Button style={{cursor: 'pointer', fontWeight: 'bold'}} block={true}
                                                    onClick={this.getCode.bind(this)}
                                                    disabled={this.state.disabled}>{this.state.text}</Button>}
@@ -159,7 +159,7 @@ class RetreivePassword extends React.Component {
                         rules: [{required: true, message: '请输入新密码!'}, {min: 6, message: '密码至少6位数'}],
                     })(
                         <Input
-                        autocomplete="off"
+                        autoComplete="off"
                             size={'large'}
                             type="password"
                             placeholder="请输入新密码"
@@ -217,7 +217,7 @@ class NormalLoginForm extends React.Component {
                         rules: [{ required: true, message: '请输入手机号!' }],
                     })(
                         <Input
-                        autocomplete="off"
+                        autoComplete="off"
                             size={'large'}
                             placeholder="请输入手机号"
                         />,
@@ -228,7 +228,7 @@ class NormalLoginForm extends React.Component {
                         rules: [{ required: true, message: '请输入密码!' }],
                     })(
                         <Input
-                        autocomplete="off"
+                        autoComplete="off"
                             type="password"
                             size={'large'}
                             placeholder="请输入密码"

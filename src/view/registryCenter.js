@@ -13,6 +13,8 @@ class Information extends React.Component {
         super(props)
         this.state = {
             disabled: false,
+            loading: false,
+            loading1: false,
             loading2: false,
             loading3: false,
             loading4: false,
@@ -35,7 +37,9 @@ class Information extends React.Component {
             regionId1:'',
             regionId2:'',
             agentType:2,
-            position:''
+            position:'',
+            head: '',
+            weixin: '',
         }
     }
     componentDidMount() {
@@ -71,6 +75,14 @@ class Information extends React.Component {
     }
     //注册
     handleSubmit(e) {
+        if(!this.state.head){
+            message.error('请先上传头像')
+            return
+        }
+        if(!this.state.weixin){
+            message.error('请先上传微信二维码')
+            return
+        }
         if(!this.state.title&&localStorage.getItem('role')==3){
             message.error('请先上传职称照片')
             return
@@ -81,7 +93,6 @@ class Information extends React.Component {
         }
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            if (!err) {
                 let re=[]
                 if(this.state.regionId){
                     re.push(this.state.regionId)
@@ -92,27 +103,33 @@ class Information extends React.Component {
                 if(this.state.regionId2){
                     re.push(this.state.regionId2)
                 }
-                let params = {
-                    "name": values.name,
-                    "regionIds":re,
-                    "bussinessId": this.state.bussinessId,
-                    "workingYears": values.workingYears,
-                    "agentType":this.state.agentType||2,
-                    "company":this.refs.company.state.value,
-                    "cardNo":this.refs.cardNo.state.value,
-                    "position":this.state.position||"房地产经纪人",
-                    "userId":localStorage.getItem('userId')
+                let params ={}
+                if(localStorage.getItem('role')==3){
+                    params={
+                        "name": values.name,
+                        "regionIds":re,
+                        "bussinessId": this.state.bussinessId,
+                        "workingYears": values.workingYears,
+                        "agentType":this.state.agentType||2,
+                        "company":this.refs.company.state.value,
+                        "cardNo":this.refs.cardNo.state.value,
+                        "position":this.state.position||"房地产经纪人",
+                        "userId":localStorage.getItem('userId')
+                    }
                 }
-                // for (let key in params){
-                //     if(params[key]||key=='company'){
-
-                //     }
-                //     else{
-                //         message.error('所有信息必填，请检查是否完成信息填写')
-                //         return false
-                //     }
-                   
-                // }
+                else{
+                   params= {
+                        "name": values.name,
+                        "company":this.refs.company.state.value,
+                        "userId":localStorage.getItem('userId')
+                    }
+                }
+                for(var key in params){
+                    if(!params[key]){
+                        message.error('所有信息必填')
+                        return;
+                    } 
+                  }
                 agentRegister(params).then((res) => {
                     if (res.data.code === 0) {
                         if (res.data.verifyErrorMsg) {
@@ -132,7 +149,6 @@ class Information extends React.Component {
                                 },
                             })
                         }
-
                         else if (res.data.msg === '该手机号已绑定用户') {
                             message.success('该手机号已注册请去登录！')
                             setTimeout(this.props.handleClose, 1000)
@@ -146,14 +162,10 @@ class Information extends React.Component {
                         else{
                             this.props.go.push('/home/consultant')
                         }
-
                     }
                 })
-            }
         });
     };
-
-    //生成验证码的方法
     //职称照片上传
     titleChange = info => {
         if (info.file.status === 'uploading') {
@@ -161,7 +173,6 @@ class Information extends React.Component {
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl1 =>
                 this.setState({
                     title: imageUrl1,
@@ -201,6 +212,37 @@ class Information extends React.Component {
             );
         }
     };
+        //头像上传
+    headChange = info => {
+        if (info.file.status === 'uploading') {
+            this.setState({loading: true});
+            return;
+        }
+        if (info.file.status === 'done') {
+            this.getBase64(info.file.originFileObj, imageUrl =>
+                this.setState({
+                    head: imageUrl,
+                    loading: false,
+                }),
+            );
+        }
+    };
+    //微信二维码上传
+    weixinChange = info => {
+        if (info.file.status === 'uploading') {
+            this.setState({loading1: true});
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            this.getBase64(info.file.originFileObj, imageUrl1 =>
+                this.setState({
+                    weixin:imageUrl1,
+                    loading1: false,
+                }),
+            );
+        }
+    };
     //区域选择
     onChange(checkedValues) {
     this.setState({
@@ -219,9 +261,19 @@ class Information extends React.Component {
             }
     //服务选择
     bussinessIdChange(value){
-        this.setState({
-            bussinessId:value
-        })
+        if(value.length>3){
+            this.props.form.setFields({
+                working: {
+                    value:'',
+                    errors: [new Error('最多选择三个')],
+                },
+            })
+         }
+         else{
+            this.setState({
+                bussinessId:value
+            })
+         }
     }
     //公司选择（独立经纪人）
     onAgentType(value){
@@ -240,10 +292,48 @@ class Information extends React.Component {
         const {Option} = Select
         return (
             <Form onSubmit={this.handleSubmit.bind(this)} className="login-form center">
+                                           <div className={'first'}>
+                                <div style={{display: 'flex', alignItems: 'center'}}>
+                                    <img src={this.state.head} className={'headerPic'}/>
+                                    <Upload
+                                        listType="picture-card"
+                                        className="avatar-uploader"
+                                        showUploadList={false}
+                                        action={base}
+                                        name={'file'}
+                                        data={{
+                                            type: '1',
+                                            userId: this.props.userInformation.userId || localStorage.getItem('userId')
+                                        }}
+                                        beforeUpload={this.beforeUpload}
+                                        onChange={this.headChange}
+                                    >
+                                        <Button type="primary" size={'large'}> <Icon
+                                            type={this.state.loading ? 'loading' : 'plus'}/>上传头像</Button>
+                                    </Upload>
+                                </div>
+                                <div style={{display: 'flex', alignItems: 'center'}}>
+                                    <img src={this.state.weixin} className={'headerPic'} style={{borderRadius: 0}}/>
+                                    <Upload
+                                        listType="picture-card"
+                                        className="avatar-uploader"
+                                        data={{
+                                            type: '3',
+                                            userId: this.props.userInformation.userId || localStorage.getItem('userId')
+                                        }}
+                                        showUploadList={false}
+                                        action={base}
+                                        beforeUpload={this.beforeUpload}
+                                        onChange={this.weixinChange.bind(this)}
+                                    >
+                                        <Button type="primary" size={'large'}> <Icon
+                                            type={this.state.loading1 ? 'loading' : 'plus'}/>添加微信二维码</Button>
+                                    </Upload>
+                                </div>
+                            </div>
+                            <p style={{marginTop: '40px'}}>账号：{localStorage.getItem('userPhone')}</p>
                 <Form.Item>
-                    {getFieldDecorator('name', {
-                        rules: [{ required: true, message: '必填项' }],
-                    })(
+                    {getFieldDecorator('name')(
                         <div className={'item'}>
                             <div className={'left'}>
                                 <p>姓名：</p>
@@ -277,23 +367,12 @@ class Information extends React.Component {
                             </div>
                         </div>
                 </Form.Item>
-                {/* <Form.Item>
-                    {getFieldDecorator('contact')(
-                        <div className={'item'}>
-                            <div className={'left'}>
-                                <p>联系电话：</p>
-                                <Input size={'large'}/>
-                            </div>
-                        </div>
-                    )}
-                </Form.Item> */}
                 <Form.Item  style={{display: localStorage.getItem('role')==3? 'block' : 'none'}}>
-                {getFieldDecorator('working', {
-                        rules: [{ required: localStorage.getItem('role')==3, message: '必填项' }],
-                    })( <div className={'item'}>
+                {getFieldDecorator('working')( <div className={'item'}>
                             <div className={'left'}>
                                 <p>服务：</p>
                                 <Checkbox.Group options={this.state.plainOptions}
+                                value={this.state.bussinessId}
                                                 onChange={this.bussinessIdChange.bind(this)}/>
                             </div>
                         </div>
@@ -327,7 +406,6 @@ class Information extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item  style={{display: localStorage.getItem('role')==3? 'block' : 'none'}}>
-
                     <div className={'item'}>
                         <div className={'left'} style={{alignItems: 'flex-start'}}>
                             <p dangerouslySetInnerHTML={{__html: '职称：'}}></p>
@@ -416,7 +494,6 @@ class Information extends React.Component {
 
 const InformationForms = Form.create({name: 'retrieve'})(Information);
 
-//上传头像
 
 class RegistryCenter extends React.Component {
     constructor(props) {
@@ -427,8 +504,6 @@ class RegistryCenter extends React.Component {
             loading2: false,
             loading3: false,
             loading4: false,
-            head: '',
-            weixin: '',
             title: '',
             idT: '',
             idF: '',
@@ -458,44 +533,9 @@ class RegistryCenter extends React.Component {
         if (!isJpgOrPng) {
             message.error('You can only upload JPG/PNG file!');
         }
-        // const isLt2M = file.size / 1024 / 1024 < 2;
-        // if (!isLt2M) {
-        //     message.error('Image must smaller than 2MB!');
-        // }
         return isJpgOrPng;
     }
 
-    //头像上传
-    headChange = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({loading: true});
-            return;
-        }
-        if (info.file.status === 'done') {
-            this.getBase64(info.file.originFileObj, imageUrl =>
-                this.setState({
-                    head: imageUrl,
-                    loading: false,
-                }),
-            );
-        }
-    };
-    //微信二维码上传
-    weixinChange = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({loading1: true});
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            this.getBase64(info.file.originFileObj, imageUrl1 =>
-                this.setState({
-                    weixin:imageUrl1,
-                    loading1: false,
-                }),
-            );
-        }
-    };
     //职称照片上传
     titleChange = info => {
         if (info.file.status === 'uploading') {
@@ -503,7 +543,6 @@ class RegistryCenter extends React.Component {
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl1 =>
                 this.setState({
                     title: imageUrl1,
@@ -519,7 +558,6 @@ class RegistryCenter extends React.Component {
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl1 =>
                 this.setState({
                     idT: imageUrl1,
@@ -535,7 +573,6 @@ class RegistryCenter extends React.Component {
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl1 =>
                 this.setState({
                     idF: imageUrl1,
@@ -544,10 +581,6 @@ class RegistryCenter extends React.Component {
             );
         }
     };
-    // handleChange(value) {
-    //     console.log(`selected ${value}`);
-    // }
-
     callback(key) {
         console.log(key);
     }
@@ -590,59 +623,8 @@ class RegistryCenter extends React.Component {
                 </div>
                 <div className={'userBox'}>
                     <div className={'container'}>
-                        {/* <div className="first" style={{display: this.state.first ? "block" : 'none'}}>
-                            <p className={'data'}>第一步：注册信息</p>
-                            <div className={'radio-box'}>
-                                <p>账号类型：</p>
-                                <Radio.Group name="radiogroup" defaultValue={3} onChange={this.onRadio.bind(this)}>
-                                    <Radio value={3}>经纪人</Radio>
-                                    <Radio value={4}>置业顾问</Radio>
-                                </Radio.Group>
-                            </div>
-                            <InformationForm role={this.state.id}/>
-                        </div> */}
                         <div className={'second'} style={{display: this.state.first ? "none" : 'block'}}>
                             <p className={'data'}>第二步：填写资料</p>
-                            <div className={'first'}>
-                                <div style={{display: 'flex', alignItems: 'center'}}>
-                                    <img src={this.state.head} className={'headerPic'}/>
-                                    <Upload
-                                        listType="picture-card"
-                                        className="avatar-uploader"
-                                        showUploadList={false}
-                                        action={base}
-                                        name={'file'}
-                                        data={{
-                                            type: '1',
-                                            userId: this.props.userInformation.userId || localStorage.getItem('userId')
-                                        }}
-                                        beforeUpload={this.beforeUpload}
-                                        onChange={this.headChange}
-                                    >
-                                        <Button type="primary" size={'large'}> <Icon
-                                            type={this.state.loading ? 'loading' : 'plus'}/>上传头像</Button>
-                                    </Upload>
-                                </div>
-                                <div style={{display: 'flex', alignItems: 'center'}}>
-                                    <img src={this.state.weixin} className={'headerPic'} style={{borderRadius: 0}}/>
-                                    <Upload
-                                        listType="picture-card"
-                                        className="avatar-uploader"
-                                        data={{
-                                            type: '3',
-                                            userId: this.props.userInformation.userId || localStorage.getItem('userId')
-                                        }}
-                                        showUploadList={false}
-                                        action={base}
-                                        beforeUpload={this.beforeUpload}
-                                        onChange={this.weixinChange.bind(this)}
-                                    >
-                                        <Button type="primary" size={'large'}> <Icon
-                                            type={this.state.loading1 ? 'loading' : 'plus'}/>添加微信二维码</Button>
-                                    </Upload>
-                                </div>
-                            </div>
-                            <p style={{marginTop: '40px'}}>账号：{localStorage.getItem('userPhone')}</p>
                             <InformationForms userInformation={this.props.userInformation} go={this.props.history}/>
                         </div>
                     </div>

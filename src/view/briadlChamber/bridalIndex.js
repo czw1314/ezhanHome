@@ -136,7 +136,7 @@ class BridalIndex extends React.Component {
         getEstateMsg(params).then((res) => {
             if (res.data.code == 1) {
                 this.props.setBridalInformation(res.data.estate)
-                let address=res.data.estate.distinctRegion.split('—')
+                let address=res.data.estate.distinctRegion.split('-')
                 localStorage.setItem('address0',address[0])
                 localStorage.setItem('address1',address[1])
                 localStorage.setItem('positionChecked',res.data.estate.distinctRegionIds[0])
@@ -380,42 +380,37 @@ class BridalIndex extends React.Component {
                                 </div>
                                 <div className={'item'}>
                                     <p>建筑类型：{values.buildingType}</p>
+                                </div>
+                                <div className={'item'}>
                                     <p>占地面积：{values.areaCovered}m²</p>
-
-                                </div>
-                                <div className={'item'}>
                                     <p>绿化率：{values.greeningRate}%</p>
+                                </div>
+                                <div className={'item'}>
                                     <p>总建筑面积：{values.floorage}m²</p>
-                                    {/*<p>建筑结构：{values.buildingStructure}</p>*/}
-
-                                </div>
-                                <div className={'item'}>
                                     <p>容积率：{values.volumeRatio}</p>
-                                    <p>拿地时间：{values.holdedTime}</p>
-                                </div>
-                                <div className={'item'}>
-                                    <p>交房时间：{values.housekeepingTime}</p>
-                                    <p>规划户数：{values.pannedHouseholds}户</p>
-                                </div>
 
+                                </div>
                                 <div className={'item'}>
+                                    <p>拿地时间：{values.holdedTime}</p>
+                                    <p>交房时间：{values.housekeepingTime}</p>
+                                </div>
+                                <div className={'item'}>
+                                    <p>规划户数：{values.pannedHouseholds}户</p>
                                     <p>楼栋总数：{values.buildingAmount}栋</p>
+                                </div>
+                                <div className={'item'}>
                                     <p>梯户比：{values.staircasesRatio}</p>
-                                    {/*<p>公摊：{values.shareArea}</p>*/}
                                 </div>
                                 <div>
-                                    <div className={'item'}>
-                                        <p>建面区间：{values.minArea}-{values.maxArea}m²</p>
-                                        <p>楼层状况：{values.floors}</p>
+                                <div className={'item'}>
+                                    <p>楼层状况：{values.floors}</p>
 
-                                    </div>
+                                </div>
                                     <div className={'item'}>
-                                        <p>车位数：{values.parkingNumbers}个</p>
-                                        <p>装修状况：{values.decorateStandard}</p>
-                                        {/*<p>层高：{values.floorHeight}</p>*/}
+                                    <p>建面区间：{values.minArea}-{values.maxArea}m²</p>
                                     </div>
+            
                                     <div className={'item'}>
-                                        <p>物管费：{values.propertyFee}</p>
                                         <p>楼盘户型：{this.state.models&&this.state.models.map((item,index)=>{
                                             return(<span key={index} style={{marginRight:'20px'}}>
                                                     {item.housingType}
@@ -424,16 +419,18 @@ class BridalIndex extends React.Component {
                                         })}</p>
                                     </div>
                                     <div className={'item'}>
-
+                                    <p>装修状况：{values.decorateStandard}</p>
+                                    </div>
+                                    <div className={'item'}>
+                                    <p>车位数：{values.parkingNumbers}个</p>
                                     </div>
                                     <div className={'item'}>
                                         <p>物管公司：{values.propertyCompany}</p>
-                                        {/*<p>车位配比：{values.parkingRatio}</p>*/}
                                     </div>
                                     <div className={'item'}>
-
-
-                                    </div>
+                                    <p>物管费：{values.propertyFee}</p>
+                                        </div>
+                             
                                 </div>
                                 </div>
                                 {/*<Button block onClick={()=>this.setState({more:true})} style={{display:!this.state.more?'block':'none'}}>更多</Button>*/}
@@ -569,7 +566,7 @@ class BridalIndex extends React.Component {
                                                         okText="Yes"
                                                         cancelText="No"
                                                     >
-                                                        <span>添加微信：查看二维码</span>
+                                                        <span>添加微信：查看微信二维码</span>
                                                     </Popconfirm>
                                                     
                                                 </p>
@@ -599,7 +596,7 @@ class BridalIndex extends React.Component {
                                                                         okText="Yes"
                                                                         cancelText="No"
                                                                     >
-                                                                        <span>添加微信：查看二维码</span>
+                                                                        <span>添加微信：查看微信二维码</span>
                                                                     </Popconfirm>
                                                                 </p>
                                     </div>
@@ -607,7 +604,7 @@ class BridalIndex extends React.Component {
                                 })
 
                             }
-                            <Pagination defaultCurrent={1} total={this.state.consultant.length} defaultPageSize={4} onChange={this.page.bind(this)} style={{marginTop:'40px'}}/>
+                            <Pagination defaultCurrent={1} total={this.state.consultant.length} defaultPageSize={4} onChange={this.page.bind(this)} style={{marginTop:'40px',display:this.state.consultant.length>4?'block':'none'}}/>
                         </div>
                 </div>
                 </div>

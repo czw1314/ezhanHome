@@ -24,9 +24,9 @@
         text-align: left;
         padding-top: 50px;
         #container {
-          height: 220px;
+          height: 290px;
           right: 0;
-          width: 300px;
+          width: 400px;
           position: absolute;
           top:0;
           .amap-marker-content:after {
@@ -406,8 +406,12 @@
           }
           .right {
             width: 200px;
+            display: flex;
+            flex-wrap: wrap;
             text-align: left;
+            align-content:space-between;
             .name {
+              width: 100%;
               font-size: 18px;
               margin: 0;
               font-family: Source Han Sans CN;
@@ -416,23 +420,17 @@
             }
             .title {
               font-size: 14px;
-              margin: 10px 0;
+              margin: 0;
               width: 100%;
               font-family: Source Han Sans CN;
               font-weight: 400;
               color: rgba(102, 102, 102, 1);
             }
-            .phone {
-              font-size: 14px;
-              font-family: Source Han Sans CN;
-              font-weight: 400;
-              color: rgba(102, 102, 102, 1);
-              span {
-                font-weight: bold;
-              }
-            }
             .weixin {
               font-size: 14px;
+              cursor: pointer;
+              margin: 0;
+              width: 100%;
               font-family: Source Han Sans CN;
               font-weight: bold;
               color: rgba(38, 138, 237, 1);
