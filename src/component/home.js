@@ -1,7 +1,7 @@
 import React from 'react';
 import Memu from './menu'
 import routes from '../router/index';
-import {Img, Button, DatePicker, Table, Input, message, Modal, InputNumber} from 'antd';
+import {Img} from 'antd';
 import '../css/home.scss'
 import {HashRouter as Router, Route, Switch, Redirect, withRouter,Link} from 'react-router-dom';
 import Agent from "../view/agent";
@@ -63,24 +63,48 @@ class Home extends React.Component {
 
     };
     link(){
-        if(this.props.userInformation.role===5||localStorage.getItem('role')==5){
-            return(
+        if (this.props.userInformation.role === 5 || localStorage.getItem('role') == 5) {
+            return (
                 <Link to={'/home/user'}>
-                    <span style={{marginRight:'20px'}}>{this.props.userInformation.userName||localStorage.getItem('userName')}</span>
+                    <img src={require('../img/login.png')} style={{marginRight: '10px'}}/>
+                    <span
+                        style={{marginRight: '20px'}}>{this.props.userInformation.name || localStorage.getItem('userName')}</span>
                 </Link>
             )
         }
-        else if(this.props.userInformation.role===5||localStorage.getItem('role')==3){
-            return(
+        else if ((this.props.userInformation.role === 3 || localStorage.getItem('role') == 3)&&localStorage.getItem('state')==1) {
+            return (
                 <Link to={'/home/agentMy'}>
-                    <span style={{marginRight:'20px'}}>{this.props.userInformation.userName||localStorage.getItem('userName')}</span>
+                    <img src={require('../img/login.png')} style={{marginRight: '10px'}}/>
+                    <span
+                        style={{marginRight: '20px'}}>{this.props.userInformation.name || localStorage.getItem('userName')}</span>
                 </Link>
             )
         }
-        else if(this.props.userInformation.role===4||localStorage.getItem('role')==4){
-            return(
+        else if ((this.props.userInformation.role === 3 || localStorage.getItem('role') == 3)) {
+            return (
+                <Link to={'/home/registryCenter'}>
+                    <img src={require('../img/login.png')} style={{marginRight: '10px'}}/>
+                    <span
+                        style={{marginRight: '20px'}}>{this.props.userInformation.name || localStorage.getItem('userName')}</span>
+                </Link>
+            )
+        }
+        else if ((this.props.userInformation.role === 4 || localStorage.getItem('role') == 4)&&localStorage.getItem('state')==1) {
+            return (
                 <Link to={'/home/consultant'}>
-                    <span style={{marginRight:'20px'}}>{this.props.userInformation.userName||localStorage.getItem('userName')}</span>
+                    <img src={require('../img/login.png')} style={{marginRight: '10px'}}/>
+                    <span
+                        style={{marginRight: '20px'}}>{this.props.userInformation.name || localStorage.getItem('userName')}</span>
+                </Link>
+            )
+        }
+        else if ((this.props.userInformation.role === 4 || localStorage.getItem('role') == 4)) {
+            return (
+                <Link to={'/home/registryCenter'}>
+                    <img src={require('../img/login.png')} style={{marginRight: '10px'}}/>
+                    <span
+                        style={{marginRight: '20px'}}>{this.props.userInformation.name || localStorage.getItem('userName')}</span>
                 </Link>
             )
         }
@@ -106,7 +130,6 @@ class Home extends React.Component {
                                 <Register register={this.state.register} handleCancel={this.handleCancel.bind(this,'register')}/>
                             </div>
                             <div className='right' style={{display:this.props.userInformation.userName||localStorage.getItem('userName')?'block':'none'}}>
-                                <img src={require('../img/login.png')} style={{marginRight:'10px'}}/>
                                 {this.link()}
                                 <span onClick={this.clear.bind(this)}>退出</span>
                             </div>

@@ -3,10 +3,9 @@ import '../css/RegistryCenter.scss';
 import {connect} from "react-redux";
 import {setUserInformation} from "../redux/action";
 import {
-    Tabs, Input, Button, Form, Upload, Icon, message, Checkbox, Select, Cascader
+    Tabs, Input, Button, Form, Upload, Icon, message, Checkbox, Select, Cascader, Modal
 } from 'antd';
-import {getDistrictRegions,agentRegister} from '../api/index'
-import InformationForm from '../component/informationForm'
+import {getDistrictRegions, agentRegister, getPersonMsg,} from '../api/index'
 
 class Information extends React.Component {
     constructor(props) {
@@ -32,17 +31,50 @@ class Information extends React.Component {
             first: false,
             id: 3,
             districtRegionsList: [],
-            bussinessId:[],
-            regionId:'',
-            regionId1:'',
-            regionId2:'',
-            agentType:2,
-            position:'',
+            bussinessId: [],
+            regionId: '',
+            regionId1: '',
+            regionId2: '',
+            agentType: 2,
+            position: '',
             head: '',
             weixin: '',
+            userInformation: {},
         }
+        this.beforeUpload=this.beforeUpload.bind(this)
     }
+
     componentDidMount() {
+        let params = {
+            userId: localStorage.getItem('userId')
+        }
+        getPersonMsg(params).then((res) => {
+            if (res.data.code === 1) {
+                let regions = []
+                for (let i = 0; i < res.data.regions.length; i++) {
+                    regions.push([res.data.regions[i].districtId, res.data.regions[i].streetId])
+                }
+                if(localStorage.getItem('state')==0){
+                    this.props.onPicUpdata()
+                }
+                this.setState({
+                    userInformation: res.data,
+                    name: res.data.name,
+                    regionId: regions[0] ? regions[0] : [],
+                    regionId1: regions[1] ? regions[1] : [],
+                    regionId2: regions[2] ? regions[2] : [],
+                    position: res.data.position,
+                    bussinessId: res.data.businesses,
+                    workYears: res.data.workingYears,
+                    agentType: res.data.agentType,
+                    company: res.data.company,
+                    contact: res.data.contact,
+                    tags: res.data.estates,
+                    bindWechatOrNot: res.data.bindWechatOrNot,
+                    weixin: res.data.weChatPersonMsg ? res.data.weChatPersonMsg : this.state.weixin,
+                })
+            }
+        })
         getDistrictRegions().then((res) => {
             if (res.data.code === 1) {
                 let option = [];
@@ -67,105 +99,108 @@ class Information extends React.Component {
             }
         })
     }
+
     //转化为base64
     getBase64(img, callback) {
         const reader = new FileReader();
         reader.addEventListener('load', () => callback(reader.result));
         reader.readAsDataURL(img);
     }
+
     //注册
     handleSubmit(e) {
-        if(!this.state.head){
+        if (!this.state.head) {
             message.error('请先上传头像')
             return
         }
-        if(!this.state.weixin){
+        if (!this.state.weixin) {
             message.error('请先上传微信二维码')
             return
         }
-        if(!this.state.title&&localStorage.getItem('role')==3){
+        if (!this.state.title && localStorage.getItem('role') == 3) {
             message.error('请先上传职称照片')
             return
         }
-        if((!this.state.idF||!this.state.idT)&&localStorage.getItem('role')==3){
+        if ((!this.state.idF || !this.state.idT) && localStorage.getItem('role') == 3) {
             message.error('请先上传身份证照片')
             return
         }
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-                let re=[]
-                if(this.state.regionId){
-                    re.push(this.state.regionId)
+            let re = []
+            if (this.state.regionId) {
+                re.push(this.state.regionId)
+            }
+            if (this.state.regionId1) {
+                re.push(this.state.regionId1)
+            }
+            if (this.state.regionId2) {
+                re.push(this.state.regionId2)
+            }
+            let params = {}
+            if (localStorage.getItem('role') == 3) {
+                params = {
+                    "name": values.name,
+                    "regionIds": re,
+                    "bussinessId": this.state.bussinessId,
+                    "workingYears": values.workingYears,
+                    "agentType": this.state.agentType || 2,
+                    "company": this.refs.company.state.value || '占位',
+                    "cardNo": this.refs.cardNo.state.value,
+                    "position": this.state.position || "房地产经纪人",
+                    "userId": localStorage.getItem('userId')
                 }
-                if(this.state.regionId1){
-                    re.push(this.state.regionId1)
+            }
+            else {
+                params = {
+                    "name": values.name,
+                    "company": this.refs.company.state.value,
+                    "userId": localStorage.getItem('userId')
                 }
-                if(this.state.regionId2){
-                    re.push(this.state.regionId2)
+            }
+            for (var key in params) {
+                if (!params[key]) {
+                    message.error('所有信息必填')
+                    return;
                 }
-                let params ={}
-                if(localStorage.getItem('role')==3){
-                    params={
-                        "name": values.name,
-                        "regionIds":re,
-                        "bussinessId": this.state.bussinessId,
-                        "workingYears": values.workingYears,
-                        "agentType":this.state.agentType||2,
-                        "company":this.refs.company.state.value,
-                        "cardNo":this.refs.cardNo.state.value,
-                        "position":this.state.position||"房地产经纪人",
-                        "userId":localStorage.getItem('userId')
+            }
+            agentRegister(params).then((res) => {
+                if (res.data.code === 0) {
+                    if (res.data.verifyErrorMsg) {
+                        this.props.form.setFields({
+                            verifyCode: {
+                                value: values.verifyCode,
+                                errors: [new Error('验证码错误')],
+                            },
+                        })
+                        this.createCode()
+                    }
+                    else if (res.data.phoneVerifyErrorMsg) {
+                        this.props.form.setFields({
+                            phoneCode: {
+                                value: values.phoneCode,
+                                errors: [new Error('手机验证码错误')],
+                            },
+                        })
+                    }
+                    else if (res.data.msg === '该手机号已绑定用户') {
+                        message.success('该手机号已注册请去登录！')
+                        setTimeout(this.props.handleClose, 1000)
                     }
                 }
-                else{
-                   params= {
-                        "name": values.name,
-                        "company":this.refs.company.state.value,
-                        "userId":localStorage.getItem('userId')
-                    }
-                }
-                for(var key in params){
-                    if(!params[key]){
-                        message.error('所有信息必填')
-                        return;
-                    } 
-                  }
-                agentRegister(params).then((res) => {
-                    if (res.data.code === 0) {
-                        if (res.data.verifyErrorMsg) {
-                            this.props.form.setFields({
-                                verifyCode: {
-                                    value: values.verifyCode,
-                                    errors: [new Error('验证码错误')],
-                                },
-                            })
-                            this.createCode()
-                        }
-                        else if (res.data.phoneVerifyErrorMsg) {
-                            this.props.form.setFields({
-                                phoneCode: {
-                                    value: values.phoneCode,
-                                    errors: [new Error('手机验证码错误')],
-                                },
-                            })
-                        }
-                        else if (res.data.msg === '该手机号已绑定用户') {
-                            message.success('该手机号已注册请去登录！')
-                            setTimeout(this.props.handleClose, 1000)
-                        }
+                else {
+                    message.success('信息填写成功！请等待管理员审核！')
+                    if (localStorage.getItem('role') == 3) {
+                        this.props.go.push('/home/agentMy')
                     }
                     else {
-                        message.success('信息填写成功！请等待管理员审核！')
-                        if(localStorage.getItem('role')==3){
-                            this.props.go.push('/home/agentMy')
-                        }
-                        else{
-                            this.props.go.push('/home/consultant')
-                        }
+                        this.props.go.push('/home/consultant')
                     }
-                })
+                }
+            })
         });
     };
+
     //职称照片上传
     titleChange = info => {
         if (info.file.status === 'uploading') {
@@ -188,7 +223,6 @@ class Information extends React.Component {
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl1 =>
                 this.setState({
                     idT: imageUrl1,
@@ -212,7 +246,7 @@ class Information extends React.Component {
             );
         }
     };
-        //头像上传
+    //头像上传
     headChange = info => {
         if (info.file.status === 'uploading') {
             this.setState({loading: true});
@@ -226,6 +260,7 @@ class Information extends React.Component {
                 }),
             );
         }
+
     };
     //微信二维码上传
     weixinChange = info => {
@@ -234,104 +269,123 @@ class Information extends React.Component {
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             this.getBase64(info.file.originFileObj, imageUrl1 =>
                 this.setState({
-                    weixin:imageUrl1,
+                    weixin: imageUrl1,
                     loading1: false,
                 }),
             );
         }
     };
+
     //区域选择
     onChange(checkedValues) {
-    this.setState({
-        regionId:checkedValues[1]
-    })
+        this.setState({
+            regionId: checkedValues[1]
+        })
     }
+
     onChange1(checkedValues) {
         this.setState({
-            regionId1:checkedValues[1]
+            regionId1: checkedValues[1]
         })
-        }
-        onChange2(checkedValues) {
-            this.setState({
-                regionId2:checkedValues[1]
-            })
-            }
+    }
+
+    onChange2(checkedValues) {
+        this.setState({
+            regionId2: checkedValues[1]
+        })
+    }
+
     //服务选择
-    bussinessIdChange(value){
-        if(value.length>3){
+    bussinessIdChange(value) {
+        if (value.length > 3) {
             this.props.form.setFields({
                 working: {
-                    value:'',
+                    value: '',
                     errors: [new Error('最多选择三个')],
                 },
             })
-         }
-         else{
+        }
+        else {
             this.setState({
-                bussinessId:value
+                bussinessId: value
             })
-         }
+        }
     }
+
     //公司选择（独立经纪人）
-    onAgentType(value){
+    onAgentType(value) {
         this.setState({
-            agentType:value
+            agentType: value
         })
     }
-    onPosition(value){
+
+    onPosition(value) {
         this.setState({
-            position:value
+            position: value
         })
     }
+
+    //上传
+    beforeUpload(file) {
+        if (localStorage.getItem('state') == 0) {
+            this.props.onPicUpdata()
+            return false
+        }
+        else {
+            return true
+        }
+    }
+
     render() {
         const {getFieldDecorator} = this.props.form;
         const base = 'http://47.108.87.104:8501/user/uploadFile';
+        const base1 = 'http://47.108.87.104:8601/user/';
         const {Option} = Select
         return (
             <Form onSubmit={this.handleSubmit.bind(this)} className="login-form center">
-                                           <div className={'first'}>
-                                <div style={{display: 'flex', alignItems: 'center'}}>
-                                    <img src={this.state.head} className={'headerPic'}/>
-                                    <Upload
-                                        listType="picture-card"
-                                        className="avatar-uploader"
-                                        showUploadList={false}
-                                        action={base}
-                                        name={'file'}
-                                        data={{
-                                            type: '1',
-                                            userId: this.props.userInformation.userId || localStorage.getItem('userId')
-                                        }}
-                                        beforeUpload={this.beforeUpload}
-                                        onChange={this.headChange}
-                                    >
-                                        <Button type="primary" size={'large'}> <Icon
-                                            type={this.state.loading ? 'loading' : 'plus'}/>上传头像</Button>
-                                    </Upload>
-                                </div>
-                                <div style={{display: 'flex', alignItems: 'center'}}>
-                                    <img src={this.state.weixin} className={'headerPic'} style={{borderRadius: 0}}/>
-                                    <Upload
-                                        listType="picture-card"
-                                        className="avatar-uploader"
-                                        data={{
-                                            type: '3',
-                                            userId: this.props.userInformation.userId || localStorage.getItem('userId')
-                                        }}
-                                        showUploadList={false}
-                                        action={base}
-                                        beforeUpload={this.beforeUpload}
-                                        onChange={this.weixinChange.bind(this)}
-                                    >
-                                        <Button type="primary" size={'large'}> <Icon
-                                            type={this.state.loading1 ? 'loading' : 'plus'}/>添加微信二维码</Button>
-                                    </Upload>
-                                </div>
-                            </div>
-                            <p style={{marginTop: '40px'}}>账号：{localStorage.getItem('userPhone')}</p>
+                <div className={'first'}>
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                        <img src={base1 + this.state.userInformation.head} className={'headerPic'}/>
+                        <Upload
+                            listType="picture-card"
+                            className="avatar-uploader"
+                            showUploadList={false}
+                            action={base}
+                            name={'file'}
+                            data={{
+                                type: '1',
+                                userId: this.props.userInformation.userId || localStorage.getItem('userId')
+                            }}
+                            beforeUpload={this.beforeUpload}
+                            onChange={this.headChange}
+                        >
+                            <Button type="primary" size={'large'}> <Icon
+                                type={this.state.loading ? 'loading' : 'plus'}/>上传头像</Button>
+                        </Upload>
+                    </div>
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                        <img src={this.state.Img || base + this.state.userInformation.weChatQrCode}
+                             className={'headerPic'} style={{borderRadius: 0}}/>
+                        <Upload
+                            listType="picture-card"
+                            className="avatar-uploader"
+                            data={{
+                                type: '3',
+                                userId: this.props.userInformation.userId || localStorage.getItem('userId')
+                            }}
+                            showUploadList={false}
+                            action={base}
+                            beforeUpload={this.beforeUpload}
+                            onChange={this.weixinChange.bind(this)}
+                        >
+                            <Button type="primary" size={'large'}> <Icon
+                                type={this.state.loading1 ? 'loading' : 'plus'}/>添加微信二维码</Button>
+                        </Upload>
+                    </div>
+                </div>
+                <p style={{marginTop: '40px'}}>账号：{localStorage.getItem('phone')}</p>
                 <Form.Item>
                     {getFieldDecorator('name')(
                         <div className={'item'}>
@@ -342,47 +396,47 @@ class Information extends React.Component {
                         </div>
                     )}
                 </Form.Item>
-                <Form.Item className={'code'}  style={{display: localStorage.getItem('role')==3 ? 'block' : 'none'}}>
-                        <div className={'item'}>
-                            <div className={'left'}>
-                                <p>区域：</p>
-                                <Cascader
-                                    options={this.state.districtRegionsList}
-                                    onChange={this.onChange.bind(this)}
-                                    placeholder={'请选择区域'}
-                                    size={'large'}
-                                />
-                                <Cascader
-                                    options={this.state.districtRegionsList}
-                                    onChange={this.onChange1.bind(this)}
-                                    placeholder={'请选择区域'}
-                                    size={'large'}
-                                />
-                                <Cascader
-                                    options={this.state.districtRegionsList}
-                                    onChange={this.onChange2.bind(this)}
-                                    placeholder={'请选择区域'}
-                                    size={'large'}
-                                />
-                            </div>
+                <Form.Item className={'code'} style={{display: localStorage.getItem('role') == 3 ? 'block' : 'none'}}>
+                    <div className={'item'}>
+                        <div className={'left'}>
+                            <p>区域：</p>
+                            <Cascader
+                                options={this.state.districtRegionsList}
+                                onChange={this.onChange.bind(this)}
+                                placeholder={'请选择区域'}
+                                size={'large'}
+                            />
+                            <Cascader
+                                options={this.state.districtRegionsList}
+                                onChange={this.onChange1.bind(this)}
+                                placeholder={'请选择区域'}
+                                size={'large'}
+                            />
+                            <Cascader
+                                options={this.state.districtRegionsList}
+                                onChange={this.onChange2.bind(this)}
+                                placeholder={'请选择区域'}
+                                size={'large'}
+                            />
                         </div>
+                    </div>
                 </Form.Item>
-                <Form.Item  style={{display: localStorage.getItem('role')==3? 'block' : 'none'}}>
-                {getFieldDecorator('working')( <div className={'item'}>
+                <Form.Item style={{display: localStorage.getItem('role') == 3 ? 'block' : 'none'}}>
+                    {getFieldDecorator('working')(<div className={'item'}>
                             <div className={'left'}>
                                 <p>服务：</p>
                                 <Checkbox.Group options={this.state.plainOptions}
-                                value={this.state.bussinessId}
+                                                value={this.state.bussinessId}
                                                 onChange={this.bussinessIdChange.bind(this)}/>
                             </div>
                         </div>
-                               )}
+                    )}
                 </Form.Item>
-                <Form.Item  style={{display: localStorage.getItem('role')==3 ? 'block' : 'none'}}>
+                <Form.Item style={{display: localStorage.getItem('role') == 3 ? 'block' : 'none'}}>
                     {getFieldDecorator('workingYears', {
-                        rules: [{ required: localStorage.getItem('role')==3, message: '必填项' }],
+                        rules: [{required: localStorage.getItem('role') == 3, message: '必填项'}],
                     })(
-                        <div className={'item'} >
+                        <div className={'item'}>
                             <div className={'left'}>
                                 <p>工龄：</p>
                                 <Input size={'large'} addonAfter="年"/>
@@ -390,22 +444,26 @@ class Information extends React.Component {
                         </div>
                     )}
                 </Form.Item>
-                <Form.Item >
+                <Form.Item>
                     {getFieldDecorator('check')(
                         <div className={'item'}>
                             <div className={'left'}>
                                 <p>公司：</p>
-                                <Select defaultValue="2"  onSelect={this.onAgentType.bind(this)} style={{display: localStorage.getItem('role')==3 ? 'block' : 'none',width:'200px'}}
+                                <Select defaultValue="2" onSelect={this.onAgentType.bind(this)} style={{
+                                    display: localStorage.getItem('role') == 3 ? 'block' : 'none',
+                                    width: '200px'
+                                }}
                                         size={'large'}>
                                     <Option value="2">在职公司</Option>
                                     <Option value="1">独立经纪人</Option>
                                 </Select>
-                                <Input disabled={this.state.agentType==1?true:false} size={'large'} ref={'company'} />
+                                <Input disabled={this.state.agentType == 1 ? true : false} size={'large'}
+                                       ref={'company'}/>
                             </div>
                         </div>
                     )}
                 </Form.Item>
-                <Form.Item  style={{display: localStorage.getItem('role')==3? 'block' : 'none'}}>
+                <Form.Item style={{display: localStorage.getItem('role') == 3 ? 'block' : 'none'}}>
                     <div className={'item'}>
                         <div className={'left'} style={{alignItems: 'flex-start'}}>
                             <p dangerouslySetInnerHTML={{__html: '职称：'}}></p>
@@ -420,7 +478,7 @@ class Information extends React.Component {
                                     className="avatar-uploader"
                                     data={{
                                         type: '2',
-                                        userId:localStorage.getItem('userId')
+                                        userId: localStorage.getItem('userId')
                                     }}
                                     showUploadList={false}
                                     action={base}
@@ -437,7 +495,7 @@ class Information extends React.Component {
                     </div>
 
                 </Form.Item>
-                <Form.Item  style={{display: localStorage.getItem('role')==3 ? 'block' : 'none'}}>
+                <Form.Item style={{display: localStorage.getItem('role') == 3 ? 'block' : 'none'}}>
                     <div className={'item'}>
                         <div className={'left'} style={{alignItems: 'flex-start'}}>
                             <p>身份证号：</p>
@@ -447,9 +505,9 @@ class Information extends React.Component {
                                     listType="picture-card"
                                     className="avatar-uploader"
                                     data={{
-                                    type: '4',
-                                    userId: localStorage.getItem('userId')
-                                }}
+                                        type: '4',
+                                        userId: localStorage.getItem('userId')
+                                    }}
                                     showUploadList={false}
                                     action={base}
                                     beforeUpload={this.beforeUpload}
@@ -484,7 +542,8 @@ class Information extends React.Component {
                     </div>
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" size={'large'} style={{margin: '40px auto 20px'}} onClick={this.handleSubmit.bind(this)}>提交注册信息申请</Button>
+                    <Button type="primary" size={'large'} style={{margin: '40px auto 20px'}}
+                            onClick={this.handleSubmit.bind(this)}>提交注册信息申请</Button>
                     <p>温馨提示：当您注册成功后，预计1-3个工作日内审核，审核成功后即可使用所有功能如有需要，可微信咨询微信号：pangzhu2018</p>
                 </Form.Item>
             </Form>
@@ -515,87 +574,25 @@ class RegistryCenter extends React.Component {
             agent: true,
             first: false,
             id: 3,
-            districtRegionsList: []
+            districtRegionsList: [],
+            visible: false,
+            visible1: false,
         }
     }
 
-
-    //转化为base64
-    getBase64(img, callback) {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => callback(reader.result));
-        reader.readAsDataURL(img);
-    }
-
-    //限制大小
-    beforeUpload(file) {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
-        }
-        return isJpgOrPng;
-    }
-
-    //职称照片上传
-    titleChange = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({loading2: true});
-            return;
-        }
-        if (info.file.status === 'done') {
-            this.getBase64(info.file.originFileObj, imageUrl1 =>
-                this.setState({
-                    title: imageUrl1,
-                    loading1: false,
-                }),
-            );
-        }
-    };
-    //身份证正面上传
-    idTChange = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({loading3: true});
-            return;
-        }
-        if (info.file.status === 'done') {
-            this.getBase64(info.file.originFileObj, imageUrl1 =>
-                this.setState({
-                    idT: imageUrl1,
-                    loading1: false,
-                }),
-            );
-        }
-    };
-    //身份证反面上传
-    idFChange = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({loading4: true});
-            return;
-        }
-        if (info.file.status === 'done') {
-            this.getBase64(info.file.originFileObj, imageUrl1 =>
-                this.setState({
-                    idF: imageUrl1,
-                    loading1: false,
-                }),
-            );
-        }
-    };
     callback(key) {
         console.log(key);
     }
-
     //多选
-    onChange(checkedValues) {
-        console.log('checked = ', checkedValues);
+    onPicUpdata() {
+        this.setState({
+            visible:true
+        })
     }
 
-    //单选
-    onRadio = e => {
-        this.setState({
-            id: e.target.value,
-        });
-    };
+    componentDidMount() {
+
+    }
 
     render() {
         const {TabPane} = Tabs;
@@ -613,8 +610,20 @@ class RegistryCenter extends React.Component {
         };
         const base = 'http://47.108.87.104:8501/user/uploadFile';
         return (
-
             <div className={'registryCenter'}>
+                <Modal
+                    title=""
+                    visible={this.state.visible}
+                    // onOk={this.setState({visible:false})}
+                    // onCancel={this.setState({visible:false})}
+                    okText="确认"
+                    cancelText=""
+                >
+                    <p>尊敬的XXX：</p>
+                    <p>你的资料正在审核中，请耐心等候。</p>
+                    <p>如有疑问，可以联系“e站房屋”工作人员。</p>
+                    <p>微信号：pangzhu2018         联系电话：13032872245</p>
+                </Modal>
                 <div className={'title'}>
                     <div className='logo'>
                         <img src={require('../img/LOGO2.png')}/>
@@ -625,7 +634,7 @@ class RegistryCenter extends React.Component {
                     <div className={'container'}>
                         <div className={'second'} style={{display: this.state.first ? "none" : 'block'}}>
                             <p className={'data'}>第二步：填写资料</p>
-                            <InformationForms userInformation={this.props.userInformation} go={this.props.history}/>
+                            <InformationForms userInformation={this.props.userInformation} go={this.props.history} onPicUpdata={this.onPicUpdata.bind(this)}/>
                         </div>
                     </div>
                 </div>

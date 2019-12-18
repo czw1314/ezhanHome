@@ -1,11 +1,11 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 import '../css/login.scss';
 import {login} from "../api";
 import {connect} from "react-redux";
 import {setUserInformation} from "../redux/action";
-import { Modal, Button,Tabs,Form, Input, message  } from 'antd';
+import { Modal, Button,Tabs,Form, Input, message } from 'antd';
 import {getPhoneCode, recoverPwd} from '../api/index'
-
 class RetreivePassword extends React.Component {
     constructor(props){
         super(props)
@@ -175,12 +175,12 @@ class RetreivePassword extends React.Component {
         );
     }
 }
-
 const Retreive = Form.create({ name: 'retrieve' })(RetreivePassword);
 class NormalLoginForm extends React.Component {
     //登录
     handleSubmit = e => {
         e.preventDefault();
+        let that=this
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let params = {
@@ -201,13 +201,17 @@ class NormalLoginForm extends React.Component {
                         localStorage.setItem('role',res.data.role)
                         localStorage.setItem('userId',res.data.userId)
                         localStorage.setItem('phone',values.phone)
+                        localStorage.setItem('bind','true')
+                        if(res.data.state=='-1'){
+                            message.error('请先去完善注册资料,3后自动跳转')
+                            setTimeout(function (){that.props.history.push({pathname: '/home/registryCenter'})}, 3000)
+                        }
                         setTimeout(this.props.handleClose, 1000)
                     }
                 })
             }
         });
     };
-
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -244,10 +248,8 @@ class NormalLoginForm extends React.Component {
         );
     }
 }
-
-const WrappedNormalLoginForm =connect(state=>(
-    {userInformation:state.userInformation}),{setUserInformation})(Form.create({ name: 'normal_login' })(NormalLoginForm))
-
+const WrappedNormalLoginForm =withRouter(connect(state=>(
+    {userInformation:state.userInformation}),{setUserInformation})(Form.create({ name: 'normal_login' })(NormalLoginForm)))
 class Login extends React.Component {
     constructor(props){
         super(props)
@@ -257,28 +259,30 @@ class Login extends React.Component {
             retrieve:false,
             accountNumber:true,
             key:5
-
         };
     }
-
     callback= e =>{
         this.setState({
             key: e,
         });
     }
-
-    handleCancel = e => {
-        this.setState({
-            key: false,
-        });
-    };
     weixin(){
         window.location='https://open.weixin.qq.com/connect/qrconnect?appid=wx53ba91de253ea23a&redirect_uri=http%3A%2F%2Fwww.ezhanhome.com&response_type=code&scope=snsapi_login&state='+this.state.key+'#wechat_redirect'
     }
-
+    componentDidMount(){
+        if(this.props.location.pathname=='/home/registryCenter'){
+            return
+        }
+        else{
+            let that=this
+            if(this.props.userInformation.state=='-1'||localStorage.getItem('state')=='-1'){
+                message.error('请完善注册资料,3后自动跳转')
+                setTimeout(function (){that.props.history.push({pathname: '/home/registryCenter'})}, 3000)
+            }
+        }
+    }
     render() {
         const { TabPane } = Tabs;
-
         return (
             <div className={'login'}>
                 <Modal
@@ -289,23 +293,6 @@ class Login extends React.Component {
                     onCancel={this.props.handleCancel}
                     footer={''}
                 >
-                    {/* <div className={'weixin'} style={{display:this.state.weixin?'block':'none'}}> */}
-                        {/* <p className={'title'}>微信快捷登录</p>
-                        <Tabs defaultActiveKey="1" onChange={this.callback}>
-                            <TabPane tab="普通用户" key="1">
-                                <div id='login_container'>
-                                    </div>
-                            </TabPane>
-                            <TabPane tab="经纪人" key="2">
-                                Content of Tab Pane 2
-                            </TabPane>
-                            <TabPane tab="置业顾问" key="3">
-                                Content of Tab Pane 3
-                            </TabPane>
-                        </Tabs>
-                        <p className={'accountNumber'} onClick={()=>this.setState({weixin:false,accountNumber:true})}>账号密码登录</p>
-                        <p className={'agreement'}>登录即代表同意<a>《e站房屋经纪人协议》</a>及<a>《e站房屋免责申明》</a></p>
-                    </div> */}
                     <div className={'accountNumber'} style={{display:this.state.accountNumber?'block':'none'}}>
                         <p className={'title'}>账号密码登录</p>
                         <Tabs defaultActiveKey="5" onChange={this.callback}>
@@ -338,4 +325,5 @@ class Login extends React.Component {
         );
     }
 }
-export default Login
+export default withRouter(connect(state=>(
+    {userInformation:state.userInformation}))(Login))

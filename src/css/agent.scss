@@ -366,7 +366,12 @@
     color: #333;
     background-color: transparent;
     justify-content: flex-start;
+    .ant-menu-item, .ant-menu-submenu-title {
+      font-weight: bold;
+      padding: 0 16px;
+    }
   }
+
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
     color: #fff;
     background-color: #268AED;
@@ -379,11 +384,9 @@
   .ant-menu-horizontal > .ant-menu-item >a {
     color: #fff;
   }
-  //.ant-menu-horizontal > .ant-menu-item >a:hover {
-  //  color: #434343;
-  //}
   .ant-menu-item, .ant-menu-submenu-title {
     font-weight: bold;
+    padding: 0 16px;
   }
   .ant-menu-vertical .ant-menu-item, .ant-menu-vertical-left .ant-menu-item, .ant-menu-vertical-right .ant-menu-item, .ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-submenu-title, .ant-menu-vertical-left .ant-menu-submenu-title, .ant-menu-vertical-right .ant-menu-submenu-title, .ant-menu-inline .ant-menu-submenu-title {
     //padding:0 20px 0 0;

@@ -9,9 +9,7 @@ import Agent from "../agent";
 class BridalHome extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
-
             left: 13,
             positionChecked: [],
             position: ['不限', '青羊', '锦江'],

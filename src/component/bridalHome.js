@@ -62,8 +62,6 @@ class BridalHome extends React.Component {
                             <img src={require('../img/LOGO2.png')}/>
                         </div>
                         <p>新房</p>
-                        {/*<img src={require('../img/Location2.png')} style={{height: 24, width: 16}}/>*/}
-                        {/*<span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp成都'}} className={'location'}/>*/}
                         <p className={'address'}><span onClick={()=>{ this.props.history.push({pathname:'/home/bridalChamber'})}}>找新房></span><span onClick={this.go.bind(this)}>{this.state.address[0]?this.state.address[0]:localStorage.getItem('address0')}楼盘</span>>{this.state.address[1]?this.state.address[1]:localStorage.getItem('address1')}楼盘</p>
                         <Search
                         placeholder="请输入楼盘名"

@@ -150,9 +150,11 @@
           }
         }
         .center {
+          .ant-form-item {
+            margin-bottom: 16px;
+          }
           .item {
             display: flex;
-            margin-top: 20px;
             justify-content: space-between;
             .left {
               display: flex;
@@ -204,7 +206,6 @@
     }
         .item{
           display: flex;
-          margin-top: 20px;
           justify-content: space-between;
           .left{
             width: 85%;

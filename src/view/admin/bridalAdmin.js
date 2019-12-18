@@ -2304,7 +2304,7 @@ class bridalAdmin extends React.Component {
     //退出登录
     clear() {
         // this.props.setUserInformation({})
-        sessionStorage.clear()
+        localStorage.clear()
     }
 
     //选择区域
@@ -2422,7 +2422,7 @@ class bridalAdmin extends React.Component {
             show:false
         })
         this.props.newEstateId('')
-        sessionStorage.setItem('estateId','')
+        localStorage.setItem('estateId','')
         if (key == 4) {
         }
     }
@@ -2500,7 +2500,7 @@ class bridalAdmin extends React.Component {
             estateId: value,
         }
         this.props.newEstateId(value?value:'')
-        sessionStorage.setItem('estateId',value)
+        localStorage.setItem('estateId',value)
         getEstateMsg(params).then((res) => {
             if (res.data.code == 1) {
                 res.data.estate.estatePictures = this.sortByKey(res.data.estate.estatePictures, 'type')
@@ -2556,7 +2556,7 @@ class bridalAdmin extends React.Component {
             type:0
         }
         this.props.newEstateId(value?value:'')
-        sessionStorage.setItem('estateId',value)
+        localStorage.setItem('estateId',value)
         getEstateMsg(params).then((res) => {
             if (res.data.code == 1) {
                 res.data.estate.estatePictures = this.sortByKey(res.data.estate.estatePictures, 'type')

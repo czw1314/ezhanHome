@@ -47,32 +47,6 @@ class Consultant extends React.Component {
             }
         })
       }
-    //选择区域
-    setRegion(value) {
-        this.setState({
-            region: value,
-            estates:[],
-            estateId: ''
-        })
-        let params = {
-            districtId: value[1]
-        }
-        getStreetEstates(params).then((res) => {
-            if (res.data.code === 1) {
-                let option = [];
-                for (let i = 0; i < res.data.estates.length; i++) {
-                    let item = {
-                        value: res.data.estates[i].id,
-                        label: res.data.estates[i].name,
-                    }
-                    option.push(item)
-                }
-                this.setState({
-                    estates: option
-                })
-            }
-        })
-    }
     //申请入驻楼盘
 apply(){
     let params={
@@ -270,8 +244,13 @@ apply(){
         let params = {
             "name": this.state.name,
             "company": this.state.company,
-            "contact": this.state.contact,
             "userId": localStorage.getItem('userId')
+        }
+        for(var key in params){
+            if(!params[key]){
+                message.error('所有信息必填')
+                return;
+            }
         }
         putPersonMsg(params).then((res) => {
             if (res.data.code === 1) {
@@ -281,7 +260,6 @@ apply(){
                 }
                 getPersonMsg(params).then((res) => {
                     if(res.data.code==1){
-                      
                         this.setState({
                             name: res.data.name,
                             head:res.data.head,

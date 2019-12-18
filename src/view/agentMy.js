@@ -114,25 +114,13 @@ class AgentMy extends React.Component {
             );
         }
     };
-
-    handleChange(value) {
-        console.log(`selected ${value}`);
-    }
-
     callback(key) {
         console.log(key);
     }
-
     //改名
     onChangeName(e) {
         this.setState({name: e.target.value});
     }
-
-    //改电话
-    onChangeContact(e) {
-        this.setState({contact: e.target.value});
-    }
-
     //区域选择
     onChange(checkedValues) {
 
@@ -140,7 +128,6 @@ class AgentMy extends React.Component {
             regionId: checkedValues
         })
     }
-
     onChange1(checkedValues) {
         this.setState({
             regionId1: checkedValues
@@ -152,7 +139,6 @@ class AgentMy extends React.Component {
             regionId2: checkedValues
         })
     }
-
     componentDidMount() {
         let params = {
             userId: localStorage.getItem('userId')
@@ -314,10 +300,16 @@ class AgentMy extends React.Component {
             "bussinessId": this.state.bussinessId,
             "workingYears": this.state.workYears,
             "agentType": this.state.agentType,
-            "company": this.state.company,
+            "company": this.state.company||'占位',
             "position": this.state.position,
             "contact": this.state.contact,
             "userId": localStorage.getItem('userId')
+        }
+        for(var key in params){
+            if(!params[key]){
+                message.error('所有信息必填')
+                return;
+            }
         }
         putPersonMsg(params).then((res) => {
             if (res.data.code === 1) {

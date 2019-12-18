@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../css/admin.scss'
-import {Tabs, Table, Divider, Modal, Input, Button, Popconfirm,notification} from 'antd';
+import {Tabs, Table, Divider, Modal, Input, Button, Popconfirm, notification} from 'antd';
 import ChangePassWord from '../../component/changePassWord'
 import {connect} from "react-redux";
 import {login, getAdmin, modifyHouseAdminPwd, getAdviser, aduitAgent, getAgent, settledAduit, delUser} from "../../api";
@@ -219,7 +219,7 @@ class EditableTable extends React.Component {
                     duration: 0,
                 });
             }
-            else{
+            else {
                 const key = `open${Date.now()}`;
                 const btn = (
                     <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -299,7 +299,7 @@ class EditableTable extends React.Component {
                     bordered
                     dataSource={dataSource}
                     columns={columns}
-                    pagination={ false }
+                    pagination={false}
                 />
             </div>
         );
@@ -326,7 +326,7 @@ class Code extends React.Component {
             <div>
                 <p onClick={this.showModal} style={{cursor: 'pointer', marginBottom: 0}}>查看</p>
                 <Modal
-                destroyOnClose={true}
+                    destroyOnClose={true}
                     title=""
                     centered
                     footer={null}
@@ -334,7 +334,7 @@ class Code extends React.Component {
                     onCancel={this.handleCancel}
                     className={'code'}
                 >
-                    <img src={this.props.src} style={{marginTop: '20px',with:'100%'}}/>
+                    <img src={this.props.src} style={{marginTop: '20px', with: '100%'}}/>
                 </Modal>
             </div>
         );
@@ -368,8 +368,8 @@ class CardCode extends React.Component {
                     onCancel={this.handleCancel}
                     className={'code'}
                 >
-                    <img src={this.props.src} style={{marginTop: '20px',with:'100%'}}/>
-                    <img src={this.props.src1} style={{marginTop: '20px',with:'100%'}}/>
+                    <img src={this.props.src} style={{marginTop: '20px', with: '100%'}}/>
+                    <img src={this.props.src1} style={{marginTop: '20px', with: '100%'}}/>
                 </Modal>
             </div>
         );
@@ -413,9 +413,9 @@ class Admin extends React.Component {
             visible10: false,
             visible11: false,
             visible12: false,
-            userId:'',
-            estateId:'',
-            index:0,
+            userId: '',
+            estateId: '',
+            index: 0,
         }
     }
 
@@ -437,6 +437,7 @@ class Admin extends React.Component {
         this.props.setUserInformation({})
         localStorage.clear()
     }
+
     //获取新房管理员列表
     callback(key) {
 
@@ -537,7 +538,7 @@ class Admin extends React.Component {
 
     //是否通过
     pass(userId, type, str, index) {
-        if(!this.props.userInformation.name){
+        if (!this.props.userInformation.name) {
             const key = `open${Date.now()}`;
             const btn = (
                 <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -554,9 +555,9 @@ class Admin extends React.Component {
         }
         this.setState({
             visible4: false,
-            visible5:false,
-            visible6:false,
-            visible7:false
+            visible5: false,
+            visible6: false,
+            visible7: false
         })
         let params = {
             userId: this.state.userId,
@@ -583,7 +584,7 @@ class Admin extends React.Component {
                                     agentData: this.state.agentData
                                 }
                             )
-        
+
                         }
                         else if (str == 'consultant') {
                             this.state.consultantData.splice(this.state.index, 1)
@@ -612,7 +613,7 @@ class Admin extends React.Component {
                                     agentData: this.state.agentData
                                 }
                             )
-        
+
                         }
                         else if (str == 'consultant') {
                             this.state.consultantData.splice(this.state.index, 1)
@@ -626,9 +627,10 @@ class Admin extends React.Component {
             }
         )
     }
+
     //是否通过楼盘入驻申请
     passApply(index, estateId, type, str, indexs) {
-        if(!this.props.userInformation.name){
+        if (!this.props.userInformation.name) {
             const key = `open${Date.now()}`;
             const btn = (
                 <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -644,13 +646,13 @@ class Admin extends React.Component {
             return
         }
         this.setState({
-            visible8:false,visible9:false,visible10:false,visible11:false
+            visible8: false, visible9: false, visible10: false, visible11: false
         })
         let params = {
-                userId: this.state.userId,
-                estateId: this.state.estateId,
-                pass: type,
-            }
+            userId: this.state.userId,
+            estateId: this.state.estateId,
+            pass: type,
+        }
         settledAduit(params).then((res) => {
                 if (res.data.code === 1) {
                     if (type === 1) {
@@ -734,9 +736,10 @@ class Admin extends React.Component {
             }
         )
     }
+
     //删除经纪人、置业顾问
-    delUserData(userId, str,index) {
-        if(!this.props.userInformation.name){
+    delUserData(userId, str, index) {
+        if (!this.props.userInformation.name) {
             console.log(1)
             const key = `open${Date.now()}`;
             const btn = (
@@ -792,17 +795,17 @@ class Admin extends React.Component {
             }
             else {
                 const key = `open${Date.now()}`;
-                        const btn = (
-                            <Button type="primary" size="small" onClick={() => notification.close(key)}>
-                                确定
-                            </Button>
-                        );
-                        notification.success({
-                            message: '删除失败',
-                            btn,
-                            key,
-                            duration: 0,
-                        });
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        确定
+                    </Button>
+                );
+                notification.success({
+                    message: '删除失败',
+                    btn,
+                    key,
+                    duration: 0,
+                });
                 // if (str === 'agent') {
                 //     this.state.agentControlData.splice(0, 1)
                 //     this.setState({
@@ -824,8 +827,8 @@ class Admin extends React.Component {
     }
 
     componentDidMount() {
-        if(!this.props.userInformation.name){
-            this.setState({login:true})
+        if (!this.props.userInformation.name) {
+            this.setState({login: true})
         }
         let params = {
             type: 2
@@ -913,8 +916,8 @@ class Admin extends React.Component {
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
-                   <a onClick={()=>{
-                       if(!this.props.userInformation.name){
+                   <a onClick={() => {
+                       if (!this.props.userInformation.name) {
                            const key = `open${Date.now()}`;
                            const btn = (
                                <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -929,10 +932,17 @@ class Admin extends React.Component {
                            });
                            return
                        }
-                       this.setState({visible5:true,userId:this.state.agentData[index].personId,index:index,onOk:this.pass.bind(this, this.state.agentData[index].personId, 1, 'agent'),title:'通过经纪人注册申请'})}}>是</a>
+                       this.setState({
+                           visible5: true,
+                           userId: this.state.agentData[index].personId,
+                           index: index,
+                           onOk: this.pass.bind(this, this.state.agentData[index].personId, 1, 'agent'),
+                           title: '通过经纪人注册申请'
+                       })
+                   }}>是</a>
                   <Divider type="vertical"/>
-                  <a onClick={()=>{
-                      if(!this.props.userInformation.name){
+                  <a onClick={() => {
+                      if (!this.props.userInformation.name) {
                           const key = `open${Date.now()}`;
                           const btn = (
                               <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -947,7 +957,14 @@ class Admin extends React.Component {
                           });
                           return
                       }
-                      this.setState({visible5:true,userId:this.state.agentData[index].personId,index:index,onOk:this.pass.bind(this, this.state.agentData[index].personId, -1, 'agent'),title:"拒绝经纪人注册申请"})}}>否</a>
+                      this.setState({
+                          visible5: true,
+                          userId: this.state.agentData[index].personId,
+                          index: index,
+                          onOk: this.pass.bind(this, this.state.agentData[index].personId, -1, 'agent'),
+                          title: "拒绝经纪人注册申请"
+                      })
+                  }}>否</a>
                 </span>
                 ),
             },
@@ -998,8 +1015,8 @@ class Admin extends React.Component {
                 key: 'action',
                 render: (text, record, index) => (
                     <span>
-                  <a onClick={()=>{
-                      if(!this.props.userInformation.name){
+                  <a onClick={() => {
+                      if (!this.props.userInformation.name) {
                           const key = `open${Date.now()}`;
                           const btn = (
                               <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -1014,10 +1031,17 @@ class Admin extends React.Component {
                           });
                           return
                       }
-                      this.setState({visible5:true,userId:this.state.consultantData[index].personId,index:index,onOk:this.pass.bind(this, this.state.consultantData[index].personId, 1, 'consultant'),title:"通过置业顾问注册申请"})}}>是</a>
+                      this.setState({
+                          visible5: true,
+                          userId: this.state.consultantData[index].personId,
+                          index: index,
+                          onOk: this.pass.bind(this, this.state.consultantData[index].personId, 1, 'consultant'),
+                          title: "通过置业顾问注册申请"
+                      })
+                  }}>是</a>
                   <Divider type="vertical"/>
-                  <a onClick={()=>{
-                      if(!this.props.userInformation.name){
+                  <a onClick={() => {
+                      if (!this.props.userInformation.name) {
                           const key = `open${Date.now()}`;
                           const btn = (
                               <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -1032,7 +1056,14 @@ class Admin extends React.Component {
                           });
                           return
                       }
-                      this.setState({visible7:true,userId:this.state.consultantData[index].personId,index:index,onOk:this.pass.bind(this, this.state.consultantData[index].personId, -1, 'consultant'),title:"拒绝置业顾问注册申请"})}}>否</a>
+                      this.setState({
+                          visible7: true,
+                          userId: this.state.consultantData[index].personId,
+                          index: index,
+                          onOk: this.pass.bind(this, this.state.consultantData[index].personId, -1, 'consultant'),
+                          title: "拒绝置业顾问注册申请"
+                      })
+                  }}>否</a>
                 </span>
                 ),
             }
@@ -1107,12 +1138,13 @@ class Admin extends React.Component {
                         {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                                    <a onClick={()=>{
-                                        if(!this.props.userInformation.name){
+                                    <a onClick={() => {
+                                        if (!this.props.userInformation.name) {
                                             console.log(1)
                                             const key = `open${Date.now()}`;
                                             const btn = (
-                                                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                                <Button type="primary" size="small"
+                                                        onClick={() => notification.close(key)}>
                                                     确定
                                                 </Button>
                                             );
@@ -1124,9 +1156,26 @@ class Admin extends React.Component {
                                             });
                                             return
                                         }
-                                        this.setState({visible5:true,userId:this.state.agentApplyData[index].personId,estateId:item.estateId,index:index,onOk:this.passApply.bind(this, index, item.estateId, 1, 'agentApply', indexs),title:"通过经纪人申请入驻"})}}>是</a>
+                                        this.setState({
+                                            visible5: true,
+                                            userId: this.state.agentApplyData[index].personId,
+                                            estateId: item.estateId,
+                                            index: index,
+                                            onOk: this.passApply.bind(this, index, item.estateId, 1, 'agentApply', indexs),
+                                            title: "通过经纪人申请入驻"
+                                        })
+                                    }}>是</a>
                                     <Divider type="vertical"/>
-                                    <a  onClick={()=>{this.setState({visible5:true,userId:this.state.agentApplyData[index].personId,estateId:item.estateId,index:index,onOk:this.passApply.bind(this, index, item.estateId, -1, 'agentApply', indexs),title:"拒绝经纪人申请入驻"})}}>否</a>
+                                    <a onClick={() => {
+                                        this.setState({
+                                            visible5: true,
+                                            userId: this.state.agentApplyData[index].personId,
+                                            estateId: item.estateId,
+                                            index: index,
+                                            onOk: this.passApply.bind(this, index, item.estateId, -1, 'agentApply', indexs),
+                                            title: "拒绝经纪人申请入驻"
+                                        })
+                                    }}>否</a>
                                 </p>
                             )
                         })
@@ -1197,12 +1246,13 @@ class Admin extends React.Component {
                         {text && text.map((item, indexs) => {
                             return (
                                 <p>
-                                    <a onClick={()=>{
-                                        if(!this.props.userInformation.name){
+                                    <a onClick={() => {
+                                        if (!this.props.userInformation.name) {
                                             console.log(1)
                                             const key = `open${Date.now()}`;
                                             const btn = (
-                                                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                                <Button type="primary" size="small"
+                                                        onClick={() => notification.close(key)}>
                                                     确定
                                                 </Button>
                                             );
@@ -1214,13 +1264,22 @@ class Admin extends React.Component {
                                             });
                                             return
                                         }
-                                        this.setState({visible10:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index,onOk:this.passApply.bind(this, index, item.estateId, 1, 'consultantApply', indexs),title:"通过置业顾问申请入驻"})}}>是</a>
+                                        this.setState({
+                                            visible10: true,
+                                            userId: this.state.consultantApplyData[index].personId,
+                                            estateId: item.estateId,
+                                            index: index,
+                                            onOk: this.passApply.bind(this, index, item.estateId, 1, 'consultantApply', indexs),
+                                            title: "通过置业顾问申请入驻"
+                                        })
+                                    }}>是</a>
                                     <Divider type="vertical"/>
-                                    <a onClick={()=>{
-                                        if(!this.props.userInformation.name){
+                                    <a onClick={() => {
+                                        if (!this.props.userInformation.name) {
                                             const key = `open${Date.now()}`;
                                             const btn = (
-                                                <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                                                <Button type="primary" size="small"
+                                                        onClick={() => notification.close(key)}>
                                                     确定
                                                 </Button>
                                             );
@@ -1232,7 +1291,15 @@ class Admin extends React.Component {
                                             });
                                             return
                                         }
-                                        this.setState({visible5:true,userId:this.state.consultantApplyData[index].personId,estateId:item.estateId,index:index,onOk:this.passApply.bind(this, index, item.estateId, -1, 'consultantApply', indexs),title:"拒绝置业顾问申请入驻"})}}>否</a>
+                                        this.setState({
+                                            visible5: true,
+                                            userId: this.state.consultantApplyData[index].personId,
+                                            estateId: item.estateId,
+                                            index: index,
+                                            onOk: this.passApply.bind(this, index, item.estateId, -1, 'consultantApply', indexs),
+                                            title: "拒绝置业顾问申请入驻"
+                                        })
+                                    }}>否</a>
                                 </p>
                             )
                         })
@@ -1322,7 +1389,7 @@ class Admin extends React.Component {
                 render: (text, record, index) => (
                     <span>
                    <a onClick={() => {
-                       if(!this.props.userInformation.name){
+                       if (!this.props.userInformation.name) {
                            const key = `open${Date.now()}`;
                            const btn = (
                                <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -1337,7 +1404,13 @@ class Admin extends React.Component {
                            });
                            return
                        }
-                       this.setState({visible6: true,userId:this.state.agentControlData[index].personId,index:index,onOk1:this.delUserData.bind(this,1, 'agent',index),title1:"是否删除"})
+                       this.setState({
+                           visible6: true,
+                           userId: this.state.agentControlData[index].personId,
+                           index: index,
+                           onOk1: this.delUserData.bind(this, 1, 'agent', index),
+                           title1: "是否删除"
+                       })
                    }}>删除</a>
                 </span>
                 ),
@@ -1367,7 +1440,7 @@ class Admin extends React.Component {
                 render: (text, record, index) => (
                     <span>
                     <a onClick={() => {
-                        if(!this.props.userInformation.name){
+                        if (!this.props.userInformation.name) {
                             const key = `open${Date.now()}`;
                             const btn = (
                                 <Button type="primary" size="small" onClick={() => notification.close(key)}>
@@ -1382,113 +1455,120 @@ class Admin extends React.Component {
                             });
                             return
                         }
-                        this.setState({visible6:true,userId:this.state.consultantControlData[index].personId,index:index,onOk1:this.delUserData.bind(this, this.state.consultantControlData[index].personId, 'consultant'),title1:"是否删除"})
+                        this.setState({
+                            visible6: true,
+                            userId: this.state.consultantControlData[index].personId,
+                            index: index,
+                            onOk1: this.delUserData.bind(this, this.state.consultantControlData[index].personId, 'consultant'),
+                            title1: "是否删除"
+                        })
                     }}>删除</a>
                 </span>
                 ),
             },
-                        ];
-                        //管理新房管理员
-                        const bridalControl=[
-                        {
-                            title: '序号',
-                            dataIndex: 'no',
-                            key: 'no',
-                        },
-                        {
-                            title: '账号',
-                            dataIndex: 'phone',
-                            key: 'phone',
-                        },
-                        {
-                            title: '修改密码',
-                            dataIndex: 'passWord',
-                            key: 'passWord',
-                            render: () => (<Input onChange={this.changePassWord.bind(this)}/>)
-                        },
-                        {
-                            title: '更新密码',
-                            render: () => (<Button>确认修改</Button>)
-                        },
-                        ];
-                        const consultant=[
-                        {
-                            title: '时间',
-                            dataIndex: 'createTime',
-                            key: 'createTime',
-                        },
-                        {
-                            title: '申请人姓名',
-                            dataIndex: 'name',
-                            key: 'name',
-                        },
-                        {
-                            title: '头像',
-                            dataIndex: 'head',
-                            key: 'head',
-                            render: (text, record, index) => (
-                            <img src={''}/>
-                            ),
-                        },
-                        {
-                            title: '申请人账号（电话）',
-                            key: 'phone',
-                            dataIndex: 'phone',
-                        },
-                        {
-                            title: '联系电话',
-                            key: 'contact',
-                            dataIndex: 'contact',
-                        },
-                        {
-                            title: '微信二维码',
-                            key: 'weChatQrCode',
-                            dataIndex: 'weChatQrCode',
-                        },
-                        {
-                            title: '申请人公司',
-                            key: 'company',
-                            dataIndex: 'company',
-                        },
-                        {
-                            title: '是否通过',
-                            key: 'action',
-                            render: (text, record, index) => (
-                            <span>
+        ];
+        //管理新房管理员
+        const bridalControl = [
+            {
+                title: '序号',
+                dataIndex: 'no',
+                key: 'no',
+            },
+            {
+                title: '账号',
+                dataIndex: 'phone',
+                key: 'phone',
+            },
+            {
+                title: '修改密码',
+                dataIndex: 'passWord',
+                key: 'passWord',
+                render: () => (<Input onChange={this.changePassWord.bind(this)}/>)
+            },
+            {
+                title: '更新密码',
+                render: () => (<Button>确认修改</Button>)
+            },
+        ];
+        const consultant = [
+            {
+                title: '时间',
+                dataIndex: 'createTime',
+                key: 'createTime',
+            },
+            {
+                title: '申请人姓名',
+                dataIndex: 'name',
+                key: 'name',
+            },
+            {
+                title: '头像',
+                dataIndex: 'head',
+                key: 'head',
+                render: (text, record, index) => (
+                    <img src={''}/>
+                ),
+            },
+            {
+                title: '申请人账号（电话）',
+                key: 'phone',
+                dataIndex: 'phone',
+            },
+            {
+                title: '联系电话',
+                key: 'contact',
+                dataIndex: 'contact',
+            },
+            {
+                title: '微信二维码',
+                key: 'weChatQrCode',
+                dataIndex: 'weChatQrCode',
+            },
+            {
+                title: '申请人公司',
+                key: 'company',
+                dataIndex: 'company',
+            },
+            {
+                title: '是否通过',
+                key: 'action',
+                render: (text, record, index) => (
+                    <span>
                             <a>是</a>
                             <Divider type="vertical"/>
                             <a>否</a>
                             </span>
-                            ),
-                        },
-                        ];
-                        return (
-                        <div className='admin'>
-                                               <Modal
-                            title={this.state.title}
-                            visible={this.state.visible5}
-                            centered
-                            destroyOnClose={true}
-                            okText="确认"
-                            cancelText="取消"
-                            onOk={this.state.onOk}
-                            onCancel={() => {
-                                this.setState({visible5: false})
-                            }}
-                        >
-                            </Modal>
-                            <Modal
-            title={this.state.title1}
-            destroyOnClose={true}
-            okText="确认"
-            cancelText="取消"
-            visible={this.state.visible6}
-            onOk={this.state.onOk1}
-                onCancel={() => {
-                this.setState({visible6: false})
-            }}
+                ),
+            },
+        ];
+        return (
+            <div className='admin'>
+                <Modal
+                    title={this.state.title}
+                    visible={this.state.visible5}
+                    centered
+                    keyboard={false}
+                    destroyOnClose={true}
+                    okText="确认"
+                    cancelText="取消"
+                    onOk={this.state.onOk}
+                    onCancel={() => {
+                        this.setState({visible5: false})
+                    }}
                 >
-                <p>删除以后将不可恢复，请谨慎选择!</p>
+                </Modal>
+                <Modal
+                    title={this.state.title1}
+                    destroyOnClose={true}
+                    okText="确认"
+                    cancelText="取消"
+                    visible={this.state.visible6}
+                    onOk={this.state.onOk1}
+                    onCancel={() => {
+                        this.setState({visible6: false})
+                    }}
+                >
+                    <p>删除以后将不可恢复，请谨慎选择!</p>
                 </Modal>
                 <div className={'header'}>
                     <div className='left'>
@@ -1503,7 +1583,7 @@ class Admin extends React.Component {
                               onClick={this.showModal.bind(this, 'login')}/>
                         <Modal
                             visible={this.state.login}
-                            maskStyle={{backgroundColor:"black"}}
+                            maskStyle={{backgroundColor: "black"}}
                             destroyOnClose={true}
                             maskClosable={false}
                             closable={false}
@@ -1511,7 +1591,7 @@ class Admin extends React.Component {
                             onCancel={this.handleCancel.bind(this)}
                             footer={''}
                         >
-                            <p style={{fontSize:'22px'}}>超级管理员登录</p>
+                            <p style={{fontSize: '22px'}}>超级管理员登录</p>
                             <Logins handleClose={this.handleCancel.bind(this)}/>
                         </Modal>
                         {/* <Login login={this.state.login} handleCancel={this.handleCancel.bind(this,'login')}/>
@@ -1528,33 +1608,38 @@ class Admin extends React.Component {
                         <TabPane tab="注册审核" key="1">
                             <Tabs defaultActiveKey="11" onChange={this.callback.bind(this)}>
                                 <TabPane tab="待审核经纪人" key="11">
-                                    <Table columns={agentColumns} dataSource={this.state.agentData} pagination={ false }/>
+                                    <Table columns={agentColumns} dataSource={this.state.agentData} pagination={false}/>
                                 </TabPane>
                                 <TabPane tab="待审核置业顾问" key="12">
-                                    <Table columns={consultantColumns} dataSource={this.state.consultantData} pagination={ false }/>
+                                    <Table columns={consultantColumns} dataSource={this.state.consultantData}
+                                           pagination={false}/>
                                 </TabPane>
                             </Tabs>
                         </TabPane>
                         <TabPane tab="入驻审核" key="2" onChange={this.callback.bind(this)}>
                             <Tabs defaultActiveKey="21" onChange={this.callback.bind(this)}>
                                 <TabPane tab="经纪人入驻申请" key="21">
-                                    <Table columns={agentApply} dataSource={this.state.agentApplyData} pagination={ false }/>
+                                    <Table columns={agentApply} dataSource={this.state.agentApplyData}
+                                           pagination={false}/>
                                 </TabPane>
                                 <TabPane tab="置业顾问入驻申请" key="22" onChange={this.callback.bind(this)}>
-                                    <Table columns={consultantApply} dataSource={this.state.consultantApplyData} pagination={ false }/>
+                                    <Table columns={consultantApply} dataSource={this.state.consultantApplyData}
+                                           pagination={false}/>
                                 </TabPane>
                             </Tabs>
                         </TabPane>
                         <TabPane tab="权限管理" key="3">
                             <Tabs defaultActiveKey="31" onChange={this.callback.bind(this)}>
                                 <TabPane tab="管理经纪人" key="31">
-                                    <Table columns={agentControl} dataSource={this.state.agentControlData} pagination={ false }/>
+                                    <Table columns={agentControl} dataSource={this.state.agentControlData}
+                                           pagination={false}/>
                                 </TabPane>
                                 <TabPane tab="管理置业顾问" key="32">
-                                    <Table columns={consultantControl} dataSource={this.state.consultantControlData} pagination={ false }/>
+                                    <Table columns={consultantControl} dataSource={this.state.consultantControlData}
+                                           pagination={false}/>
                                 </TabPane>
                                 <TabPane tab="管理新房管理员" key='33'>
-                                    <EditableTable dataSource={this.state.adminData} pagination={ false }/>
+                                    <EditableTable dataSource={this.state.adminData} pagination={false}/>
                                 </TabPane>
                             </Tabs>
                         </TabPane>
@@ -1571,4 +1656,4 @@ class Admin extends React.Component {
 }
 
 export default connect(state => (
-                        {userInformation: state.userInformation}), {setUserInformation})(Admin);
+    {userInformation: state.userInformation}), {setUserInformation})(Admin);

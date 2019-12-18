@@ -17,7 +17,6 @@ class Phone extends React.Component {
             code: 'http://47.108.87.104:8501/user/verfiyCode'
         }
     }
-
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -45,7 +44,6 @@ class Phone extends React.Component {
             }
         });
     };
-
     //获取手机验证码
     getCode() {
         if(!this.props.form.getFieldValue('phone')){
@@ -73,14 +71,12 @@ class Phone extends React.Component {
                         }, 1000)
                     }
                 }
-        
                 time()
             }
         })
     }
-
     render() {
-        const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched} = this.props.form;
+        const {getFieldDecorator} = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit} className="login-form" id={'phone'}>
                 <Form.Item>
@@ -174,6 +170,20 @@ class HomePage extends React.Component {
                 })
             }
         })
+        if (!localStorage.getItem('bind') && localStorage.getItem('role') == 3) {
+            this.setState({phoneShow: true})
+        }
+        else if(!localStorage.getItem('bind')&& localStorage.getItem('role') == 4){
+            this.setState({phoneShow: true})
+        }
+        else if (!localStorage.getItem('bind')&& localStorage.getItem('role') == 5) {
+            this.setState({phoneShow: true})
+        }
+        else if(localStorage.getItem('bind')){
+            if((localStorage.getItem('role')==3||localStorage.getItem('role')==4)&&localStorage.getItem('state')=='-1'){
+                this.props.history.push({pathname: '/home/registryCenter'})
+            }
+        }
         if (this.getQueryVariable('state') == 'bind') {
             let params = {
                 userId: localStorage.getItem('userId'),
@@ -240,7 +250,6 @@ class HomePage extends React.Component {
             });
         }
     };
-
     //退出登录
     clear() {
         this.props.setUserInformation({})
@@ -249,6 +258,7 @@ class HomePage extends React.Component {
         localStorage.setItem('role','')
         localStorage.setItem('userId','')
         localStorage.setItem('phone','')
+        localStorage.setItem('bind','')
     }
 
     //登录或注册以后关闭弹框
@@ -301,7 +311,7 @@ class HomePage extends React.Component {
                 </Link>
             )
         }
-        else if (this.props.userInformation.role === 3 || localStorage.getItem('role') == 3) {
+        else if ((this.props.userInformation.role === 3 || localStorage.getItem('role') == 3)&&localStorage.getItem('state')==1) {
             return (
                 <Link to={'/home/agentMy'}>
                     <img src={require('../img/login.png')} style={{marginRight: '10px'}}/>
@@ -310,9 +320,27 @@ class HomePage extends React.Component {
                 </Link>
             )
         }
-        else if (this.props.userInformation.role === 4 || localStorage.getItem('role') == 4) {
+        else if ((this.props.userInformation.role === 3 || localStorage.getItem('role') == 3)) {
+            return (
+                <Link to={'/home/registryCenter'}>
+                    <img src={require('../img/login.png')} style={{marginRight: '10px'}}/>
+                    <span
+                        style={{marginRight: '20px'}}>{this.props.userInformation.name || localStorage.getItem('userName')}</span>
+                </Link>
+            )
+        }
+        else if ((this.props.userInformation.role === 4 || localStorage.getItem('role') == 4)&&localStorage.getItem('state')==1) {
             return (
                 <Link to={'/home/consultant'}>
+                    <img src={require('../img/login.png')} style={{marginRight: '10px'}}/>
+                    <span
+                        style={{marginRight: '20px'}}>{this.props.userInformation.name || localStorage.getItem('userName')}</span>
+                </Link>
+            )
+        }
+        else if ((this.props.userInformation.role === 4 || localStorage.getItem('role') == 4)) {
+            return (
+                <Link to={'/home/registryCenter'}>
                     <img src={require('../img/login.png')} style={{marginRight: '10px'}}/>
                     <span
                         style={{marginRight: '20px'}}>{this.props.userInformation.name || localStorage.getItem('userName')}</span>

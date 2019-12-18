@@ -1,19 +1,19 @@
-.bridalChamber{
+.bridalChamber {
   text-align: left;
   color: #fff;
-  font-family:Source Han Sans CN;
+  font-family: Source Han Sans CN;
   .title-box {
     background: rgba(242, 245, 248, 1);
     .ant-btn-primary {
       background-color: #fff;
       border-color: #d9d9d9
     }
-    .ant-btn-primary:hover, .ant-btn-primary :focus{
+    .ant-btn-primary:hover, .ant-btn-primary :focus {
       border-color: #40a9ff
     }
     .title {
       width: 1200px;
-      margin:auto;
+      margin: auto;
       display: flex;
       //height: 70px;
       font-size: 41px;
@@ -42,227 +42,132 @@
       }
     }
   }
-  .condition{
+  .condition {
     width: 1200px;
-    margin:8px auto 0;
-    .ant-checkbox-group-item{
-    color: #333;
-  }
-    .ant-radio-wrapper-checked{
+    margin: 8px auto 0;
+    .ant-checkbox-group-item {
+      color: #333;
+    }
+    .ant-radio-wrapper-checked {
       font-weight: bold;
       color: #268AED !important;
     }
     .ant-radio-wrapper {
       color: #333;
     }
-  .ant-checkbox-group-item{
-    margin: 10px 0;
-  }
-    .ant-checkbox-wrapper-checked{
+    .ant-checkbox-group-item {
+      margin: 10px 0;
+    }
+    .ant-checkbox-wrapper-checked {
       color: #268AED;
       font-weight: bold;
     }
-    .first{
+    .first {
       display: flex;
       margin-top: 20px;
-      border-bottom: 1px solid rgba(217,217,217,1);
-      .ant-radio{
+      border-bottom: 1px solid rgba(217, 217, 217, 1);
+      .ant-radio {
         display: none;
       }
-      .ant-radio-wrapper-checked{
+      .ant-radio-wrapper-checked {
         color: #268AED;
       }
-      p{
-        font-size:15px;
-        font-family:Source Han Sans CN;
+      p {
+        font-size: 15px;
+        font-family: Source Han Sans CN;
         margin-right: 20px;
-        font-weight:bold;
-        color:rgba(51,51,51,1);
+        font-weight: bold;
+        color: rgba(51, 51, 51, 1);
       }
     }
-    .second{
+    .second {
       display: flex;
-      p{
-        font-size:15px;
-        font-family:Source Han Sans CN;
+      p {
+        font-size: 15px;
+        font-family: Source Han Sans CN;
         margin-right: 28px;
-        font-weight:bold;
-        color:rgba(51,51,51,1);
+        font-weight: bold;
+        color: rgba(51, 51, 51, 1);
       }
-      .ant-checkbox-group{
+      .ant-checkbox-group {
         width: 1000px;
         text-align: left;
       }
     }
   }
-  .result{
+  .result {
     width: 1200px;
     margin: 10px auto 0;
-    .find{
-      font-size:24px;
+    .find {
+      font-size: 24px;
       margin-bottom: 20px;
       text-align: left;
-      font-family:Source Han Sans CN;
-      font-weight:bold;
-      color:rgba(51,51,51,1);
-      span{
+      font-family: Source Han Sans CN;
+      font-weight: bold;
+      color: rgba(51, 51, 51, 1);
+      span {
         color: #268AED;
       }
     }
-    .sort{
+    .sort {
       display: flex;
       align-items: center;
-      ul{
+      ul {
         width: 840px;
         height: 46px;
-        border-bottom: 2px solid rgba(38,138,237,1);
+        border-bottom: 2px solid rgba(38, 138, 237, 1);
         border-right: none;
       }
       .ant-menu-submenu-title {
         padding: 0 16px;
         margin-bottom: 0;
       }
-      .ant-menu-item{
+      .ant-menu-item {
         padding: 0 16px;
       }
       .ant-menu-item:not(:last-child) {
         padding: 0 16px;
         margin-bottom: 0px;
       }
-      .clear{
-        color:#268aed;
+      .clear {
+        color: #268aed;
         font-size: 14px;
         margin-left: -162px;
         cursor: pointer;
       }
     }
   }
-    .show {
-      display: flex;
-      width: 1200px;
-      margin: auto;
-      .left{
-        width: 840px;
-        margin-right: 75px;
-      }
-      .showItem {
-        padding: 40px 0;
-        border-bottom: 1px solid rgba(217, 217, 217, 1);
-        .left {
-          .item {
-            cursor: pointer;
-            display: flex;
-            .pic{
-              width: 352px;
-              height: 264px;
-              img{
-                width: 100%;
-                height: 100%;
-              }
-            }
-            .information {
-              position: relative;
-              width: 448px;
-              margin-left: 20px;
-              text-align: left;
-              .title {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                p {
-                  border: none;
-                  padding: 0;
-                  margin: 0;
-                }
-                .name {
-                  font-size: 20px;
-                  cursor: pointer;
-                  font-weight: bold;
-                  color: rgba(51, 51, 51, 1);
-                }
-                .name:hover{
-                  color: #2f54eb;
-                }
-                .price {
-                  font-size: 24px;
-                  font-weight: bold;
-                  color: rgba(255, 83, 83, 1);
-                }
-              }
-              .address {
-                font-size: 16px;
-                cursor: pointer;
-                font-weight: bold;
-                margin-bottom: 10px ;
-                color: rgba(51, 51, 51, 1);
-              }
-              .apartment {
-                width: 100%;
-                font-size: 14px;
-                cursor: pointer;
-                font-weight: 400;
-                color: rgba(51, 51, 51, 1);
-              }
-              .area {
-                font-size: 14px;
-                margin: 10px 0;
-                cursor: pointer;
-                color: rgba(102, 102, 102, 1);
-              }
-              .tag {
-                color: #333;
-              }
-              .advantage {
-                position: absolute;
-                margin: 0;
-                bottom: 0;
-                .advantageItem {
-                  display: inline-block;
-                  text-align: center;
-                  margin-top: 10px;
-                  width: 80px;
-                  height: 27px;
-                  margin-right: 14px;
-                  background: rgba(222, 229, 237, 1);
-                  font-size: 14px;
-                  font-family: Source Han Sans CN;
-                  font-weight: 400;
-                  line-height: 30px;
-                  color: rgba(102, 102, 102, 1);
-                  opacity: 1;
-                }
-              }
+  .show {
+    display: flex;
+    width: 1200px;
+    margin: auto;
+    .left {
+      width: 840px;
+      margin-right: 75px;
+    }
+    .showItem {
+      padding: 40px 0;
+      border-bottom: 1px solid rgba(217, 217, 217, 1);
+      .left {
+        .item {
+          cursor: pointer;
+          display: flex;
+          .pic {
+            width: 352px;
+            height: 264px;
+            img {
+              width: 100%;
+              height: 100%;
             }
           }
-        }
-      }
-      .last {
-        border: none;
-      }
-      .ant-pagination{
-        text-align: center;
-        margin: 10px 0
-      }
-      .hot {
-        margin-top: 40px;
-        .title {
-          font-size: 20px;
-          font-family: Source Han Sans CN;
-          font-weight: bold;
-          color: rgba(51, 51, 51, 1);
-        }
-          .hotItem{
-            cursor: pointer;
-            margin-bottom: 30px;
-           img{
-             width: 280px;
-             height: 210px;
-           }
+          .information {
+            position: relative;
+            width: 448px;
+            margin-left: 20px;
+            text-align: left;
             .title {
+              width: 100%;
               display: flex;
-              text-align: left;
-              height: auto;
-              margin-top: 10px;
               justify-content: space-between;
               p {
                 border: none;
@@ -270,108 +175,200 @@
                 margin: 0;
               }
               .name {
-                font-size: 18px;
-                font-family: Source Han Sans CN;
+                font-size: 20px;
+                cursor: pointer;
                 font-weight: bold;
                 color: rgba(51, 51, 51, 1);
-                width: 150px;
-                overflow: hidden;
-                text-overflow:ellipsis;
-                white-space: nowrap
+              }
+              .name:hover {
+                color: #2f54eb;
               }
               .price {
-                font-size: 18px;
-                font-family: Source Han Sans CN;
+                font-size: 24px;
                 font-weight: bold;
                 color: rgba(255, 83, 83, 1);
               }
             }
-
-            .center{
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              .address{
-                font-size:16px;
-                margin:4px 0;
-                font-family:Source Han Sans CN;
-                color:rgba(51,51,51,1);
-              }
-              .area{
-                font-size:14px;
-                margin: 4px 0;
-                font-family:Source Han Sans CN;
-                color:rgba(102,102,102,1);
+            .address {
+              font-size: 16px;
+              cursor: pointer;
+              font-weight: bold;
+              margin-bottom: 10px;
+              color: rgba(51, 51, 51, 1);
+            }
+            .apartment {
+              width: 100%;
+              font-size: 14px;
+              cursor: pointer;
+              font-weight: 400;
+              color: rgba(51, 51, 51, 1);
+            }
+            .area {
+              font-size: 14px;
+              margin: 10px 0;
+              cursor: pointer;
+              color: rgba(102, 102, 102, 1);
+            }
+            .tag {
+              color: #333;
+            }
+            .advantage {
+              position: absolute;
+              margin: 0;
+              bottom: 0;
+              .advantageItem {
+                display: inline-block;
+                text-align: center;
+                margin-top: 10px;
+                width: 80px;
+                height: 27px;
+                margin-right: 14px;
+                background: rgba(222, 229, 237, 1);
+                font-size: 14px;
+                font-family: Source Han Sans CN;
+                font-weight: 400;
+                line-height: 30px;
+                color: rgba(102, 102, 102, 1);
+                opacity: 1;
               }
             }
-            .tag{
-              font-size:14px;
-              color:rgba(102,102,102,1);
-              text-align: left;
-            }
+          }
         }
       }
     }
-  .chain{
+    .last {
+      border: none;
+    }
+    .ant-pagination {
+      text-align: center;
+      margin: 10px 0
+    }
+    .hot {
+      margin-top: 40px;
+      .title {
+        font-size: 20px;
+        font-family: Source Han Sans CN;
+        font-weight: bold;
+        color: rgba(51, 51, 51, 1);
+      }
+      .hotItem {
+        cursor: pointer;
+        margin-bottom: 30px;
+        img {
+          width: 280px;
+          height: 210px;
+        }
+        .title {
+          display: flex;
+          text-align: left;
+          height: auto;
+          margin-top: 10px;
+          justify-content: space-between;
+          p {
+            border: none;
+            padding: 0;
+            margin: 0;
+          }
+          .name {
+            font-size: 18px;
+            font-family: Source Han Sans CN;
+            font-weight: bold;
+            color: rgba(51, 51, 51, 1);
+            width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+          }
+          .price {
+            font-size: 18px;
+            font-family: Source Han Sans CN;
+            font-weight: bold;
+            color: rgba(255, 83, 83, 1);
+          }
+        }
+
+        .center {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .address {
+            font-size: 16px;
+            margin: 4px 0;
+            font-family: Source Han Sans CN;
+            color: rgba(51, 51, 51, 1);
+          }
+          .area {
+            font-size: 14px;
+            margin: 4px 0;
+            font-family: Source Han Sans CN;
+            color: rgba(102, 102, 102, 1);
+          }
+        }
+        .tag {
+          font-size: 14px;
+          color: rgba(102, 102, 102, 1);
+          text-align: left;
+        }
+      }
+    }
+  }
+  .chain {
     margin: 0;
     font-size: 14px;
     border-bottom: 1px solid #E3E3E3;
-    padding:0 0 20px ;
-    li{
+    padding: 0 0 20px;
+    li {
       margin-right: 60px;
       display: inline-block;
-      a{
+      a {
         color: #333333;
       }
     }
   }
-  .company{
+  .company {
     padding-top: 20px;
     color: #999;
     display: flex;
     font-size: 14px;
-    img{
+    img {
       width: 180px;
       height: 55px;
     }
-    .right{
+    .right {
       margin-left: 40px;
-      a{
+      a {
         color: #999;
       }
 
-      li{
+      li {
         margin-right: 60px;
         display: inline-block;
-        a{
+        a {
           color: #999;
         }
       }
     }
   }
 
-  .ant-menu{
+  .ant-menu {
     display: flex;
     margin-right: 80px;
     color: #333;
     background-color: transparent;
     justify-content: flex-start;
   }
-  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
+  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
     color: #fff;
     background-color: #268AED;
     font-size: 18px;
   }
-  .ant-menu-horizontal{
+  .ant-menu-horizontal {
     border: none;
   }
 
-  .ant-menu-horizontal > .ant-menu-item >a {
+  .ant-menu-horizontal > .ant-menu-item > a {
     color: #fff;
   }
-  //.ant-menu-horizontal > .ant-menu-item >a:hover {
-  //  color: #434343;
-  //}
   .ant-menu-item, .ant-menu-submenu-title {
     font-weight: bold;
     padding: 0 16px;
@@ -385,31 +382,32 @@
     //margin: 0 7px;
     padding: 0;
     color: #fff;
-  }.ant-menu-horizontal > .ant-menu-item a:hover {
-       background-color: #268AED;
-     color: #fff;
-   }
+  }
+  .ant-menu-horizontal > .ant-menu-item a:hover {
+    background-color: #268AED;
+    color: #fff;
+  }
   .ant-menu-horizontal > .ant-menu-item:hover {
     background-color: #268AED;
     color: #fff;
-    border:none
+    border: none
   }
   //.ant-menu-horizontal > .ant-menu-item :hover {
   //  color: #434343;
   //  background-color: #fff;
   //}
-  .ant-menu-horizontal > .ant-menu-item-selected{
+  .ant-menu-horizontal > .ant-menu-item-selected {
 
-    border:none;
+    border: none;
   }
   .ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
     border: none;
     color: #fff;
   }
-  .ant-menu-horizontal > .ant-menu-item-selected>a{
+  .ant-menu-horizontal > .ant-menu-item-selected > a {
     color: #fff;
   }
-  .ant-menu-item-active{
+  .ant-menu-item-active {
     color: #fff !important;
     background-color: #268AED;
     border: none;
@@ -419,7 +417,8 @@
   }
 
 }
-.ant-table-fixed-header .ant-table-scroll .ant-table-header{
+
+.ant-table-fixed-header .ant-table-scroll .ant-table-header {
   overflow: hidden !important;
   margin-bottom: 0px !important;
   padding-bottom: 0px !important;
