@@ -160,13 +160,13 @@ class HomePage extends React.Component {
             districtIds: [],
             streetId: [],
             searchText: '',
-            pageSize: 4
+            pageSize: 12
         }
         searchAgent(params1).then((res) => {
             if (res.data.code === 1) {
                 this.setState({
                     agent: res.data.models,
-                    num: Math.ceil(res.data.models.length / 4)
+                    num: Math.floor(res.data.counts / 4)
                 })
             }
         })
@@ -192,7 +192,6 @@ class HomePage extends React.Component {
             bindWechat(params).then((res) => {
                 if (res.data.code === 1) {
                     message.success('微信绑定成功！')
-                    // localStorage.setItem('bind',true)
                 }
                 else {
                     message.error(res.data.msg)
@@ -398,6 +397,7 @@ class HomePage extends React.Component {
     }
 
     goRight() {
+        console.log(this.state.num)
         this.setState({
             translateX: this.state.translateX - 1201 > (-this.state.num * 1201) ? this.state.translateX - 1201: -this.state.num * 1201,
         })
@@ -611,8 +611,6 @@ class HomePage extends React.Component {
                                                             })
                                                         }</p>
                                                     </div>
-                                                    {/* <p className={'phone'}>联系电话：{localStorage.getItem('userId') ? item.contact : '登录后查看'}
-                                                    </p> */}
                                                     <p className={'weixin'}>
                                                         <Popconfirm
                                                         title="微信扫描二维码添加经纪人"
@@ -661,7 +659,7 @@ class HomePage extends React.Component {
                             </ul>
                             <div style={{textAlign:'center'}}>
                         <span>Copyright©2019 成都叁城房地产经纪有限公司 版权所有 ©</span>
-                    <a target={'_blank'} href={'http://www.028icp.com/'} style={{color:'#666'}}> 蜀ICP备18023206号-2</a>
+                    <a target={'_blank'} href={'http://beian.miit.gov.cn/'} style={{color:'#666'}}> 蜀ICP备18023206号-2</a>
                 </div>
                         </div>
                     </div>

@@ -286,7 +286,7 @@ class BridalIndex extends React.Component {
     }
 
     handleVisibleChange = (visible, index) => {
-        if (this.state.condition) {
+        if (!localStorage.getItem('userId')) {
             message.info('请先登录'); // next step
         } else {
             let arr = this.state.visible
@@ -600,7 +600,7 @@ class BridalIndex extends React.Component {
                             <p className={'address'}>项目地址：<span>{values.adress}</span></p>
 
                         </div>
-                        <div className={'second'}>
+                        <div className={'second'} style={{display:this.state.agent.length>0?'block':'none'}}>
                             <p className={'star'}>推荐经纪人</p>
                             {
                                 this.state.agent && this.state.agent.map((item, index) => {
@@ -610,7 +610,6 @@ class BridalIndex extends React.Component {
                                             <div className={'right'}>
                                                 <p className={'name'}>{item.name}</p>
                                                 <p className={'title'}>{item.position}</p>
-                                                {/* <p className={'phone'}><span>联系电话：</span>{item.contact}</p> */}
                                                 <p className={'weixin'}>
                                                     <Popconfirm
                                                         title="微信扫描二维码添加经纪人"
@@ -630,9 +629,8 @@ class BridalIndex extends React.Component {
                                     )
                                 })
                             }
-                            {/* <Pagination defaultCurrent={1} total={this.state.consultant.length} defaultPageSize={4} onChange={this.page.bind(this)}/> */}
                         </div>
-                        <div className={'second'}>
+                        <div className={'second'} style={{display:this.state.consultantShow.length>0?'block':'none'}}>
                             <p className={'star'}>置业顾问</p>
                             {
                                 this.state.consultantShow && this.state.consultantShow.map((item, index) => {

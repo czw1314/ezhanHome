@@ -45,7 +45,7 @@
     }
   }
   .accountNumber{
-    img{
+    svg{
       width: 40px;
       height: 40px;
       cursor: pointer;
@@ -71,6 +71,7 @@
     }
     .agreement{
       color: #666;
+      margin-top: 20px;
       text-align: left;
       a{
         color: #666;

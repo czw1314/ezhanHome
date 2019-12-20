@@ -18,7 +18,13 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
+.ant-message-notice-content {
+  height: 50px;
+  font-size: 18px;
+}
+  .anticon-info-circle{
+    font-size: 18px;
+  }
 .App-link {
   color: #61dafb;
 }

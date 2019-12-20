@@ -106,7 +106,6 @@
             height: 120px;
             background-color: transparent;
             display: inline-block;
-            border-radius: 50%;
           }
           .ant-upload-picture-card-wrapper {
             width: auto;
@@ -173,21 +172,20 @@
               }
               input {
                 width: 200px;
-                margin-left: 20px;
+
               }
               .ant-select {
                 width: 180px;
-                margin-left: 20px;
+
               }
               .ant-checkbox-group {
-                margin-left: 20px;
+
                 input {
                   width: auto;
-                  mxargin-left: 20px;
+
                 }
               }
               .bottom{
-                margin-left: 16px;
                 width: 230px;
                 .ant-upload{
                   padding: 0;
@@ -215,6 +213,9 @@
             .ant-input-group-wrapper {
               width: auto;
             }
+            .ant-cascader-picker{
+              margin-right: 20px;
+            }
             p{
               padding: 0;
               margin: 0;
@@ -222,14 +223,12 @@
             input{
               width: 200px;
               color: #333;
-              margin-left: 20px;
             }
             .ant-select{
               width: 180px;
-              margin-left: 20px;
+              margin-right: 20px;
             }
             .ant-checkbox-group{
-              margin-left: 20px;
               input{
                 width:auto;
                 mxargin-left: 20px;
