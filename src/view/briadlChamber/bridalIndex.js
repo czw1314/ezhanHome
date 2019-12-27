@@ -135,7 +135,6 @@ class BridalIndex extends React.Component {
     }
 
     componentDidMount() {
-
         let params = {
             estateId: this.props.estateId || localStorage.getItem('estateId'),
         }
@@ -639,7 +638,6 @@ class BridalIndex extends React.Component {
                                         <div className={'right'}>
                                             <p className={'name'}>{item.name}</p>
                                             <p className={'title'}>{item.position}</p>
-                                            {/* <p className={'phone'}><span>联系电话：</span>{item.contact}</p> */}
                                             <p className={'weixin'}>
                                                 <Popconfirm
                                                     title="微信扫描二维码添加经纪人"

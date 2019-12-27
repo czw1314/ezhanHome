@@ -454,7 +454,6 @@ class Agent extends React.Component {
                                                             </div>
                                                             <p className={'company'}>{item.agentType}</p>
                                                             <div className={'contact'}>
-                                                                {/* <p className={'phone'}><img src={require('../img/Phone.png')}/><span>联系电话：</span>{item.contact}</p> */}
                                                                 <p className={'weixin'}><img src={require('../img/weixin.png')}/>
                                                                     <Popconfirm
                                                                         title="微信扫描二维码添加经纪人"

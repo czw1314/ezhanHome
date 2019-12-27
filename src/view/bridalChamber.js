@@ -47,7 +47,6 @@ class BridalChamber extends React.Component {
             index: 1
         }
     }
-
     componentDidMount() {
         //获取区域
         getDistrictRegions().then((res) => {
