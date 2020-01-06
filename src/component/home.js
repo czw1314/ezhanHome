@@ -44,7 +44,7 @@ class Home extends React.Component {
         localStorage.setItem('role','')
         localStorage.setItem('userId','')
         localStorage.setItem('phone','')
-        if(this.props.location.pathname=='/home/user'||this.props.location.pathname=='/home/agentMy'||this.props.location.pathname=='/home/consultant'){
+        if(this.props.location.pathname=='/home/user'||this.props.location.pathname=='/home/agentMy'||this.props.location.pathname=='/home/consultant'||this.props.location.pathname=='/home/registryCenter'){
             this.props.history.push('/homePage')
         }
     }
@@ -136,6 +136,7 @@ class Home extends React.Component {
                     </div>
                 </div>
                 {this.props.children}
+                <div style={{backgroundColor:"#f2f5f8"}}>
                 <div className={'bottomSide'} style={{backgroundColor:(this.props.location.pathname=='/home/user'||this.props.location.pathname=='/home/consultant'||this.props.location.pathname=='/home/agentMy')?"#f2f5f8":"#fff"}}>
                     <p>友情链接</p>
                     <ul className={'chain'}>
@@ -159,7 +160,8 @@ class Home extends React.Component {
                             </ul>
                             <div style={{textAlign:'center'}}>
                         <span>Copyright©2019 成都叁城房地产经纪有限公司 版权所有 ©</span>
-                        <a target={'_blank'} href={'http://www.028icp.com/'} style={{color:'#666'}}> 蜀ICP备18023206号-2</a>
+                        <a target={'_blank'} href={'http://beian.miit.gov.cn/'} style={{color:'#666'}}> 蜀ICP备18023206号-2</a>
+                </div>
                 </div>
                         </div>
                     </div>

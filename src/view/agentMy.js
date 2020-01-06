@@ -1,6 +1,15 @@
 import React from 'react';
 import '../css/agentMy.scss';
-import {getPersonMsg, getDistrictRegions, putPersonMsg,cancelWechat,getStreetEstates,settledInEstate,delcancelSettledInEstate,searchEstate} from '../api'
+import {
+    getPersonMsg,
+    getDistrictRegions,
+    putPersonMsg,
+    cancelWechat,
+    getStreetEstates,
+    settledInEstate,
+    delcancelSettledInEstate,
+    searchEstate
+} from '../api'
 import {connect} from "react-redux";
 import {newEstateId} from "../redux/action";
 import {
@@ -32,14 +41,14 @@ class AgentMy extends React.Component {
             workYears: '',
             agentType: '',
             position: '',
-            weixinImg:'',
-            weixin:{
-                weChatName:'',
-                weChatNumber:'',
-                weChatAddr:'',
-                weChatSex:'',
-                weChatHeadUrl:''
-            },                                                                                                                                                                                                                 
+            weixinImg: '',
+            weixin: {
+                weChatName: '',
+                weChatNumber: '',
+                weChatAddr: '',
+                weChatSex: '',
+                weChatHeadUrl: ''
+            },
             plainOptions: [{label: '新房经纪', value: '新房经纪'}, {label: '二手房经纪', value: '二手房经纪'}, {
                 label: '权证代办',
                 value: '权证代办'
@@ -54,6 +63,7 @@ class AgentMy extends React.Component {
         reader.addEventListener('load', () => callback(reader.result));
         reader.readAsDataURL(img);
     }
+
     //限制大小
     beforeUpload(file) {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -91,8 +101,8 @@ class AgentMy extends React.Component {
                         agentType: res.data.agentType,
                         company: res.data.company,
                         contact: res.data.contact,
-                        tags:res.data.estates,
-                        weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin,
+                        tags: res.data.estates,
+                        weixin: res.data.weChatPersonMsg ? res.data.weChatPersonMsg : this.state.weixin,
                     })
                 }
             })
@@ -114,13 +124,16 @@ class AgentMy extends React.Component {
             );
         }
     };
+
     callback(key) {
         console.log(key);
     }
+
     //改名
     onChangeName(e) {
         this.setState({name: e.target.value});
     }
+
     //区域选择
     onChange(checkedValues) {
 
@@ -128,6 +141,7 @@ class AgentMy extends React.Component {
             regionId: checkedValues
         })
     }
+
     onChange1(checkedValues) {
         this.setState({
             regionId1: checkedValues
@@ -139,6 +153,7 @@ class AgentMy extends React.Component {
             regionId2: checkedValues
         })
     }
+
     componentDidMount() {
         let params = {
             userId: localStorage.getItem('userId')
@@ -161,9 +176,9 @@ class AgentMy extends React.Component {
                     agentType: res.data.agentType,
                     company: res.data.company,
                     contact: res.data.contact,
-                    tags:res.data.estates,
-                    bindWechatOrNot:res.data.bindWechatOrNot,
-                    weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin,
+                    tags: res.data.estates,
+                    bindWechatOrNot: res.data.bindWechatOrNot,
+                    weixin: res.data.weChatPersonMsg ? res.data.weChatPersonMsg : this.state.weixin,
                 })
             }
         })
@@ -191,15 +206,15 @@ class AgentMy extends React.Component {
                 })
             }
         })
-        let params2={
-            area:[],
-            housingTypes:[],
-            orderType:0,
-            prices:[],
-            traitIds:[],
+        let params2 = {
+            area: [],
+            housingTypes: [],
+            orderType: 0,
+            prices: [],
+            traitIds: [],
             districtIds: [],
-            streetId:[],
-            searchText:'',
+            streetId: [],
+            searchText: '',
         }
         searchEstate(params2).then((res) => {
             if (res.data.code === 1) {
@@ -208,7 +223,7 @@ class AgentMy extends React.Component {
                     let item = {
                         value: res.data.estates[i].id,
                         label: res.data.estates[i].name,
-                        url:'http://47.108.87.104:8601/show/downloadPaper?estateId='+res.data.estates[i].id
+                        url: 'http://47.108.87.104:8601/show/downloadPaper?estateId=' + res.data.estates[i].id
                     }
                     option.push(item)
                 }
@@ -218,7 +233,8 @@ class AgentMy extends React.Component {
             }
         })
     }
-        //选择区域
+
+    //选择区域
     setRegion(value) {
         this.setState({
             region: value
@@ -242,6 +258,7 @@ class AgentMy extends React.Component {
             }
         })
     }
+
     setEstates(value) {
         this.setState({
             estateId: value
@@ -250,8 +267,9 @@ class AgentMy extends React.Component {
             estateId: value
         }
         this.props.newEstateId(value)
-        localStorage.setItem('estateId',value)
+        localStorage.setItem('estateId', value)
     }
+
     //职称改变
     changePosition(e) {
         this.setState({
@@ -300,13 +318,13 @@ class AgentMy extends React.Component {
             "bussinessId": this.state.bussinessId,
             "workingYears": this.state.workYears,
             "agentType": this.state.agentType,
-            "company": this.state.company||'占位',
+            "company": this.state.company || '占位',
             "position": this.state.position,
-            "contact": this.state.contact,
             "userId": localStorage.getItem('userId')
         }
-        for(var key in params){
-            if(!params[key]){
+        for (var key in params) {
+            if (!params[key]) {
+                console.log(key)
                 message.error('所有信息必填')
                 return;
             }
@@ -335,8 +353,8 @@ class AgentMy extends React.Component {
                             agentType: res.data.agentType,
                             company: res.data.company,
                             contact: res.data.contact,
-                            weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin,
-                            
+                            weixin: res.data.weChatPersonMsg ? res.data.weChatPersonMsg : this.state.weixin,
+
                         })
                     }
                 })
@@ -355,8 +373,8 @@ class AgentMy extends React.Component {
         confirm({
             title: '是否确认更新修改信息?',
             content: '',
-            okText:"确认",
-            cancelText:"取消",
+            okText: "确认",
+            cancelText: "取消",
             onOk: () => {
                 this.onSubmit()
             },
@@ -365,96 +383,99 @@ class AgentMy extends React.Component {
             },
         });
     }
-        //确认修改？
-        showConfirm1() {
-            const {confirm} = Modal;
-            const that = this
-            confirm({
-                title: '是否确认申请入驻?',
-                content: '',
-                okText:"确认",
-                cancelText:"取消",
-                onOk: () => {
-                    this.apply()
-                },
-                onCancel() {
-                    console.log('Cancel');
-                },
-            });
-        }
-        showConfirm2(e,tag,index) {
-            const {confirm} = Modal;
-            e.preventDefault();
-            const that = this
-            confirm({
-                title: '确认退出该楼盘?',
-                content: '',
-                okText:"确认",
-                cancelText:"取消",
-                onOk: () => {
-                    this.state.tags.splice(index, 1)
-                    this.setState({tags:this.state.tags})
-                    this.preventDefault(tag)
-                },
-                onCancel:()=> {
-                },
-            });
-        }
-  //绑定微信
-  bindWeixin(){
-    window.location='https://open.weixin.qq.com/connect/qrconnect?appid=wx53ba91de253ea23a&redirect_uri=http%3A%2F%2Fwww.ezhanhome.com&response_type=code&scope=snsapi_login&state=bind#wechat_redirect'
-}
+
+    //确认修改？
+    showConfirm1() {
+        const {confirm} = Modal;
+        const that = this
+        confirm({
+            title: '是否确认申请入驻?',
+            content: '',
+            okText: "确认",
+            cancelText: "取消",
+            onOk: () => {
+                this.apply()
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+
+    showConfirm2(e, tag, index) {
+        const {confirm} = Modal;
+        e.preventDefault();
+        const that = this
+        confirm({
+            title: '确认退出该楼盘?',
+            content: '',
+            okText: "确认",
+            cancelText: "取消",
+            onOk: () => {
+                this.state.tags.splice(index, 1)
+                this.setState({tags: this.state.tags})
+                this.preventDefault(tag)
+            },
+            onCancel: () => {
+            },
+        });
+    }
+
+    //绑定微信
+    bindWeixin() {
+        window.location = 'https://open.weixin.qq.com/connect/qrconnect?appid=wx53ba91de253ea23a&redirect_uri=http%3A%2F%2Fwww.ezhanhome.com&response_type=code&scope=snsapi_login&state=bind#wechat_redirect'
+    }
+
 //解绑微信
-cancleWeixin(){
-    let params={
-        userId:localStorage.getItem('userId')
-    }
-    cancelWechat(params).then((res)=>{
-        if(res.data.code===1){
-            message.success('解绑成功')
-            this.setState({
-                bindWechatOrNot:false
-            })
+    cancleWeixin() {
+        let params = {
+            userId: localStorage.getItem('userId')
         }
-    })
-}
+        cancelWechat(params).then((res) => {
+            if (res.data.code === 1) {
+                message.success('解绑成功')
+                this.setState({
+                    bindWechatOrNot: false
+                })
+            }
+        })
+    }
+
 //申请入驻楼盘
-apply(){
-    let params={
-        userId:localStorage.getItem('userId'),
-        estateId:this.state. estateId
+    apply() {
+        let params = {
+            userId: localStorage.getItem('userId'),
+            estateId: this.state.estateId
 
+        }
+        settledInEstate(params).then((res) => {
+            if (res.data.code == 1) {
+                message.success('申请成功，等待管理员通过申请')
+            }
+            else {
+                message.error(res.data.msg)
+            }
+        })
     }
-    settledInEstate(params).then((res)=>{
-        if(res.data.code==1){
-            message.success('申请成功，等待管理员通过申请')
-        }
-        else{
-            message.error(res.data.msg)
-        }
-    })
-}
-confirm(e) {
-    message.success('Click on Yes');
-  }
+
 //取消关注楼盘
-preventDefault(e) {
-    let params={
-        userId:localStorage.getItem('userId'),
-        estateId:e.estateId
+    preventDefault(e) {
+        let params = {
+            userId: localStorage.getItem('userId'),
+            estateId: e.estateId
 
-    }
-    delcancelSettledInEstate(params).then((res)=>{
-        if(res.data.code==1){
-            message.success('成功取消入驻该楼盘')
         }
-    })
-  }
+        delcancelSettledInEstate(params).then((res) => {
+            if (res.data.code == 1) {
+                message.success('成功取消入驻该楼盘')
+            }
+        })
+    }
+
     render() {
         const {TabPane} = Tabs;
-        const {imageUrl, imageUrl1} = this.state;
         const {Option} = Select;
-        const {tags, inputVisible, inputValue} = this.state;
+        const {tags} = this.state;
         const base = 'http://47.108.87.104:8601/user/';
         const updata = 'http://47.108.87.104:8501/user/uploadFile';
         return (
@@ -518,12 +539,16 @@ preventDefault(e) {
                                         </Upload>
                                     </div>
                                 </div>
-                                <p style={{marginTop: '30px',fontWeight:'bold'}}>账号：{localStorage.getItem('phone')}</p>
+                                <p style={{
+                                    marginTop: '30px',
+                                    fontWeight: 'bold'
+                                }}>账号：{localStorage.getItem('phone')}</p>
                                 <div className={'center'}>
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>姓名：</p>
-                                            <Input value={this.state.name} onChange={this.onChangeName.bind(this)} size={'large'}/>
+                                            <Input value={this.state.name} onChange={this.onChangeName.bind(this)}
+                                                   size={'large'}/>
                                         </div>
                                     </div>
                                     <div className={'item'}>
@@ -575,7 +600,8 @@ preventDefault(e) {
                                         <div className={'left'}>
                                             <p>工龄：</p>
                                             <Input value={this.state.workYears}
-                                            style={{width: 200}}
+                                                   style={{width: 200}}
+                                                   size={'large'}
                                                    onChange={this.changeWorkYears.bind(this)} addonAfter="年"/>
                                         </div>
 
@@ -583,7 +609,8 @@ preventDefault(e) {
                                     <div className={'item'}>
                                         <div className={'left'}>
                                             <p>公司：</p>
-                                            <Select value={this.state.agentType} onSelect={this.onAgentType.bind(this)} style={{width: 200}}
+                                            <Select value={this.state.agentType} onSelect={this.onAgentType.bind(this)}
+                                                    style={{width: 200}}
                                                     size={'large'}>
                                                 <Option value={2}>在职公司</Option>
                                                 <Option value={1}>独立经纪人</Option>
@@ -602,20 +629,24 @@ preventDefault(e) {
 
                                     </div>
                                 </div>
-                                <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'block':'none'}}>
-                                    <p className={'h2'} >微信绑定（已绑定）</p>
+                                <div className={'weixin'}
+                                     style={{display: this.state.bindWechatOrNot ? 'block' : 'none'}}>
+                                    <p className={'h2'}>微信绑定（已绑定）</p>
                                     <div className={'weixinBox'}>
                                         <img src={this.state.weixin.weChatHeadUrl}/>
                                         <p>微信昵称：{this.state.weixin.weChatName}<br></br>微信账号：{this.state.weixin.weChatNumber}
                                         </p>
                                         <p>地区：{this.state.weixin.weChatAddr}<br></br>性别：{this.state.weixin.weChatSex}
                                         </p>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'} onClick={this.cancleWeixin}>解除绑定</Button>
+                                        <Button type="primary" style={{marginLeft: '40px'}} size={'large'}
+                                                onClick={this.cancleWeixin}>解除绑定</Button>
                                     </div>
                                 </div>
-                                <div className={'weixin'} style={{display:this.state.bindWechatOrNot?'none':'block'}}>
-                                    <div className={'weixinBox'} style={{marginTop:'30px'}}>
-                                        <Button type="primary" style={{marginLeft:'40px'}} size={'large'} onClick={this.bindWeixin}>微信绑定</Button>
+                                <div className={'weixin'}
+                                     style={{display: this.state.bindWechatOrNot ? 'none' : 'block'}}>
+                                    <div className={'weixinBox'} style={{marginTop: '30px'}}>
+                                        <Button type="primary" style={{marginLeft: '40px'}} size={'large'}
+                                                onClick={this.bindWeixin}>微信绑定</Button>
                                     </div>
                                 </div>
                             </TabPane>
@@ -624,30 +655,35 @@ preventDefault(e) {
                                 <div className={'item'}>
                                     <div className={'left'}>
                                         <p>选择入驻的楼盘：</p>
-                                        <Select style={{width: 200,marginRight:'20px'}} onChange={this.setEstates.bind(this)} value={this.state.estateId}
-                                        allowClear
-                                        showSearch
-                                        placeholder="输入楼盘名搜索"
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }>
-                                    {this.state.estates && this.state.estates.map(item => {
-                                            return (<Option value={item.value} key={item.value}>{item.label}</Option>)
-                                        }
-                                    )}
-                                </Select>
+                                        <Select style={{width: 200, marginRight: '20px'}}
+                                                onChange={this.setEstates.bind(this)} value={this.state.estateId}
+                                                allowClear
+                                                showSearch
+                                                placeholder="输入楼盘名搜索"
+                                                optionFilterProp="children"
+                                                filterOption={(input, option) =>
+                                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                }>
+                                            {this.state.estates && this.state.estates.map(item => {
+                                                    return (
+                                                        <Option value={item.value} key={item.value}>{item.label}</Option>)
+                                                }
+                                            )}
+                                        </Select>
                                     </div>
-                                    <Button type="primary" style={{marginLeft: '40px'}} size={'large'} onClick={this.showConfirm1.bind(this)}>确认申请</Button>
+                                    <Button type="primary" style={{marginLeft: '40px'}} size={'large'}
+                                            onClick={this.showConfirm1.bind(this)}>确认申请</Button>
                                 </div>
                                 <p style={{marginTop: '20px'}}>已入驻的楼盘：</p>
                                 {tags.map((tag, index) => {
-                                    return  (
-                                     <Tag key={index} closable onClose={(e)=>{this.showConfirm2(e,tag,index)}}>
+                                    return (
+                                        <Tag key={index} closable onClose={(e) => {
+                                            this.showConfirm2(e, tag, index)
+                                        }}>
                                             {tag.estateName}
                                         </Tag>
-                                      
-                                    ) ;
+
+                                    );
                                 })}
                             </TabPane>
                             <TabPane tab="合作协议" key="3">

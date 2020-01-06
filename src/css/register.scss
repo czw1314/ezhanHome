@@ -66,6 +66,10 @@
           border-radius: 0;
         }
       }
+      .ant-tabs-nav .ant-tabs-tab-active {
+        color: #268AED;
+        font-weight: bold
+      }
       .ant-tabs-tab {
         font-size: 18px;
         color: #333;

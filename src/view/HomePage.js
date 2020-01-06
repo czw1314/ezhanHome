@@ -29,11 +29,10 @@ class Phone extends React.Component {
                 bindPhone(params).then((res) => {
                     if (res.data.code === 0) {
                         message.error(res.data.msg)
-                        console.log((this.props.userInformation.role==3||this.props.userInformation.role==4)&&!this.props.userInformation.fillOrNot)
                     }
                     else {
-                        localStorage.setItem('userPhone',values.phone)
-                        console.log((this.props.userInformation.role==3||this.props.userInformation.role==4)&&!this.props.userInformation.fillOrNot)
+                        localStorage.setItem('phone',values.phone)
+                        localStorage.setItem('password',values.phone.slice(5))
                         message.success('绑定成功！')
                         if((this.props.userInformation.role==3||this.props.userInformation.role==4)&&!this.props.userInformation.fillOrNot){
                             this.props.history.push({pathname: '/home/registryCenter'})
@@ -141,6 +140,24 @@ class HomePage extends React.Component {
                 estates: res.data.estates
             })
         })
+        if(localStorage.getItem('phone')&&localStorage.getItem('password')){
+            let params = {
+                "password": localStorage.getItem('password'),
+                "phone": localStorage.getItem('phone'),
+                "role":localStorage.getItem('role'),
+                "loginType": 2
+            };
+            login(params).then((res) => {
+                if (res.data.code === 0) {
+                }
+                else {
+                    localStorage.setItem('state', res.data.state)
+                    localStorage.setItem('userName', res.data.name)
+                    localStorage.setItem('role', res.data.role)
+                    localStorage.setItem('userId', res.data.userId)
+                }
+            })
+        }
         let params = {
             pageSize: 4,
             orderType: 3
@@ -160,28 +177,28 @@ class HomePage extends React.Component {
             districtIds: [],
             streetId: [],
             searchText: '',
-            pageSize: 4
+            pageSize: 12
         }
         searchAgent(params1).then((res) => {
             if (res.data.code === 1) {
                 this.setState({
                     agent: res.data.models,
-                    num: Math.ceil(res.data.models.length / 4)
+                    num: Math.floor(res.data.models.length / 4)
                 })
             }
         })
-        if (!localStorage.getItem('bind') && localStorage.getItem('role') == 3) {
+        if (!localStorage.getItem('phone') && localStorage.getItem('role') == 3) {
             this.setState({phoneShow: true})
         }
-        else if(!localStorage.getItem('bind')&& localStorage.getItem('role') == 4){
+        else if(!localStorage.getItem('phone')&& localStorage.getItem('role') == 4){
             this.setState({phoneShow: true})
         }
-        else if (!localStorage.getItem('bind')&& localStorage.getItem('role') == 5) {
+        else if (!localStorage.getItem('phone')&& localStorage.getItem('role') == 5) {
             this.setState({phoneShow: true})
         }
-        else if(localStorage.getItem('bind')){
+        else if(localStorage.getItem('phone')){
             if((localStorage.getItem('role')==3||localStorage.getItem('role')==4)&&localStorage.getItem('state')=='-1'){
-                this.props.history.push({pathname: '/home/registryCenter'})
+                // this.props.history.push({pathname: '/home/registryCenter'})
             }
         }
         if (this.getQueryVariable('state') == 'bind') {
@@ -192,7 +209,6 @@ class HomePage extends React.Component {
             bindWechat(params).then((res) => {
                 if (res.data.code === 1) {
                     message.success('微信绑定成功！')
-                    // localStorage.setItem('bind',true)
                 }
                 else {
                     message.error(res.data.msg)
@@ -212,8 +228,12 @@ class HomePage extends React.Component {
                     message.error(res.data.msg)
                 }
                 else {
+                    if(res.data.phone){
+                        localStorage.setItem('password',res.data.phone.slice(5))
+                    }
                     this.props.setUserInformation(res.data)
-                    localStorage.setItem('userPhone',res.data.phone)
+                    localStorage.setItem('state',res.data.state)
+                    localStorage.setItem('phone',res.data.phone)
                     localStorage.setItem('userName', res.data.name)
                     localStorage.setItem('role', res.data.role)
                     localStorage.setItem('userId', res.data.userId)
@@ -258,6 +278,7 @@ class HomePage extends React.Component {
         localStorage.setItem('role','')
         localStorage.setItem('userId','')
         localStorage.setItem('phone','')
+        localStorage.setItem('password','')
         localStorage.setItem('bind','')
     }
 
@@ -589,7 +610,7 @@ class HomePage extends React.Component {
                                                     </div>
                                                     <div className={'second'}>
                                                         <div className={'address'}>
-                                                            <p>熟悉区域：{
+                                                            <p>区域：{
                                                                 item.streets && item.streets.map((items, indexs) => {
                                                                     return (
                                                                         <span style={{marginRight: '10px'}}
@@ -661,7 +682,7 @@ class HomePage extends React.Component {
                             </ul>
                             <div style={{textAlign:'center'}}>
                         <span>Copyright©2019 成都叁城房地产经纪有限公司 版权所有 ©</span>
-                    <a target={'_blank'} href={'http://www.028icp.com/'} style={{color:'#666'}}> 蜀ICP备18023206号-2</a>
+                    <a target={'_blank'} href={'http://beian.miit.gov.cn/'} style={{color:'#666'}}> 蜀ICP备18023206号-2</a>
                 </div>
                         </div>
                     </div>

@@ -64,7 +64,8 @@ class Information extends React.Component {
                 return false
             }
             if (!err) {
-                localStorage.setItem('userPhone',values.phone)
+                localStorage.setItem('phone',values.phone)
+                localStorage.setItem('phone',values.password)
                 let params = {
                     "password": values.password,
                     "phone": values.phone,

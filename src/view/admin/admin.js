@@ -10,7 +10,6 @@ import {Form, message} from "antd/lib/index";
 class Login extends React.Component {
     //登录
     handleSubmit = e => {
-        console.log(this.props)
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -308,7 +307,6 @@ class EditableTable extends React.Component {
 
 class Code extends React.Component {
     state = {visible: false};
-
     showModal = () => {
         this.setState({
             visible: true,
@@ -435,6 +433,7 @@ class Admin extends React.Component {
     //退出登录
     clear() {
         this.props.setUserInformation({})
+        this.setState({login: true})
         localStorage.clear()
     }
 
@@ -646,7 +645,7 @@ class Admin extends React.Component {
             return
         }
         this.setState({
-            visible8: false, visible9: false, visible10: false, visible11: false
+            visible8: false, visible9: false, visible5: false, visible11: false
         })
         let params = {
             userId: this.state.userId,
@@ -1140,7 +1139,6 @@ class Admin extends React.Component {
                                 <p>
                                     <a onClick={() => {
                                         if (!this.props.userInformation.name) {
-                                            console.log(1)
                                             const key = `open${Date.now()}`;
                                             const btn = (
                                                 <Button type="primary" size="small"
@@ -1248,7 +1246,6 @@ class Admin extends React.Component {
                                 <p>
                                     <a onClick={() => {
                                         if (!this.props.userInformation.name) {
-                                            console.log(1)
                                             const key = `open${Date.now()}`;
                                             const btn = (
                                                 <Button type="primary" size="small"
@@ -1264,8 +1261,9 @@ class Admin extends React.Component {
                                             });
                                             return
                                         }
+                                        console.log(1)
                                         this.setState({
-                                            visible10: true,
+                                            visible5: true,
                                             userId: this.state.consultantApplyData[index].personId,
                                             estateId: item.estateId,
                                             index: index,
@@ -1318,13 +1316,6 @@ class Admin extends React.Component {
                 title: '姓名',
                 dataIndex: 'name',
             },
-            // {
-            //     title: '头像',
-            //     dataIndex: 'head',
-            //     render: (text, record, index) => (
-            //         <img src={'http://47.108.87.104:8601/user/' + text} style={{width: 60}}/>
-            //     ),
-            // },
             {
                 title: '账号',
                 dataIndex: 'phone',
@@ -1333,56 +1324,6 @@ class Admin extends React.Component {
                 title: '状态',
                 dataIndex: 'state',
             },
-            // {
-            //     title: '联系电话',
-            //     dataIndex: 'contact',
-            // },
-            // {
-            //     title: '微信二维码',
-            //     dataIndex: 'weChatQrCode',
-            //     render: (text, record, index) => (
-            //         <Code src={'http://47.108.87.104:8601/user/' + text}/>
-            //     ),
-            // },
-            // {
-            //     title: '公司',
-            //     dataIndex: 'company',
-            // },
-            // {
-            //     title: '经纪人服务区域',
-            //     dataIndex: 'regions',
-            //     render: (text, record, index) => (
-            //         <div>
-            //             {text && text.map(item => {
-            //                 return (<p>{item.districtName + '—' + item.streetName}</p>)
-            //             })
-            //             }
-            //         </div>
-            //     ),
-            // },
-            // {
-            //     title: '身份证号',
-            //     dataIndex: 'cardNumber',
-            // },
-            // {
-            //     title: '查看身份证',
-            //     dataIndex: 'frontCard',
-            //     render: (text, record, index) => (
-            //         <CardCode src={'http://47.108.87.104:8601/user/' + text}
-            //                   src1={'http://47.108.87.104:8601/user/' + this.state.agentControlData[index].backCard}/>
-            //     ),
-            // },
-            // {
-            //     title: '职称',
-            //     dataIndex: 'position',
-            // },
-            // {
-            //     title: '查看职称证件',
-            //     dataIndex: 'positionPicture',
-            //     render: (text, record, index) => (
-            //         <Code src={'http://47.108.87.104:8601/user/' + text}/>
-            //     ),
-            // },
             {
                 title: '权限管理',
                 key: 'action',
@@ -1578,19 +1519,21 @@ class Admin extends React.Component {
                         <p>管理员中心</p>
                     </div>
                     <div className='right' style={{display: this.props.userInformation.name ? 'none' : 'block'}}>
-                        <img src={require('../../img/admin.png')}/>
+                        {/* <img src={require('../../img/admin.png')}/>
                         <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登录'}}
-                              onClick={this.showModal.bind(this, 'login')}/>
+                              onClick={()=>this.setState({login:true})}/> */}
                         <Modal
                             visible={this.state.login}
-                            maskStyle={{backgroundColor: "black"}}
+                            maskStyle={{backgroundColor: "#fff"}}
                             destroyOnClose={true}
+                            keyboard={false}
                             maskClosable={false}
                             closable={false}
                             width={390}
                             onCancel={this.handleCancel.bind(this)}
                             footer={''}
                         >
+                            <img src={require('../../img/LOGO2@2x.png')} style={{width:'180px',marginBottom:'30px'}}/>
                             <p style={{fontSize: '22px'}}>超级管理员登录</p>
                             <Logins handleClose={this.handleCancel.bind(this)}/>
                         </Modal>
