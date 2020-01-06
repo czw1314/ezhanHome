@@ -43,7 +43,7 @@ class Phone extends React.Component {
             }
         });
     };
-    //获取手机验证码
+    //获取手机验证码s
     getCode() {
         if(!this.props.form.getFieldValue('phone')){
             message.error('请输入手机号！')
