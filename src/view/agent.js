@@ -435,7 +435,7 @@ class Agent extends React.Component {
                                                         <div className={'text'}>
                                                             <p className={'name'}><span>{item.name}</span><span>{item.position}</span><span>工龄：{item.workingYears}年</span></p>
                                                             <div className={'service'}>
-                                                                <p className={'area'}>熟悉区域：{
+                                                                <p className={'area'}>区域：{
                                                                     item.streets&&item.streets.map(items=>{
                                                                         return(
                                                                             <span key={items}> 

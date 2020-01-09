@@ -186,6 +186,7 @@ apply(){
                     bindWechatOrNot:res.data.bindWechatOrNot,
                     weixinImg:res.data.weChatQrCode,
                     weixin:res.data.weChatPersonMsg?res.data.weChatPersonMsg:this.state.weixin,
+                    tags:res.data.estates,
                 })
             }
         })

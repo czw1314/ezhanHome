@@ -2,8 +2,8 @@ import React from 'react';
 import '../css/RegistryCenter.scss';
 import {connect} from "react-redux";
 import {setUserInformation} from "../redux/action";
-import {Input, Button, Form, Upload, Icon, message, Checkbox, Select, Cascader, Modal
-} from 'antd';
+import {withRouter} from 'react-router-dom';
+import {Input, Button, Form, Upload, Icon, message, Checkbox, Select, Cascader, Modal} from 'antd';
 import {getDistrictRegions, agentRegister, getPersonMsg,} from '../api/index'
 
 class Information extends React.Component {
@@ -48,9 +48,15 @@ class Information extends React.Component {
         }
         getPersonMsg(params).then((res) => {
             if (res.data.code === 1) {
+                if(res.data.state==1){
+                    this.props.history.push('/')
+                    return true
+                }
                 let regions = []
-                for (let i = 0; i < res.data.regions.length; i++) {
-                    regions.push([res.data.regions[i].districtId, res.data.regions[i].streetId])
+                if(res.data.regions){
+                    for (let i = 0; i < res.data.regions.length; i++) {
+                        regions.push([res.data.regions[i].districtId, res.data.regions[i].streetId])
+                    }
                 }
                 if(res.data.state==0||res.data.state=='-2'){
                     this.props.onPicUpdata()
@@ -369,8 +375,7 @@ class Information extends React.Component {
                         </Upload>
                     </div>
                     <div style={{display: 'flex', alignItems: 'center'}}>
-                        <img src={this.state.weChatQrCode}
-                             className={'headerPic'} style={{borderRadius: 0}}/>
+                        <img src={this.state.weChatQrCode} style={{borderRadius: 0,width:'120px',height:'120px'}}/>
                         <Upload
                             listType="picture-card"
                             className="avatar-uploader"
@@ -445,8 +450,8 @@ class Information extends React.Component {
                                     width: '200px'
                                 }}
                                         size={'large'}>
-                                    <Option value="2">在职公司</Option>
-                                    <Option value="1">独立经纪人</Option>
+                                    <Option value={2}>在职公司</Option>
+                                    <Option value={1}>独立经纪人</Option>
                                 </Select>
                                 <Input disabled={this.state.agentType == 1 ? true : false} size={'large'} value={this.state.company} onChange={(e)=>this.setState({company:e.target.value})}/>
                             </div>
@@ -539,7 +544,7 @@ class Information extends React.Component {
     }
 }
 
-const InformationForms = Form.create({name: 'retrieve'})(Information);
+const InformationForms = Form.create({name: 'retrieve'})(withRouter(Information));
 
 
 class RegistryCenter extends React.Component {
@@ -597,10 +602,10 @@ class RegistryCenter extends React.Component {
                     onCancel={()=>this.setState({visible:false})}
                     footer={[<Button key='confirm' className='ant-btn-custom-circle' type='primary'  onClick={()=>this.setState({visible:false})}>确认</Button>]}
                 >
-                    <p>尊敬的XXX：</p>
-                    <p style={{fontWeight:'bold',display:this.state.text==0?'block':'none'}}>你的资料<span style={{color:'#1890ff'}}>正在审核中</span>，请耐心等候。</p>
-                    <p style={{fontWeight:'bold',display:this.state.text=='-2'?'block':'none'}}>你的资料<span style={{color:'#1890ff'}}>不全或相关图片模糊被工作人员驳回，请修改后再次申请。</span></p>
-                    <p>如有疑问，可以联系“e站房屋”工作人员。</p>
+                    <p>尊敬的用户：</p>
+                    <p style={{fontWeight:'bold',display:this.state.text==0?'block':'none'}}>你的资料正在审核中，请耐心等候。</p>
+                    <p style={{fontWeight:'bold',display:this.state.text=='-2'?'block':'none'}}>你的资料不全或相关图片模糊被工作人员驳回，请修改后再次申请。</p>
+                    <p>如有疑问，请联系“e站房屋”工作人员。</p>
                     <p><span style={{marginRight:'30px'}}>微信号：pangzhu2018</span>联系电话：13032872245</p>
                 </Modal>
                 <div className={'title'}>

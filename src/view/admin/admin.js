@@ -307,7 +307,6 @@ class EditableTable extends React.Component {
 
 class Code extends React.Component {
     state = {visible: false};
-
     showModal = () => {
         this.setState({
             visible: true,
@@ -646,7 +645,7 @@ class Admin extends React.Component {
             return
         }
         this.setState({
-            visible8: false, visible9: false, visible10: false, visible11: false
+            visible8: false, visible9: false, visible5: false, visible11: false
         })
         let params = {
             userId: this.state.userId,
@@ -1140,7 +1139,6 @@ class Admin extends React.Component {
                                 <p>
                                     <a onClick={() => {
                                         if (!this.props.userInformation.name) {
-                                            console.log(1)
                                             const key = `open${Date.now()}`;
                                             const btn = (
                                                 <Button type="primary" size="small"
@@ -1248,7 +1246,6 @@ class Admin extends React.Component {
                                 <p>
                                     <a onClick={() => {
                                         if (!this.props.userInformation.name) {
-                                            console.log(1)
                                             const key = `open${Date.now()}`;
                                             const btn = (
                                                 <Button type="primary" size="small"
@@ -1264,8 +1261,9 @@ class Admin extends React.Component {
                                             });
                                             return
                                         }
+                                        console.log(1)
                                         this.setState({
-                                            visible10: true,
+                                            visible5: true,
                                             userId: this.state.consultantApplyData[index].personId,
                                             estateId: item.estateId,
                                             index: index,
@@ -1521,15 +1519,14 @@ class Admin extends React.Component {
                         <p>管理员中心</p>
                     </div>
                     <div className='right' style={{display: this.props.userInformation.name ? 'none' : 'block'}}>
-                        <img src={require('../../img/admin.png')}/>
+                        {/* <img src={require('../../img/admin.png')}/>
                         <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登录'}}
-                              onClick={this.showModal.bind(this, 'login')}/>
+                              onClick={()=>this.setState({login:true})}/> */}
                         <Modal
                             visible={this.state.login}
                             maskStyle={{backgroundColor: "#fff"}}
                             destroyOnClose={true}
                             keyboard={false}
-                            centered={true}
                             maskClosable={false}
                             closable={false}
                             width={390}

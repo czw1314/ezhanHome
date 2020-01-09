@@ -382,10 +382,11 @@ class BridalIndex extends React.Component {
                         </div>
                         <div className={'center'}>
                             <div id={'container'}></div>
-                            <p style={{marginBottom:0}}><span style={{marginRight:'20px'}}>楼盘详情</span> <Button type="primary" icon="download" size={'large'}
+                            <p style={{marginBottom:0}}><span style={{marginRight:'20px'}}>楼盘详情</span>
+                             <Button type="primary" icon="download" size={'large'} onClick={()=>{window.open('http://47.108.87.104:8601/down/building/' + this.state.values.paperPath)}}
                                                          onClick={this.down.bind(this)}
                                                          style={{display: (this.props.userInformation.role == 3 && this.props.userInformation.state == 1) || (localStorage.getItem('role') == 3 && localStorage.getItem('state') == 1) ? "inline-block" : 'none'}}>
-                                <a href={'http://47.108.87.104:8601/building/' + this.state.values.paperPath} download
+                                <a  download 
                                    style={{color: '#fff'}}>下载一页纸</a>
                             </Button></p>
                             <div className={'information'}>

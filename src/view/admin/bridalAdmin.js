@@ -2344,40 +2344,30 @@ class bridalAdmin extends React.Component {
     onChange = positionChecked => {
         this.setState({
             positionChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
         });
     };
     //选择价格
     onChangeService = serviceChecked => {
         this.setState({
             serviceChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
         });
     };
     //选择面积
     onChangeTitle = titleChecked => {
         this.setState({
             titleChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
         });
     };
     //选择户型
     onChangeApartment = apartmentChecked => {
         this.setState({
             apartmentChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
         });
     };
     //选择特色
     onChangeCharacteristic = characteristicChecked => {
         this.setState({
             characteristicChecked,
-            // indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
-            // checkAll: checkedList.length === plainOptions.length,
         });
     };
     //上传一页纸
@@ -2399,7 +2389,6 @@ class bridalAdmin extends React.Component {
         }).then((res) => {
             if (res.data.code == 1) {
                 this.setState({
-                    fileList1: [],
                     uploading: false,
                 });
                 const key = `open${Date.now()}`;
@@ -2456,7 +2445,8 @@ class bridalAdmin extends React.Component {
             key: key,
             estateId: '',
             values: {},
-            show: false
+            show: false,
+                fileList1: [],
         })
         this.props.newEstateId('')
         localStorage.setItem('estateId', '')
@@ -2467,11 +2457,8 @@ class bridalAdmin extends React.Component {
     handleChange = info => {
         let fileList = [...info.fileList];
         fileList = fileList.slice(-2);
-
-        // 2. Read from response and show file link
         fileList = fileList.map(file => {
             if (file.response) {
-                // Component will show file.url as link
                 file.url = file.response.url;
             }
             return file;
@@ -2612,7 +2599,7 @@ class bridalAdmin extends React.Component {
                         fileList1: [
                             {
                                 uid: '-1',
-                                name: res.data.estate.name  ,
+                                name: res.data.estate.paperPath.split('/').pop()  ,
                                 status: 'done',
                                 url: 'http://47.108.87.104:8601/building/' + res.data.estate.paperPath
                             },
@@ -2754,7 +2741,7 @@ class bridalAdmin extends React.Component {
         const {TextArea} = Input;
         const {uploading, fileList1} = this.state;
         const props = {
-            accept: '.pdf',
+            accept:'.pdf',
             onRemove: file => {
                 this.setState(state => {
                     const index = state.fileList1.indexOf(file);
@@ -2783,16 +2770,15 @@ class bridalAdmin extends React.Component {
                         <p>新房管理中心</p>
                     </div>
                     <div className='right' style={{display: this.props.userInformation.name ? 'none' : 'block'}}>
-                        <img src={require('../../img/admin.png')}/>
+                        {/* <img src={require('../../img/admin.png')}/>
                         <span dangerouslySetInnerHTML={{__html: '&nbsp&nbsp登录'}}
                               onClick={() => {
                                   this.setState({login: true})
-                              }}/>
+                              }}/> */}
                         <Modal
                             visible={this.state.login}
                             width={390}
                             destroyOnClose={true}
-                            centered={true}
                             maskStyle={{backgroundColor: "#fff"}}
                             closable={false}
                             maskClosable={false}
@@ -2965,7 +2951,7 @@ class bridalAdmin extends React.Component {
                                     </Select>
                                     <Upload {...props} fileList={this.state.fileList1}>
                                         <Button>
-                                            <Icon type="upload"/> 选择楼盘一页纸
+                                            <Icon type="upload"/> 选择楼盘一页纸(只能上传pdf格式)
                                         </Button>
                                     </Upload>
                                     <Button

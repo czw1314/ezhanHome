@@ -10,6 +10,9 @@
       width: 100%;
     }
   }
+  .ant-tabs-nav .ant-tabs-tab-active {
+    font-weight: bold
+  }
   .ant-tabs-nav .ant-tabs-tab {
     margin: 0;
   }
@@ -141,5 +144,25 @@
       margin-top: 10px;
       width: 100%;
     }
+  }
+  .title{
+    font-size: 18px;
+    color: #333;
+    text-align: center
+  }
+  p{
+    text-indent: 2em;
+    font-size: 14px;
+    line-height: 26px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    color: #333;
+    text-align: left;
+    // b{
+    //   text-decoration: underline
+    // }
+  }
+  .userN{
+    text-indent: 0
   }
 }

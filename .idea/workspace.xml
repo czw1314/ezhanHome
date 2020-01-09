@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="67f4acab-a71f-4d96-9384-c51ff552c986" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/build.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build.zip" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/build.zip" beforeDir="false" />
+>>>>>>> 's'
       <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/login.js" afterDir="false" />
@@ -32,7 +36,11 @@
       <file leaf-file-name="agentMy.scss" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/css/agentMy.scss">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="3230">
+=======
+            <state relative-caret-position="-849">
+>>>>>>> 's'
               <caret line="170" column="28" selection-start-line="170" selection-start-column="28" selection-end-line="170" selection-end-column="28" />
             </state>
           </provider>
@@ -41,7 +49,11 @@
       <file leaf-file-name="HomePage.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/view/HomePage.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="10678">
+=======
+            <state relative-caret-position="192">
+>>>>>>> 's'
               <caret line="662" column="73" selection-start-line="662" selection-start-column="73" selection-end-line="662" selection-end-column="73" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
@@ -54,7 +66,11 @@
       <file leaf-file-name="home.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/component/home.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="2831">
+=======
+            <state relative-caret-position="1019">
+>>>>>>> 's'
               <caret line="161" column="77" selection-start-line="161" selection-start-column="77" selection-end-line="161" selection-end-column="77" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
@@ -66,10 +82,18 @@
       <file leaf-file-name="registryCenter.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/view/registryCenter.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="7258">
               <caret line="388" column="26" selection-start-line="388" selection-start-column="26" selection-end-line="388" selection-end-column="26" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
+=======
+            <state relative-caret-position="137">
+              <caret line="388" column="26" selection-start-line="388" selection-start-column="26" selection-end-line="388" selection-end-column="26" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+                <element signature="e#455#1303#0" />
+>>>>>>> 's'
               </folding>
             </state>
           </provider>
@@ -78,7 +102,11 @@
       <file leaf-file-name="admin.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/view/admin/admin.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="19817">
+=======
+            <state relative-caret-position="1512">
+>>>>>>> 's'
               <caret line="1548" column="49" selection-start-line="1548" selection-start-column="44" selection-end-line="1548" selection-end-column="49" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
@@ -97,7 +125,11 @@
       <file leaf-file-name="bridalAdmin.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="2698">
+=======
+            <state relative-caret-position="125">
+>>>>>>> 's'
               <caret line="2338" selection-start-line="2338" selection-end-line="2338" selection-end-column="36" />
               <folding>
                 <element signature="n#NormalLoginForm#0" />
@@ -107,15 +139,25 @@
                 <element signature="n#HousingPicturesWallUpdata#0" />
                 <element signature="n#InformationUpdata#0" />
                 <element signature="n#PicturesWallUpdata#0" />
+<<<<<<< HEAD
+=======
+                <element signature="e#93913#94951#0" />
+                <element signature="e#109795#111828#0" />
+                <element signature="e#111910#116891#0" />
+>>>>>>> 's'
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="login.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="login.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/component/login.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="2356">
+=======
+            <state relative-caret-position="187">
+>>>>>>> 's'
               <caret line="312" column="37" selection-start-line="312" selection-start-column="37" selection-end-line="312" selection-end-column="37" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
@@ -127,6 +169,7 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/build/index.html">
           <provider selected="true" editor-type-id="text-editor">
@@ -140,6 +183,12 @@
         <entry file="file://$PROJECT_DIR$/src/css/login.scss">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1349">
+=======
+      <file leaf-file-name="login.scss" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/css/login.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="610">
+>>>>>>> 's'
               <caret line="71" column="14" selection-start-line="71" selection-start-column="5" selection-end-line="71" selection-end-column="14" />
             </state>
           </provider>
@@ -181,12 +230,19 @@
       <find>管理员</find>
       <find>paperPublished</find>
       <find>clear</find>
+<<<<<<< HEAD
+=======
+      <find>./static</find>
+>>>>>>> 's'
       <find>cardNo</find>
       <find>./static/</find>
       <find>20</find>
       <find>8601</find>
       <find>agreement</find>
+<<<<<<< HEAD
       <find>./static</find>
+=======
+>>>>>>> 's'
     </findStrings>
     <replaceStrings>
       <replace>sessionStorage</replace>
@@ -251,11 +307,18 @@
         <option value="$PROJECT_DIR$/src/view/admin/admin.js" />
         <option value="$PROJECT_DIR$/src/view/registryCenter.js" />
         <option value="$PROJECT_DIR$/src/App.css" />
+<<<<<<< HEAD
+=======
+        <option value="$PROJECT_DIR$/build/index.html" />
+>>>>>>> 's'
         <option value="$PROJECT_DIR$/src/view/HomePage.js" />
         <option value="$PROJECT_DIR$/src/component/home.js" />
         <option value="$PROJECT_DIR$/src/css/login.scss" />
         <option value="$PROJECT_DIR$/src/component/login.js" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/build/index.html" />
+=======
+>>>>>>> 's'
       </list>
     </option>
   </component>
@@ -369,7 +432,11 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+<<<<<<< HEAD
     <property name="last_opened_file_path" value="D:/project/yyxt/yyxt" />
+=======
+    <property name="last_opened_file_path" value="D:/project/储能/储能ems" />
+>>>>>>> 's'
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -475,8 +542,12 @@
       <workItem from="1574730968393" duration="20000" />
       <workItem from="1574738061998" duration="12193000" />
       <workItem from="1576633030194" duration="20283000" />
+<<<<<<< HEAD
       <workItem from="1576719199117" duration="21850000" />
       <workItem from="1576805030591" duration="17000" />
+=======
+      <workItem from="1576719199117" duration="21566000" />
+>>>>>>> 's'
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1568629048875</created>
@@ -538,7 +609,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="625180000" />
+=======
+    <option name="totallyTimeSpent" value="624879000" />
+>>>>>>> 's'
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -716,26 +791,46 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js</url>
           <line>189</line>
+<<<<<<< HEAD
+=======
+          <properties lambdaOrdinal="-1" />
+>>>>>>> 's'
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/registryCenter.js</url>
           <line>11</line>
+<<<<<<< HEAD
+=======
+          <properties lambdaOrdinal="-1" />
+>>>>>>> 's'
           <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js</url>
           <line>27</line>
+<<<<<<< HEAD
+=======
+          <properties lambdaOrdinal="-1" />
+>>>>>>> 's'
           <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js</url>
           <line>2819</line>
+<<<<<<< HEAD
+=======
+          <properties lambdaOrdinal="-1" />
+>>>>>>> 's'
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/view/registryCenter.js</url>
           <line>79</line>
+<<<<<<< HEAD
+=======
+          <properties lambdaOrdinal="-1" />
+>>>>>>> 's'
           <option name="timeStamp" value="52" />
         </line-breakpoint>
       </breakpoints>
@@ -991,6 +1086,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="107" column="34" selection-start-line="107" selection-start-column="34" selection-end-line="107" selection-end-column="34" />
+<<<<<<< HEAD
         </state>
       </provider>
     </entry>
@@ -1001,6 +1097,23 @@
         </state>
       </provider>
     </entry>
+=======
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/view/agentMy.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="603" column="65" selection-start-line="603" selection-start-column="65" selection-end-line="603" selection-end-column="65" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+            <element signature="e#2323#3780#0" />
+            <element signature="e#3823#4266#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+>>>>>>> 's'
     <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$0/储能ems/电池数据.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1024,7 +1137,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/view/admin/bridalAdmin.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="2698">
+=======
+        <state relative-caret-position="125">
+>>>>>>> 's'
           <caret line="2338" selection-start-line="2338" selection-end-line="2338" selection-end-column="36" />
           <folding>
             <element signature="n#NormalLoginForm#0" />
@@ -1034,13 +1151,23 @@
             <element signature="n#HousingPicturesWallUpdata#0" />
             <element signature="n#InformationUpdata#0" />
             <element signature="n#PicturesWallUpdata#0" />
+<<<<<<< HEAD
+=======
+            <element signature="e#93913#94951#0" />
+            <element signature="e#109795#111828#0" />
+            <element signature="e#111910#116891#0" />
+>>>>>>> 's'
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/view/admin/admin.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="19817">
+=======
+        <state relative-caret-position="1512">
+>>>>>>> 's'
           <caret line="1548" column="49" selection-start-line="1548" selection-start-column="44" selection-end-line="1548" selection-end-column="49" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
@@ -1057,17 +1184,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/view/registryCenter.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="7258">
           <caret line="388" column="26" selection-start-line="388" selection-start-column="26" selection-end-line="388" selection-end-column="26" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
+=======
+        <state relative-caret-position="137">
+          <caret line="388" column="26" selection-start-line="388" selection-start-column="26" selection-end-line="388" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+            <element signature="e#455#1303#0" />
+>>>>>>> 's'
           </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/src/component/home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2831">
+=======
+    <entry file="file://$PROJECT_DIR$/build/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="1903" selection-start-line="1" selection-start-column="1903" selection-end-line="1" selection-end-column="1903" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/component/home.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2831">
+        <state relative-caret-position="1019">
+>>>>>>> 's'
           <caret line="161" column="77" selection-start-line="161" selection-start-column="77" selection-end-line="161" selection-end-column="77" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
@@ -1084,14 +1232,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/css/agentMy.scss">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="3230">
+=======
+        <state relative-caret-position="-849">
+>>>>>>> 's'
           <caret line="170" column="28" selection-start-line="170" selection-start-column="28" selection-end-line="170" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/view/HomePage.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="10678">
+=======
+        <state relative-caret-position="192">
+>>>>>>> 's'
           <caret line="662" column="73" selection-start-line="662" selection-start-column="73" selection-end-line="662" selection-end-column="73" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
@@ -1102,14 +1258,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/css/login.scss">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="1349">
+=======
+        <state relative-caret-position="610">
+>>>>>>> 's'
           <caret line="71" column="14" selection-start-line="71" selection-start-column="5" selection-end-line="71" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/component/login.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="2356">
+=======
+        <state relative-caret-position="187">
+>>>>>>> 's'
           <caret line="312" column="37" selection-start-line="312" selection-start-column="37" selection-end-line="312" selection-end-column="37" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
