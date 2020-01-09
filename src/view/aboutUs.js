@@ -4,4 +4,4 @@ import {
     Tabs, Input, Button, Popconfirm, Upload, Icon, message, Checkbox,
     Select, Tag, Tooltip, Cascader, Modal
 } from 'antd';
-c
+class
